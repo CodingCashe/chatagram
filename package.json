@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "postinstall":"prisma generate",
+    "postinstall": "prisma generate",
     "lint": "next lint",
     "ngrok": "ngrok http 3000"
   },
@@ -42,6 +42,8 @@
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
     "@reduxjs/toolkit": "^2.4.0",
+    "@tanstack/react-query": "^5.62.7",
+    "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
