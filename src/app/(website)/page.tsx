@@ -49,8 +49,8 @@ export default function Home() {
                 <div className="h-8 w-8 rounded-lg bg-white flex items-center justify-center font-bold">
                   li
                 </div>
-                <span className="text-xl bg-black font-semibold text-primary-foreground">
-                ChataGram
+                <span className="text-xl font-semibold text-primary-foreground">
+                Chatalk
                 </span>
               </div>
               <nav className="hidden space-x-6 text-sm text-blue-200 md:block">
@@ -63,9 +63,7 @@ export default function Home() {
               <Button className="bg-black text-primary">
                 <Link href="/dashboard">Login</Link>
               </Button>
-              <Button className="bg-black text-primary">
-                <Link href="/dashboard">Register</Link>
-              </Button>
+              
             </div>
 
             <div className="mx-auto mt-16 max-w-3xl text-center">
