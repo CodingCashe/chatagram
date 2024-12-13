@@ -51,7 +51,7 @@ const AutomationsBreadCrumb = ({ id }: Props) => {
               <PencilIcon size={14} />
             </span>
           )}
-          <p className="text-[#9B9CA0] truncate">Automation Title</p>
+          <p className="text-[#9B9CA0] truncate"></p>
         </span>
       </div>
 

@@ -40,7 +40,7 @@ export const PLANS = [
   {
     name: 'Smart AI Plan',
     description: 'Advanced features for power users',
-    price: '$99',
+    price: '$89',
     features: [
       'All features from Free Plan',
       'AI-powered response generation',

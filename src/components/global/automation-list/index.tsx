@@ -30,7 +30,7 @@ const AutomationList = (props: Props) => {
   if (data?.status !== 200 || data.data.length <= 0) {
     return (
       <div className="h-[70vh] flex justify-center items-center flex-col gap-y-3">
-        <h3 className="text-lg text-gray-400">No Automations </h3>
+        <h3 className="text-lg text-gray-400">No Automations Yet </h3>
         <CreateAutomation />
       </div>
     )
@@ -47,7 +47,7 @@ const AutomationList = (props: Props) => {
           <div className="flex flex-col flex-1 items-start">
             <h2 className="text-xl font-semibold">{automation.name}</h2>
             <p className="text-[#9B9CA0] text-sm font-light mb-2">
-              This is from the comment
+              This automtion is for comments
             </p>
 
             {automation.keywords.length > 0 ? (
@@ -66,7 +66,7 @@ const AutomationList = (props: Props) => {
                         (2 + 1) % 3 == 0 &&
                           'bg-keyword-yellow/15 border-2 border-keyword-yellow',
                         (3 + 1) % 4 == 0 &&
-                          'bg-keyword-red/15 border-2 border-keyword-red'
+                          'bg-keyword-green/15 border-2 border-keyword-green'
                       )}
                     >
                       {keyword.word}
@@ -75,7 +75,7 @@ const AutomationList = (props: Props) => {
                 }
               </div>
             ) : (
-              <div className="rounded-full border-2 mt-3 border-dashed border-white/60 px-3 py-1">
+              <div className="rounded-full border-2 mt-3 border-dashed border-green/60 px-3 py-1">
                 <p className="text-sm text-[#bfc0c3]">No Keywords</p>
               </div>
             )}
