@@ -15,13 +15,13 @@ const Page = (props: Props) => {
       <div className="lg:col-span-2">
         <div className="flex flex-col rounded-xl bg-background-80 gap-y-6 p-5 border-[1px] overflow-hidden border-in-active">
           <div>
-            <h2 className="text-xl ">Automations</h2>
+            <h2 className="text-xl ">My Automations</h2>
             <p className="text-text-secondary">
               Your live automations will show here.
             </p>
           </div>
           <div className="flex flex-col gap-y-3">
-            {[1, 2, 3].map((item) => (
+            {[1, 2, 3, 4].map((item) => (
               <div
                 key={item}
                 className="flex items-start justify-between"

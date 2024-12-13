@@ -49,27 +49,32 @@ export default function Home() {
                 <div className="h-8 w-8 rounded-lg bg-white flex items-center justify-center font-bold">
                   li
                 </div>
-                <span className="text-xl font-semibold text-primary-foreground">
-                  Slide
+                <span className="text-xl bg-black font-semibold text-primary-foreground">
+                ChataGram
                 </span>
               </div>
               <nav className="hidden space-x-6 text-sm text-blue-200 md:block">
                 <Link href="#features">Features</Link>
                 <Link href="#pricing">Pricing</Link>
                 <Link href="#about">About</Link>
+                <Link href="#about">Services</Link>
+                <Link href="#about">Blogs</Link>
               </nav>
-              <Button className="bg-white text-primary">
+              <Button className="bg-black text-primary">
                 <Link href="/dashboard">Login</Link>
+              </Button>
+              <Button className="bg-black text-primary">
+                <Link href="/dashboard">Register</Link>
               </Button>
             </div>
 
             <div className="mx-auto mt-16 max-w-3xl text-center">
               <h1 className="text-4xl font-bold leading-tight tracking-tighter text-white sm:text-5xl md:text-6xl lg:text-7xl">
-                Transform Your Instagram Engagement with Slide
+                Transform Your Instagram Engagement with ChataGram!
               </h1>
 
               <p className="mt-6 text-lg text-blue-200">
-                Slide revolutionizes how you connect with your audience on
+                ChataGram revolutionizes how you connect with your audience on
                 Instagram. Automate responses and boost engagement effortlessly,
                 turning interactions into valuable business opportunities.
               </p>
