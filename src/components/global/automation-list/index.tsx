@@ -75,7 +75,7 @@ const AutomationList = (props: Props) => {
                 }
               </div>
             ) : (
-              <div className="rounded-full border-2 mt-3 border-dashed border-green/60 px-3 py-1">
+              <div className="rounded-full border-2 mt-3 border-dashed border-white/60 px-3 py-1">
                 <p className="text-sm text-[#bfc0c3]">No Keywords</p>
               </div>
             )}
