@@ -46,11 +46,11 @@ export default function Home() {
           <div className="container px-4 py-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-lg bg-white flex items-center justify-center font-bold">
-                  li
+                <div className="h-8 w-8 rounded-lg bg-black flex items-center justify-center font-bold">
+                  Chatal
                 </div>
                 <span className="text-xl font-semibold text-primary-foreground">
-                Chatalk
+                
                 </span>
               </div>
               <nav className="hidden space-x-6 text-sm text-blue-200 md:block">
@@ -68,11 +68,11 @@ export default function Home() {
 
             <div className="mx-auto mt-16 max-w-3xl text-center">
               <h1 className="text-4xl font-bold leading-tight tracking-tighter text-white sm:text-5xl md:text-6xl lg:text-7xl">
-                Transform Your Instagram Engagement with Chata!
+                Transform Your Instagram Engagement with Chatal!
               </h1>
 
               <p className="mt-6 text-lg text-blue-200">
-                Chata revolutionizes how you connect with your audience on
+                Chatal revolutionizes how you connect with your audience on
                 Instagram. Automate responses and boost engagement effortlessly,
                 turning interactions into valuable business opportunities.
               </p>
