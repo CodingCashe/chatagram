@@ -1,4 +1,4 @@
-import { InstagramDuoToneBlue, SalesForceDuoToneBlue,Twitter } from "@/icons"
+import { InstagramDuoToneBlue, SalesForceDuoToneBlue,TikTok,Twitter, WeChat } from "@/icons"
 
 type Props = {
   title: string
@@ -19,36 +19,29 @@ export const INTEGRATION_CARDS: Props[] = [
   {
     title: 'Connect X (Formerly Twitter)',
     description:
-      'Connect and increase sales through the power of automated DMs',
+      'Automatically engage your audience on X',
     icon: <Twitter />,
     strategy: 'CRM',
   },
   {
-    title: 'Connect Facebook',
+    title: 'Connect SalesForce',
     description:
       'Connect and increase sales through the power of automated DMs',
     icon: <SalesForceDuoToneBlue />,
     strategy: 'CRM',
   },
   {
-    title: 'Connect Threads',
+    title: 'Connect TikTok',
     description:
-      'Connect and increase sales through the power of automated DMs',
-    icon: <SalesForceDuoToneBlue />,
+      'Connect and increase TikTok Engagements',
+    icon: <TikTok />,
     strategy: 'CRM',
   },
   {
     title: 'Connect WeChat',
     description:
-      'Connect and increase sales through the power of automated DMs',
-    icon: <SalesForceDuoToneBlue />,
-    strategy: 'CRM',
-  },
-  {
-    title: 'Connect Tiktok',
-    description:
-      'Connect and increase sales through the power of automated DMs',
-    icon: <SalesForceDuoToneBlue />,
+      'Experience the power of DM automation on WeChat',
+    icon: <WeChat />,
     strategy: 'CRM',
   },
 ]
