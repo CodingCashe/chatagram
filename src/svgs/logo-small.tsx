@@ -217,7 +217,7 @@ export const LogoSmall = () => {
       
       {/* Abstract message bubbles */}
       <path d="M55 20c5.523 0 10 4.477 10 10s-4.477 10-10 10S45 35.523 45 30s4.477-10 10-10z" fill="#FCAF45"/>
-      <path d="M75 25c2.761 0 5 2.239 5 5s-2.239 5-5 5-5-2.239-5-5 2.239-5 5-5z" fill="#FD1D1D"/>
+      <path d="M75 25c2.761 0 5 2.239 5 5s-2.239 5-5 5-5-2.239-5-5 2.239-5 5-5z" fill="#AABBFF"/>
       <path d="M90 15c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3z" fill="#F77737"/>
       
       {/* Automation lines */}
@@ -228,7 +228,7 @@ export const LogoSmall = () => {
           type="translate"
           from="0 0"
           to="15 0"
-          dur="1.5s"
+          dur="3s"
           repeatCount="indefinite"
         />
       </path>
@@ -238,7 +238,7 @@ export const LogoSmall = () => {
         <animate
           attributeName="opacity"
           values="0;1;0"
-          dur="2s"
+          dur="5s"
           repeatCount="indefinite"
         />
       </path>
