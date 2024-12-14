@@ -228,7 +228,7 @@ export const LogoSmall = () => {
           type="translate"
           from="0 0"
           to="15 0"
-          dur="6s"
+          dur="10s"
           repeatCount="indefinite"
         />
       </path>
