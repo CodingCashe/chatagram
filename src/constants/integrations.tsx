@@ -17,7 +17,35 @@ export const INTEGRATION_CARDS: Props[] = [
     
   },
   {
-    title: 'Connect Salesforce',
+    title: 'Connect X (Formerly Twitter)',
+    description:
+      'Connect and increase sales through the power of automated DMs',
+    icon: <SalesForceDuoToneBlue />,
+    strategy: 'CRM',
+  },
+  {
+    title: 'Connect Facebook',
+    description:
+      'Connect and increase sales through the power of automated DMs',
+    icon: <SalesForceDuoToneBlue />,
+    strategy: 'CRM',
+  },
+  {
+    title: 'Connect Threads',
+    description:
+      'Connect and increase sales through the power of automated DMs',
+    icon: <SalesForceDuoToneBlue />,
+    strategy: 'CRM',
+  },
+  {
+    title: 'Connect WeChat',
+    description:
+      'Connect and increase sales through the power of automated DMs',
+    icon: <SalesForceDuoToneBlue />,
+    strategy: 'CRM',
+  },
+  {
+    title: 'Connect Tiktok',
     description:
       'Connect and increase sales through the power of automated DMs',
     icon: <SalesForceDuoToneBlue />,
