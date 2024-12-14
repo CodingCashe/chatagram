@@ -46,7 +46,7 @@ export default function Home() {
           <div className="container px-4 py-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="h-8 w-12 rounded-lg bg-[#70C5FF] flex items-center justify-center font-bold">
+                <div className="h-8 w-14 rounded-lg bg-[#70C5FF] flex items-center justify-center font-bold">
                   Chatal
                 </div>
                 <span className="text-xl font-semibold text-primary-foreground">
