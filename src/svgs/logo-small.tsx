@@ -1,88 +1,88 @@
 
-export const LogoSmall = () => {
-  return (
-    <svg
-      width="116"
-      height="61"
-      viewBox="0 0 116 61"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M10 30
-        A20 20 0 1 1 50 30
-        L40 30
-        A10 10 0 1 0 20 30
-        Z"
-        fill="#AABBFF"
-      /> {/* C */}
-      <path
-        d="M10 10 
-        L10 50 
-        L20 50 
-        L20 30 
-        L40 30 
-        L40 50 
-        L50 50 
-        L50 10 
-        L40 10 
-        L40 20 
-        L20 20 
-        L20 10 
-        Z" 
-        fill="#AABBFF"
-      /> {/* h */}
-      <path
-        d="M30 50 
-        L20 10 
-        L10 50 
-        L15 50 
-        L18 40 
-        L28 40 
-        L32 50 
-        L30 50 
-        Z 
-        M22 35 
-        L18 35 
-        L20 25 
-        L22 35 
-        Z" 
-        fill="#AABBFF"
-      /> {/* a */}
-      <path
-        d="M20 40V60H30V50H40V60H50V40H40V50H30V40H20Z" 
-        fill="#AABBFF"
-      /> {/* t */}
-      <path
-        d="M30 50 
-        L20 10 
-        L10 50 
-        L15 50 
-        L18 40 
-        L28 40 
-        L32 50 
-        L30 50 
-        Z 
-        M22 35 
-        L18 35 
-        L20 25 
-        L22 35 
-        Z" 
-        fill="#AABBFF"
-      /> {/* a */}
-      <path
-        d="M10 10 
-        V50 
-        H40 
-        V40 
-        H20 
-        V10 
-        Z" 
-        fill="#AABBFF"
-      /> {/* l */}
-    </svg>
-  );
-};
+// export const LogoSmall = () => {
+//   return (
+//     <svg
+//       width="116"
+//       height="61"
+//       viewBox="0 0 116 61"
+//       fill="none"
+//       xmlns="http://www.w3.org/2000/svg"
+//     >
+//       <path
+//         d="M10 30
+//         A20 20 0 1 1 50 30
+//         L40 30
+//         A10 10 0 1 0 20 30
+//         Z"
+//         fill="#AABBFF"
+//       /> {/* C */}
+//       <path
+//         d="M10 10 
+//         L10 50 
+//         L20 50 
+//         L20 30 
+//         L40 30 
+//         L40 50 
+//         L50 50 
+//         L50 10 
+//         L40 10 
+//         L40 20 
+//         L20 20 
+//         L20 10 
+//         Z" 
+//         fill="#AABBFF"
+//       /> {/* h */}
+//       <path
+//         d="M30 50 
+//         L20 10 
+//         L10 50 
+//         L15 50 
+//         L18 40 
+//         L28 40 
+//         L32 50 
+//         L30 50 
+//         Z 
+//         M22 35 
+//         L18 35 
+//         L20 25 
+//         L22 35 
+//         Z" 
+//         fill="#AABBFF"
+//       /> {/* a */}
+//       <path
+//         d="M20 40V60H30V50H40V60H50V40H40V50H30V40H20Z" 
+//         fill="#AABBFF"
+//       /> {/* t */}
+//       <path
+//         d="M30 50 
+//         L20 10 
+//         L10 50 
+//         L15 50 
+//         L18 40 
+//         L28 40 
+//         L32 50 
+//         L30 50 
+//         Z 
+//         M22 35 
+//         L18 35 
+//         L20 25 
+//         L22 35 
+//         Z" 
+//         fill="#AABBFF"
+//       /> {/* a */}
+//       <path
+//         d="M10 10 
+//         V50 
+//         H40 
+//         V40 
+//         H20 
+//         V10 
+//         Z" 
+//         fill="#AABBFF"
+//       /> {/* l */}
+//     </svg>
+//   );
+// };
 
 // export const LogoSmall = () => {
 //     return (
@@ -120,3 +120,42 @@ export const LogoSmall = () => {
 //       </svg>
 //     )
 //   }
+
+export const LogoSmall = () => {
+  return (
+    <svg
+      width="116"
+      height="61"
+      viewBox="0 0 116 61"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Replace paths here to spell "Chatal" */}
+      <path
+        d="M10 40 L20 10 L30 40 Z" /* Example of 'C' */
+        fill="#AABBFF"
+      />
+      <path
+        d="M40 10 L50 40 L60 10 Z" /* Example of 'H' */
+        fill="#AABBFF"
+      />
+      {/* Additional paths to complete "Chatal" */}
+      <path
+        d="M70 20 A10 10 0 1 1 70 40 Z" /* Example of 'A' */
+        fill="#AABBFF"
+      />
+      <path
+        d="M90 10 L100 40 L110 10 Z" /* Example of 'T' */
+        fill="#AABBFF"
+      />
+      <path
+        d="M120 40 L130 10 L140 40 Z" /* Example of 'A' */
+        fill="#AABBFF"
+      />
+      <path
+        d="M150 10 L160 40 L170 10 Z" /* Example of 'L' */
+        fill="#AABBFF"
+      />
+    </svg>
+  );
+};
