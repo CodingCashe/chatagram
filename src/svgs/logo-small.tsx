@@ -121,6 +121,45 @@
 //     )
 //   }
 
+// export const LogoSmall = () => {
+//   return (
+//     <svg
+//       width="116"
+//       height="61"
+//       viewBox="0 0 116 61"
+//       fill="none"
+//       xmlns="http://www.w3.org/2000/svg"
+//     >
+//       {/* Replace paths here to spell "Chatal" */}
+//       <path
+//         d="M10 40 L20 10 L30 40 Z" /* Example of 'C' */
+//         fill="#AABBFF"
+//       />
+//       <path
+//         d="M40 10 L50 40 L60 10 Z" /* Example of 'H' */
+//         fill="#AABBFF"
+//       />
+//       {/* Additional paths to complete "Chatal" */}
+//       <path
+//         d="M70 20 A10 10 0 1 1 70 40 Z" /* Example of 'A' */
+//         fill="#AABBFF"
+//       />
+//       <path
+//         d="M90 10 L100 40 L110 10 Z" /* Example of 'T' */
+//         fill="#AABBFF"
+//       />
+//       <path
+//         d="M120 40 L130 10 L140 40 Z" /* Example of 'A' */
+//         fill="#AABBFF"
+//       />
+//       <path
+//         d="M150 10 L160 40 L170 10 Z" /* Example of 'L' */
+//         fill="#AABBFF"
+//       />
+//     </svg>
+//   );
+// };
+
 export const LogoSmall = () => {
   return (
     <svg
@@ -130,32 +169,26 @@ export const LogoSmall = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Replace paths here to spell "Chatal" */}
-      <path
-        d="M10 40 L20 10 L30 40 Z" /* Example of 'C' */
-        fill="#AABBFF"
-      />
-      <path
-        d="M40 10 L50 40 L60 10 Z" /* Example of 'H' */
-        fill="#AABBFF"
-      />
-      {/* Additional paths to complete "Chatal" */}
-      <path
-        d="M70 20 A10 10 0 1 1 70 40 Z" /* Example of 'A' */
-        fill="#AABBFF"
-      />
-      <path
-        d="M90 10 L100 40 L110 10 Z" /* Example of 'T' */
-        fill="#AABBFF"
-      />
-      <path
-        d="M120 40 L130 10 L140 40 Z" /* Example of 'A' */
-        fill="#AABBFF"
-      />
-      <path
-        d="M150 10 L160 40 L170 10 Z" /* Example of 'L' */
-        fill="#AABBFF"
-      />
+      {/* Instagram-inspired camera outline */}
+      <rect x="10" y="10" width="96" height="41" rx="10" stroke="#E1306C" strokeWidth="4"/>
+      
+      {/* Camera lens */}
+      <circle cx="58" cy="30.5" r="15" stroke="#E1306C" strokeWidth="4"/>
+      
+      {/* Flash */}
+      <circle cx="86" cy="20" r="4" fill="#E1306C"/>
+      
+      {/* Automation gears */}
+      <path d="M30 25a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 6a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="#4CAF50"/>
+      <path d="M25 30h10M30 20v25" stroke="#4CAF50" strokeWidth="2"/>
+      
+      {/* Message bubble */}
+      <path d="M65 35l10 10h16c2.76 0 5-2.24 5-5V25c0-2.76-2.24-5-5-5H75c-2.76 0-5 2.24-5 5v10z" fill="#4CAF50"/>
+      
+      {/* Automation lines */}
+      <path d="M35 30h25M90 30h16" stroke="#4CAF50" strokeWidth="2" strokeDasharray="2 2"/>
     </svg>
   );
 };
+
+
