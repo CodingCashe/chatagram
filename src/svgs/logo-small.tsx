@@ -228,7 +228,7 @@ export const LogoSmall = () => {
           type="translate"
           from="0 0"
           to="15 0"
-          dur="10s"
+          dur="20s"
           repeatCount="indefinite"
         />
       </path>
@@ -238,7 +238,7 @@ export const LogoSmall = () => {
         <animate
           attributeName="opacity"
           values="0;1;0"
-          dur="5s"
+          dur="10s"
           repeatCount="indefinite"
         />
       </path>
