@@ -1,4 +1,4 @@
-import { InstagramDuoToneBlue, SalesForceDuoToneBlue } from "@/icons"
+import { InstagramDuoToneBlue, SalesForceDuoToneBlue,Twitter } from "@/icons"
 
 type Props = {
   title: string
@@ -20,7 +20,7 @@ export const INTEGRATION_CARDS: Props[] = [
     title: 'Connect X (Formerly Twitter)',
     description:
       'Connect and increase sales through the power of automated DMs',
-    icon: <SalesForceDuoToneBlue />,
+    icon: <Twitter />,
     strategy: 'CRM',
   },
   {
