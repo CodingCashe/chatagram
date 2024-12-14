@@ -160,6 +160,37 @@
 //   );
 // };
 
+// export const LogoSmall = () => {
+//   return (
+//     <svg
+//       width="116"
+//       height="61"
+//       viewBox="0 0 116 61"
+//       fill="none"
+//       xmlns="http://www.w3.org/2000/svg"
+//     >
+//       {/* Instagram-inspired camera outline */}
+//       <rect x="10" y="10" width="96" height="41" rx="10" stroke="#E1306C" strokeWidth="4"/>
+      
+//       {/* Camera lens */}
+//       <circle cx="58" cy="30.5" r="15" stroke="#E1306C" strokeWidth="4"/>
+      
+//       {/* Flash */}
+//       <circle cx="86" cy="20" r="4" fill="#E1306C"/>
+      
+//       {/* Automation gears */}
+//       <path d="M30 25a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 6a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="#4CAF50"/>
+//       <path d="M25 30h10M30 20v25" stroke="#4CAF50" strokeWidth="2"/>
+      
+//       {/* Message bubble */}
+//       <path d="M65 35l10 10h16c2.76 0 5-2.24 5-5V25c0-2.76-2.24-5-5-5H75c-2.76 0-5 2.24-5 5v10z" fill="#4CAF50"/>
+      
+//       {/* Automation lines */}
+//       <path d="M35 30h25M90 30h16" stroke="#4CAF50" strokeWidth="2" strokeDasharray="2 2"/>
+//     </svg>
+//   );
+// };
+
 export const LogoSmall = () => {
   return (
     <svg
@@ -169,26 +200,155 @@ export const LogoSmall = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Instagram-inspired camera outline */}
-      <rect x="10" y="10" width="96" height="41" rx="10" stroke="#E1306C" strokeWidth="4"/>
+      {/* Background gradient */}
+      <defs>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#405DE6" />
+          <stop offset="50%" stopColor="#5851DB" />
+          <stop offset="100%" stopColor="#833AB4" />
+        </linearGradient>
+      </defs>
       
-      {/* Camera lens */}
-      <circle cx="58" cy="30.5" r="15" stroke="#E1306C" strokeWidth="4"/>
+      {/* Abstract Instagram-inspired shape */}
+      <path d="M10 30.5C10 18.073 20.073 8 32.5 8h51C95.927 8 106 18.073 106 30.5S95.927 53 83.5 53h-51C20.073 53 10 42.927 10 30.5z" fill="url(#gradient)"/>
       
-      {/* Flash */}
-      <circle cx="86" cy="20" r="4" fill="#E1306C"/>
+      {/* Stylized camera lens */}
+      <circle cx="32.5" cy="30.5" r="15" stroke="white" strokeWidth="3" strokeDasharray="4 2"/>
       
-      {/* Automation gears */}
-      <path d="M30 25a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 6a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" fill="#4CAF50"/>
-      <path d="M25 30h10M30 20v25" stroke="#4CAF50" strokeWidth="2"/>
-      
-      {/* Message bubble */}
-      <path d="M65 35l10 10h16c2.76 0 5-2.24 5-5V25c0-2.76-2.24-5-5-5H75c-2.76 0-5 2.24-5 5v10z" fill="#4CAF50"/>
+      {/* Abstract message bubbles */}
+      <path d="M55 20c5.523 0 10 4.477 10 10s-4.477 10-10 10S45 35.523 45 30s4.477-10 10-10z" fill="#FCAF45"/>
+      <path d="M75 25c2.761 0 5 2.239 5 5s-2.239 5-5 5-5-2.239-5-5 2.239-5 5-5z" fill="#FD1D1D"/>
+      <path d="M90 15c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3z" fill="#F77737"/>
       
       {/* Automation lines */}
-      <path d="M35 30h25M90 30h16" stroke="#4CAF50" strokeWidth="2" strokeDasharray="2 2"/>
+      <path d="M47.5 30.5c-30 20 30 20 0 0z" stroke="white" strokeWidth="2" strokeDasharray="4 2">
+        <animateTransform
+          attributeName="transform"
+          attributeType="XML"
+          type="translate"
+          from="0 0"
+          to="15 0"
+          dur="1.5s"
+          repeatCount="indefinite"
+        />
+      </path>
+      
+      {/* Wi-Fi-like automation waves */}
+      <path d="M70 40c5.523 0 10 4.477 10 10M70 35c8.284 0 15 6.716 15 15M70 30c11.046 0 20 8.954 20 20" stroke="white" strokeWidth="2" strokeLinecap="round">
+        <animate
+          attributeName="opacity"
+          values="0;1;0"
+          dur="2s"
+          repeatCount="indefinite"
+        />
+      </path>
     </svg>
   );
 };
+
+
+// import React from 'react';
+
+// export const LogoSmall: React.FC = () => {
+//   return (
+//     <svg
+//       width="116"
+//       height="61"
+//       viewBox="0 0 116 61"
+//       fill="none"
+//       xmlns="http://www.w3.org/2000/svg"
+//     >
+//       <defs>
+//         <filter id="glow">
+//           <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+//           <feMerge>
+//             <feMergeNode in="coloredBlur"/>
+//             <feMergeNode in="SourceGraphic"/>
+//           </feMerge>
+//         </filter>
+//         <linearGradient id="instagram" x1="0%" y1="0%" x2="100%" y2="100%">
+//           <stop offset="0%" stopColor="#405DE6">
+//             <animate attributeName="stop-color" values="#405DE6; #5851DB; #833AB4; #C13584; #E1306C; #FD1D1D; #F56040; #F77737; #FCAF45; #FFDC80; #405DE6" dur="20s" repeatCount="indefinite" />
+//           </stop>
+//           <stop offset="100%" stopColor="#FFDC80">
+//             <animate attributeName="stop-color" values="#FFDC80; #405DE6; #5851DB; #833AB4; #C13584; #E1306C; #FD1D1D; #F56040; #F77737; #FCAF45; #FFDC80" dur="20s" repeatCount="indefinite" />
+//           </stop>
+//         </linearGradient>
+//       </defs>
+
+//       {/* Main circular path */}
+//       <path d="M58 5A25 25 0 0 1 58 56A25 25 0 0 1 58 5" stroke="url(#instagram)" strokeWidth="3" fill="none">
+//         <animateTransform
+//           attributeName="transform"
+//           attributeType="XML"
+//           type="rotate"
+//           from="0 58 30.5"
+//           to="360 58 30.5"
+//           dur="20s"
+//           repeatCount="indefinite"
+//         />
+//       </path>
+
+//       {/* Central hub */}
+//       <circle cx="58" cy="30.5" r="15" fill="#E1306C" filter="url(#glow)">
+//         <animate attributeName="r" values="15;17;15" dur="2s" repeatCount="indefinite" />
+//       </circle>
+
+//       {/* Orbiting messages */}
+//       {[0, 72, 144, 216, 288].map((angle, index) => (
+//         <React.Fragment key={index}>
+//           <circle cx="58" cy="30.5" r="25" fill="none" stroke="#FCAF45" strokeWidth="2" strokeDasharray="2 4">
+//             <animateTransform
+//               attributeName="transform"
+//               attributeType="XML"
+//               type="rotate"
+//               from={`${angle} 58 30.5`}
+//               to={`${angle + 360} 58 30.5`}
+//               dur={`${10 + index}s`}
+//               repeatCount="indefinite"
+//             />
+//           </circle>
+//           <circle cx="83" cy="30.5" r="4" fill="#FCAF45">
+//             <animateTransform
+//               attributeName="transform"
+//               attributeType="XML"
+//               type="rotate"
+//               from={`${angle} 58 30.5`}
+//               to={`${angle + 360} 58 30.5`}
+//               dur={`${10 + index}s`}
+//               repeatCount="indefinite"
+//             />
+//             <animate attributeName="r" values="4;5;4" dur="1s" repeatCount="indefinite" />
+//           </circle>
+//         </React.Fragment>
+//       ))}
+
+//       {/* Automation beams */}
+//       {[0, 72, 144, 216, 288].map((angle, index) => (
+//         <path
+//           key={index}
+//           d="M58 30.5L83 30.5"
+//           stroke="#FFF"
+//           strokeWidth="2"
+//           strokeLinecap="round"
+//           opacity="0.7"
+//           transform={`rotate(${angle} 58 30.5)`}
+//         >
+//           <animate
+//             attributeName="stroke-dasharray"
+//             values="0,25;25,0"
+//             dur={`${1 + index * 0.2}s`}
+//             repeatCount="indefinite"
+//           />
+//         </path>
+//       ))}
+
+//       {/* Instagram camera icon */}
+//       <path d="M52 25h12v11H52z" stroke="#FFF" strokeWidth="2" fill="none" />
+//       <circle cx="58" cy="30.5" r="2" stroke="#FFF" strokeWidth="2" fill="none" />
+//       <circle cx="62" cy="26.5" r="1" fill="#FFF" />
+//     </svg>
+//   );
+// };
 
 
