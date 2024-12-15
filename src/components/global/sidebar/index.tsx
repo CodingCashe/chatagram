@@ -233,18 +233,19 @@ const Sidebar = ({ slug }: Props) => {
     >
       <div
         className="
-          flex flex-col
+          flex
+          flex-col
           gap-y-5
           w-full
-          h-[50vh]           /* Default height on mobile (auto height) */
-          lg:h-[50vh] 
+          h-full
           p-3
           bg-[#0e0e0e]
           bg-opacity-90
           bg-clip-padding
           backdrop-filter
           backdrop--blur__safari
-          backdrop-blur-3xl"
+          backdrop-blur-3xl
+          overflow-hidden"
       >
         <div className="flex gap-x-1 items-center p-2 justify-center">
           <LogoSmall />
