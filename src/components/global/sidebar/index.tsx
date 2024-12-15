@@ -58,7 +58,7 @@
 //           <Items
 //             page={page}
 //             slug={slug}
-//             onItemClick={}
+//             
 //           />
 //         </div>  
 

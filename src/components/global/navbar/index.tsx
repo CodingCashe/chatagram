@@ -25,8 +25,7 @@ const Navbar = ({ slug }: Props) => {
   const { page } = usePaths()
   const currentPage = PAGE_BREAD_CRUMBS.includes(page) || page == slug
   
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
-
+  
   return (
     currentPage && (
       <div className="flex flex-col">
@@ -44,8 +43,7 @@ const Navbar = ({ slug }: Props) => {
                 <div className="flex flex-col py-1">
                   <Items
                     page={page}
-                    slug={slug}
-                    onItemClick={() => setSidebarOpen(false)}
+                    slug={slug}                    
                   />
                 </div>
                 <div className="px-16">
