@@ -241,7 +241,7 @@ const Sidebar = ({ slug }: Props) => {
           gap-y-5
           w-full
           h-[50vh]           /* Default height on mobile (auto height) */
-          lg:h-full
+          lg:h-[50vh] 
           p-3
           bg-[#0e0e0e]
           bg-opacity-90
