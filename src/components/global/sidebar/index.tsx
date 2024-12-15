@@ -250,9 +250,9 @@ const Sidebar = ({ slug }: Props) => {
           backdrop--blur__safari
           backdrop-blur-3xl"
       >
-        <div className="flex gap-x-1 items-center p-2 justify-center">
+        {/* <div className="flex gap-x-1 items-center p-2 justify-center">
           <LogoSmall />
-        </div>
+        </div> */}
 
         <div className="flex flex-col py-2">
           <Items page={page} 
