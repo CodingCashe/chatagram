@@ -75,7 +75,7 @@ const IntegrationCard = ({ description, icon, strategy, title }: Props) => {
   return (
     <div className="border-2 border-[#3352CC] rounded-2xl gap-4 p-5 flex flex-col sm:flex-row items-center sm:items-start">
       {/* Icon Section */}
-      <div className="flex-shrink-0 mb-4 sm:mb-0">{icon}</div>
+      <div className="flex-shrink-0 mb-2 sm:mb-0">{icon}</div>
 
       {/* Title and Description */}
       <div className="flex flex-col flex-1 text-center sm:text-left">
