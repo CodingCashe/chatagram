@@ -81,14 +81,25 @@ const AutomationList = (props: Props) => {
             )}
           </div>
           <div className="flex flex-col justify-between">
-            <p className="capitalize text-sm font-light text-[#9B9CA0]">
+            {/* <p className="capitalize text-sm font-light text-[#9B9CA0]">
               {getMonth(automation.createdAt.getUTCMonth() + 1)}{' '}
               {automation.createdAt.getUTCDate() === 1
                 ? `${automation.createdAt.getUTCDate()}st`
                 : `${automation.createdAt.getUTCDate()}th`}{' '}
               {automation.createdAt.getUTCFullYear()}
               {automation.createdAt.getUTCTime() }
+            </p> */}
+            <p className="capitalize text-sm font-light text-[#9B9CA0]">
+              {getMonth(automation.createdAt.getUTCMonth() + 1)}{' '}
+              {automation.createdAt.getUTCDate() === 1
+                ? `${automation.createdAt.getUTCDate()}st`
+                : `${automation.createdAt.getUTCDate()}th`}{' '}
+              {automation.createdAt.getUTCFullYear()},{' '}
+              {String(automation.createdAt.getUTCHours()).padStart(2, '0')}:
+              {String(automation.createdAt.getUTCMinutes()).padStart(2, '0')}:
+              {String(automation.createdAt.getUTCSeconds()).padStart(2, '0')} UTC
             </p>
+
 
             {automation.listener?.listener === 'SMARTAI' ? (
               <GradientButton
