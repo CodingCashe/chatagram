@@ -87,7 +87,7 @@ export const Keywords = ({ id }: Props) => {
                 <p>{word.word}</p>
                 <X
                   className="cursor-pointer hover:text-red-500"
-                  onClick={deleteMutation}
+                  onClick={() => deleteMutation({ id: word.id })}
                 />
               </div>
             )

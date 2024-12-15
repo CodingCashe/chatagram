@@ -87,6 +87,7 @@ const AutomationList = (props: Props) => {
                 ? `${automation.createdAt.getUTCDate()}st`
                 : `${automation.createdAt.getUTCDate()}th`}{' '}
               {automation.createdAt.getUTCFullYear()}
+              {automation.createdAt.getUTCTime() }
             </p>
 
             {automation.listener?.listener === 'SMARTAI' ? (

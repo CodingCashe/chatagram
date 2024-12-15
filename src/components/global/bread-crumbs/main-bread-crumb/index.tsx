@@ -12,7 +12,7 @@ const MainBreadCrumb = ({ page, slug }: Props) => {
       {page === 'Home' && (
         <div className="flex justify-center w-full">
           <div className="radial--gradient w-4/12 py-5 lg:py-10 flex flex-col items-center">
-            <p className="text-text-secondary text-lg">Hello</p>
+            <p className="text-text-secondary text-lg">Welcome,</p>
             <h3 className="capitalize text-4xl font-medium">{slug}!</h3>
           </div>
         </div>
