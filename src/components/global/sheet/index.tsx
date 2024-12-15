@@ -1,3 +1,34 @@
+// import {
+//   Sheet as ShadcnSheet,
+//   SheetContent,
+//   SheetTrigger,
+// } from '@/components/ui/sheet'
+
+// import React from 'react'
+
+// type Props = {
+//   trigger: React.ReactNode
+//   children: React.ReactNode
+//   className?: string
+//   side: 'left' | 'right'
+// }
+
+// const Sheet = ({ children, trigger, className, side }: Props) => {
+//   return (
+//     <ShadcnSheet>
+//       <SheetTrigger className={className}>{trigger}</SheetTrigger>
+//       <SheetContent
+//         side={side}
+//         className="p-0"
+//       >
+//         {children}
+//       </SheetContent>
+//     </ShadcnSheet>
+//   )
+// }
+
+// export default Sheet
+
 import {
   Sheet as ShadcnSheet,
   SheetContent,
@@ -19,7 +50,7 @@ const Sheet = ({ children, trigger, className, side }: Props) => {
       <SheetTrigger className={className}>{trigger}</SheetTrigger>
       <SheetContent
         side={side}
-        className="p-0"
+        className="p-0 overflow-y-auto max-h-screen" // Added overflow-y-auto and max-h-screen
       >
         {children}
       </SheetContent>
