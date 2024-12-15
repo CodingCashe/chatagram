@@ -211,11 +211,7 @@ type Props = {
 
 const Sidebar = ({ slug }: Props) => {
   const { page } = usePaths()
-  const [isOpen, setIsOpen] = useState(true)
-
-  const closeSidebar = () => setIsOpen(false)
-
-  return isOpen ? (
+   return (
     <div
       className="
         w-[250px]
@@ -250,14 +246,14 @@ const Sidebar = ({ slug }: Props) => {
           backdrop--blur__safari
           backdrop-blur-3xl"
       >
-        {/* <div className="flex gap-x-1 items-center p-2 justify-center">
+        <div className="flex gap-x-1 items-center p-2 justify-center">
           <LogoSmall />
-        </div> */}
+        </div>
 
         <div className="flex flex-col py-2">
           <Items page={page} 
           slug={slug} 
-          onItemClick={closeSidebar} />
+           />
         </div>
 
         <div className="px-16">
@@ -282,7 +278,7 @@ const Sidebar = ({ slug }: Props) => {
         </SubscriptionPlan>
       </div>
     </div>
-  ) : null
+  ) 
 }
 
 export default Sidebar

@@ -6,10 +6,9 @@ import React from 'react'
 type Props = {
   page: string
   slug: string
-  onItemClick?: () => void
 }
 
-const Items = ({ page, slug, onItemClick }: Props) => {
+const Items = ({ page, slug }: Props) => {
   return SIDEBAR_MENU.map((item) => (
     <Link
       key={item.id}
@@ -21,7 +20,7 @@ const Items = ({ page, slug, onItemClick }: Props) => {
           ? 'bg-[#0f0f0f]'
           : 'text-[#9B9CA0]'
       )}
-      onClick={onItemClick}
+      
     >
       {item.icon}
       {item.label}
