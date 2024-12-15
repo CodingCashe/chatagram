@@ -60,6 +60,50 @@
 
 // export default Sheet
 
+// import {
+//   Sheet as ShadcnSheet,
+//   SheetContent,
+//   SheetTrigger,
+//   SheetClose,
+// } from '@/components/ui/sheet'
+
+// import React from 'react'
+
+// type Props = {
+//   trigger: React.ReactNode
+//   children: React.ReactNode
+//   className?: string
+//   side: 'left' | 'right'
+// }
+
+// const Sheet = ({ children, trigger, className, side }: Props) => {
+//   return (
+//     <ShadcnSheet>
+//       {/* Trigger for the Sheet */}
+//       <SheetTrigger className={className}>{trigger}</SheetTrigger>
+      
+//       {/* Sheet Content */}
+//       <SheetContent
+//         side={side}
+//         className="p-0 overflow-y-auto max-h-screen relative" // Make space for the X button
+//       >
+//         {/* X Button to Close */}
+//         <SheetClose
+//           className="absolute top-4 left-4 text-gray-600 hover:text-gray-900 cursor-pointer"
+//           aria-label="Close"
+//         >
+//           ✖
+//         </SheetClose>
+
+//         {/* Children (Sidebar Items) */}
+//         <div onClick={() => document.body.click()}>{children}</div>
+//       </SheetContent>
+//     </ShadcnSheet>
+//   )
+// }
+
+// export default Sheet
+
 import {
   Sheet as ShadcnSheet,
   SheetContent,
@@ -85,7 +129,7 @@ const Sheet = ({ children, trigger, className, side }: Props) => {
       {/* Sheet Content */}
       <SheetContent
         side={side}
-        className="p-0 overflow-y-auto max-h-screen relative" // Make space for the X button
+        className="p-4 overflow-y-auto max-h-screen relative bg-white"
       >
         {/* X Button to Close */}
         <SheetClose
@@ -96,7 +140,7 @@ const Sheet = ({ children, trigger, className, side }: Props) => {
         </SheetClose>
 
         {/* Children (Sidebar Items) */}
-        <div onClick={() => document.body.click()}>{children}</div>
+        <div>{children}</div>
       </SheetContent>
     </ShadcnSheet>
   )
