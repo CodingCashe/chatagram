@@ -47,21 +47,38 @@ type Props = {
 
 const Sheet = ({ children, trigger, className, side }: Props) => {
   return (
+    // <ShadcnSheet> 
+    //   <SheetTrigger className={className}>{trigger}</SheetTrigger>
+    //   <SheetContent
+    //     side={side}
+    //     className="p-0 overflow-y-auto max-h-screen" // Added overflow-y-auto and max-h-screen
+    //   >
+    //     <SheetClose
+    //       className="absolute top-4 left-4 text-white-600 hover:text-white-900 cursor-pointer"
+    //       aria-label="Close"
+    //     >
+    //       ✖
+    //     </SheetClose>
+    //     {children}
+    //   </SheetContent>
+    // </ShadcnSheet>
+
     <ShadcnSheet>
-      <SheetTrigger className={className}>{trigger}</SheetTrigger>
-      <SheetContent
-        side={side}
-        className="p-0 overflow-y-auto max-h-screen" // Added overflow-y-auto and max-h-screen
+    <SheetTrigger className={className}>{trigger}</SheetTrigger>
+    <SheetContent
+      side={side}
+      className="p-0 overflow-y-auto max-h-screen h-[90vh] sm:w-auto sm:h-auto" // Adjust size for small devices
+    >
+      <SheetClose
+        className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 cursor-pointer"
+        aria-label="Close"
       >
-        <SheetClose
-          className="absolute top-4 left-4 text-white-600 hover:text-white-900 cursor-pointer"
-          aria-label="Close"
-        >
-          ✖YZX
-        </SheetClose>
-        {children}
-      </SheetContent>
-    </ShadcnSheet>
+        ✖
+      </SheetClose>
+      {children}
+    </SheetContent>
+  </ShadcnSheet>
+
   )
 }
 
