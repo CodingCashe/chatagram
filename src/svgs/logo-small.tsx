@@ -194,9 +194,11 @@
 export const LogoSmall = () => {
   return (
     <svg
-      width="116"
-      height="61"
-      viewBox="0 0 116 61"
+      // width="116"
+      // height="61"
+      width="50"
+      height="30"
+      viewBox="0 0 50 30"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
