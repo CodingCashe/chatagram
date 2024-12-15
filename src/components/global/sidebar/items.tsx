@@ -6,7 +6,7 @@ import React from 'react'
 type Props = {
   page: string
   slug: string
-  onItemClick: () => void
+  onItemClick?: () => void
 }
 
 const Items = ({ page, slug, onItemClick }: Props) => {
