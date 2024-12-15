@@ -219,7 +219,7 @@ const Sidebar = ({ slug }: Props) => {
     <div
       className="
         w-[250px]
-        border-[1px]
+        border-[2px]
         radial
         fixed
         left-0
@@ -229,8 +229,8 @@ const Sidebar = ({ slug }: Props) => {
         via-[#171717]
         to-[#768BDD]
         hidden
-        bottom-0
-        top-0
+        bottom-2
+        top-2
         m-3
         rounded-3xl
         overflow-hidden"
@@ -240,7 +240,8 @@ const Sidebar = ({ slug }: Props) => {
           flex flex-col
           gap-y-5
           w-full
-          h-full
+          h-auto           /* Default height on mobile (auto height) */
+          lg:h-full
           p-3
           bg-[#0e0e0e]
           bg-opacity-90
@@ -254,7 +255,9 @@ const Sidebar = ({ slug }: Props) => {
         </div>
 
         <div className="flex flex-col py-2">
-          <Items page={page} slug={slug} onItemClick={closeSidebar} />
+          <Items page={page} 
+          slug={slug} 
+          onItemClick={closeSidebar} />
         </div>
 
         <div className="px-16">
