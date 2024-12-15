@@ -3,7 +3,7 @@
 import { PAGE_BREAD_CRUMBS } from '@/constants/pages'
 import { usePaths } from '@/hooks/user-nav'
 import { Menu } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
 import Sheet from '../sheet'
 import Items from '../sidebar/items'
 import { Separator } from '@/components/ui/separator'
@@ -24,6 +24,8 @@ type Props = {
 const Navbar = ({ slug }: Props) => {
   const { page } = usePaths()
   const currentPage = PAGE_BREAD_CRUMBS.includes(page) || page == slug
+  
+  const [isSidebarOpen, setSidebarOpen] = useState(true);
 
   return (
     currentPage && (
@@ -36,13 +38,14 @@ const Navbar = ({ slug }: Props) => {
               side="left"
             >
               <div className="flex flex-col gap-y-5 w-full h-full p-3 bg-[#0e0e0e] bg-opacity-90 bg-clip-padding backdrop-filter backdrop--blur__safari backdrop-blur-3xl">
-                <div className="flex gap-x-2 items-center p-5 justify-center">
+                {/* <div className="flex gap-x-2 items-center p-5 justify-center">
                   <LogoSmall />
-                </div>
+                </div> */}
                 <div className="flex flex-col py-3">
                   <Items
                     page={page}
                     slug={slug}
+                    onItemClick={() => setSidebarOpen(false)}
                   />
                 </div>
                 <div className="px-16">
