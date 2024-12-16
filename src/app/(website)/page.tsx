@@ -334,14 +334,14 @@ export default function Home() {
             </p>
           </div>
           <div 
-            className="fixed top-0 left-0 w-screen h-screen overflow-hidden"
+            className="
+              fixed top-0 left-0 w-screen h-screen overflow-hidden 
+              bg-cover bg-fixed bg-center -z-10"
             style={{
-              backgroundImage: `url('/customers.png')`,
-              backgroundSize: 'cover',
-              backgroundAttachment: 'fixed',
-              backgroundPosition: 'center',
+              backgroundImage: `url('/customers.png')`
             }}
           />
+
 
 
         </div>
