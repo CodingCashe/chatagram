@@ -355,7 +355,7 @@ export default function Home() {
             ].map((feature, index) => (
               <Card key={index} className="text-center hover:shadow-lg transition-shadow duration-300">
                 <CardHeader>
-                  <div className="w-20 h-20 mx-auto mb-4">
+                  <div className="w-150 h-150 mx-auto mb-4">
                     <Image src={feature.image} alt={feature.title} width={150} height={150} />
                   </div>
                   <CardTitle>{feature.title}</CardTitle>
