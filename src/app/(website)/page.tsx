@@ -258,7 +258,7 @@ export default function Home() {
     {
       name: 'Smart AI Plan',
       description: 'Advanced features for power users',
-      price: '$99',
+      price: '$89',
       features: [
         'All features from Free Plan',
         'AI-powered response generation',
@@ -335,7 +335,7 @@ export default function Home() {
           </div>
           <div className="relative h-40 md:h-80 w-full rounded-lg overflow-hidden shadow-2xl">
             <Image
-              src="/Ig-creators.png"
+              src="/customers.png"
               alt="Instagram creators using Chatal"
               fill
               className="object-cover"
@@ -344,7 +344,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="features" className="py-20 bg-[#77C7FF]">
+      <section id="features" className="py-20 bg-[#364B5A]">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12 sm:text-4xl text-[#01083C]">
             Why Choose Chatal?
@@ -371,7 +371,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="pricing" className="py-20 bg-[#77C7FF]">
+      <section id="pricing" className="py-20 bg-[#364B5A]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4 sm:text-4xl text-[#01083C]">
