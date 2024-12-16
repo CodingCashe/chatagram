@@ -325,10 +325,10 @@ export default function Home() {
         <div className="container mx-auto px-1">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="text-3xl font-bold mb-4 sm:text-4xl text-[#01083C]">
-              Elevate Your Instagram Presence
+              {/* Elevate Your Instagram Presence */}
             </h2>
             <p className="text-xl text-gray-600">
-              See how Chatal can transform your Instagram strategy and boost your engagement.
+              {/* See how Chatal can transform your Instagram strategy and boost your engagement. */}
             </p>
           </div>
           <div className="relative h-40 md:h-80 w-full rounded-lg overflow-hidden shadow-2xl">
