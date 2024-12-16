@@ -40,8 +40,8 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ maxWidth = 300, maxHeight
       >
         <defs>
           <linearGradient id="bubbleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#4A00E0" />
-            <stop offset="100%" stopColor="#8E2DE2" />
+            <stop offset="0%" stopColor="#260AFF" />
+            <stop offset="100%" stopColor="#0A68FF" />
           </linearGradient>
           <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
@@ -58,10 +58,11 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ maxWidth = 300, maxHeight
         {/* Main chat bubble */}
         <g clipPath="url(#chatBubbleClip)">
           <rect width="100" height="100" fill="url(#bubbleGradient)" />
-          <circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.1)" />
+          {/* <circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.1)" /> */}
+          <circle cx="50" cy="50" r="40" fill="#1B5CFF" />
           <path
             d="M30 30 Q 50 0, 70 30 Q 100 50, 70 70 Q 50 100, 30 70 Q 0 50, 30 30"
-            fill="rgba(255,255,255,0.1)"
+            fill="#1B5CFF"
             transform="rotate(45 50 50)"
           >
             <animateTransform
