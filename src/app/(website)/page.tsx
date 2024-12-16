@@ -44,7 +44,7 @@
 //       <section className="relative bg-gradient-to-b from-slate-900 via-green-900 to-bg">
 //         <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
 //         <div className="relative">
-        
+
 //           <div className="container px-4 py-4">
 //             <div className="flex items-center justify-between">
 //               <div className="flex items-center gap-2">
@@ -54,9 +54,9 @@
 //                 <div className="flex gap-x-2 items-center p-2 justify-center">
 //                   <LogoSmall />
 //                 </div>
-                 
+
 //                 <span className="text-xl font-semibold text-primary-foreground">
-                
+
 //                 </span>
 //               </div>
 //               <nav className="hidden space-x-6 text-sm text-blue-200 md:block">
@@ -64,12 +64,12 @@
 //                 <Link href="#pricing">Pricing</Link>
 //                 <Link href="#about">About</Link>
 //                 <Link href="#about">Services</Link>
-                
+
 //               </nav>
 //               <Button className="bg-black text-primary">
 //                 <Link href="/dashboard">Login</Link>
 //               </Button>
-              
+
 //             </div>
 
 //             <div className="mx-auto mt-16 max-w-3xl text-center">
@@ -192,7 +192,7 @@
 //                   <Button className="w-full">{plan.cta}</Button>                
 //                 </CardFooter>
 //               </Card>
-              
+
 //             ))}
 //           </div>
 //         </div>
@@ -355,8 +355,8 @@ export default function Home() {
             ].map((feature, index) => (
               <Card key={index} className="text-center hover:shadow-lg transition-shadow duration-300">
                 <CardHeader>
-                  <div className="w-150 h-150 mx-auto mb-4">
-                    <Image src={feature.image} alt={feature.title} width={150} height={150} />
+                  <div className="w-200 h-200 mx-auto mb-4">
+                    <Image src={feature.image} alt={feature.title} width={200} height={200} />
                   </div>
                   <CardTitle>{feature.title}</CardTitle>
                 </CardHeader>
@@ -413,7 +413,7 @@ export default function Home() {
                 <CardFooter>
                   <Button className="w-full bg-blue-600 text-white hover:bg-blue-700">
                     {plan.cta}
-                  </Button>                
+                  </Button>
                 </CardFooter>
               </Card>
             ))}
