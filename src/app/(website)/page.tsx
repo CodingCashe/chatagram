@@ -334,18 +334,17 @@ export default function Home() {
             </p>
           </div>
           <div 
-              className="fixed top-0 left-0 w-screen h-screen overflow-hidden"
-            >
-              <Image
-                src="/customers.png"
-                alt="Community members"
-                width={1792}
-                height={1024}
-                className="object-cover w-full h-full"
-              />
+            className="fixed top-0 left-0 w-screen h-screen overflow-hidden"
+          >
+            <Image
+              src="/Ig-creators.png"
+              alt="Community member"
+              width={1792}
+              height={1024}
+              className="object-cover w-full h-full"
+            />
           </div>
 
-          </div>
         </div>
       </section>
 
