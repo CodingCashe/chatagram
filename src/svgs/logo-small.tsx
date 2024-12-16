@@ -369,6 +369,11 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ width = 300, height = 100
       viewBox="0 0 300 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      style={{
+        display: 'block', /* Ensures no extra space above */
+        margin: '0', /* Resets any default margins */
+        verticalAlign: 'top', /* Aligns to the top of the container */
+      }}
     >
       <defs>
         <linearGradient id="bubbleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -435,7 +440,8 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ width = 300, height = 100
       <g transform="translate(50, 50)">
         <path
           d="M-10 -10 L10 10 M-10 10 L10 -10"
-          stroke="#FFD700"
+          // stroke="#FFD700"
+           fill = '#AABBFF'
           strokeWidth="3"
           strokeLinecap="round"
         >
@@ -476,7 +482,8 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ width = 300, height = 100
         fontFamily="Arial, sans-serif"
         fontSize="40"
         fontWeight="bold"
-        fill="#4A00E0"
+        // fill="#4A00E0"
+        fill = '#AABBFF'
         filter="url(#neonGlow)"
       >
         Chatal
@@ -494,7 +501,8 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ width = 300, height = 100
         y="80"
         fontFamily="Arial, sans-serif"
         fontSize="14"
-        fill="#8E2DE2"
+        // fill="#8E2DE2"
+         fill = '#AABBFF'
       >
         Automate. Engage. Grow.
       </text>
