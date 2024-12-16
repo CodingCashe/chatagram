@@ -48,8 +48,11 @@ export default function Home() {
           <div className="container px-4 py-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="h-8 w-14 rounded-lg bg-black flex items-center justify-center font-bold">
+                {/* <div className="h-8 w-14 rounded-lg bg-black flex items-center justify-center font-bold">
                   Chatal
+                </div> */}
+                <div className="flex gap-x-2 items-center p-5 justify-center">
+                  <LogoSmall />
                 </div>
                  
                 <span className="text-xl font-semibold text-primary-foreground">
