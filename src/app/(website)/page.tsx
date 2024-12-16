@@ -253,6 +253,7 @@ export default function Home() {
         'Turn followers into customers with targeted messaging',
       ],
       cta: 'Get Started',
+      link: '/dashboard',
     },
     {
       name: 'Smart AI Plan',
@@ -266,6 +267,7 @@ export default function Home() {
         'Custom branding options',
       ],
       cta: 'Upgrade Now',
+      link: '/api/payment',
     },
   ]
 
@@ -307,7 +309,7 @@ export default function Home() {
                 size="lg"
                 className="bg-blue-600 text-white hover:bg-blue-700"
               >
-                Get Started
+                <Link href="/dashboard">Get Started</Link>
               </Button>
               <Button
                 size="lg"
@@ -412,7 +414,7 @@ export default function Home() {
                 </CardContent>
                 <CardFooter>
                   <Button className="w-full bg-blue-600 text-white hover:bg-blue-700">
-                    {plan.cta}
+                  <Link href={plan.link}>{plan.cta}</Link>
                   </Button>
                 </CardFooter>
               </Card>
