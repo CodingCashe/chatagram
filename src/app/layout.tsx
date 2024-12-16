@@ -21,7 +21,7 @@ import {Toaster} from "sonner"
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ChataGram",
+  title: "Chatal",
   description: "Next-Level AI DM Automations",
 };
 
