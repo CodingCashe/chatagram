@@ -30,7 +30,7 @@ const AutomationsBreadCrumb = ({ id }: Props) => {
             <Input
               ref={inputRef}
               placeholder={
-                isPending ? latestVariable.variables : 'Add a new name'
+                isPending ? latestVariable.variables : 'rename'
               }
               className="bg-transparent h-auto outline-none text-base border-none p-0"
             />
@@ -61,7 +61,7 @@ const AutomationsBreadCrumb = ({ id }: Props) => {
         </p>
         <div className="flex gap-x-5 flex-shrink-0">
           <p className="text-text-secondary text-sm truncate min-w-0">
-            Changes Saved
+            {/* Changes Saved */}
           </p>
         </div>
       </div>

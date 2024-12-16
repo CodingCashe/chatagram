@@ -333,13 +333,18 @@ export default function Home() {
               {/* See how Chatal can transform your Instagram strategy and boost your engagement. */}
             </p>
           </div>
-          <div className="relative h-40 md:h-80 w-full rounded-lg overflow-hidden shadow-2xl">
-            <Image
-              src="/customers.png"
-              alt="Instagram creators using Chatal"
-              fill
-              className="object-cover"
-            />
+          <div 
+              className="fixed top-0 left-0 w-screen h-screen overflow-hidden"
+            >
+              <Image
+                src="/customers.png"
+                alt="Community members"
+                width={1792}
+                height={1024}
+                className="object-cover w-full h-full"
+              />
+          </div>
+
           </div>
         </div>
       </section>
