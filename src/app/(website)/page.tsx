@@ -51,7 +51,7 @@ export default function Home() {
                 {/* <div className="h-8 w-14 rounded-lg bg-black flex items-center justify-center font-bold">
                   Chatal
                 </div> */}
-                <div className="flex gap-x-2 items-center p-5 justify-center">
+                <div className="flex gap-x-2 items-center p-2 justify-center">
                   <LogoSmall />
                 </div>
                  
