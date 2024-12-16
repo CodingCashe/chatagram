@@ -335,15 +335,14 @@ export default function Home() {
           </div>
           <div 
             className="fixed top-0 left-0 w-screen h-screen overflow-hidden"
-          >
-            <Image
-              src="/Ig-creators.png"
-              alt="Community member"
-              width={1792}
-              height={1024}
-              className="object-cover w-full h-full"
-            />
-          </div>
+            style={{
+              backgroundImage: `url('/customers.png')`,
+              backgroundSize: 'cover',
+              backgroundAttachment: 'fixed',
+              backgroundPosition: 'center',
+            }}
+          />
+
 
         </div>
       </section>
