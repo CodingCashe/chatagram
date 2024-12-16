@@ -346,7 +346,7 @@ export default function Home() {
 
       <section id="features" className="py-20 bg-[#364B5A]">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 sm:text-4xl text-[#01083C]">
+          <h2 className="text-3xl font-bold text-center mb-12 sm:text-4xl text-white">
             Why Choose Chatal?
           </h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -374,10 +374,10 @@ export default function Home() {
       <section id="pricing" className="py-20 bg-[#364B5A]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4 sm:text-4xl text-[#01083C]">
+            <h2 className="text-3xl font-bold mb-4 sm:text-4xl text-white">
               Choose Your Plan
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-[#FFFAF8] max-w-2xl mx-auto">
               Select the perfect plan to boost your Instagram engagement and take your social media presence to the next level.
             </p>
           </div>
@@ -394,7 +394,7 @@ export default function Home() {
                 <CardContent className="flex-grow">
                   <div className="text-4xl font-bold mb-6">
                     {plan.price}
-                    <span className="text-lg font-normal text-gray-500">
+                    <span className="text-lg font-normal text-[#FFFAF8]">
                       /month
                     </span>
                   </div>
