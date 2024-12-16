@@ -342,7 +342,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="features" className="py-20 bg-gray-100">
+      <section id="features" className="py-20 bg-[#77C7FF]">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12 sm:text-4xl text-[#01083C]">
             Why Choose Chatal?
@@ -369,7 +369,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="pricing" className="py-20 bg-white">
+      <section id="pricing" className="py-20 bg-[#77C7FF]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4 sm:text-4xl text-[#01083C]">
