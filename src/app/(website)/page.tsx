@@ -439,7 +439,7 @@ export default function Home() {
             </div>
             <div>
               <h3 className="text-lg text-center font-semibold mb-4">Connect with us</h3>
-              <div className="text-center flex space-x-4">
+              <div className="items-center flex space-x-4">
                 <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:opacity-75 transition-opacity">
                   <Image src="/instagram-icon.svg" alt="Instagram" width={24} height={24} />
                 </a>
