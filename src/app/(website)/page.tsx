@@ -290,7 +290,7 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="relative bg-gradient-to-b from-slate-900 via-green-900 to-bg py-20">
+      <section className="relative bg-gradient-to-b from-slate-900 via-blue-900 to-bg py-20">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
         <div className="container mx-auto px-4 relative">
           <div className="max-w-3xl mx-auto text-center">
@@ -324,14 +324,14 @@ export default function Home() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4 sm:text-4xl">
+            <h2 className="text-3xl font-bold mb-4 sm:text-4xl text-[#01083C]">
               Elevate Your Instagram Presence
             </h2>
             <p className="text-xl text-gray-600">
               See how Chatal can transform your Instagram strategy and boost your engagement.
             </p>
           </div>
-          <div className="relative h-[400px] md:h-[600px] w-full rounded-lg overflow-hidden shadow-2xl">
+          <div className="relative h-40 md:h-80 w-full rounded-lg overflow-hidden shadow-2xl">
             <Image
               src="/Ig-creators.png"
               alt="Instagram creators using Chatal"
@@ -344,7 +344,7 @@ export default function Home() {
 
       <section id="features" className="py-20 bg-gray-100">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 sm:text-4xl">
+          <h2 className="text-3xl font-bold text-center mb-12 sm:text-4xl text-[#01083C]">
             Why Choose Chatal?
           </h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -356,7 +356,7 @@ export default function Home() {
               <Card key={index} className="text-center hover:shadow-lg transition-shadow duration-300">
                 <CardHeader>
                   <div className="w-20 h-20 mx-auto mb-4">
-                    <Image src={feature.image} alt={feature.title} width={80} height={80} />
+                    <Image src={feature.image} alt={feature.title} width={100} height={100} />
                   </div>
                   <CardTitle>{feature.title}</CardTitle>
                 </CardHeader>
@@ -372,7 +372,7 @@ export default function Home() {
       <section id="pricing" className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4 sm:text-4xl">
+            <h2 className="text-3xl font-bold mb-4 sm:text-4xl text-[#01083C]">
               Choose Your Plan
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -392,7 +392,7 @@ export default function Home() {
                 <CardContent className="flex-grow">
                   <div className="text-4xl font-bold mb-6">
                     {plan.price}
-                    <span className="text-lg font-normal text-gray-600">
+                    <span className="text-lg font-normal text-gray-500">
                       /month
                     </span>
                   </div>
