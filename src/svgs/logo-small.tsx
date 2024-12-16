@@ -406,7 +406,7 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ width = 300, height = 100
             type="rotate"
             from="0 50 50"
             to="360 50 50"
-            dur="20s"
+            dur="40s"
             repeatCount="indefinite"
           />
         </path>
@@ -420,7 +420,7 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ width = 300, height = 100
             type="rotate"
             from="0"
             to="360"
-            dur="10s"
+            dur="20s"
             repeatCount="indefinite"
           />
         </circle>
@@ -430,7 +430,7 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ width = 300, height = 100
             type="rotate"
             from="360"
             to="0"
-            dur="7s"
+            dur="14s"
             repeatCount="indefinite"
           />
         </circle>
@@ -449,7 +449,7 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ width = 300, height = 100
             attributeName="transform"
             type="scale"
             values="1;1.2;1"
-            dur="2s"
+            dur="13s"
             repeatCount="indefinite"
           />
         </path>
@@ -461,7 +461,7 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ width = 300, height = 100
           <animate
             attributeName="d"
             values="M15 40 Q 30 20, 45 40;M15 40 Q 30 60, 45 40;M15 40 Q 30 20, 45 40"
-            dur="3s"
+            dur="13s"
             repeatCount="indefinite"
           />
         </path>
@@ -469,7 +469,7 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ width = 300, height = 100
           <animate
             attributeName="d"
             values="M55 60 Q 70 80, 85 60;M55 60 Q 70 40, 85 60;M55 60 Q 70 80, 85 60"
-            dur="3s"
+            dur="13s"
             repeatCount="indefinite"
           />
         </path>
@@ -490,7 +490,7 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ width = 300, height = 100
         <animate
           attributeName="opacity"
           values="1;0.7;1"
-          dur="3s"
+          dur="13s"
           repeatCount="indefinite"
         />
       </text>
