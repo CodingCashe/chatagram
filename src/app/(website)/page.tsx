@@ -119,21 +119,21 @@ export default function Home() {
           </h2>
           <div className="grid grid-cols-1 gap-8 mt-8 md:grid-cols-3">
             <div className="flex flex-col items-center text-center">
-              <Image src="/feature-1.png" alt="Boost Engagement" width={100} height={100} />
+              <Image src="/engage.png" alt="Boost Engagement" width={100} height={100} />
               <h3 className="text-xl font-semibold mt-4">Boost Engagement</h3>
               <p className="text-muted-foreground">
                 Automate comment replies and direct messages to interact with your audience 24/7.
               </p>
             </div>
             <div className="flex flex-col items-center text-center">
-              <Image src="/feature-2.png" alt="Save Time" width={100} height={100} />
+              <Image src="/time.png" alt="Save Time" width={100} height={100} />
               <h3 className="text-xl font-semibold mt-4">Save Time</h3>
               <p className="text-muted-foreground">
                 Let our AI handle repetitive tasks so you can focus on creating amazing content.
               </p>
             </div>
             <div className="flex flex-col items-center text-center">
-              <Image src="/feature-3.png" alt="Grow Revenue" width={100} height={100} />
+              <Image src="/revenue.png" alt="Grow Revenue" width={100} height={100} />
               <h3 className="text-xl font-semibold mt-4">Grow Revenue</h3>
               <p className="text-muted-foreground">
                 Convert followers into customers with targeted, personalized messaging.
