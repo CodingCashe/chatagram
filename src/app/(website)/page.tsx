@@ -189,40 +189,40 @@ export default function Home() {
                   </ul>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full">{plan.cta}</Button>
-                  <footer className="bg-slate-800 text-blue-200 py-8">
-                    <div className="container flex flex-wrap justify-between px-4">
-                      <div>
-                        <LogoSmall />
-                        <p className="mt-4 text-sm text-muted-foreground">
-                          © 2024 Chatal. All rights reserved.
-                        </p>
-                      </div>
-                      <div className="flex space-x-4">
-                        <Link href="/privacy-policy">Privacy Policy</Link>
-                        <Link href="/terms">Terms of Service</Link>
-                        <Link href="/contact">Contact</Link>
-                      </div>
-                      <div className="flex space-x-4">
-                        <a href="https://instagram.com" target="_blank" aria-label="Instagram">
-                          <Image src="/instagram-icon.svg" alt="Instagram" width={24} height={24} />
-                        </a>
-                        <a href="https://twitter.com" target="_blank" aria-label="Twitter">
-                          <Image src="/twitter-icon.svg" alt="Twitter" width={24} height={24} />
-                        </a>
-                        <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn">
-                          <Image src="/linkedin-icon.svg" alt="LinkedIn" width={24} height={24} />
-                        </a>
-                      </div>
-                    </div>
-                  </footer>
-
+                  <Button className="w-full">{plan.cta}</Button>                
                 </CardFooter>
               </Card>
+              
             ))}
           </div>
         </div>
       </section>
+      <footer className="bg-slate-800 text-blue-200 py-8">
+        <div className="container flex flex-wrap justify-between px-4">
+          <div>
+            <LogoSmall />
+            <p className="mt-4 text-sm text-muted-foreground">
+              © 2024 Chatal. All rights reserved.
+            </p>
+          </div>
+          <div className="flex space-x-4">
+            <Link href="/privacy-policy">Privacy Policy</Link>
+            <Link href="/terms">Terms of Service</Link>
+            <Link href="/contact">Contact</Link>
+          </div>
+          <div className="flex space-x-4">
+            <a href="https://instagram.com" target="_blank" aria-label="Instagram">
+              <Image src="/instagram-icon.svg" alt="Instagram" width={24} height={24} />
+            </a>
+            <a href="https://twitter.com" target="_blank" aria-label="Twitter">
+              <Image src="/twitter-icon.svg" alt="Twitter" width={24} height={24} />
+            </a>
+            <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn">
+              <Image src="/linkedin-icon.svg" alt="LinkedIn" width={24} height={24} />
+            </a>
+          </div>
+        </div>
+      </footer>
     </main>
   )
 }
