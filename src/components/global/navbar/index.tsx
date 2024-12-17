@@ -47,7 +47,7 @@ const Navbar = ({ slug }: Props) => {
                     page={page}
                     slug={slug}                    
                   />
-                  </SheetClose>
+                  </SheetClose>                  
                 </div>
                 <div className="px-16">
                   <Separator
