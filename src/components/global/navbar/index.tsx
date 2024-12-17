@@ -42,12 +42,12 @@ const Navbar = ({ slug }: Props) => {
                   <LogoSmall />
                 </div>
                 <div className="flex flex-col py-3">
-                <SheetClose asChild>
+                {/* <SheetClose asChild> */}
                   <Items
                     page={page}
                     slug={slug}                    
                   />
-                  </SheetClose>
+                  {/* </SheetClose> */}
                 </div>
                 <div className="px-16">
                   <Separator
