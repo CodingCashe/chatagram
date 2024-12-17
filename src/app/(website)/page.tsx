@@ -335,7 +335,7 @@ export default function Home() {
           </div>
           <div 
             className="
-              fixed top-20 left-0 w-screen h-60 overflow-hidden 
+              fixed top-30 left-0 w-screen h-screen overflow-hidden 
               bg-cover bg-fixed bg-center -z-10"
             style={{
               backgroundImage: `url('/customers.png')`
