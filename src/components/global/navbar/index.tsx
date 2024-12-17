@@ -116,8 +116,8 @@ const Navbar = ({ slug }: Props) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   return (
-    currentPage && (
-      <div className="flex flex-col">
+    currentPage && isSidebarOpen && (
+      <div className="flex flex-col bg-white">
         <div className="flex gap-x-3 lg:gap-x-5 justify-end">
           <span className="lg:hidden flex items-center flex-1 gap-x-2">
             <Sheet
