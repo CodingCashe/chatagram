@@ -333,6 +333,7 @@ export default function Home() {
               {/* See how Chatal can transform your Instagram strategy and boost your engagement. */}
             </p>
           </div>
+
           <div>
             {/* Background Image Div */}
             <div
@@ -355,6 +356,8 @@ export default function Home() {
             </div>
           </div>
 
+         
+        </div>
       </section>
 
       <section id="features" className="py-20 bg-[#364B5A]">
