@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import {
   createAutomations,
+  deleteAutomation,
   deleteKeyword,
   saveKeyword,
   saveListener,
@@ -9,6 +10,7 @@ import {
   updateAutomationName,
 } from '@/actions/automations'
 import { useMutationData } from './use-mutation-data'
+// import { useMutation } from '@/hooks/use-mutation-data' // Highlighted change
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import useZodForm from './use-zod-form'
@@ -138,6 +140,8 @@ export const useKeywords = (id: string) => {
   return { keyword, onValueChange, onKeyPress, deleteMutation }
 }
 
+
+
 export const useAutomationPosts = (id: string) => {
   const [posts, setPosts] = useState<
     {
@@ -169,5 +173,12 @@ export const useAutomationPosts = (id: string) => {
     'automation-info',
     () => setPosts([])
   )
-  return { posts, onSelectPost, mutate, isPending }
+
+  const { mutate: deleteMutation, isPending: isDeleting } = useMutationData(
+    ['delete-automation'],
+    (data: { id: string }) => deleteAutomation(data.id),
+    'automation-info'
+  )
+
+  return { posts, onSelectPost, mutate, isPending,deleteMutation ,isDeleting}
 }

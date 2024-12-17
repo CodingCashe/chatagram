@@ -9,18 +9,42 @@ import { Button } from '@/components/ui/button'
 import { useQueryAutomations } from '@/hooks/user-queries'
 import CreateAutomation from '../create-automation'
 import { useMutationDataState } from '@/hooks/use-mutation-data'
+import { useAutomationPosts } from '@/hooks/use-automations'
+// import { useMutation } from '@/hooks/use-mutation-data' // Highlighted: Import useMutation hook
 
-type Props = {}
+type Props = {
+  id: string
+}
 
-const AutomationList = (props: Props) => {
-  const { data } = useQueryAutomations()
+const AutomationList = ({ id }: Props) => {
+  const { data, refetch } = useQueryAutomations() // Highlighted: Refetch function for updated data
+  // const { data } = useQueryAutomations()
+  const{deleteMutation} = useAutomationPosts(id)
 
   const { latestVariable } = useMutationDataState(['create-automation'])
   console.log(latestVariable)
   const { pathname } = usePaths()
+
   
+  // const optimisticUiData = useMemo(() => {
+  //   if ((latestVariable && latestVariable?.variables &&  data)) {
+  //     const test = [latestVariable.variables, ...data.data]
+  //     return { data: test }
+  //   }
+  //   return data || { data: [] }
+  // }, [latestVariable, data])
+
+  // if (data?.status !== 200 || data.data.length <= 0) {
+  //   return (
+  //     <div className="h-[70vh] flex justify-center items-center flex-col gap-y-3">
+  //       <h3 className="text-lg text-gray-400">No Automations Yet </h3>
+  //       <CreateAutomation />
+  //     </div>
+  //   )
+  // }
+  // Optimistic UI Update
   const optimisticUiData = useMemo(() => {
-    if ((latestVariable && latestVariable?.variables &&  data)) {
+    if (latestVariable?.variables && data) {
       const test = [latestVariable.variables, ...data.data]
       return { data: test }
     }
@@ -30,7 +54,7 @@ const AutomationList = (props: Props) => {
   if (data?.status !== 200 || data.data.length <= 0) {
     return (
       <div className="h-[70vh] flex justify-center items-center flex-col gap-y-3">
-        <h3 className="text-lg text-gray-400">No Automations Yet </h3>
+        <h3 className="text-lg text-gray-400">No Automations Yet</h3>
         <CreateAutomation />
       </div>
     )
@@ -99,6 +123,15 @@ const AutomationList = (props: Props) => {
               {String(automation.createdAt.getUTCMinutes()).padStart(2, '0')}:
               {String(automation.createdAt.getUTCSeconds()).padStart(2, '0')} UTC
             </p>
+
+            {/* Delete Button */}
+            <Button
+              className="bg-red-500 hover:bg-red-600 text-white mt-3"
+              // onClick={() => deleteAutomation.mutate(automation.id)} // Highlighted: Delete function
+              onClick={() => deleteMutation({ id: automation.id })}
+            >
+              Delete
+            </Button>
 
 
             {automation.listener?.listener === 'SMARTAI' ? (
