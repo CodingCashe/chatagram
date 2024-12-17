@@ -338,7 +338,7 @@ export default function Home() {
             {/* Background Image Div */}
             <div
               className="
-                fixed top-[120px] left-0 w-screen h-[calc(100vh-120px)] 
+                fixed top-[100px] left-0 w-screen h-[calc(100vh-100px)] 
                 bg-cover bg-fixed bg-center -z-10
               "
               style={{
