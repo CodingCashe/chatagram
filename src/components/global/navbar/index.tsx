@@ -42,12 +42,7 @@ const Navbar = ({ slug }: Props) => {
                   <LogoSmall />
                 </div>
                 <div className="flex-1 h-120 overflow-y-auto py-2">
-                <SheetClose asChild>
-                  <Items
-                    page={page}
-                    slug={slug}                    
-                  />
-                  </SheetClose>
+                <Items page={page} slug={slug} Wrapper={SheetClose} />
                 </div>
                 <div className="px-16">
                   <Separator
