@@ -333,18 +333,28 @@ export default function Home() {
               {/* See how Chatal can transform your Instagram strategy and boost your engagement. */}
             </p>
           </div>
-          <div 
-            className="
-              fixed top-30 left-0 w-screen h-screen overflow-hidden 
-              bg-cover bg-fixed bg-center -z-10"
-            style={{
-              backgroundImage: `url('/customers.png')`
-            }}
-          />
+          <div>
+            {/* Background Image Div */}
+            <div
+              className="
+                fixed top-0 left-0 w-screen h-screen 
+                bg-cover bg-fixed bg-center -z-10
+              "
+              style={{
+                backgroundImage: `url('/customers.png')`,
+              }}
+            ></div>
 
+            {/* Foreground Content */}
+            <div className="relative z-10 text-white p-8">
+              <h1 className="text-4xl font-bold">Welcome to Our Platform</h1>
+              <p className="mt-4 text-lg">
+                This is some text that appears in the foreground. The background image
+                will remain fixed as you scroll.
+              </p>
+            </div>
+          </div>
 
-
-        </div>
       </section>
 
       <section id="features" className="py-20 bg-[#364B5A]">
