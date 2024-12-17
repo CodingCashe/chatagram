@@ -113,10 +113,10 @@ const Navbar = ({ slug }: Props) => {
   const currentPage = PAGE_BREAD_CRUMBS.includes(page) || page == slug
 
   // Added state to control sidebar visibility
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   return (
-    currentPage && isSidebarOpen && (
+    currentPage && (
       <div className="flex flex-col bg-white">
         <div className="flex gap-x-3 lg:gap-x-5 justify-end">
           <span className="lg:hidden flex items-center flex-1 gap-x-2">
