@@ -113,7 +113,7 @@ const Navbar = ({ slug }: Props) => {
   const currentPage = PAGE_BREAD_CRUMBS.includes(page) || page == slug
 
   // Added state to control sidebar visibility
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
   return (
     currentPage && isSidebarOpen && (
