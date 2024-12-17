@@ -41,7 +41,7 @@ const Navbar = ({ slug }: Props) => {
                 <div className="flex gap-x-2 items-center p-5 justify-center">
                   <LogoSmall />
                 </div>
-                <div className="flex flex-col py-3">
+                <div className="flex-1 h-120 overflow-y-auto py-2">
                 <SheetClose asChild>
                   <Items
                     page={page}
