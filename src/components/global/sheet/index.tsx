@@ -106,3 +106,33 @@ export default Sheet
 
 // export default Sheet
 
+// import {
+//   Sheet as ShadcnSheet,
+//   SheetContent,
+//   SheetTrigger,
+// } from "@/components/ui/sheet";
+// import React, { ReactNode } from "react";
+
+// type Props = {
+//   trigger: React.ReactNode;
+//   children: (closeSheet: () => void) => ReactNode; // Allow children to access the close function
+//   className?: string;
+//   side: "left" | "right";
+// };
+
+// const Sheet = ({ children, trigger, className, side }: Props) => {
+//   const [open, setOpen] = React.useState(false);
+
+//   const closeSheet = () => setOpen(false);
+
+//   return (
+//     <ShadcnSheet open={open} onOpenChange={setOpen}>
+//       <SheetTrigger className={className}>{trigger}</SheetTrigger>
+//       <SheetContent side={side} className="p-0">
+//         {children(closeSheet)}
+//       </SheetContent>
+//     </ShadcnSheet>
+//   );
+// };
+
+// export default Sheet;
