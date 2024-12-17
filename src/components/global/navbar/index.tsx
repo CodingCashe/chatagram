@@ -127,14 +127,14 @@ const Navbar = ({ slug }: Props) => {
               side="left"
             >
               {isSidebarOpen && ( // Only render when sidebar is open
-                <div className="flex flex-col gap-y-5 w-full h-100 p-3 bg-[#0e0e0e] bg-opacity-90 bg-clip-padding backdrop-filter backdrop--blur__safari backdrop-blur-3xl">
+                <div className="flex flex-col gap-y-5 w-full h-full p-3 bg-[#0e0e0e] bg-opacity-90 bg-clip-padding backdrop-filter backdrop--blur__safari backdrop-blur-3xl">
                   {/* Close button */}
-                  <div className="flex justify-end">
+                  {/* <div className="flex justify-end">
                     <X
                       className="cursor-pointer text-white"
                       onClick={() => setIsSidebarOpen(false)} // Close the sidebar
                     />
-                  </div>
+                  </div> */}
 
                   <div className="flex gap-x-2 items-center p-0 justify-center">
                     <LogoSmall />
