@@ -241,7 +241,7 @@ const Navbar = ({ slug }: Props) => {
              
         
         
-              <div className="flex flex-col gap-y-5 w-full  bottom-2 top-2 m-3 border-[2px] radial rounded-3xl overflow-hidden border-[#545454] h-full p-3 bg-[#0e0e0e] bg-opacity-90 bg-clip-padding backdrop-filter backdrop--blur__safari backdrop-blur-3xl">
+              <div className="flex flex-col gap-y-5 w-full  bottom-2 top-2 m-2 border-[2px] radial rounded-3xl overflow-hidden border-[#545454] h-full p-3 bg-[#0e0e0e] bg-opacity-90 bg-clip-padding backdrop-filter backdrop--blur__safari backdrop-blur-3xl">
                 <div className="flex gap-x-2 items-center p-0 justify-center">
                   <LogoSmall />
                 </div>
