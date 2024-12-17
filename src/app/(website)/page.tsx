@@ -347,11 +347,10 @@ export default function Home() {
             ></div>
 
             {/* Foreground Content */}
-            <div className="relative z-10 text-white p-8">
-              <h1 className="text-4xl font-bold">Welcome to Our Platform</h1>
+            <div className="relative z-10 text-center text-white p-8">
+              <h1 className="text-4xl font-bold">Chatal Has Over 1200 happy clients in 30+ countries</h1>
               <p className="mt-4 text-lg">
-                This is some text that appears in the foreground. The background image
-                starts below the navbar and remains fixed.
+                Become one of our happy clients by signing up. Create an account and get started now!
               </p>
             </div>
           </div>

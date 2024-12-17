@@ -141,7 +141,7 @@ const Navbar = ({ slug }: Props) => {
                   </div>
                   
                   {/* Scrollable Items */}
-                  <div className="flex-1 h-120 overflow-y-auto py-3"> {/* Added overflow-y-auto */}
+                  <div className="flex-1 h-120 overflow-y-auto py-2"> {/* Added overflow-y-auto */}
                     <Items
                       page={page}
                       slug={slug}
