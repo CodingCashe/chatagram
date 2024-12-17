@@ -16,6 +16,7 @@ import CreateAutomation from '../create-automation'
 import Search from './search'
 import { Notifications } from './notifications'
 import MainBreadCrumb from '../bread-crumbs/main-bread-crumb'
+import { SheetClose } from '@/components/ui/sheet' // Import SheetClose
 
 type Props = {
   slug: string
@@ -41,10 +42,12 @@ const Navbar = ({ slug }: Props) => {
                   <LogoSmall />
                 </div>
                 <div className="flex flex-col py-3">
+                <SheetClose asChild>
                   <Items
                     page={page}
                     slug={slug}                    
                   />
+                  </SheetClose>
                 </div>
                 <div className="px-16">
                   <Separator

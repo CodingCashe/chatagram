@@ -67,7 +67,7 @@ import { SIDEBAR_MENU } from '@/constants/menu'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import React from 'react'
-import { SheetClose } from '@/components/ui/sheet' // Import SheetClose
+
 
 type Props = {
   page: string
@@ -76,7 +76,6 @@ type Props = {
 
 const Items = ({ page, slug }: Props) => {
   return SIDEBAR_MENU.map((item) => (
-    <SheetClose key={item.id}>
       <Link
         href={`/dashboard/${slug}/${item.label === 'home' ? '/' : item.label}`}
         className={cn(
@@ -90,7 +89,7 @@ const Items = ({ page, slug }: Props) => {
         {item.icon}
         {item.label}
       </Link>
-    </SheetClose>
+
   ))
 }
 
