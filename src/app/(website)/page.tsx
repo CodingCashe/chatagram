@@ -338,7 +338,7 @@ export default function Home() {
             {/* Background Image Div */}
             <div
               className="
-                fixed top-0 left-0 w-screen h-screen 
+                fixed top-[120px] left-0 w-screen h-[calc(100vh-120px)] 
                 bg-cover bg-fixed bg-center -z-10
               "
               style={{
@@ -351,10 +351,11 @@ export default function Home() {
               <h1 className="text-4xl font-bold">Welcome to Our Platform</h1>
               <p className="mt-4 text-lg">
                 This is some text that appears in the foreground. The background image
-                will remain fixed as you scroll.
+                starts below the navbar and remains fixed.
               </p>
             </div>
           </div>
+
 
          
         </div>
