@@ -167,11 +167,11 @@ export const addPost = async (
 }
 
 // **New Functionality for Deleting Automation**
-export const deleteAutomationQuery = async (id: string) => {
+export const deleteAutomationQuery = async (autmationId: string) => {
   try {
     return await client.automation.delete({
       where: {
-        id,
+        id:autmationId,
       },
     })
   } catch (error) {
