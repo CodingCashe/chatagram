@@ -224,86 +224,6 @@ type Props = {
   slug: string
 }
 
-// const Navbar = ({ slug }: Props) => {
-//   const { page } = usePaths()
-//   const currentPage = PAGE_BREAD_CRUMBS.includes(page) || page == slug
-
-//   return (
-//     currentPage && (
-//       <div className="flex flex-col">
-//         <div className="flex gap-x-3 lg:gap-x-5 justify-end">
-//           <span className="lg:hidden flex items-center flex-1 gap-x-2">
-//             <Sheet
-//               trigger={<Menu />}
-//               className="lg:hidden"
-//               side="left"
-//             >
-             
-        
-        
-//               <div className="flex flex-col gap-y-5 w-full  bottom-2 top-2 m-2 border-[2px] radial rounded-3xl overflow-hidden border-[#545454] h-full p-3 bg-[#0e0e0e] bg-opacity-90 bg-clip-padding backdrop-filter backdrop--blur__safari backdrop-blur-3xl">
-//                 <div className="flex gap-x-2 items-center p-0 justify-center">
-//                   <LogoSmall />
-//                 </div>
-//                 <div className="flex-1 h-120 overflow-y-auto py-2">
-//                   {/* Inline Items Component */}
-//                   {SIDEBAR_MENU.map((item) => (
-//                     <SheetClose asChild key={item.id}>
-//                       <Link
-//                         href={`/dashboard/${slug}/${item.label === 'home' ? '/' : item.label}`}
-//                         className={cn(
-//                           'capitalize flex gap-x-2 rounded-full p-3',
-//                           page === item.label && 'bg-[#0f0f0f]',
-//                           page === slug && item.label === 'home'
-//                             ? 'bg-[#0f0f0f]'
-//                             : 'text-[#9B9CA0]'
-//                         )}
-//                       >
-//                         {item.icon}
-//                         {item.label}
-//                       </Link>
-//                     </SheetClose>
-//                   ))}
-//                 </div>
-//                 <div className="px-16">
-//                   <Separator
-//                     orientation="horizontal"
-//                     className="bg-[#333336]"
-//                   />
-//                 </div>
-//                 <div className="px-3 flex flex-col gap-y-5">
-//                   <div className="flex gap-x-2">
-//                     <ClerkAuthState />
-//                     <p className="text-[#9B9CA0]">Profile</p>
-//                   </div>
-//                   <div className="flex gap-x-3">
-//                     <HelpDuoToneWhite />
-//                     <p className="text-[#9B9CA0]">Help</p>
-//                   </div>
-//                 </div>
-//                 <SubscriptionPlan type="FREE">
-//                   <div className="flex-1 flex flex-col justify-end">
-//                     <UpgradeCard />
-//                   </div>
-//                 </SubscriptionPlan>
-//               </div>
-//             </Sheet>
-//           </span>
-//           <Search />
-//           <CreateAutomation />
-//           <Notifications />
-//         </div>
-//         <MainBreadCrumb
-//           page={page === slug ? 'Home' : page}
-//           slug={slug}
-//         />
-//       </div>
-//     )
-//   )
-// }
-
-// export default Navbar
-
 const Navbar = ({ slug }: Props) => {
   const { page } = usePaths()
   const currentPage = PAGE_BREAD_CRUMBS.includes(page) || page == slug
@@ -311,18 +231,17 @@ const Navbar = ({ slug }: Props) => {
   return (
     currentPage && (
       <div className="flex flex-col">
-        {/* Add a container for fixed elements */}
-        <div 
-          className="flex gap-x-3 lg:gap-x-5 justify-end bg-[#0e0e0e] sticky top-0 z-10 p-4" 
-          // Highlight: Added `sticky`, `top-0`, and `z-10` to fix this section
-        >
+        <div className="flex gap-x-3 lg:gap-x-5 justify-end">
           <span className="lg:hidden flex items-center flex-1 gap-x-2">
             <Sheet
               trigger={<Menu />}
               className="lg:hidden"
               side="left"
             >
-              <div className="flex flex-col gap-y-5 w-full bottom-2 top-2 m-2 border-[2px] radial rounded-3xl overflow-hidden border-[#545454] h-full p-3 bg-[#0e0e0e] bg-opacity-90 bg-clip-padding backdrop-filter backdrop--blur__safari backdrop-blur-3xl">
+             
+        
+        
+              <div className="flex flex-col gap-y-5 w-full  bottom-2 top-2 m-2 border-[2px] radial rounded-3xl overflow-hidden border-[#545454] h-full p-3 bg-[#0e0e0e] bg-opacity-90 bg-clip-padding backdrop-filter backdrop--blur__safari backdrop-blur-3xl">
                 <div className="flex gap-x-2 items-center p-0 justify-center">
                   <LogoSmall />
                 </div>
@@ -370,28 +289,14 @@ const Navbar = ({ slug }: Props) => {
               </div>
             </Sheet>
           </span>
-
-          {/* These components are fixed */}
           <Search />
           <CreateAutomation />
           <Notifications />
         </div>
-
-        {/* Breadcrumb section also fixed */}
-        <div 
-          className="sticky top-[50px] z-10 bg-[#0e0e0e] p-4" 
-          // Highlight: Added `sticky`, `top-[50px]`, and `z-10` for breadcrumb
-        >
-          <MainBreadCrumb
-            page={page === slug ? 'Home' : page}
-            slug={slug}
-          />
-        </div>
-
-        {/* Remaining content will scroll */}
-        <div className="flex-1 overflow-y-auto">
-          {/* Other content goes here */}
-        </div>
+        <MainBreadCrumb
+          page={page === slug ? 'Home' : page}
+          slug={slug}
+        />
       </div>
     )
   )
