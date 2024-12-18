@@ -53,6 +53,7 @@
 
 // export default Page
 
+'use client'
 
 import AutomationList from '@/components/global/automation-list'
 import CreateAutomation from '@/components/global/create-automation'
