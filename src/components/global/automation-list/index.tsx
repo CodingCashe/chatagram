@@ -125,10 +125,23 @@ const AutomationList = ({ id }: Props) => {
             </p>
 
             {/* Delete Button */}
-            <Button
+            {/* <Button
               className="bg-red-500 hover:bg-red-600 text-white mt-3"
               // onClick={() => deleteAutomation.mutate(automation.id)} // Highlighted: Delete function
               onClick={() => deleteMutation({ id: automation.id })}
+            >
+              Delete
+            </Button> */}
+            <Button
+              className="bg-red-500 hover:bg-red-600 text-white mt-3 mb-2"
+              onClick={async () => {
+                try {
+                  await deleteMutation({ id: automation.id }); // Perform the deletion
+                  refetch(); // Refresh the list
+                } catch (error) {
+                  console.error('Error deleting automation:', error);
+                }
+              }}
             >
               Delete
             </Button>
