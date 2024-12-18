@@ -123,8 +123,7 @@ const AutomationList = ({ id }: Props) => {
                 : `${automation.createdAt.getUTCDate()}th`}{' '}
               {automation.createdAt.getUTCFullYear()},{' '}
               {String(automation.createdAt.getUTCHours()).padStart(2, '0')}:
-              {String(automation.createdAt.getUTCMinutes()).padStart(2, '0')}:
-              {String(automation.createdAt.getUTCSeconds()).padStart(2, '0')} UTC
+              {String(automation.createdAt.getUTCMinutes()).padStart(2, '0')} UTC
             </p>
 
             {/* Delete Button */}
@@ -135,19 +134,7 @@ const AutomationList = ({ id }: Props) => {
             >
               Delete
             </Button> */}
-            <Button
-              className="bg-red-500 hover:bg-red-600 text-white mt-3 mb-2"
-              onClick={async () => {
-                try {
-                  await deleteMutation({ id: automation.id }); // Perform the deletion
-                  refetch(); // Refresh the list
-                } catch (error) {
-                  console.error('Error deleting automation:', error);
-                }
-              }}
-            >
-              Delete
-            </Button>
+           
 
 
             {automation.listener?.listener === 'SMARTAI' ? (
@@ -158,10 +145,34 @@ const AutomationList = ({ id }: Props) => {
                 Smart AI
               </GradientButton>
             ) : (
-              <Button className="bg-background-80 hover:bg-background-80 text-white">
-                Standard
-              </Button>
+              // <Button >
+                <div className="flex items-center justify-center">
+                  <span className="px-3 py-1 text-xs font-semibold uppercase text-white bg-blue-500 rounded-full shadow-md">
+                    Standard
+                  </span>
+                </div>
+              // </Button>
+              
             )}
+             <Button
+              className="bg-red-500 hover:bg-red-600 text-white mt-3 mb-2"
+              onClick={async () => {
+                try {
+                  await deleteMutation({ id: automation.id }); // Remove .mutate()
+                  refetch(); // Refresh the list
+                } catch (error) {
+                  console.error('Error deleting automation:', error);
+                }
+              }}
+            >
+              Delete
+            </Button>
+            <Button className="bg-background-80 hover:bg-background-80 text-white mt-2 mb-3">
+            <Link
+                href={`${pathname}/${automation.id}`}
+                key={automation.id}
+                >Configure</Link>
+            </Button>
           </div>
           </div>
         // </Link>
