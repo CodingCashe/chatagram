@@ -163,6 +163,7 @@ const AutomationList = ({ id }: Props) => {
                       onSuccess: () => {
                         console.log('Automation deleted successfully');
                         refetch(); // Trigger refetch manually after success
+                        console.log('refetch done');
                       },
                       onError: (error) => {
                         console.error('Error deleting automation:', error);
