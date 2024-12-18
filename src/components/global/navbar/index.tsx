@@ -245,7 +245,7 @@ const Navbar = ({ slug }: Props) => {
                 <div className="flex gap-x-2 items-center p-0 justify-center">
                   <LogoSmall />
                 </div>
-                <div className="flex-1 h-120 overflow-y-auto py-2">
+                <div className="flex-1 h-100 overflow-y-auto py-2">
                   {/* Inline Items Component */}
                   {SIDEBAR_MENU.map((item) => (
                     <SheetClose asChild key={item.id}>
@@ -271,6 +271,7 @@ const Navbar = ({ slug }: Props) => {
                     className="bg-[#333336]"
                   />
                 </div>
+                <div className="flex-1 overflow-y-auto py-2">
                 <div className="px-3 flex flex-col gap-y-5">
                   <div className="flex gap-x-2">
                     <ClerkAuthState />
@@ -286,6 +287,7 @@ const Navbar = ({ slug }: Props) => {
                     <UpgradeCard />
                   </div>
                 </SubscriptionPlan>
+                </div>
               </div>
             </Sheet>
           </span>
