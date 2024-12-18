@@ -155,18 +155,25 @@ const AutomationList = ({ id }: Props) => {
               
             )}
              <Button
-              className="bg-red-500 hover:bg-red-600 text-white mt-3 mb-2"
-              onClick={async () => {
-                try {
-                  await deleteMutation({ id: automation.id }); // Remove .mutate()
-                  refetch(); // Refresh the list
-                } catch (error) {
-                  console.error('Error deleting automation:', error);
-                }
-              }}
-            >
-              Delete
-            </Button>
+                className="bg-red-500 hover:bg-red-600 text-white mt-3 mb-2"
+                onClick={() => {
+                  deleteMutation(
+                    { id: automation.id },
+                    {
+                      onSuccess: () => {
+                        console.log('Automation deleted successfully');
+                        refetch(); // Trigger refetch manually after success
+                      },
+                      onError: (error) => {
+                        console.error('Error deleting automation:', error);
+                      },
+                    }
+                  );
+                }}
+              >
+                Delete
+              </Button>
+
             <Button className="bg-background-80 hover:bg-background-80 text-white mt-2 mb-3">
             <Link
                 href={`${pathname}/${automation.id}`}
