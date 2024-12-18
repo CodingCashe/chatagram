@@ -23,7 +23,7 @@ export const createAutomations = async (id?: string) => {
 
     return { status: 404, data: 'Oops! something went wrong' }
   } catch (error) {
-    return { status: 500, data: 'Internal server error' }
+    return { status: 500, data: 'Try refreshing the page first' }
   }
 }
 
