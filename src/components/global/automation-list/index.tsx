@@ -63,11 +63,12 @@ const AutomationList = ({ id }: Props) => {
   return (
     <div className="flex flex-col gap-y-3">
       {optimisticUiData.data!.map((automation) => (
-        <Link
-          href={`${pathname}/${automation.id}`}
-          key={automation.id}
-          className="bg-[#1D1D1D] hover:opacity-80 transition duration-100 rounded-xl p-5 border-[1px] radial--gradient--automations flex border-[#545454]"
-        >
+        // <Link
+        //   href={`${pathname}/${automation.id}`}
+        //   key={automation.id}
+          
+        // >
+          <div className="bg-[#1D1D1D] hover:opacity-80 transition duration-100 rounded-xl p-5 border-[1px] radial--gradient--automations flex border-[#545454]">
           <div className="flex flex-col flex-1 items-start">
             <h2 className="text-xl font-semibold">{automation.name}</h2>
             <p className="text-[#9B9CA0] text-sm font-light mb-2">
@@ -160,7 +161,8 @@ const AutomationList = ({ id }: Props) => {
               </Button>
             )}
           </div>
-        </Link>
+          </div>
+        // </Link>
       ))}
     </div>
   )
