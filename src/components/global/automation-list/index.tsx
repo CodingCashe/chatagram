@@ -23,7 +23,7 @@ const AutomationList = ({ id }: Props) => {
 
   const { latestVariable } = useMutationDataState(['create-automation'])
   console.log(latestVariable)
-  const { pathname } = usePaths()
+  const { pathname } = usePaths() 
 
   
   // const optimisticUiData = useMemo(() => {

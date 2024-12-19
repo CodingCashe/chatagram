@@ -237,6 +237,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { CheckCircle, MenuIcon } from 'lucide-react'
+import PrivacyPolicy from '@/components/global/privacy-policy'
 import Image from 'next/image'
 import Link from 'next/link'
 import { LogoSmall } from '@/svgs/logo-small'
@@ -284,6 +285,9 @@ export default function Home() {
               <Link href="#pricing">Pricing</Link>
               <Link href="#about">About</Link>
               <Link href="#services">Services</Link>
+              <Link href="/privacy">Privacy Policy</Link>
+
+
             </nav>
             <Button className="bg-blue-600 text-white hover:bg-blue-700">
               <Link href="/dashboard">Login</Link>

@@ -23,8 +23,8 @@ const ActiveTrigger = ({ keywords, type }: Props) => {
       </div>
       <p className="text-text-secondary">
         {type === 'COMMENT'
-          ? 'If the user comments on a video that is setup to listen for keyworks, this automation will fire'
-          : 'If the user send your a message that contains a keyword, this automation will fire'}
+          ? 'If the user comments on a post setup to listen for keyworks, this automation will fire'
+          : 'If the user sends you a message that contains a keyword, this automation will fire'}
       </p>
       <div className="flex  gap-2 mt-5 flex-wrap">
         {keywords.map((word) => (
