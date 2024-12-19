@@ -9,7 +9,7 @@ export const FancyHomeButton: React.FC = () => {
   return (
     <Link href="/">
       <div
-        className="relative w-20 h-20 cursor-pointer"
+        className="relative w-10 h-10 cursor-pointer"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
