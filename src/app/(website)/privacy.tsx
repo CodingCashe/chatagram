@@ -7,10 +7,10 @@ const PrivacyPolicy = () => {
       <p>Effective Date: [Insert Date]</p>
 
       <p>
-        Welcome to Chatal ("we," "our," or "us"). We value your privacy and are
+        Welcome to Chatal (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). We value your privacy and are
         committed to protecting your personal information. This Privacy Policy
         explains how we collect, use, and share information about you when you
-        use our website ("Chatal") and related services.
+        use our website (&quot;Chatal&quot;) and related services.
       </p>
 
       <h2 style={{ color: "#0000FF" }}>1. Information We Collect</h2>
@@ -61,7 +61,7 @@ const PrivacyPolicy = () => {
         <li>To process payments and subscriptions.</li>
         <li>To communicate with you about updates, offers, and support.</li>
         <li>
-          To analyze website usage and improve our platform's performance and
+          To analyze website usage and improve our platform&apos;s performance and
           features.
         </li>
         <li>To comply with legal obligations and enforce our terms.</li>
@@ -114,7 +114,7 @@ const PrivacyPolicy = () => {
         security.
       </p>
 
-      <h2 style={{ color: "#0000FF" }}>6. Children's Privacy</h2>
+      <h2 style={{ color: "#0000FF" }}>6. Children&apos;s Privacy</h2>
       <p>
         Chatal is not intended for individuals under the age of 13. We do not
         knowingly collect personal information from children. If we become

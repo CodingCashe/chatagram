@@ -237,7 +237,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { CheckCircle, MenuIcon } from 'lucide-react'
-import PrivacyPolicy from '@/components/global/privacy-policy'
+// import PrivacyPolicy from '@/components/global/privacy-policy'
 import Image from 'next/image'
 import Link from 'next/link'
 import { LogoSmall } from '@/svgs/logo-small'
