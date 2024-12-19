@@ -1,3 +1,4 @@
+'use client'
 import { usePaths } from '@/hooks/user-nav';
 import { cn, getMonth } from '@/lib/utils';
 import Link from 'next/link';
@@ -77,7 +78,7 @@ const AutomationList = ({ id }: Props) => {
           <div className="flex flex-col flex-1 items-start">
             <h2 className="text-xl font-semibold">{automation.name}</h2>
             <p className="text-[#9B9CA0] text-sm font-light mb-2">
-              {automation.type?.type === 'DM' ? 'This automation is for posts' : 'This automation is for comments'}
+              {automation.type === 'DM' ? 'This automation is for posts' : 'This automation is for comments'}
             </p>
 
             
