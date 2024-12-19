@@ -34,7 +34,7 @@ export const FancyHomeButton: React.FC = () => {
             fill="none"
             stroke="#4299e1"
             strokeWidth="2"
-            className={`transform transition-transform duration-500 ${
+            className={`transform transition-transform duration-2000 ${
               isHovered ? 'scale-100' : 'scale-90'
             }`}
           />
