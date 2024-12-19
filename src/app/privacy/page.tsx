@@ -6,6 +6,7 @@ import {
   CardHeader, 
   CardTitle 
 } from "@/components/ui/card"
+import { FancyHomeButton } from '@/components/global/fancy-button'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | Chatal',
@@ -16,6 +17,15 @@ export default function PrivacyPolicy() {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold text-blue-400">Privacy Policy</h1>
+          <div className="relative group">
+            <FancyHomeButton />
+            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+              Back to Home
+            </span>
+          </div>
+        </div>
         <Card className="bg-gray-800 border-blue-500">
           <CardHeader>
             <CardTitle className="text-3xl font-bold text-blue-400">Chatal Privacy Policy</CardTitle>
