@@ -114,6 +114,11 @@ const AutomationList = ({ id }: Props) => {
                     {keyword.word}
                   </div>
                 ))}
+                <Button 
+                  className="bg-background-80 px-0 hover:bg-background-80 text-white mt-2 mb-3 sm:mt-1 sm:mb-1 sm:px-0 sm:py-1"
+                >
+                  <Link href={`${pathname}/${automation.id}`}>Configure</Link>
+                </Button>
               </div>
             ) : (
               <div className="rounded-full border-2 mt-3 border-dashed border-white/60 px-3 py-1">
@@ -164,12 +169,7 @@ const AutomationList = ({ id }: Props) => {
               }}
             >
               Delete
-            </Button>
-            <Button 
-              className="bg-background-80 px-0 hover:bg-background-80 text-white mt-2 mb-3 sm:mt-1 sm:mb-1 sm:px-0 sm:py-1"
-            >
-              <Link href={`${pathname}/${automation.id}`}>Configure</Link>
-            </Button>
+            </Button>            
 
           </div>
         </div>
