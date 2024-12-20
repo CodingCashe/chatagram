@@ -345,9 +345,9 @@ export default function Home() {
                 fixed top-[140px] left-0 w-screen h-[calc(100vh-140px)] 
                 bg-cover bg-fixed bg-center -z-10
               "
-              style={{
-                backgroundImage: `url('/customers.png')`,
-              }}
+              // style={{
+              //   backgroundImage: `url('/customers.png')`,
+              // }}
             ></div>
 
             {/* Foreground Content */}
