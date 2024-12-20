@@ -12,7 +12,7 @@ import { useAutomationPosts } from '@/hooks/use-automations';
 
 
 type Props = {
-  type: string;
+  type: 'COMMENT' | 'DM';
   id: string;
 };
 
