@@ -50,7 +50,7 @@ export function InactiveIndicator() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              OFF
+              INACTIVE
             </motion.span>
           </div>
         </motion.div>
