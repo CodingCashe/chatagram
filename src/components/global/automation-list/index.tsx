@@ -1,27 +1,37 @@
 'use client'
 import { usePaths } from '@/hooks/user-nav';
-import { cn, getMonth } from '@/lib/utils';
-import Link from 'next/link';
 import React, { useMemo, useEffect, useState } from 'react';
-import GradientButton from '../gradient-button';
 import { Button } from '@/components/ui/button';
 import { useQueryAutomations } from '@/hooks/user-queries';
 import CreateAutomation from '../create-automation';
 import { useMutationDataState } from '@/hooks/use-mutation-data';
 import { useAutomationPosts } from '@/hooks/use-automations';
-import {InactiveIndicator} from '../indicators/inactive-indicator'
-import { ActiveIndicator } from '../indicators/active-indicator';
 import { FancyAutomationBox } from '../fancy/fancy-automation-box';
+
+// Update the Automation type to match the actual data structure
+type Keyword = {
+  id: string;
+  automationId: string | null;
+  word: string;
+};
+
+type Listener = {
+  id: string;
+  listener: string;
+  automationId: string;
+  prompt: string;
+  commentReply: string | null;
+  dmCount: number;
+  commentCount: number;
+};
 
 type Automation = {
   id: string;
   name: string;
   active: boolean;
-  keywords: { id: string; word: string }[];
+  keywords: Keyword[];
   createdAt: Date;
-  listener?: {
-    listener: string;
-  };
+  listener: Listener | null;
 };
 
 type Props = {
@@ -34,27 +44,16 @@ const AutomationList = ({ id }: Props) => {
   const { latestVariable } = useMutationDataState(['create-automation']);
   const { pathname } = usePaths();
 
-  // Local state to manage the updated automation list
-  const [automations, setAutomations] = useState(data?.data || []);
+  const [automations, setAutomations] = useState<Automation[]>(data?.data || []);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedAutomationId, setSelectedAutomationId] = useState<string | null>(null);
 
-  // Added state for modal visibility and selected automation ID
-  const [showConfirmModal, setShowConfirmModal] = useState(false); // NEW
-  const [selectedAutomationId, setSelectedAutomationId] = useState<string | null>(null); // NEW  
-
-  // Update state when data changes
   useEffect(() => {
     if (data?.data) {
       setAutomations(data.data);
-           
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log("Automations Data:", automations);
-  }, [automations]);
-  
-
-  // Delete automation and remove it from the list
   const handleDelete = (automationId: string) => {
     deleteMutation(
       { id: automationId },
@@ -100,7 +99,6 @@ const AutomationList = ({ id }: Props) => {
           pathname={pathname}
         />
       ))}
-      {/* Confirmation Modal */}
       {showConfirmModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-gradient-to-br from-red-500 to-pink-500 p-6 rounded-lg text-white shadow-lg w-80">
@@ -133,6 +131,8 @@ const AutomationList = ({ id }: Props) => {
 };
 
 export default AutomationList;
+
+
 
 
 

@@ -93,10 +93,21 @@ import GradientButton from '../gradient-button';
 import { ActiveIndicator } from '../indicators/active-indicator';
 import { InactiveIndicator } from '../indicators/inactive-indicator';
 
-interface Keyword {
+type Keyword = {
   id: string;
+  automationId: string | null;
   word: string;
-}
+};
+
+type Listener = {
+  id: string;
+  listener: string;
+  automationId: string;
+  prompt: string;
+  commentReply: string | null;
+  dmCount: number;
+  commentCount: number;
+};
 
 interface Automation {
   id: string;
@@ -104,9 +115,7 @@ interface Automation {
   active: boolean;
   keywords: Keyword[];
   createdAt: Date;
-  listener?: {
-    listener: string;
-  };
+  listener: Listener | null;
 }
 
 interface FancyAutomationBoxProps {
@@ -192,5 +201,4 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
     </div>
   );
 };
-
 
