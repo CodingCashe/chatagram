@@ -9,6 +9,8 @@ import { useQueryAutomations } from '@/hooks/user-queries';
 import CreateAutomation from '../create-automation';
 import { useMutationDataState } from '@/hooks/use-mutation-data';
 import { useAutomationPosts } from '@/hooks/use-automations';
+import {InactiveIndicator} from '../indicators/inactive-indicator'
+import { ActiveIndicator } from '../indicators/active-indicator';
 
 
 type Props = {
@@ -26,14 +28,13 @@ const AutomationList = ({ id }: Props) => {
 
   // Added state for modal visibility and selected automation ID
   const [showConfirmModal, setShowConfirmModal] = useState(false); // NEW
-  const [selectedAutomationId, setSelectedAutomationId] = useState<string | null>(null); // NEW
+  const [selectedAutomationId, setSelectedAutomationId] = useState<string | null>(null); // NEW  
 
   // Update state when data changes
   useEffect(() => {
     if (data?.data) {
       setAutomations(data.data);
-     
-      
+           
     }
   }, [data]);
 
@@ -86,7 +87,7 @@ const AutomationList = ({ id }: Props) => {
           <div className="flex flex-col flex-1 items-start">
             <h2 className="text-xl font-semibold">{automation.name}</h2>
             <p className="text-[#9B9CA0] text-sm font-light mb-2">
-              {automation.active ? 'This automation is activated' : 'This automation is deactivated'}
+              {automation.active ? <ActiveIndicator/> : <InactiveIndicator/>}
             </p>
 
             
