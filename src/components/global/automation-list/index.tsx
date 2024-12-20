@@ -144,7 +144,7 @@ const AutomationList = ({ id }: Props) => {
               </div>
             )}
             {/* Updated Delete Button */}
-            <Button
+            {/* <Button
               className="bg-red-500 hover:bg-red-600 text-white mt-3 mb-2"
               onClick={() => {
                 setSelectedAutomationId(automation.id); // NEW
@@ -155,7 +155,22 @@ const AutomationList = ({ id }: Props) => {
             </Button>
             <Button className="bg-background-80 hover:bg-background-80 text-white mt-2 mb-3">
               <Link href={`${pathname}/${automation.id}`}>Configure</Link>
+            </Button> */}
+            <Button
+              className="bg-red-500 hover:bg-red-600 text-white mt-3 mb-2 sm:mt-1 sm:mb-1 sm:px-2 sm:py-1"
+              onClick={() => {
+                setSelectedAutomationId(automation.id); // NEW
+                setShowConfirmModal(true); // NEW
+              }}
+            >
+              Delete
             </Button>
+            <Button 
+              className="bg-background-80 hover:bg-background-80 text-white mt-2 mb-3 sm:mt-1 sm:mb-1 sm:px-2 sm:py-1"
+            >
+              <Link href={`${pathname}/${automation.id}`}>Configure</Link>
+            </Button>
+
           </div>
         </div>
       ))}
