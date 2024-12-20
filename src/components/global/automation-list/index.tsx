@@ -12,11 +12,10 @@ import { useAutomationPosts } from '@/hooks/use-automations';
 
 
 type Props = {
-  type: 'COMMENT' | 'DM';
   id: string;
 };
 
-const AutomationList = ({ id,type }: Props) => {
+const AutomationList = ({ id }: Props) => {
   const { data, refetch } = useQueryAutomations();
   const { deleteMutation } = useAutomationPosts(id);
   const { latestVariable } = useMutationDataState(['create-automation']);
@@ -82,7 +81,7 @@ const AutomationList = ({ id,type }: Props) => {
           <div className="flex flex-col flex-1 items-start">
             <h2 className="text-xl font-semibold">{automation.name}</h2>
             <p className="text-[#9B9CA0] text-sm font-light mb-2">
-              {type === 'DM' ? 'This automation is for posts' : 'This automation is for comments'}
+              {automation.type === 'DM' ? 'This automation is for posts' : 'This automation is for comments'}
               
             </p>
 
