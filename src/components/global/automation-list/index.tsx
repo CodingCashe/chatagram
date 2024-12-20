@@ -84,7 +84,7 @@ const AutomationList = ({ id }: Props) => {
           className="bg-[#1D1D1D] hover:opacity-80 transition duration-100 rounded-xl p-5 border-[1px] radial--gradient--automations flex border-[#545454]"
           key={automation.id}
         >
-          <div className="flex flex-col flex-1 items-start">
+          <div className="flex flex-col m-2 flex-1 items-start">
             <h2 className="text-xl font-semibold">{automation.name}</h2>
             <p className="text-[#9B9CA0] text-sm font-light mb-2">
               {automation.active ? <ActiveIndicator/> : <InactiveIndicator/>}
@@ -114,11 +114,6 @@ const AutomationList = ({ id }: Props) => {
                     {keyword.word}
                   </div>
                 ))}
-                <Button 
-                  className="bg-background-80 px-0 hover:bg-background-80 text-white mt-2 mb-3 sm:mt-1 sm:mb-1 sm:px-0 sm:py-1"
-                >
-                  <Link href={`${pathname}/${automation.id}`}>Configure</Link>
-                </Button>
               </div>
             ) : (
               <div className="rounded-full border-2 mt-3 border-dashed border-white/60 px-3 py-1">
@@ -126,7 +121,7 @@ const AutomationList = ({ id }: Props) => {
               </div>
             )}
           </div>
-          <div className="flex flex-col justify-between">
+          <div className="flex flex-col m-2 justify-between">
             <p className="capitalize text-sm font-light text-[#9B9CA0]">
               {getMonth(automation.createdAt.getUTCMonth() + 1)}{' '}
               {automation.createdAt.getUTCDate()}th{' '}
@@ -169,7 +164,12 @@ const AutomationList = ({ id }: Props) => {
               }}
             >
               Delete
-            </Button>            
+            </Button>
+            <Button 
+              className="bg-background-80 px-0 hover:bg-background-80 text-white mt-1 mb-1 sm:mt-1 sm:mb-1 sm:px-0 sm:py-1"
+            >
+              <Link href={`${pathname}/${automation.id}`}>Configure</Link>
+            </Button>
 
           </div>
         </div>
