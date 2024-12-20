@@ -458,8 +458,8 @@ export default function Home() {
               <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
             </div>
             <div>
-              <h3 className="text-lg text-center font-semibold mb-4">Connect with us</h3>
-              <div className="items-center flex space-x-4">
+              <h3 className="text-lg font-semibold mb-4">Connect with us</h3>
+              <div className="flex space-x-4">
                 <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:opacity-75 transition-opacity">
                   <Image src="/instagram-icon.svg" alt="Instagram" width={24} height={24} />
                 </a>
