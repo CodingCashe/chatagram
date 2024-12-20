@@ -132,14 +132,14 @@ const AutomationStatus = ({ count }: { count: number }) => {
     return (
       <div className="flex items-center gap-2 text-green-500">
         <Sparkles className="w-5 h-5" />
-        <p>Great start! You're on your way to automation mastery.</p>
+        <p>Great start! You are on your way to automation mastery.</p>
       </div>
     )
   } else {
     return (
       <div className="flex items-center gap-2 text-blue-500">
         <Rocket className="w-5 h-5" />
-        <p>Wow! You're an automation pro. Keep optimizing your workflow!</p>
+        <p>Wow! You are an automation pro. Keep optimizing your workflow!</p>
       </div>
     )
   }
