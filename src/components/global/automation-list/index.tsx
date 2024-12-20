@@ -157,7 +157,7 @@ const AutomationList = ({ id }: Props) => {
               <Link href={`${pathname}/${automation.id}`}>Configure</Link>
             </Button> */}
             <Button
-              className="bg-red-500 hover:bg-red-600 text-white mt-3 mb-2 sm:mt-1 sm:mb-1 sm:px-2 sm:py-1"
+              className="bg-red-500 hover:bg-red-600 text-white mt-1 mb-1 sm:mt-1 sm:mb-1 sm:px-0 sm:py-1"
               onClick={() => {
                 setSelectedAutomationId(automation.id); // NEW
                 setShowConfirmModal(true); // NEW
@@ -166,7 +166,7 @@ const AutomationList = ({ id }: Props) => {
               Delete
             </Button>
             <Button 
-              className="bg-background-80 hover:bg-background-80 text-white mt-2 mb-3 sm:mt-1 sm:mb-1 sm:px-2 sm:py-1"
+              className="bg-background-80 hover:bg-background-80 text-white mt-2 mb-3 sm:mt-1 sm:mb-1 sm:px-0 sm:py-1"
             >
               <Link href={`${pathname}/${automation.id}`}>Configure</Link>
             </Button>
