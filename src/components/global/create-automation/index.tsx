@@ -24,6 +24,7 @@ const CreateAutomation = (props: Props) => {
           id: mutationId,
           createdAt: new Date(),
           keywords: [],
+          
         })
       }
     >
