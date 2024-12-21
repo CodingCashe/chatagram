@@ -83,9 +83,6 @@ const Trigger = ({ id }: Props) => {
       </div>
     </TriggerButton>
   )
-  // return(
-  //   <div>Oh Gosh!</div>
-  // )
 }
 
 export default Trigger
