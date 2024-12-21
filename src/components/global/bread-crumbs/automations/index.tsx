@@ -95,7 +95,7 @@ const AutomationsBreadCrumb = ({ id }: Props) => {
   return (
     <div className="rounded-full w-full p-5 bg-[#18181B1A] flex items-center">
       <div className="flex items-center gap-x-3 min-w-0">
-        <Link href={} className="text-[#9B9CA0] hover:text-white transition-colors duration-200">
+        <Link href={`/automations`} className="text-[#9B9CA0] hover:text-white transition-colors duration-200">
           Automations
         </Link>
         <ChevronRight
