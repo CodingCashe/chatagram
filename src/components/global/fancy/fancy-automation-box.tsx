@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn, getMonth } from '@/lib/utils';
+import { cn, getMonth,getRelativeTime } from '@/lib/utils';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import GradientButton from '../gradient-button';
@@ -51,7 +51,7 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
             </GradientButton>
           ) : (
             <span className="inline-block px-4 py-1 text-xs font-semibold uppercase text-white bg-[#1D1D1D] rounded-full shadow-md -my-[3px]">
-              Standard
+              Standard Plan
             </span>
           )}
         </div>
@@ -92,12 +92,15 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
             )}
           </div>
           <div className="flex flex-col justify-between space-y-3 md:items-end">
-            <p className="text-sm font-light text-[#9B9CA0]">
+            {/* <p className="text-sm font-light text-[#9B9CA0]">
               {getMonth(automation.createdAt.getUTCMonth() + 1)}{' '}
               {automation.createdAt.getUTCDate()}th{' '}
               {automation.createdAt.getUTCFullYear()},{' '}
               {String(automation.createdAt.getUTCHours()).padStart(2, '0')}:
               {String(automation.createdAt.getUTCMinutes()).padStart(2, '0')} UTC
+            </p> */}
+            <p className="text-sm font-light text-[#9B9CA0]">
+              {getRelativeTime(automation.createdAt)}
             </p>
             <div className="flex flex-col sm:flex-row gap-2">
               <Button
