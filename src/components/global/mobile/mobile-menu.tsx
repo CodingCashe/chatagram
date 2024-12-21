@@ -16,7 +16,7 @@ export function MobileMenu() {
         {isOpen ? <X /> : <MenuIcon />}
       </Button>
       {isOpen && (
-        <div className="absolute top-16 left-0 right-0 bg-slate-900 p-4">
+        <div className="absolute top-25 left-20 right-20 bg-slate-900 p-4">
           <nav className="flex flex-col space-y-4">
             <Link href="#features" className="text-blue-200 hover:text-white" onClick={toggleMenu}>Features</Link>
             <Link href="#pricing" className="text-blue-200 hover:text-white" onClick={toggleMenu}>Pricing</Link>

@@ -39,7 +39,7 @@ interface FancyAutomationBoxProps {
 
 export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automation, onDelete, pathname }) => {
   return (
-    <div className="relative bg-[#1D1D1D] rounded-xl border-[1px] border-[#545454] overflow-hidden before:content-[''] before:absolute before:top-0 before:left-1/2 before:transform before:-translate-x-1/2 before:w-28 before:h-[2px] before:bg-[#1D1D1D] before:z-[1]">
+    <div className="relative bg-[#1D1D1D] rounded-xl border-[1px] border-[#545454] before:content-[''] before:absolute before:top-0 before:left-1/2 before:transform before:-translate-x-1/2 before:w-28 before:h-[2px] before:bg-[#1D1D1D] before:z-[1]">
       <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-10">
         <div className="bg-[#1D1D1D] px-1 rounded-full border-[1px] border-[#545454]">
           {automation.listener?.listener === 'SMARTAI' ? (
