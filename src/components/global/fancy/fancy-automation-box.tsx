@@ -56,7 +56,7 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
           )}
         </div>
       </div>
-      <div className="absolute bottom-2 top-2 right-2 z-10">
+      <div className="absolute mb-3 bottom-2 top-2 right-2 z-10">
         {automation.active ? <ActiveIndicator /> : <InactiveIndicator />}
       </div>
       <div className="p-5 pt-8 radial--gradient--automations">

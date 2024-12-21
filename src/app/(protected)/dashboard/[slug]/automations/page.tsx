@@ -124,21 +124,21 @@ const AutomationStatus = ({ count }: { count: number }) => {
   if (count === 0) {
     return (
       <div className="flex items-center gap-2 text-yellow-500">
-        <Zap className="w-5 h-5" />
+        <Zap className="w-10 h-10" />
         <p>Ready to supercharge your workflow? Create your first automation!</p>
       </div>
     )
   } else if (count < 3) {
     return (
       <div className="flex items-center gap-2 text-green-500">
-        <Sparkles className="w-5 h-5" />
+        <Sparkles className="w-10 h-10" />
         <p>Great start! You are on your way to automation mastery.</p>
       </div>
     )
   } else {
     return (
       <div className="flex items-center gap-2 text-blue-500">
-        <Rocket className="w-5 h-5" />
+        <Rocket className="w-10 h-10" />
         <p>Wow! You are an automation pro. Keep optimizing your workflow!</p>
       </div>
     )
