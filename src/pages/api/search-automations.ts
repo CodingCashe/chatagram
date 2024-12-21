@@ -73,7 +73,6 @@ import { getAllAutomations } from '@/actions/automations/index';
 interface Automation {
   id: string;
   name: string;
-  status?: string;
   keywords: { id: string; word: string }[];
   listener: {
     id: string;
@@ -108,8 +107,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Filter the automations
     const filteredAutomations = automations.filter((automation: Automation) => 
       automation.name.toLowerCase().includes(query.toLowerCase()) ||
-      automation.keywords.some((keyword) => keyword.word.toLowerCase().includes(query.toLowerCase())) ||
-      (automation.status && automation.status.toLowerCase().includes(query.toLowerCase()))
+      automation.keywords.some((keyword) => keyword.word.toLowerCase().includes(query.toLowerCase()))
+      
     );
 
     res.status(200).json(filteredAutomations);
