@@ -65,7 +65,7 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
             <h2 className="text-xl font-semibold">{automation.name}</h2>
             
             {automation.keywords.length > 0 ? (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 m-2">
                 {automation.keywords.map((keyword, key) => (
                   <div
                     key={keyword.id}
@@ -78,7 +78,7 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
                       (key + 1) % 3 === 0 &&
                         'bg-keyword-yellow/15 border-[1px] border-keyword-yellow',
                       (key + 1) % 4 === 0 &&
-                        'bg-keyword-green/15 border-[1px] border-keyword-green'
+                        'bg-keyword-red/15 border-[1px] border-keyword-red'
                     )}
                   >
                     {keyword.word}
