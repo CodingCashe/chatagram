@@ -123,7 +123,7 @@ const AutomationList = ({ id }: Props) => {
                   setSelectedAutomationId(automation.id);
                   setShowConfirmModal(true);
                 }}
-                pathname={pathname}
+                pathname={pathname || ""}
               />
             ))}
           </div>
