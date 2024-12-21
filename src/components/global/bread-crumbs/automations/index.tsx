@@ -170,10 +170,10 @@ const AutomationsBreadCrumb = ({ id }: Props) => {
   const { data } = useQueryAutomation(id)
   const { edit, enableEdit, inputRef, isPending } = useEditAutomation(id)
   const { latestVariable } = useMutationDataState(['update-automation'])
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   // Extract the slug from the pathname
-  const slugMatch = pathname?.match(/^\/dashboard\/([^/]+)/)
+  const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
   const slug = slugMatch ? slugMatch[1] : ''
 
   const automationsLink = `/dashboard/${slug}/automations`
