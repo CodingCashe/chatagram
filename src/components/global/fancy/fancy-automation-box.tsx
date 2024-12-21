@@ -35,7 +35,7 @@ interface Automation {
 interface FancyAutomationBoxProps {
   automation: Automation;
   onDelete: () => void;
-  pathname: string;
+  pathname: string | null;
 }
 
 export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automation, onDelete, pathname }) => {
