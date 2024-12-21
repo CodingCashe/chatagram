@@ -42,7 +42,7 @@ const AutomationList = ({ id }: Props) => {
   const { deleteMutation } = useAutomationPosts(id);
   const { latestVariable } = useMutationDataState(['create-automation']);
   const { pathname } = usePaths();
-
+ 
   const [automations, setAutomations] = useState<Automation[]>(data?.data || []);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedAutomationId, setSelectedAutomationId] = useState<string | null>(null);
@@ -102,7 +102,7 @@ const AutomationList = ({ id }: Props) => {
                   setSelectedAutomationId(automation.id);
                   setShowConfirmModal(true);
                 }}
-                pathname={pathname}
+                pathname={pathname ||'/'}
               />
             ))}
           </div>
@@ -123,7 +123,7 @@ const AutomationList = ({ id }: Props) => {
                   setSelectedAutomationId(automation.id);
                   setShowConfirmModal(true);
                 }}
-                pathname={pathname}
+                pathname={pathname ||'/'}
               />
             ))}
           </div>
