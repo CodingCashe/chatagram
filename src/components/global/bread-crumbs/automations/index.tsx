@@ -173,7 +173,7 @@ const AutomationsBreadCrumb = ({ id }: Props) => {
   const pathname = usePathname()
 
   // Extract the slug from the pathname
-  const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+  const slugMatch = pathname?.match(/^\/dashboard\/([^/]+)/)
   const slug = slugMatch ? slugMatch[1] : ''
 
   const automationsLink = `/dashboard/${slug}/automations`
