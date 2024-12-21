@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import PopOver from '../../popover'
 import { Divide } from 'lucide-react'
