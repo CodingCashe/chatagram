@@ -45,15 +45,3 @@ const Page = (props: Props) => {
 }
 
 export default Page
-
-// import React from 'react'
-
-// type Props = {}
-
-// const page = (props: Props) => {
-//   return (
-//     <div>page</div>
-//   )
-// }
-
-// export default page
