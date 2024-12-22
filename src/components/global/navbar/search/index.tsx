@@ -1,3 +1,4 @@
+
 import { Input } from '@/components/ui/input'
 import { SearchIcon } from 'lucide-react'
 import React from 'react'
@@ -20,7 +21,7 @@ export default Search
 
 //USE THE BELOW ONE 
 
-'use client'
+// 'use client'
 
 // import { Input } from '@/components/ui/input'
 // import { SearchIcon } from 'lucide-react'
