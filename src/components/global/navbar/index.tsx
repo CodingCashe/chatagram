@@ -1,4 +1,4 @@
-//  'use client'
+  'use client'
 
 // import { PAGE_BREAD_CRUMBS } from '@/constants/pages'
 // import { usePaths } from '@/hooks/user-nav'
