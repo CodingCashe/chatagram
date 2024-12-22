@@ -394,7 +394,8 @@ const Navbar: React.FC<Props> = ({ slug }) => {
               </div>
             </Sheet>
           </span>
-          <Search slug={slug} />
+          <Search/>
+          {/* <Search slug={slug} /> */}
           <CreateAutomation />
           <Notifications />
         </div>

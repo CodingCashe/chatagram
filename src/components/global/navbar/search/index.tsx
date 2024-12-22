@@ -1,88 +1,89 @@
-// import { Input } from '@/components/ui/input'
-// import { SearchIcon } from 'lucide-react'
-// import React from 'react'
-
-// type Props = {}
-
-// const Search = (props: Props) => {
-//   return (
-//     <div className="flex overflow-hidden gap-x-2 border-[1px] border-[#3352CC] rounded-full px-4 py-1 items-center flex-1">
-//       <SearchIcon color="#3352CC" />
-//       <Input
-//         placeholder="Search by name, email or status"
-//         className="border-none outline-none ring-0 focus:ring-0 flex-1"
-//       />
-//     </div>
-//   )
-// }
-
-// export default Search
-
-
-'use client'
-
 import { Input } from '@/components/ui/input'
 import { SearchIcon } from 'lucide-react'
-import React, { useState, useEffect } from 'react'
-import { useQueryAutomations } from '@/hooks/user-queries'
-import { useDebounce } from '@/hooks/use-debounce'
-import { HighlightedText } from '@/components/global/search-text/highlighted'
+import React from 'react'
 
-interface Automation {
-  id: string
-  name: string
-}
+type Props = {}
 
-interface SearchProps {
-  slug: string
-}
-
-const Search: React.FC<SearchProps> = ({ slug }) => {
-  const { data: automationsData } = useQueryAutomations()
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filteredAutomations, setFilteredAutomations] = useState<Automation[]>([])
-  const [isSearching, setIsSearching] = useState(false)
-  const debouncedSearchTerm = useDebounce(searchTerm, 300)
-
-  useEffect(() => {
-    if (debouncedSearchTerm) {
-      setIsSearching(true)
-      const filtered = automationsData?.data?.filter(automation => 
-        automation.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-      ) || []
-      setFilteredAutomations(filtered)
-      setIsSearching(false)
-    } else {
-      setFilteredAutomations([])
-    }
-  }, [debouncedSearchTerm, automationsData])
-
+const Search = (props: Props) => {
   return (
-    <div className="relative">
-      <div className="flex overflow-hidden gap-x-2 border-[1px] border-[#3352CC] rounded-full px-4 py-1 items-center flex-1">
-        <SearchIcon color="#3352CC" />
-        <Input
-          placeholder="Search by name"
-          className="border-none outline-none ring-0 focus:ring-0 flex-1"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-      {isSearching && <div className="absolute top-full mt-2 w-full bg-white p-2 rounded shadow">Searching...</div>}
-      {!isSearching && filteredAutomations.length > 0 && (
-        <div className="absolute top-full mt-2 w-full bg-white p-2 rounded shadow max-h-60 overflow-y-auto">
-          {filteredAutomations.map(automation => (
-            <div key={automation.id} className="p-2 hover:bg-gray-100 cursor-pointer">
-              <HighlightedText text={automation.name} highlight={debouncedSearchTerm} />
-            </div>
-          ))}
-        </div>
-      )}
+    <div className="flex overflow-hidden gap-x-2 border-[1px] border-[#3352CC] rounded-full px-4 py-1 items-center flex-1">
+      <SearchIcon color="#3352CC" />
+      <Input
+        placeholder="Search by name, email or status"
+        className="border-none outline-none ring-0 focus:ring-0 flex-1"
+      />
     </div>
   )
 }
 
 export default Search
+
+//USE THE BELOW ONE 
+
+'use client'
+
+// import { Input } from '@/components/ui/input'
+// import { SearchIcon } from 'lucide-react'
+// import React, { useState, useEffect } from 'react'
+// import { useQueryAutomations } from '@/hooks/user-queries'
+// import { useDebounce } from '@/hooks/use-debounce'
+// import { HighlightedText } from '@/components/global/search-text/highlighted'
+
+// interface Automation {
+//   id: string
+//   name: string
+// }
+
+// interface SearchProps {
+//   slug: string
+// }
+
+// const Search: React.FC<SearchProps> = ({ slug }) => {
+//   const { data: automationsData } = useQueryAutomations()
+//   const [searchTerm, setSearchTerm] = useState('')
+//   const [filteredAutomations, setFilteredAutomations] = useState<Automation[]>([])
+//   const [isSearching, setIsSearching] = useState(false)
+//   const debouncedSearchTerm = useDebounce(searchTerm, 300)
+
+//   useEffect(() => {
+//     if (debouncedSearchTerm) {
+//       setIsSearching(true)
+//       const filtered = automationsData?.data?.filter(automation => 
+//         automation.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+//       ) || []
+//       setFilteredAutomations(filtered)
+//       setIsSearching(false)
+//     } else {
+//       setFilteredAutomations([])
+//     }
+//   }, [debouncedSearchTerm, automationsData])
+
+//   return (
+//     <div className="relative">
+//       <div className="flex overflow-hidden gap-x-2 border-[1px] border-[#3352CC] rounded-full px-4 py-1 items-center flex-1">
+//         <SearchIcon color="#3352CC" />
+//         <Input
+//           placeholder="Search by name"
+//           className="border-none outline-none ring-0 focus:ring-0 flex-1"
+//           value={searchTerm}
+//           onChange={(e) => setSearchTerm(e.target.value)}
+//         />
+//       </div>
+//       {isSearching && <div className="absolute top-full mt-2 w-full bg-white p-2 rounded shadow">Searching...</div>}
+//       {!isSearching && filteredAutomations.length > 0 && (
+//         <div className="absolute top-full mt-2 w-full bg-white p-2 rounded shadow max-h-60 overflow-y-auto">
+//           {filteredAutomations.map(automation => (
+//             <div key={automation.id} className="p-2 hover:bg-gray-100 cursor-pointer">
+//               <HighlightedText text={automation.name} highlight={debouncedSearchTerm} />
+//             </div>
+//           ))}
+//         </div>
+//       )}
+//     </div>
+//   )
+// }
+
+// export default Search
 
 
 
