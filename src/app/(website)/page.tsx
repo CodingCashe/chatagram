@@ -72,7 +72,7 @@ export default function Home() {
         <PricingPlans />
         <Testimonials />
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-900">
-          {/* <GlobalReach /> */}
+          <GlobalReach />
         </section>
         <FAQ />
         <CTA />
