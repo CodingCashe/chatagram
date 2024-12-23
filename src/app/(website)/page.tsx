@@ -26,7 +26,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-pink-100">
-      {/* <ParticleBackground /> */}
+      <ParticleBackground />
       
       {/* Header Section */}
       <header className="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
