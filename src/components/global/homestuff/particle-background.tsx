@@ -306,7 +306,7 @@ export default function ParticleBackground() {
     canvas.height = window.innerHeight;
 
     const particles: Particle[] = [];
-    const particleCount = 5;  // Reduced the number of particles
+    const particleCount = 2;  // Reduced the number of particles
 
     class Particle {
       x: number;
