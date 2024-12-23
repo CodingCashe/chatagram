@@ -243,6 +243,7 @@
 
 'use client'
 
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -259,9 +260,20 @@ import { LogoSmall } from '@/svgs/logo-small'
 import { MobileMenu } from '@/components/global/mobile/mobile-menu'
 import { AnimatedHero } from '@/components/global/animated-hero/animatedhero'
 import { AnimatedFeatureCard } from '@/components/global/animated-feature/animatedfeature'
-import { motion } from 'framer-motion'
+import { InstagramSimulator } from '@/components/global/instagram-simulator/instasimulator'
+import { FollowerGrowthGame } from '@/components/global/followergrowth/followergrowth'
+import { motion, useScroll, useTransform } from 'framer-motion'
 
 export default function Home() {
+  const [testimonials, setTestimonials] = useState([
+    { name: 'John Doe', company: 'Tech Innovators', text: 'Chatal has revolutionized our Instagram strategy. Our engagement rates have skyrocketed!' },
+    { name: 'Jane Smith', company: 'Fashion Forward', text: 'The AI-powered responses feel so natural. Our followers love the increased interaction.' },
+    { name: 'Alex Johnson', company: 'Travel Enthusiasts', text: 'Chatal saved us countless hours. Now we can focus on creating great content while Chatal handles engagement.' },
+  ])
+
+  const { scrollYProgress } = useScroll()
+  const scale = useTransform(scrollYProgress, [0, 1], [0.2, 1])
+
   const plans = [
     {
       name: 'Free Plan',
@@ -307,9 +319,9 @@ export default function Home() {
             </div>
             <nav className="hidden space-x-6 text-sm text-white md:flex">
               <Link href="#features">Features</Link>
+              <Link href="#demo">Demo</Link>
+              <Link href="#testimonials">Testimonials</Link>
               <Link href="#pricing">Pricing</Link>
-              <Link href="#about">About</Link>
-              <Link href="#services">Services</Link>
               <Link href="/privacy">Privacy Policy</Link>
             </nav>
             <div className="flex items-center gap-4">
@@ -347,7 +359,38 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="pricing" className="py-20 bg-blue-600">
+      <section id="demo" className="py-20 bg-blue-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-12 text-blue-600">See Chatal in Action</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <InstagramSimulator />
+            <FollowerGrowthGame />
+          </div>
+        </div>
+      </section>
+
+      <section id="testimonials" className="py-20 bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-12">What Our Users Say</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+                className="bg-white bg-opacity-10 p-6 rounded-lg backdrop-blur-sm"
+              >
+                <p className="mb-4">{testimonial.text}</p>
+                <p className="font-semibold">{testimonial.name}</p>
+                <p className="text-sm opacity-75">{testimonial.company}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <motion.div
             className="text-center mb-12"
@@ -355,10 +398,10 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-4xl font-bold mb-4 text-white">
+            <h2 className="text-4xl font-bold mb-4 text-blue-600">
               Choose Your Plan
             </h2>
-            <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Select the perfect plan to boost your Instagram engagement and take your social media presence to the next level.
             </p>
           </motion.div>
@@ -405,6 +448,23 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-gray-100">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-12 text-blue-600">Ready to Transform Your Instagram Engagement?</h2>
+          <motion.div
+            className="max-w-lg mx-auto text-center"
+            style={{ scale }}
+          >
+            <p className="text-xl mb-8">
+              Join thousands of satisfied users who have revolutionized their Instagram strategy with Chatal. Start your journey to better engagement today!
+            </p>
+            <Button size="lg" className="bg-blue-600 text-white hover:bg-blue-700">
+              <Link href="/dashboard">Get Started Now</Link>
+            </Button>
+          </motion.div>
         </div>
       </section>
 
