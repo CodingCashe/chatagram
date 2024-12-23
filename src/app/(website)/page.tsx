@@ -60,10 +60,10 @@ export default function Home() {
       {/* Page Content */}
       <main>
         <Hero />
-        {/* <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <section className="py-20 px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Experience Chatal in Action</h2>
           <InteractiveDemo />
-        </section> */}
+        </section>
         <Features />
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#2563EB]">
           <h2 className="text-3xl font-bold text-center text-white mb-12">Chatal Global Impact</h2>
@@ -72,12 +72,12 @@ export default function Home() {
         <PricingPlans />
         <Testimonials />
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-900">
-          <GlobalReach />
+          {/* <GlobalReach /> */}
         </section>
         <FAQ />
         <CTA />
         <Footer />
-        <FloatingNotification />
+        {/* <FloatingNotification /> */}
       </main>
     </div>
   );
