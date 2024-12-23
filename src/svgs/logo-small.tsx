@@ -145,7 +145,7 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ maxWidth = 300, maxHeight
           fontFamily="Arial, sans-serif"
           fontSize="40"
           fontWeight="bold"
-          fill="#AABBFF"
+          fill="purple-600"
           filter="url(#neonGlow)"
         >
           Chatal
