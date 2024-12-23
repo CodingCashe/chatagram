@@ -19,13 +19,13 @@ export default function Hero() {
     <section className="py-20 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between overflow-hidden">
       <div className="max-w-2xl mb-10 lg:mb-0 z-10">
         <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl mb-6">
-          Revolutionize Your <span className="text-purple-600">Instagram DMs</span> with AI-Powered Automation
+          Revolutionize Your <span className="text-[#2563EB]">Instagram DMs</span> with AI-Powered Automation
         </h1>
         <p className="text-xl text-gray-600 mb-8">
           Boost engagement, save time, and grow your audience with Chatal cutting-edge DM automation tools.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+          <Button size="lg" className="bg-[#2563EB] hover:bg-[#2563EB]">
           <Link href="/dashboard">Get Started</Link> <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
           <Button size="lg" variant="outline">
@@ -96,7 +96,7 @@ function InstagramAutomationSVG({ animationStep }: { animationStep: number }) {
 function FeatureBubble({ icon: Icon, label, delay }: { icon: React.ElementType, label: string, delay: number }) {
   return (
     <div className="bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg flex items-center justify-center flex-col animate-bounce" style={{ animationDelay: `${delay * 0.2}s` }}>
-      <Icon className="h-8 w-8 text-purple-600" />
+      <Icon className="h-8 w-8 text-[#2563EB]" />
       <span className="text-xs font-semibold mt-1 text-gray-800">{label}</span>
     </div>
   )

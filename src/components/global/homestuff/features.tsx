@@ -32,7 +32,7 @@ export default function Features() {
         {features.map((feature, index) => (
           <Card key={index} className="bg-white/80 backdrop-blur-sm hover:shadow-lg transition-shadow duration-300">
             <CardHeader>
-              <feature.icon className="h-12 w-12 text-purple-600 mb-4" />
+              <feature.icon className="h-12 w-12 text-[#2563EB] mb-2" />
               <CardTitle>{feature.title}</CardTitle>
             </CardHeader>
             <CardContent>

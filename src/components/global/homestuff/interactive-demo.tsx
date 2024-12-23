@@ -72,11 +72,11 @@ export default function InteractiveDemo() {
               className={`flex items-start mb-4 ${msg.role === MessageRole.User ? 'justify-end' : 'justify-start'}`}
             >
               <div className={`flex items-center ${msg.role === MessageRole.User ? 'flex-row-reverse' : 'flex-row'}`}>
-                <div className={`p-2 rounded-lg max-w-xs ${msg.role === MessageRole.User ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-800'}`}>
+                <div className={`p-2 rounded-lg max-w-xs ${msg.role === MessageRole.User ? 'bg-[#2563EB] text-white' : 'bg-gray-200 text-gray-800'}`}>
                   {msg.message}
                 </div>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${msg.role === MessageRole.User ? 'bg-purple-200 ml-2' : 'bg-gray-300 mr-2'}`}>
-                  {msg.role === MessageRole.User ? <User className="w-4 h-4 text-purple-600" /> : <MessageSquare className="w-4 h-4 text-gray-600" />}
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${msg.role === MessageRole.User ? 'bg-blue-200 ml-2' : 'bg-gray-300 mr-2'}`}>
+                  {msg.role === MessageRole.User ? <User className="w-4 h-4 text-blue-600" /> : <MessageSquare className="w-4 h-4 text-gray-600" />}
                 </div>
               </div>
             </motion.div>

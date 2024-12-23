@@ -52,7 +52,7 @@ export default function PricingPlans() {
               </ul>
             </CardContent>
             <CardFooter>
-              <Button className="w-full bg-purple-600 hover:bg-purple-700">Choose {plan.name}</Button>
+              <Button className="w-full bg-[#2563EB] hover:bg-blue-700">Choose {plan.name}</Button>
             </CardFooter>
           </Card>
         ))}

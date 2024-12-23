@@ -62,7 +62,7 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ maxWidth = 300, maxHeight
           <circle cx="50" cy="50" r="40" fill="#1B5CFF" />
           <path
             d="M30 30 Q 50 0, 70 30 Q 100 50, 70 70 Q 50 100, 30 70 Q 0 50, 30 30"
-            fill="#1B5CFF"
+            fill="#2563EB"
             transform="rotate(45 50 50)"
           >
             <animateTransform
@@ -145,7 +145,7 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ maxWidth = 300, maxHeight
           fontFamily="Arial, sans-serif"
           fontSize="40"
           fontWeight="bold"
-          fill="#6B21A8"
+          fill="#2563EB"
           filter="url(#neonGlow)"
         >
           Chatal

@@ -306,7 +306,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-100">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-pink-100">
       <ParticleBackground />
       
       {/* Header Section */}
@@ -317,10 +317,10 @@ export default function Home() {
           </div>
           <nav className={`md:block ${isMenuOpen ? 'block' : 'hidden'}`}>
             <ul className="flex space-x-8">
-              <li><Link href="#" className="text-gray-600 hover:text-purple-600 transition-colors">Features</Link></li>
-              <li><Link href="#" className="text-gray-600 hover:text-purple-600 transition-colors">Pricing</Link></li>
-              <li><Link href="#" className="text-gray-600 hover:text-purple-600 transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/privacy" className="text-gray-600 hover:text-purple-600 transition-colors">Contact</Link></li>
+              <li><Link href="#" className="text-gray-600 hover:[#2563EB] transition-colors">Features</Link></li>
+              <li><Link href="#" className="text-gray-600 hover:[#2563EB] transition-colors">Pricing</Link></li>
+              <li><Link href="#" className="text-gray-600 hover:[#2563EB] transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/privacy" className="text-gray-600 hover:text-[#2563EB] transition-colors">Contact</Link></li>
             </ul>
           </nav>
           <Button className="md:hidden" variant="ghost" size="icon" onClick={toggleMenu}>
@@ -340,7 +340,7 @@ export default function Home() {
           <InteractiveDemo />
         </section>
         <Features />
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-purple-700">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#2563EB]">
           <h2 className="text-3xl font-bold text-center text-white mb-12">Chatal Global Impact</h2>
           <DynamicStats />
         </section>

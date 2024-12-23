@@ -36,7 +36,7 @@ export default function DynamicStats() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: index * 0.1 }}
         >
-          <stat.icon className="w-12 h-12 text-purple-600 mx-auto mb-4" />
+          <stat.icon className="w-12 h-12 text-[#2563EB] mx-auto mb-4" />
           <h3 className="text-2xl font-bold text-gray-800 mb-2">
             {stat.currentValue.toLocaleString()}
           </h3>
