@@ -31,9 +31,9 @@ export default function Home() {
       {/* Header Section */}
       <header className="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          {/* <div className="flex items-center gap-0">
+          <div className="flex items-center gap-0">
             <LogoSmall />
-          </div> */}
+          </div>
           {/* <nav className={`md:block ${isMenuOpen ? 'block' : 'hidden'}`}>
             <ul className="flex space-x-8">
               <li><Link href="#" className="text-gray-600 hover:[#2563EB] transition-colors">Features</Link></li>
@@ -42,9 +42,15 @@ export default function Home() {
               <li><Link href="/privacy" className="text-gray-600 hover:text-[#2563EB] transition-colors">Contact</Link></li>
             </ul>
           </nav> */}
-          <Button className="md:hidden" variant="ghost" size="icon" onClick={toggleMenu}>
-            <Menu className="h-6 w-6" />
+          <Button 
+            className="md:hidden bg-gray-200 hover:bg-gray-300 text-gray-800 rounded p-2 shadow" 
+            variant="ghost" 
+            size="icon" 
+            onClick={toggleMenu}
+          >
+            <Menu className="h-6 w-6 text-gray-700" />
           </Button>
+
           <Button className="bg-blue-600 text-white hover:bg-blue-700">
             <Link href="/dashboard">Login</Link>
           </Button>
