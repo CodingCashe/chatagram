@@ -21,7 +21,7 @@ export default function Hero() {
           Revolutionize Your <span className="text-purple-600">Instagram DMs</span> with AI-Powered Automation
         </h1>
         <p className="text-xl text-gray-600 mb-8">
-          Boost engagement, save time, and grow your audience with Chatal's cutting-edge DM automation tools.
+          Boost engagement, save time, and grow your audience with Chatal cutting-edge DM automation tools.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
           <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
