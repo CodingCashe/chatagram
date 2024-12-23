@@ -194,6 +194,103 @@
 //   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none" />;
 // }
 
+// 'use client';
+
+// import { useEffect, useRef } from 'react';
+
+// export default function ParticleBackground() {
+//   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+//   useEffect(() => {
+//     const canvas = canvasRef.current!;
+//     if (!canvas) return;
+
+//     const ctx = canvas.getContext('2d')!;
+//     if (!ctx) return;
+
+//     canvas.width = window.innerWidth;
+//     canvas.height = window.innerHeight;
+
+//     const particles: Particle[] = [];
+//     const particleCount = 15;
+
+//     class Particle {
+//       x: number;
+//       y: number;
+//       size: number;
+//       speedX: number;
+//       speedY: number;
+
+//       constructor() {
+//         this.x = Math.random() * canvas.width;
+//         this.y = Math.random() * canvas.height;
+//         this.size = Math.random() * 30 + 10; // Adjust size for ❅
+//         this.speedX = Math.random() * 3 - 1.5;
+//         this.speedY = Math.random() * 3 - 1.5;
+//       }
+
+//       update() {
+//         this.x += this.speedX;
+//         this.y += this.speedY;
+
+//         if (
+//           this.x > canvas.width ||
+//           this.x < 0 ||
+//           this.y > canvas.height ||
+//           this.y < 0
+//         ) {
+//           this.x = Math.random() * canvas.width;
+//           this.y = Math.random() * canvas.height;
+//           this.size = Math.random() * 30 + 10;
+//         }
+//       }
+
+//       draw() {
+//         ctx.font = `${this.size}px serif`; // Adjust font and size
+//         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+//         ctx.textAlign = 'center';
+//         ctx.textBaseline = 'middle';
+//         ctx.fillText('❅', this.x, this.y); // Draw ❅ instead of a circle
+//       }
+//     }
+
+//     function init() {
+//       for (let i = 0; i < particleCount; i++) {
+//         particles.push(new Particle());
+//       }
+//     }
+
+//     function animate() {
+//       ctx.clearRect(0, 0, canvas.width, canvas.height);
+//       for (let i = 0; i < particles.length; i++) {
+//         particles[i].update();
+//         particles[i].draw();
+//       }
+//       requestAnimationFrame(animate);
+//     }
+
+//     init();
+//     animate();
+
+//     const handleResize = () => {
+//       canvas.width = window.innerWidth;
+//       canvas.height = window.innerHeight;
+//       init();
+//     };
+
+//     window.addEventListener('resize', handleResize);
+
+//     return () => {
+//       window.removeEventListener('resize', handleResize);
+//     };
+//   }, []);
+
+//   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none" />;
+// }
+
+
+//Can change color according to background
+
 'use client';
 
 import { useEffect, useRef } from 'react';
@@ -224,7 +321,7 @@ export default function ParticleBackground() {
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 30 + 10; // Adjust size for ❅
+        this.size = Math.random() * 30 + 10;
         this.speedX = Math.random() * 3 - 1.5;
         this.speedY = Math.random() * 3 - 1.5;
       }
@@ -245,12 +342,43 @@ export default function ParticleBackground() {
         }
       }
 
+      // draw() {
+      //   // Sample the pixel color at the particle's current position
+      //   const imageData = ctx.getImageData(this.x, this.y, 1, 1);
+      //   const [r, g, b] = imageData.data;
+
+      //   // Calculate brightness using luminance formula
+      //   const brightness = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+      //   // Set particle color based on brightness
+      //   const particleColor = brightness < 128 ? 'white' : 'black';
+
+      //   ctx.font = `${this.size}px serif`;
+      //   ctx.fillStyle = particleColor;
+      //   ctx.textAlign = 'center';
+      //   ctx.textBaseline = 'middle';
+      //   ctx.fillText('❅', this.x, this.y);
+      // }
+
       draw() {
-        ctx.font = `${this.size}px serif`; // Adjust font and size
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        // Sample the pixel color at the particle's current position
+        const imageData = ctx.getImageData(this.x, this.y, 1, 1);
+        const data = imageData.data;
+        const r = data[0];
+        const g = data[1];
+        const b = data[2];
+      
+        // Calculate brightness using luminance formula
+        const brightness = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      
+        // Set particle color based on brightness
+        const particleColor = brightness < 128 ? 'white' : 'black';
+      
+        ctx.font = `${this.size}px serif`;
+        ctx.fillStyle = particleColor;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('❅', this.x, this.y); // Draw ❅ instead of a circle
+        ctx.fillText('❅', this.x, this.y);
       }
     }
 
