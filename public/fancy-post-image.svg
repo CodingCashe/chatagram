@@ -1,0 +1,28 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a1c4fd;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c2e9fb;stop-opacity:1" />
+    </linearGradient>
+    <filter id="displacementFilter">
+      <feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="3" result="turbulence" />
+      <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="50" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+  
+  <rect width="400" height="400" fill="url(#bg-grad)" />
+  
+  <g filter="url(#displacementFilter)">
+    <circle cx="100" cy="100" r="50" fill="#6a11cb" opacity="0.7" />
+    <circle cx="300" cy="300" r="70" fill="#2575fc" opacity="0.7" />
+    <circle cx="200" cy="200" r="90" fill="#ff758c" opacity="0.7" />
+  </g>
+  
+  <text x="200" y="200" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle" dominant-baseline="middle">Chatal Demo</text>
+  
+  <g transform="translate(175, 220)">
+    <path d="M25,0 L50,40 L0,40 Z" fill="#ffeaa7" />
+    <rect x="20" y="40" width="10" height="20" fill="#fab1a0" />
+  </g>
+</svg>
+

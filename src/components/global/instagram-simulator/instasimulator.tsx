@@ -33,7 +33,7 @@ export const InstagramSimulator = () => {
       <div className="p-4 border-b">
         <div className="flex items-center">
           <Image
-            src="/placeholder.svg?height=40&width=40"
+            src="/fancy-profile-pic.svg"
             alt="Chatal"
             width={40}
             height={40}
@@ -43,7 +43,7 @@ export const InstagramSimulator = () => {
         </div>
       </div>
       <Image
-        src="/placeholder.svg?height=400&width=400"
+        src="/fancy-post-image.svg"
         alt="Chatal Demo"
         width={400}
         height={400}
