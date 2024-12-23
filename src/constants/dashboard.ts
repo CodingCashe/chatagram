@@ -23,7 +23,7 @@ export const DASHBOARD_CARDS: Props[] = [
   {
     id: v4(),
     label: 'Give quality replies that increase engagements',
-    subLabel: 'Let AI take care of your dms with high level creativity',
+    subLabel: 'Let our AI take care of your dms with high level creativity',
     description: 'The AI answers based on a well designed database and creativity',
   },
 ]
