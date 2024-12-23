@@ -1,4 +1,4 @@
-// 'use client'
+'use client'
 
 // import { Button } from '@/components/ui/button'
 // import {
@@ -241,265 +241,41 @@
 
 
 
-'use client'
-
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { CheckCircle, MenuIcon } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { LogoSmall } from '@/svgs/logo-small'
-import { MobileMenu } from '@/components/global/mobile/mobile-menu'
-import { AnimatedHero } from '@/components/global/animated-hero/animatedhero'
-import { AnimatedFeatureCard } from '@/components/global/animated-feature/animatedfeature'
-import { InstagramSimulator } from '@/components/global/instagram-simulator/instasimulator'
-import { FollowerGrowthGame } from '@/components/global/followergrowth/followergrowth'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import Hero from '@/components/global/homestuff/hero'
+import PricingPlans from '@/components/global/homestuff/pricing-plans'
+import Features from '@/components/global/homestuff/features'
+import Testimonials from '@/components/global/homestuff/testimonials'
+import FAQ from '@/components/global/homestuff/faq'
+import CTA from '@/components/global/homestuff/cta'
+import Footer from '@/components/global/homestuff/footer'
+import FloatingNotification from '@/components/global/homestuff/floating-notification'
+import InteractiveDemo from '@/components/global/homestuff/interactive-demo'
+import DynamicStats from '@/components/global/homestuff/dynamic-stats'
+import GlobalReach from '@/components/global/homestuff/global-reach'
 
 export default function Home() {
-  const [testimonials, setTestimonials] = useState([
-    { name: 'John Doe', company: 'Tech Innovators', text: 'Chatal has revolutionized our Instagram strategy. Our engagement rates have skyrocketed!' },
-    { name: 'Jane Smith', company: 'Fashion Forward', text: 'The AI-powered responses feel so natural. Our followers love the increased interaction.' },
-    { name: 'Alex Johnson', company: 'Travel Enthusiasts', text: 'Chatal saved us countless hours. Now we can focus on creating great content while Chatal handles engagement.' },
-  ])
-
-  const { scrollYProgress } = useScroll()
-  const scale = useTransform(scrollYProgress, [0, 1], [0.2, 1])
-
-  const plans = [
-    {
-      name: 'Free Plan',
-      description: 'Perfect for getting started',
-      price: '$0',
-      features: [
-        'Boost engagement with target responses',
-        'Automate comment replies to enhance audience interaction',
-        'Turn followers into customers with targeted messaging',
-      ],
-      cta: 'Get Started',
-      link: '/dashboard',
-    },
-    {
-      name: 'Smart AI Plan',
-      description: 'Advanced features for power users',
-      price: '$89',
-      features: [
-        'All features from Free Plan',
-        'AI-powered response generation',
-        'Advanced analytics and insights',
-        'Priority customer support',
-        'Custom branding options',
-      ],
-      cta: 'Upgrade Now',
-      link: '/api/payment',
-    },
-  ]
-
-  const features = [
-    { title: "Boost Engagement", image: "/engage.png", description: "Automate comment replies and direct messages to interact with your audience 24/7." },
-    { title: "Save Time", image: "/time.png", description: "Let our AI handle repetitive tasks so you can focus on creating amazing content." },
-    { title: "Grow Revenue", image: "/revenue.png", description: "Convert followers into customers with targeted, personalized messaging." }
-  ]
-
   return (
-    <main className="flex flex-col min-h-screen">
-      <header className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <LogoSmall />
-            </div>
-            <nav className="hidden space-x-6 text-sm text-white md:flex">
-              <Link href="#features">Features</Link>
-              <Link href="#demo">Demo</Link>
-              <Link href="#testimonials">Testimonials</Link>
-              <Link href="#pricing">Pricing</Link>
-              <Link href="/privacy">Privacy Policy</Link>
-            </nav>
-            <div className="flex items-center gap-4">
-              <MobileMenu />
-              <Button className="bg-white text-blue-600 hover:bg-blue-100">
-                <Link href="/dashboard">Login</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <AnimatedHero />
-
-      <section id="features" className="py-20 bg-gray-100">
-        <div className="container mx-auto px-4">
-          <motion.h2
-            className="text-4xl font-bold text-center mb-12 text-blue-600"
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            Why Choose Chatal?
-          </motion.h2>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-            {features.map((feature, index) => (
-              <AnimatedFeatureCard
-                key={index}
-                title={feature.title}
-                description={feature.description}
-                image={feature.image}
-              />
-            ))}
-          </div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-100">
+      <Hero />
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Experience Chatal in Action</h2>
+        <InteractiveDemo />
       </section>
-
-      <section id="demo" className="py-20 bg-blue-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12 text-blue-600">See Chatal in Action</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <InstagramSimulator />
-            <FollowerGrowthGame />
-          </div>
-        </div>
+      <Features />
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-purple-700">
+        <h2 className="text-3xl font-bold text-center text-white mb-12">Chatal's Global Impact</h2>
+        <DynamicStats />
       </section>
-
-      <section id="testimonials" className="py-20 bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">What Our Users Say</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                className="bg-white bg-opacity-10 p-6 rounded-lg backdrop-blur-sm"
-              >
-                <p className="mb-4">{testimonial.text}</p>
-                <p className="font-semibold">{testimonial.name}</p>
-                <p className="text-sm opacity-75">{testimonial.company}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+      <PricingPlans />
+      <Testimonials />
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-900">
+        <GlobalReach />
       </section>
-
-      <section id="pricing" className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-4xl font-bold mb-4 text-blue-600">
-              Choose Your Plan
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Select the perfect plan to boost your Instagram engagement and take your social media presence to the next level.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 max-w-4xl mx-auto">
-            {plans.map((plan, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-              >
-                <Card className="flex flex-col justify-between hover:shadow-xl transition-shadow duration-300">
-                  <CardHeader>
-                    <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                    <CardDescription>{plan.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex-grow">
-                    <div className="text-4xl font-bold mb-6">
-                      {plan.price}
-                      <span className="text-lg font-normal text-gray-600">
-                        /month
-                      </span>
-                    </div>
-                    <ul className="space-y-3">
-                      {plan.features.map((feature, i) => (
-                        <li
-                          key={i}
-                          className="flex items-center"
-                        >
-                          <CheckCircle className="mr-2 h-5 w-5 text-green-500" />
-                          <span className="text-gray-700">
-                            {feature}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter>
-                    <Button className="w-full bg-blue-600 text-white hover:bg-blue-700">
-                      <Link href={plan.link}>{plan.cta}</Link>
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 bg-gray-100">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12 text-blue-600">Ready to Transform Your Instagram Engagement?</h2>
-          <motion.div
-            className="max-w-lg mx-auto text-center"
-            style={{ scale }}
-          >
-            <p className="text-xl mb-8">
-              Join thousands of satisfied users who have revolutionized their Instagram strategy with Chatal. Start your journey to better engagement today!
-            </p>
-            <Button size="lg" className="bg-blue-600 text-white hover:bg-blue-700">
-              <Link href="/dashboard">Get Started Now</Link>
-            </Button>
-          </motion.div>
-        </div>
-      </section>
-
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <LogoSmall />
-              <p className="mt-4 text-sm text-gray-400">
-                © 2024 Chatal. All rights reserved.
-              </p>
-            </div>
-            <div className="flex flex-col space-y-2">
-              <Link href="/privacy-policy" className="hover:text-blue-400 transition-colors">Privacy Policy</Link>
-              <Link href="/terms" className="hover:text-blue-400 transition-colors">Terms of Service</Link>
-              <Link href="/contact" className="hover:text-blue-400 transition-colors">Contact</Link>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Connect with us</h3>
-              <div className="flex space-x-4">
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:opacity-75 transition-opacity">
-                  <Image src="/instagram-icon.svg" alt="Instagram" width={24} height={24} />
-                </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="hover:opacity-75 transition-opacity">
-                  <Image src="/twitter-icon.svg" alt="Twitter" width={24} height={24} />
-                </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:opacity-75 transition-opacity">
-                  <Image src="/linkedin-icon.svg" alt="LinkedIn" width={24} height={24} />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </main>
+      <FAQ />
+      <CTA />
+      <Footer />
+      <FloatingNotification />
+    </div>
   )
 }
 
