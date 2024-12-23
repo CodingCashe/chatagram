@@ -4,12 +4,24 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Bell } from 'lucide-react'
 
+// const notifications = [
+//   "Sarah just automated 100 DMs!",
+//   "New feature: Advanced targeting",
+//   "Join our webinar on DM strategies",
+//   "50% off Pro plan - Limited time!",
+// ]
 const notifications = [
-  "Sarah just automated 100 DMs!",
-  "New feature: Advanced targeting",
-  "Join our webinar on DM strategies",
-  "50% off Pro plan - Limited time!",
-]
+  "Sarah just automated 100 DMs! 🚀",
+  "New feature: Advanced targeting 🎯",
+  "Join our webinar on DM strategies 💡",
+  "50% off Pro plan - Limited time! 🔥",
+  "Mike gained 200 followers with automated replies! 🎉",
+  "Set up keyword triggers in under 5 minutes ⏱️",
+  "Boost engagement by 80% with Chatal! 📈",
+  "New integration: Track performance analytics 📊",
+  "Emily doubled her sales using auto-DMs! 💰",
+  "Your free trial starts now—sign up today! 🎁",
+];
 
 export default function FloatingNotification() {
   const [isVisible, setIsVisible] = useState(false)
