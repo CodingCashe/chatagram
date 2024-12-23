@@ -34,14 +34,14 @@ export default function Home() {
           <div className="flex items-center gap-0">
             <LogoSmall />
           </div>
-          {/* <nav className={`md:block ${isMenuOpen ? 'block' : 'hidden'}`}>
+          <nav className={`md:block ${isMenuOpen ? 'block' : 'hidden'}`}>
             <ul className="flex space-x-8">
               <li><Link href="#" className="text-gray-600 hover:[#2563EB] transition-colors">Features</Link></li>
               <li><Link href="#" className="text-gray-600 hover:[#2563EB] transition-colors">Pricing</Link></li>
-              <li><Link href="#" className="text-gray-600 hover:[#2563EB] transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/privacy" className="text-gray-600 hover:text-[#2563EB] transition-colors">Contact</Link></li>
+              <li><Link href="/privacy" className="text-gray-600 hover:[#2563EB] transition-colors">Privacy Policy</Link></li>
+              <li><Link href="#" className="text-gray-600 hover:text-[#2563EB] transition-colors">Contact</Link></li>
             </ul>
-          </nav> */}
+          </nav>
           <Button 
             className="md:hidden bg-gray-200 hover:bg-gray-300 text-gray-800 rounded p-2 shadow" 
             variant="ghost" 
