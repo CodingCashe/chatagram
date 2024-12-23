@@ -77,7 +77,7 @@ export default function Home() {
         <FAQ />
         <CTA />
         <Footer />
-        {/* <FloatingNotification /> */}
+        <FloatingNotification />
       </main>
     </div>
   );
