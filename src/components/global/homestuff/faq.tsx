@@ -2,7 +2,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 const faqs = [
   {
-    question: "How does Chatal's automation work?",
+    question: "How does Chatal automation work?",
     answer: "Chatal uses advanced AI to analyze incoming DMs and provide appropriate responses based on your customized settings and templates. You can create complex workflows to handle various scenarios automatically.",
   },
   {
@@ -22,7 +22,7 @@ const faqs = [
 export default function FAQ() {
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8">
-      <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Frequently Asked Questions</h2>
+      <h2 className="text-3xl font-bold text-center text-black mb-12">Frequently Asked Questions</h2>
       <div className="max-w-3xl mx-auto">
         <Accordion type="single" collapsible className="w-full">
           {faqs.map((faq, index) => (

@@ -5,7 +5,7 @@ import { Check } from 'lucide-react'
 const plans = [
   {
     name: "Standard",
-    price: "$29",
+    price: "FREE",
     description: "Perfect for small businesses and influencers",
     features: [
       "Up to 1,000 automated DMs per month",
@@ -16,7 +16,7 @@ const plans = [
   },
   {
     name: "Pro",
-    price: "$79",
+    price: "$89",
     description: "Ideal for growing brands and power users",
     features: [
       "Unlimited automated DMs",

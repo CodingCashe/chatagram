@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google'
 import { Button } from "@/components/ui/button"
 import { Menu } from 'lucide-react'
 import ParticleBackground from '@/components/global/homestuff/particle-background'
+import {LogoSmall} from '@/svgs/logo-small'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -32,7 +33,9 @@ export default function PageLayout({
         <ParticleBackground />
         <header className="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-purple-600">Chatal</h1>
+          <div className="flex items-center gap-2">
+               <LogoSmall />
+          </div>
             <nav className="hidden md:block">
               <ul className="flex space-x-8">
                 <li><a href="#" className="text-gray-600 hover:text-purple-600 transition-colors">Features</a></li>

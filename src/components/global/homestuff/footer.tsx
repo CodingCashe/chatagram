@@ -43,13 +43,16 @@
 // }
 
 import { Facebook, TwitterIcon, InstagramIcon, LinkedinIcon } from 'lucide-react';
+import {LogoSmall} from '@/svgs/logo-small'
 
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
-          <h3 className="text-2xl font-bold mb-4">Chatal</h3>
+             <div className="flex items-center gap-2">
+               <LogoSmall />
+             </div>
           <p className="text-gray-400">Revolutionizing Instagram DM automation for businesses and influencers.</p>
         </div>
         <div>
@@ -80,7 +83,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="mt-12 text-center text-gray-400">
-        <p>&copy; 2023 Chatal. All rights reserved.</p>
+        <p>&copy; 2025 Chatal. All rights reserved.</p>
       </div>
     </footer>
   );

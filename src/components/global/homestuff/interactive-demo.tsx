@@ -17,12 +17,14 @@ interface Message {
 }
 
 const demoConversation: Message[] = [
-  { role: MessageRole.User, message: 'Hey, Im interested in your products!' },
-  { role: MessageRole.Assistant, message: 'Hii there! Thanks for your interest. What kind of products are you looking for?' },
-  { role: MessageRole.User, message: 'Im looking for sustainable fashion items.' },
-  { role: MessageRole.Assistant, message: 'Great choice! We have a wide range of sustainable fashion items. Are you interested in clothing, accessories, or both?' },
-  { role: MessageRole.User, message: 'Mainly clothing, especially t-shirts and jeans.' },
-  { role: MessageRole.Assistant, message: 'Excellent! We have a great selection of eco-friendly t-shirts and jeans. Would you like me to show you some of our bestsellers?' },
+  { role: MessageRole.User, message: 'Hey' },
+  { role: MessageRole.Assistant, message: 'Hi there! 👋 Welcome to Chatal, the ultimate Instagram DM automation tool. How can I assist you today?' },
+  { role: MessageRole.User, message: 'What does Chatal do?' },
+  { role: MessageRole.Assistant, message: 'Chatal automates Instagram DMs to save you time and boost engagement 💬.It can send automatic replies when someone comments on your posts using specific keywords like info or price.It also replies instantly to DMs with set keywords like subscribe or discount.🚀' },
+  { role: MessageRole.User, message: 'How do I set it up?' },
+  { role: MessageRole.Assistant, message: 'Setup is super simple! Just pick your trigger keywords, write custom replies or let our AI do it on PRO plan and start automating—no coding needed. 😊' },
+  { role: MessageRole.User, message: 'Thank you' },
+  { role: MessageRole.Assistant, message: 'Welcome, see you onboard!' },
 ]
 
 export default function InteractiveDemo() {
