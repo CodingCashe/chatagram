@@ -26,7 +26,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-pink-100">
-      <ParticleBackground />
+      {/* <ParticleBackground /> */}
       
       {/* Header Section */}
       <header className="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
@@ -61,17 +61,17 @@ export default function Home() {
         <Features />
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#2563EB]">
           <h2 className="text-3xl font-bold text-center text-white mb-12">Chatal Global Impact</h2>
-          <DynamicStats />
+          {/* <DynamicStats /> */}
         </section>
         <PricingPlans />
         <Testimonials />
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-900">
-          <GlobalReach />
+          {/* <GlobalReach /> */}
         </section>
         <FAQ />
         <CTA />
         <Footer />
-        <FloatingNotification />
+        {/* <FloatingNotification /> */}
       </main>
     </div>
   );
