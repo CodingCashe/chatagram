@@ -67,17 +67,17 @@ export default function Home() {
         <Features />
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#2563EB]">
           <h2 className="text-3xl font-bold text-center text-white mb-12">Chatal Global Impact</h2>
-          {/* <DynamicStats /> */}
+          <DynamicStats />
         </section>
         <PricingPlans />
         <Testimonials />
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-900">
-          {/* <GlobalReach /> */}
+          <GlobalReach />
         </section>
         <FAQ />
         <CTA />
         <Footer />
-        {/* <FloatingNotification /> */}
+        <FloatingNotification />
       </main>
     </div>
   );
