@@ -68,12 +68,6 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
-
-export const metadata = {
-  title: 'Chatal - Instagram DM Automation',
-  description: 'Automate your Instagram DMs with Chatal. Boost engagement and save time.',
-}
-
 export default function PageLayout({
   children,
 }: {
