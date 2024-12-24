@@ -48,7 +48,7 @@ export const Notifications: React.FC = () => {
       <Button
         onClick={toggleNotifications}
         className={cn(
-          "bg-white rounded-full py-6 p-2 transition-all duration-300 ease-in-out relative",
+          "bg-white rounded-full py-6 transition-all duration-300 ease-in-out relative",
           isOpen && "ring-2 ring-blue-500 ring-opacity-50"
         )}
       >
