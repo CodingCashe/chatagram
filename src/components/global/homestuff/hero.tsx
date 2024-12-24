@@ -16,7 +16,7 @@ export default function Hero() {
   }, [])
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between overflow-hidden">
+    <section className="py-10 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between overflow-hidden">
       <div className="max-w-2xl mb-10 lg:mb-0 z-10">
         <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl mb-6">
           Revolutionize Your <span className="text-[#2563EB]">Instagram DMs</span> with AI-Powered Automation
