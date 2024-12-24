@@ -37,7 +37,7 @@ export default function Testimonials() {
                   <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <CardTitle className="text-lg">{testimonial.name}</CardTitle>
+                  <CardTitle className="text-lg text-black">{testimonial.name}</CardTitle>
                   <p className="text-sm text-gray-600">{testimonial.role}</p>
                 </div>
               </div>

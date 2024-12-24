@@ -8,7 +8,7 @@ const plans = [
     price: "FREE",
     description: "Perfect for small businesses and influencers",
     features: [
-      "Up to 1,000 automated DMs per month",
+      "Up to 4 automated DMs per month",
       "Basic message templates",
       "24/7 customer support",
       "Analytics dashboard"

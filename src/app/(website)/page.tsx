@@ -266,7 +266,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Fancy Mobile Menu */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div

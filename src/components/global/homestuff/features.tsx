@@ -33,7 +33,7 @@ export default function Features() {
           <Card key={index} className="bg-white/80 backdrop-blur-sm hover:shadow-lg transition-shadow duration-300">
             <CardHeader>
               <feature.icon className="h-12 w-12 text-[#2563EB] mb-2" />
-              <CardTitle>{feature.title}</CardTitle>
+              <CardTitle className="text-black">{feature.title}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-gray-600">{feature.description}</p>
