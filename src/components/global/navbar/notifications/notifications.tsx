@@ -48,15 +48,17 @@ export const Notifications: React.FC = () => {
       <Button
         onClick={toggleNotifications}
         className={cn(
-          "bg-white rounded-full p-2 transition-all duration-300 ease-in-out relative",
+          "bg-white rounded-full py-6 p-2 transition-all duration-300 ease-in-out relative",
           isOpen && "ring-2 ring-blue-500 ring-opacity-50"
         )}
       >
         <Bell
-          className="w-6 h-6 text-blue-600"
-          style={{ 
-            filter: isOpen ? 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.5))' : 'none'
-          }}
+        color="#3352CC"
+        fill="#3352CC"
+          // className="w-6 h-6 text-blue-600"
+          // style={{ 
+          //   filter: isOpen ? 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.5))' : 'none'
+          // }}
         />
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
