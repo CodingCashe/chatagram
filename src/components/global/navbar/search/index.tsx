@@ -210,12 +210,12 @@ const Search = () => {
   }, [])
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto px-4 gap-x-2 border-[1px] border-[#3352CC]">
+    <div className="relative w-full max-w-4xl mx-auto">
       <div className="relative">
         <Input
           ref={inputRef}
           placeholder="Search automation by name"
-          className="pl-10 pr-4 py-2 w-full border-2 border-[#545454] rounded-full focus:outline-none focus:ring-2 focus:ring-[#3352CC] focus:border-transparent bg-[#1D1D1D] text-white"
+          className="pl-10 pr-4 py-2 w-full border-2 border-[#3352CC] rounded-full focus:outline-none focus:ring-2 focus:ring-[#3352CC] focus:border-transparent bg-[#1D1D1D] text-white"
           value={searchTerm}
           onChange={handleSearch}
           onFocus={() => setIsOpen(true)} 
