@@ -90,7 +90,7 @@ export const useNotifications = () => {
         timestamp: 'Just now'
       }
       addNotification(newNotification)
-    }, 30000) // Add a new notification every 30 seconds
+    }, 60000) // Add a new notification every 1 min
 
     return () => clearInterval(interval)
   }, [])

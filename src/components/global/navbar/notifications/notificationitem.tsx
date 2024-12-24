@@ -35,7 +35,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({ notification
         <div className="flex items-center gap-2">
           <img src={notification.user.avatar} alt={notification.user.username} className="w-8 h-8 rounded-full" />
           <div>
-            <span className="font-semibold">{notification.user.username}</span>
+            <span className="text-black font-semibold">{notification.user.username}</span>
             <span className="text-gray-600"> {notification.action}</span>
           </div>
         </div>
