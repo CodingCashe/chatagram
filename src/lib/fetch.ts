@@ -1,4 +1,4 @@
-import axios from 'axios'
+ import axios from 'axios' //axios
 
 export const refreshToken = async (token: string) => {
   const refresh_token = await axios.get(
@@ -61,6 +61,9 @@ export const sendPrivateMessage = async (
 }
 
 
+
+
+
 export const generateTokens = async (code: string) => {
   const insta_form = new FormData()
   insta_form.append('client_id', process.env.INSTAGRAM_CLIENT_ID as string)
@@ -91,3 +94,7 @@ export const generateTokens = async (code: string) => {
     return long_token.data
   }
 }
+
+
+
+
