@@ -211,7 +211,7 @@ const Search = () => {
 
   return (
     <div className="relative w-full max-w-4xl mx-auto">
-      <div className="relative">
+      <div className="flex overflow-hidden gap-x-2 border-[1px] border-[#3352CC] rounded-full px-4 py-1 items-center flex-1">
         <Input
           ref={inputRef}
           placeholder="Search automation by name"
