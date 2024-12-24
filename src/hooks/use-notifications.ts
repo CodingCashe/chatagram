@@ -7,7 +7,7 @@ const sampleNotifications: Notification[] = [
     type: 'like',
     user: {
       id: 'user1',
-      username: 'Cashe King',
+      username: 'Angel Mamaa',
       avatar: 'https://i.pravatar.cc/150?img=1'
     },
     action: 'liked your post.',
@@ -32,7 +32,7 @@ const sampleNotifications: Notification[] = [
     type: 'follow',
     user: {
       id: 'user3',
-      username: 'Angel',
+      username: 'Cashe King',
       avatar: 'https://i.pravatar.cc/150?img=3'
     },
     action: 'started following you.',
