@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react'
 
 export function useKeyboardNavigation<T>(items: T[], onSelect: (item: T) => void) {
