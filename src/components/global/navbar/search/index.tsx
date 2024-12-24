@@ -210,7 +210,7 @@ const Search = () => {
   }, [])
 
   return (
-    <div className="flex overflow-hidden gap-x-2 border-[1px] border-[#3352CC] rounded-full px-4 py-1 items-center flex-1">
+    <div className="relative w-full max-w-4xl mx-auto px-4 gap-x-2 border-[1px] border-[#3352CC]">
       <div className="relative">
         <Input
           ref={inputRef}
