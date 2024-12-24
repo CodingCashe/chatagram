@@ -210,17 +210,17 @@ const Search = () => {
   }, [])
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto">
-      <div className="flex overflow-hidden gap-x-2 border-[1px] border-[#3352CC] rounded-full px-4 py-1 items-center flex-1">
+    <div className="flex overflow-hidden gap-x-2 border-[1px] border-[#3352CC] rounded-full px-4 py-1 items-center flex-1">
+      <div className="relative">
         <Input
           ref={inputRef}
           placeholder="Search automation by name"
-          className="pl-10 pr-4 py-2 w-full border-2 border-[#545454] rounded-full focus:outline-none focus:ring-2 focus:ring-[#3352CC] focus:border-transparent bg-[#1D1D1D] text-white"
+          className="border-none outline-none ring-0 focus:ring-0 flex-1"
           value={searchTerm}
           onChange={handleSearch}
-          onFocus={() => setIsOpen(true)}
+          onFocus={() => setIsOpen(true)} 
         />
-        <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#545454]" size={20} />
+        <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3352CC]" size={20} />
         {searchTerm && (
           <Button
             className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 rounded-full bg-transparent hover:bg-[#2A2A2A]"
