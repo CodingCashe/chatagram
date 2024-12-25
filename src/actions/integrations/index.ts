@@ -20,7 +20,7 @@ export const onIntegrate = async (code: string) => {
 
     if (integration && integration.integrations.length === 0) {
       const token = await generateTokens(code)
-      console.log(token)
+      console.log('Token:', {token})
 
       if (token) {
         const insta_id = await axios.get(
