@@ -24,6 +24,54 @@
 // export default Page
 
 
+// import { onIntegrate } from '@/actions/integrations';
+// import { redirect } from 'next/navigation';
+// import React from 'react';
+
+// type Props = {
+//   searchParams: {
+//     code: string;
+//   };
+// };
+
+// const Page = async ({ searchParams: { code } }: Props) => {
+//   try {
+//     // Log the received search parameter
+//     console.log('Received searchParams:', { code });
+
+//     if (!code) {
+//       console.error('Error: No code parameter received.');
+//       return redirect('/sign-in');
+//     }
+
+//     // Clean the code if it contains additional fragments
+//     const cleanedCode = code.split('#_')[0];
+//     console.log('Cleaned code:', cleanedCode);
+
+//     // Attempt to integrate the user
+//     const user = await onIntegrate(cleanedCode);
+//     console.log('Integration response:', user);
+
+//     // Check if the integration was successful
+//     if (user.status === 200) {
+//       const redirectPath = `/dashboard/${user.data?.firstname}${user.data?.lastname}/integrations`;
+//       console.log('Redirecting to:', redirectPath);
+//       return redirect(redirectPath);
+//     } else {
+//       console.error('Integration failed with status:', user.status, 'Response:', user);
+//     }
+//   } catch (error) {
+//     console.error('Error during integration process:', error);
+//   }
+
+//   // Redirect to sign-up if any issues occur
+//   console.warn('Redirecting to /sign-up due to an error or invalid response.');
+//   return redirect('/privacy');
+// };
+
+// export default Page;
+
+
 import { onIntegrate } from '@/actions/integrations';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -36,36 +84,40 @@ type Props = {
 
 const Page = async ({ searchParams: { code } }: Props) => {
   try {
-    // Log the received search parameter
+    console.log('Starting Page function...');
     console.log('Received searchParams:', { code });
 
     if (!code) {
       console.error('Error: No code parameter received.');
-      return redirect('/privacy');
+      return redirect('/sign-in');
     }
 
-    // Clean the code if it contains additional fragments
     const cleanedCode = code.split('#_')[0];
     console.log('Cleaned code:', cleanedCode);
 
-    // Attempt to integrate the user
     const user = await onIntegrate(cleanedCode);
     console.log('Integration response:', user);
 
-    // Check if the integration was successful
     if (user.status === 200) {
-      const redirectPath = `/dashboard/${user.data?.firstname}${user.data?.lastname}/integrations`;
+      const firstname = user.data?.firstname || 'unknown';
+      const lastname = user.data?.lastname || 'user';
+      const redirectPath = `/dashboard/${firstname}${lastname}/integrations`;
       console.log('Redirecting to:', redirectPath);
       return redirect(redirectPath);
     } else {
       console.error('Integration failed with status:', user.status, 'Response:', user);
+      if (user.status === 401) {
+        return redirect('/unauthorized');
+      }
+      if (user.status === 404) {
+        return redirect('/not-found');
+      }
     }
   } catch (error) {
     console.error('Error during integration process:', error);
   }
 
-  // Redirect to sign-up if any issues occur
-  console.warn('Redirecting to /sign-up due to an error or invalid response.');
+  console.warn('Redirecting to /privacy due to an error or invalid response.');
   return redirect('/privacy');
 };
 
