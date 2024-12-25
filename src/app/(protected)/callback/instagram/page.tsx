@@ -66,7 +66,7 @@ const Page = async ({ searchParams: { code } }: Props) => {
 
   // Redirect to sign-up if any issues occur
   console.warn('Redirecting to /sign-up due to an error or invalid response.');
-  return redirect('/dashboard/${user.data?.firstname}${user.data?.lastname}/automations');
+  return redirect('/privacy');
 };
 
 export default Page;
