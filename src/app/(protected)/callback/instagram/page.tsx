@@ -41,7 +41,7 @@ const Page = async ({ searchParams: { code } }: Props) => {
 
     if (!code) {
       console.error('Error: No code parameter received.');
-      return redirect('/sign-up');
+      return redirect('/privacy');
     }
 
     // Clean the code if it contains additional fragments
@@ -66,7 +66,7 @@ const Page = async ({ searchParams: { code } }: Props) => {
 
   // Redirect to sign-up if any issues occur
   console.warn('Redirecting to /sign-up due to an error or invalid response.');
-  return redirect('/sign-up');
+  return redirect('/dashboard/${user.data?.firstname}${user.data?.lastname}/automations');
 };
 
 export default Page;
