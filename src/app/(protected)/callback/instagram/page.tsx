@@ -76,74 +76,45 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
-import { onIntegrate } from '@/actions/integrations';
-import { generateTokens } from '@/lib/fetch';
 
-const Page: React.FC = () => {
+const Page = () => {
   const router = useRouter();
-  const [statusMessage, setStatusMessage] = useState<string>('Processing your Instagram integration...');
+  const [code, setCode] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const processIntegration = async () => {
-      // Extract the code from the URL query parameters
+    if (!router.isReady) return; // Wait until the router is ready
+
+    try {
+      // Extract the "code" query parameter from the URL
       const { code } = router.query;
 
       if (!code) {
-        console.error('🔴 Error: No code received from Instagram.');
-        setStatusMessage('Error: No code received from Instagram.');
+        setError('No code parameter found in the URL.');
         return;
       }
 
-      try {
-        // Step 1: Clean the code in case there are fragments after '#_'
-        const cleanedCode = Array.isArray(code) ? code[0].split('#_')[0] : code.split('#_')[0];
-        console.log('🟢 Cleaned code:', cleanedCode);
-
-        // Step 2: Generate tokens using the cleaned code
-        const tokenResponse = await generateTokens(cleanedCode);
-        if (!tokenResponse || !tokenResponse.access_token) {
-          console.error('🔴 Error: Failed to retrieve Instagram token.');
-          setStatusMessage('Error: Failed to retrieve Instagram token.');
-          return;
-        }
-        console.log('🟢 Token Response:', tokenResponse);
-
-        // Step 3: Fetch Instagram user data using the access token
-        const instaResponse = await axios.get(
-          `${process.env.INSTAGRAM_BASE_URL}/me?fields=id&access_token=${tokenResponse.access_token}`
-        );
-
-        if (!instaResponse.data || !instaResponse.data.id) {
-          console.error('🔴 Error: Failed to fetch Instagram user data.');
-          setStatusMessage('Error: Failed to retrieve Instagram user data.');
-          return;
-        }
-        console.log('🟢 Instagram User Data:', instaResponse.data);
-
-        // Step 4: Integrate the user using the onIntegrate function
-        const integrationResponse = await onIntegrate(cleanedCode);
-        console.log('🟢 User Integration Response:', integrationResponse);
-
-        if (integrationResponse?.status === 200) {
-          setStatusMessage('Integration successful! You can now use Instagram features.');
-          router.push('/dashboard'); // Redirect to the desired page after successful integration
-        } else {
-          console.error('🔴 Error: Integration failed with status:', integrationResponse?.status);
-          setStatusMessage('Integration failed. Please try again later.');
-        }
-      } catch (error) {
-        console.error('🔴 Error during Instagram callback processing:', error);
-        setStatusMessage('Error: Something went wrong during integration.');
-      }
-    };
-
-    if (router.isReady) {
-      processIntegration();
+      // Clean the code (in case of fragments like '#_')
+      const cleanedCode = Array.isArray(code) ? code[0].split('#_')[0] : code.split('#_')[0];
+      setCode(cleanedCode);
+    } catch (err) {
+      setError('An error occurred while extracting the code.');
+      console.error('Error extracting code:', err);
     }
   }, [router]);
 
-  return <div>{statusMessage}</div>;
+  return (
+    <div>
+      <h1>Instagram Callback Debugging</h1>
+      {error ? (
+        <p style={{ color: 'red' }}>Error: {error}</p>
+      ) : code ? (
+        <p style={{ color: 'green' }}>Code successfully extracted: {code}</p>
+      ) : (
+        <p>Waiting for the code...</p>
+      )}
+    </div>
+  );
 };
 
 export default Page;
