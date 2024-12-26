@@ -49,7 +49,7 @@ import { cookies } from 'next/headers'
 
 const INSTAGRAM_CLIENT_ID = process.env.INSTAGRAM_CLIENT_ID
 const INSTAGRAM_CLIENT_SECRET = process.env.INSTAGRAM_CLIENT_SECRET
-const REDIRECT_URI = `${process.env.NEXT_PUBLIC_HOST_URL}/callback/instagram/`
+const REDIRECT_URI = `${process.env.NEXT_PUBLIC_HOST_URL}/callback/instagram`
 
 export async function exchangeCodeForToken(code: string) {
   try {
