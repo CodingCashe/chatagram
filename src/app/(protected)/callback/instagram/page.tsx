@@ -77,6 +77,7 @@
 import { useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { onIntegrate } from '@/actions/integrations';
+import { exchangeCodeForToken } from '@/actions/exchange/actions'
 
 export default function InstagramCallback() {
   const router = useRouter()
@@ -87,9 +88,9 @@ export default function InstagramCallback() {
     
     if (code) {
       // If we have a code, exchange it for an access token
-      onIntegrate(code)
+      exchangeCodeForToken(code)
         .then((result) => {
-          if (result.status==200) {
+          if (result.success) {
             // Redirect to a success page or dashboard
             console.log('success')
           } else {
