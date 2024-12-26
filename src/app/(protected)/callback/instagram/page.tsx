@@ -80,7 +80,7 @@ import axios from 'axios';
 import { onIntegrate } from '@/actions/integrations';
 import { generateTokens } from '@/lib/fetch';
 
-const InstagramCallbackPage: React.FC = () => {
+const Page: React.FC = () => {
   const router = useRouter();
   const [statusMessage, setStatusMessage] = useState<string>('Processing your Instagram integration...');
 
@@ -146,4 +146,4 @@ const InstagramCallbackPage: React.FC = () => {
   return <div>{statusMessage}</div>;
 };
 
-export default InstagramCallbackPage;
+export default Page;
