@@ -23,6 +23,45 @@
 
 // export default Page
 
+// import { onIntegrate } from '@/actions/integrations';
+// import React from 'react';
+
+// type Props = {
+//   searchParams: {
+//     code: string;
+//   };
+// };
+
+// const Page = async ({ searchParams: { code } }: Props) => {
+//   if (code) {
+//     console.log(code);
+//     const user = await onIntegrate(code.split('#_')[0]);
+//     if (user.status === 200) {
+//       return (
+//         <div>
+//           <h1>Integration Successful</h1>
+//           <p>User: {JSON.stringify(user.data)}</p>
+//           <p>Code: {code}</p>
+//         </div>
+//       );
+//     }
+//     return (
+//       <div>
+//         <h1>Integration Failed</h1>
+//         <p>Code: {code}</p>
+//       </div>
+//     );
+//   }
+//   return (
+//     <div>
+//       <h1>No Code Provided</h1>
+//     </div>
+//   );
+// };
+
+// export default Page;
+
+
 import { onIntegrate } from '@/actions/integrations';
 import React from 'react';
 
@@ -35,23 +74,15 @@ type Props = {
 const Page = async ({ searchParams: { code } }: Props) => {
   if (code) {
     console.log(code);
-    const user = await onIntegrate(code.split('#_')[0]);
-    if (user.status === 200) {
-      return (
-        <div>
-          <h1>Integration Successful</h1>
-          <p>User: {JSON.stringify(user.data)}</p>
-          <p>Code: {code}</p>
-        </div>
-      );
-    }
+    const result = await onIntegrate(code.split('#_')[0]);
     return (
       <div>
-        <h1>Integration Failed</h1>
-        <p>Code: {code}</p>
+        <h1>Integration Result</h1>
+        {result.content}
       </div>
     );
   }
+
   return (
     <div>
       <h1>No Code Provided</h1>
@@ -60,6 +91,7 @@ const Page = async ({ searchParams: { code } }: Props) => {
 };
 
 export default Page;
+
 
 
 
