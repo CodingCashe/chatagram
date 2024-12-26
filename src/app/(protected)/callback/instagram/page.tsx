@@ -72,49 +72,38 @@
 // export default Page;
 
 
-'use client';
+'use client'
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { onIntegrate } from '@/actions/integrations';
 
-const Page = () => {
-  const router = useRouter();
-  const [code, setCode] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+export default function InstagramCallback() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
-    if (!router.isReady) return; // Wait until the router is ready
-
-    try {
-      // Extract the "code" query parameter from the URL
-      const { code } = router.query;
-
-      if (!code) {
-        setError('No code parameter found in the URL.');
-        return;
-      }
-
-      // Clean the code (in case of fragments like '#_')
-      const cleanedCode = Array.isArray(code) ? code[0].split('#_')[0] : code.split('#_')[0];
-      setCode(cleanedCode);
-    } catch (err) {
-      setError('An error occurred while extracting the code.');
-      console.error('Error extracting code:', err);
+    const code = searchParams.get('code')
+    
+    if (code) {
+      // If we have a code, exchange it for an access token
+      onIntegrate(code)
+        .then((result) => {
+          if (result.status==200) {
+            // Redirect to a success page or dashboard
+            console.log('success')
+          } else {
+            // Handle error
+            console.error('Failed to exchange code for token:')
+            
+          }
+        })
+    } else {
+      // If there's no code, redirect to an error page
+      console.log('error2')
     }
-  }, [router]);
+  }, [searchParams, router])
 
-  return (
-    <div>
-      <h1>Instagram Callback Debugging</h1>
-      {error ? (
-        <p style={{ color: 'red' }}>Error: {error}</p>
-      ) : code ? (
-        <p style={{ color: 'green' }}>Code successfully extracted: {code}</p>
-      ) : (
-        <p>Waiting for the code...</p>
-      )}
-    </div>
-  );
-};
+  return <div>Processing your Instagram login...</div>
+}
 
-export default Page;
