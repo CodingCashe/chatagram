@@ -23,6 +23,45 @@
 
 // export default Page
 
+import { onIntegrate } from '@/actions/integrations';
+import React from 'react';
+
+type Props = {
+  searchParams: {
+    code: string;
+  };
+};
+
+const Page = async ({ searchParams: { code } }: Props) => {
+  if (code) {
+    console.log(code);
+    const user = await onIntegrate(code.split('#_')[0]);
+    if (user.status === 200) {
+      return (
+        <div>
+          <h1>Integration Successful</h1>
+          <p>User: {JSON.stringify(user.data)}</p>
+          <p>Code: {code}</p>
+        </div>
+      );
+    }
+    return (
+      <div>
+        <h1>Integration Failed</h1>
+        <p>Code: {code}</p>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <h1>No Code Provided</h1>
+    </div>
+  );
+};
+
+export default Page;
+
+
 
 // import { onIntegrate } from '@/actions/integrations';
 // import { redirect } from 'next/navigation';
@@ -172,36 +211,36 @@
 //   )
 // }
 
-import { redirect } from 'next/navigation'
-import { onIntegrate } from '@/actions/integrations'
+// import { redirect } from 'next/navigation'
+// import { onIntegrate } from '@/actions/integrations'
 
-type Props = {
-  searchParams: {
-    code: string
-  }
-}
+// type Props = {
+//   searchParams: {
+//     code: string
+//   }
+// }
 
-export default async function InstagramCallback({ searchParams: { code } }: Props) {
-  if (!code) {
-    console.error('No authorization code received from Instagram')
-    return redirect('/privacy')
-  }
+// export default async function InstagramCallback({ searchParams: { code } }: Props) {
+//   if (!code) {
+//     console.error('No authorization code received from Instagram')
+//     return redirect('/privacy')
+//   }
 
-  const cleanCode = code.split('#_')[0]
+//   const cleanCode = code.split('#_')[0]
   
-  try {
-    const result = await onIntegrate(cleanCode)
+//   try {
+//     const result = await onIntegrate(cleanCode)
     
-    if (result.status === 200 && result.data) {
-      const { firstname, lastname } = result.data
-      return redirect(`/dashboard/${firstname}${lastname}/integrations`)
-    } else {
-      console.error('Integration failed:', result)
-      return redirect('/error')
-    }
-  } catch (error) {
-    console.error('Error during integration:', error)
-    return redirect('/last')
-  }
-}
+//     if (result.status === 200 && result.data) {
+//       const { firstname, lastname } = result.data
+//       return redirect(`/dashboard/${firstname}${lastname}/integrations`)
+//     } else {
+//       console.error('Integration failed:', result)
+//       return redirect('/error')
+//     }
+//   } catch (error) {
+//     console.error('Error during integration:', error)
+//     return redirect('/last')
+//   }
+// }
 
