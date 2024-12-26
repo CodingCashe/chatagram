@@ -184,7 +184,7 @@ type Props = {
 export default async function InstagramCallback({ searchParams: { code } }: Props) {
   if (!code) {
     console.error('No authorization code received from Instagram')
-    return redirect('/sign-up')
+    return redirect('/privacy')
   }
 
   const cleanCode = code.split('#_')[0]
@@ -197,11 +197,11 @@ export default async function InstagramCallback({ searchParams: { code } }: Prop
       return redirect(`/dashboard/${firstname}${lastname}/integrations`)
     } else {
       console.error('Integration failed:', result)
-      return redirect('/sign-up')
+      return redirect('/error')
     }
   } catch (error) {
     console.error('Error during integration:', error)
-    return redirect('/sign-up')
+    return redirect('/last')
   }
 }
 
