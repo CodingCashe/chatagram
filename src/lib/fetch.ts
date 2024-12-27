@@ -64,80 +64,80 @@ export const sendPrivateMessage = async (
 
 
 
-// export const generateTokens = async (code: string) => {
-//   const insta_form = new FormData()
-//   insta_form.append('client_id', process.env.INSTAGRAM_CLIENT_ID as string)
-
-//   insta_form.append(
-//     'client_secret',
-//     process.env.INSTAGRAM_CLIENT_SECRET as string
-//   )
-//   insta_form.append('grant_type', 'authorization_code')
-//   insta_form.append(
-//     'redirect_uri',
-//     `${process.env.NEXT_PUBLIC_HOST_URL}/callback/instagram`
-//   )
-//   insta_form.append('code', code)
-
-//   const shortTokenRes = await fetch(process.env.INSTAGRAM_TOKEN_URL as string, {
-//     method: 'POST',
-//     body: insta_form,
-//   })
-
-//   const token = await shortTokenRes.json()
-//   if (token.permissions.length > 0) {
-//     console.log(token, 'got permissions')
-//     const long_token = await axios.get(
-//       `${process.env.INSTAGRAM_BASE_URL}/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTAGRAM_CLIENT_SECRET}&access_token=${token.access_token}`
-//     )
-
-//     return long_token.data
-//   }
-// }
-
-//USING FETCH
-
 export const generateTokens = async (code: string) => {
-  const insta_form = new FormData();
-  insta_form.append('client_id', process.env.INSTAGRAM_CLIENT_ID as string);
-  insta_form.append('client_secret', process.env.INSTAGRAM_CLIENT_SECRET as string);
-  insta_form.append('grant_type', 'authorization_code');
-  insta_form.append('redirect_uri', `${process.env.NEXT_PUBLIC_HOST_URL}/callback/instagram`);
-  insta_form.append('code', code);
+  const insta_form = new FormData()
+  insta_form.append('client_id', process.env.INSTAGRAM_CLIENT_ID as string)
 
-  // Fetch short-lived token
+  insta_form.append(
+    'client_secret',
+    process.env.INSTAGRAM_CLIENT_SECRET as string
+  )
+  insta_form.append('grant_type', 'authorization_code')
+  insta_form.append(
+    'redirect_uri',
+    `${process.env.NEXT_PUBLIC_HOST_URL}/callback/instagram`
+  )
+  insta_form.append('code', code)
+
   const shortTokenRes = await fetch(process.env.INSTAGRAM_TOKEN_URL as string, {
     method: 'POST',
     body: insta_form,
-  });
+  })
 
-  if (!shortTokenRes.ok) {
-    console.error(`Failed to fetch short-lived token: ${shortTokenRes.status}`);
-    throw new Error(`Error fetching short-lived token: ${shortTokenRes.status}`);
-  }
-
-  const token = await shortTokenRes.json();
-
-  if (token.permissions?.length > 0) {
-    console.log(token, 'got permissions');
-
-    // Fetch long-lived token
-    const longTokenRes = await fetch(
+  const token = await shortTokenRes.json()
+  if (token.permissions.length > 0) {
+    console.log(token, 'got permissions')
+    const long_token = await axios.get(
       `${process.env.INSTAGRAM_BASE_URL}/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTAGRAM_CLIENT_SECRET}&access_token=${token.access_token}`
-    );
+    )
 
-    if (!longTokenRes.ok) {
-      console.error(`Failed to fetch long-lived token: ${longTokenRes.status}`);
-      throw new Error(`Error fetching long-lived token: ${longTokenRes.status}`);
-    }
-
-    const long_token = await longTokenRes.json();
-    return long_token;
+    return long_token.data
   }
+}
 
-  console.error('No permissions found in token');
-  throw new Error('No permissions found in token');
-};
+// //USING FETCH
+
+// export const generateTokens = async (code: string) => {
+//   const insta_form = new FormData();
+//   insta_form.append('client_id', process.env.INSTAGRAM_CLIENT_ID as string);
+//   insta_form.append('client_secret', process.env.INSTAGRAM_CLIENT_SECRET as string);
+//   insta_form.append('grant_type', 'authorization_code');
+//   insta_form.append('redirect_uri', `${process.env.NEXT_PUBLIC_HOST_URL}/callback/instagram`);
+//   insta_form.append('code', code);
+
+//   // Fetch short-lived token
+//   const shortTokenRes = await fetch(process.env.INSTAGRAM_TOKEN_URL as string, {
+//     method: 'POST',
+//     body: insta_form,
+//   });
+
+//   if (!shortTokenRes.ok) {
+//     console.error(`Failed to fetch short-lived token: ${shortTokenRes.status}`);
+//     throw new Error(`Error fetching short-lived token: ${shortTokenRes.status}`);
+//   }
+
+//   const token = await shortTokenRes.json();
+
+//   if (token.permissions?.length > 0) {
+//     console.log(token, 'got permissions');
+
+//     // Fetch long-lived token
+//     const longTokenRes = await fetch(
+//       `${process.env.INSTAGRAM_BASE_URL}/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTAGRAM_CLIENT_SECRET}&access_token=${token.access_token}`
+//     );
+
+//     if (!longTokenRes.ok) {
+//       console.error(`Failed to fetch long-lived token: ${longTokenRes.status}`);
+//       throw new Error(`Error fetching long-lived token: ${longTokenRes.status}`);
+//     }
+
+//     const long_token = await longTokenRes.json();
+//     return long_token;
+//   }
+
+//   console.error('No permissions found in token');
+//   throw new Error('No permissions found in token');
+// };
 
 
 
