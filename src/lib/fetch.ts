@@ -383,21 +383,21 @@ export const generateTokens = async (code: string): Promise<InstagramLongLivedTo
     }
 
     const longTokenUrl = new URL(`${env.INSTAGRAM_BASE_URL}/access_token`);
-    const longTokenParams = new URLSearchParams({
+    longTokenUrl.search = new URLSearchParams({
       grant_type: 'ig_exchange_token',
       client_secret: env.INSTAGRAM_CLIENT_SECRET,
       access_token: token.access_token
-    });
+    }).toString();
 
-    console.log('Fetching long-lived token with params:', longTokenParams.toString());
+    console.log('Fetching long-lived token with URL:', longTokenUrl.toString());
 
-    const longTokenRes = await fetch(longTokenUrl.toString(), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: longTokenParams
-    });
+    const longTokenRes = await fetch(longTokenUrl.toString(), { method: 'GET' });
+
+    if (!longTokenRes.ok) {
+      const errorText = await longTokenRes.text();
+      throw new Error(`Failed to fetch long-lived token: ${longTokenRes.statusText}. Error: ${errorText}`);
+    }
+
 
     if (!longTokenRes.ok) {
       const errorText = await longTokenRes.text();
