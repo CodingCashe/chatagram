@@ -127,7 +127,7 @@ export const onOAuthInstagram = (strategy: 'INSTAGRAM' | 'CRM') => {
 export const onIntegrate = async (code: string) => {
   const user = await onCurrentUser();
 
-  if (!user) {
+  if (user) {
     return {
       status: 401,
       content: (
