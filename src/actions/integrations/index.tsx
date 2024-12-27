@@ -108,7 +108,7 @@
 // };
 
 
- 'use server'
+'use server'
 
 import { redirect } from 'next/navigation'
 import { onCurrentUser } from '../user'
