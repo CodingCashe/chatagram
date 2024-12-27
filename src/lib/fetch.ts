@@ -1,4 +1,5 @@
- import axios from 'axios' //axioss
+'use server'
+import axios from 'axios' //axioss
 
 export const refreshToken = async (token: string) => {
   const refresh_token = await axios.get(
@@ -98,7 +99,7 @@ export const sendPrivateMessage = async (
 
 
 
-'use server'
+
 
 import { redirect } from 'next/navigation'
 
