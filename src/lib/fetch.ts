@@ -173,6 +173,81 @@ export const sendPrivateMessage = async (
 
 
 
+// const env = process.env as unknown as EnvironmentVariables;
+
+// const validateEnvironmentVariables = (): void => {
+//   const requiredVars: (keyof EnvironmentVariables)[] = [
+//     'INSTAGRAM_CLIENT_ID',
+//     'INSTAGRAM_CLIENT_SECRET',
+//     'NEXT_PUBLIC_HOST_URL',
+//     'INSTAGRAM_TOKEN_URL',
+//     'INSTAGRAM_BASE_URL'
+//   ];
+
+//   for (const varName of requiredVars) {
+//     if (!env[varName]) {
+//       throw new Error(`Missing environment variable: ${varName}`);
+//     }
+//   }
+// };
+
+// export const generateTokens = async (code: string): Promise<InstagramLongLivedToken> => {
+//   try {
+//     validateEnvironmentVariables();
+
+//     const insta_form = new URLSearchParams({
+//       client_id: env.INSTAGRAM_CLIENT_ID,
+//       client_secret: env.INSTAGRAM_CLIENT_SECRET,
+//       grant_type: 'authorization_code',
+//       redirect_uri: `${env.NEXT_PUBLIC_HOST_URL}/callback/instagram`,
+//       code: code
+//     });
+
+//     const shortTokenRes = await fetch(env.INSTAGRAM_TOKEN_URL, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/x-www-form-urlencoded'
+//       },
+//       body: insta_form
+//     });
+
+//     if (!shortTokenRes.ok) {
+//       throw new Error(`Failed to fetch short-lived token: ${shortTokenRes.statusText}`);
+//     }
+
+//     const token: InstagramShortLivedToken = await shortTokenRes.json();
+
+//     if (!token.access_token) {
+//       throw new Error('Invalid token response: missing access_token');
+//     }
+
+//     const longTokenUrl = new URL(`${env.INSTAGRAM_BASE_URL}/access_token`);
+//     longTokenUrl.searchParams.append('grant_type', 'ig_exchange_token');
+//     longTokenUrl.searchParams.append('client_secret', env.INSTAGRAM_CLIENT_SECRET);
+//     longTokenUrl.searchParams.append('access_token', token.access_token);
+
+//     const longTokenRes = await fetch(longTokenUrl.toString());
+
+//     if (!longTokenRes.ok) {
+//       throw new Error(`Failed to fetch long-lived token: ${longTokenRes.statusText}`);
+//     }
+
+//     const longToken: InstagramLongLivedToken = await longTokenRes.json();
+
+//     if (!longToken.access_token) {
+//       throw new Error('Invalid long-lived token response: missing access_token');
+//     }
+
+//     return longToken;
+//   } catch (error) {
+//     console.error('Error in generateTokens:', error);
+//     throw error;
+//   }
+// };
+
+
+
+
 const env = process.env as unknown as EnvironmentVariables;
 
 const validateEnvironmentVariables = (): void => {
@@ -203,6 +278,8 @@ export const generateTokens = async (code: string): Promise<InstagramLongLivedTo
       code: code
     });
 
+    console.log('Fetching short-lived token with params:', insta_form.toString());
+
     const shortTokenRes = await fetch(env.INSTAGRAM_TOKEN_URL, {
       method: 'POST',
       headers: {
@@ -212,10 +289,12 @@ export const generateTokens = async (code: string): Promise<InstagramLongLivedTo
     });
 
     if (!shortTokenRes.ok) {
-      throw new Error(`Failed to fetch short-lived token: ${shortTokenRes.statusText}`);
+      const errorText = await shortTokenRes.text();
+      throw new Error(`Failed to fetch short-lived token: ${shortTokenRes.statusText}. Error: ${errorText}`);
     }
 
     const token: InstagramShortLivedToken = await shortTokenRes.json();
+    console.log('Received short-lived token:', JSON.stringify(token, null, 2));
 
     if (!token.access_token) {
       throw new Error('Invalid token response: missing access_token');
@@ -226,13 +305,17 @@ export const generateTokens = async (code: string): Promise<InstagramLongLivedTo
     longTokenUrl.searchParams.append('client_secret', env.INSTAGRAM_CLIENT_SECRET);
     longTokenUrl.searchParams.append('access_token', token.access_token);
 
+    console.log('Fetching long-lived token with URL:', longTokenUrl.toString());
+
     const longTokenRes = await fetch(longTokenUrl.toString());
 
     if (!longTokenRes.ok) {
-      throw new Error(`Failed to fetch long-lived token: ${longTokenRes.statusText}`);
+      const errorText = await longTokenRes.text();
+      throw new Error(`Failed to fetch long-lived token: ${longTokenRes.statusText}. Error: ${errorText}`);
     }
 
     const longToken: InstagramLongLivedToken = await longTokenRes.json();
+    console.log('Received long-lived token:', JSON.stringify(longToken, null, 2));
 
     if (!longToken.access_token) {
       throw new Error('Invalid long-lived token response: missing access_token');
