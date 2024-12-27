@@ -1,6 +1,9 @@
 'use server'
 import axios from 'axios' //axioss
 
+import { InstagramShortLivedToken, InstagramLongLivedToken, EnvironmentVariables } from '@/types/instagram';
+
+
 export const refreshToken = async (token: string) => {
   const refresh_token = await axios.get(
     `${process.env.INSTAGRAM_BASE_URL}/refresh_access_token?grant_type=ig_refresh_token&access_token=${token}`
@@ -101,71 +104,147 @@ export const sendPrivateMessage = async (
 
 
 
-import { redirect } from 'next/navigation'
+// import { redirect } from 'next/navigation'
 
-export const generateTokens = async (code: string) => {
-  const clientId = process.env.INSTAGRAM_CLIENT_ID
-  const clientSecret = process.env.INSTAGRAM_CLIENT_SECRET
-  const redirectUri = `${process.env.NEXT_PUBLIC_HOST_URL}/callback/instagram`
-  const tokenUrl = process.env.INSTAGRAM_TOKEN_URL
-  const baseUrl = process.env.INSTAGRAM_BASE_URL
+// export const generateTokens = async (code: string) => {
+//   const clientId = process.env.INSTAGRAM_CLIENT_ID
+//   const clientSecret = process.env.INSTAGRAM_CLIENT_SECRET
+//   const redirectUri = `${process.env.NEXT_PUBLIC_HOST_URL}/callback/instagram`
+//   const tokenUrl = process.env.INSTAGRAM_TOKEN_URL
+//   const baseUrl = process.env.INSTAGRAM_BASE_URL
 
-  if (!clientId || !clientSecret || !redirectUri || !tokenUrl || !baseUrl) {
-    throw new Error('Missing Instagram credentials in environment variables')
+//   if (!clientId || !clientSecret || !redirectUri || !tokenUrl || !baseUrl) {
+//     throw new Error('Missing Instagram credentials in environment variables')
+//   }
+
+//   try {
+//     // Step 1: Exchange code for short-lived access token
+//     const shortTokenRes = await fetch(tokenUrl, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/x-www-form-urlencoded',
+//       },
+//       body: new URLSearchParams({
+//         client_id: clientId,
+//         client_secret: clientSecret,
+//         grant_type: 'authorization_code',
+//         redirect_uri: redirectUri,
+//         code: code,
+//       }),
+//     })
+
+//     if (!shortTokenRes.ok) {
+//       throw new Error(`HTTP error! status: ${shortTokenRes.status}`)
+//     }
+
+//     const shortToken = await shortTokenRes.json()
+
+//     if (!shortToken.access_token) {
+//       throw new Error('Failed to obtain short-lived access token')
+//     }
+
+//     // Step 2: Exchange short-lived token for long-lived token
+//     const longTokenRes = await fetch(
+//       `${baseUrl}/access_token?grant_type=ig_exchange_token&client_secret=${clientSecret}&access_token=${shortToken.access_token}`,
+//       { method: 'GET' }
+//     )
+
+//     if (!longTokenRes.ok) {
+//       throw new Error(`HTTP error! status: ${longTokenRes.status}`)
+//     }
+
+//     const longToken = await longTokenRes.json()
+
+//     if (!longToken.access_token) {
+//       throw new Error('Failed to obtain long-lived access token')
+//     }
+
+//     return {
+//       accessToken: longToken.access_token,
+//       tokenType: longToken.token_type,
+//       expiresIn: longToken.expires_in,
+//     }
+//   } catch (error) {
+//     console.error('Error generating Instagram token:', error)
+//     throw error
+//   }
+// }
+
+
+
+
+const env = process.env as unknown as EnvironmentVariables;
+
+const validateEnvironmentVariables = (): void => {
+  const requiredVars: (keyof EnvironmentVariables)[] = [
+    'INSTAGRAM_CLIENT_ID',
+    'INSTAGRAM_CLIENT_SECRET',
+    'NEXT_PUBLIC_HOST_URL',
+    'INSTAGRAM_TOKEN_URL',
+    'INSTAGRAM_BASE_URL'
+  ];
+
+  for (const varName of requiredVars) {
+    if (!env[varName]) {
+      throw new Error(`Missing environment variable: ${varName}`);
+    }
   }
+};
 
+export const generateTokens = async (code: string): Promise<InstagramLongLivedToken> => {
   try {
-    // Step 1: Exchange code for short-lived access token
-    const shortTokenRes = await fetch(tokenUrl, {
+    validateEnvironmentVariables();
+
+    const insta_form = new URLSearchParams({
+      client_id: env.INSTAGRAM_CLIENT_ID,
+      client_secret: env.INSTAGRAM_CLIENT_SECRET,
+      grant_type: 'authorization_code',
+      redirect_uri: `${env.NEXT_PUBLIC_HOST_URL}/callback/instagram`,
+      code: code
+    });
+
+    const shortTokenRes = await fetch(env.INSTAGRAM_TOKEN_URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: new URLSearchParams({
-        client_id: clientId,
-        client_secret: clientSecret,
-        grant_type: 'authorization_code',
-        redirect_uri: redirectUri,
-        code: code,
-      }),
-    })
+      body: insta_form
+    });
 
     if (!shortTokenRes.ok) {
-      throw new Error(`HTTP error! status: ${shortTokenRes.status}`)
+      throw new Error(`Failed to fetch short-lived token: ${shortTokenRes.statusText}`);
     }
 
-    const shortToken = await shortTokenRes.json()
+    const token: InstagramShortLivedToken = await shortTokenRes.json();
 
-    if (!shortToken.access_token) {
-      throw new Error('Failed to obtain short-lived access token')
+    if (!token.access_token) {
+      throw new Error('Invalid token response: missing access_token');
     }
 
-    // Step 2: Exchange short-lived token for long-lived token
-    const longTokenRes = await fetch(
-      `${baseUrl}/access_token?grant_type=ig_exchange_token&client_secret=${clientSecret}&access_token=${shortToken.access_token}`,
-      { method: 'GET' }
-    )
+    const longTokenUrl = new URL(`${env.INSTAGRAM_BASE_URL}/access_token`);
+    longTokenUrl.searchParams.append('grant_type', 'ig_exchange_token');
+    longTokenUrl.searchParams.append('client_secret', env.INSTAGRAM_CLIENT_SECRET);
+    longTokenUrl.searchParams.append('access_token', token.access_token);
+
+    const longTokenRes = await fetch(longTokenUrl.toString());
 
     if (!longTokenRes.ok) {
-      throw new Error(`HTTP error! status: ${longTokenRes.status}`)
+      throw new Error(`Failed to fetch long-lived token: ${longTokenRes.statusText}`);
     }
 
-    const longToken = await longTokenRes.json()
+    const longToken: InstagramLongLivedToken = await longTokenRes.json();
 
     if (!longToken.access_token) {
-      throw new Error('Failed to obtain long-lived access token')
+      throw new Error('Invalid long-lived token response: missing access_token');
     }
 
-    return {
-      accessToken: longToken.access_token,
-      tokenType: longToken.token_type,
-      expiresIn: longToken.expires_in,
-    }
+    return longToken;
   } catch (error) {
-    console.error('Error generating Instagram token:', error)
-    throw error
+    console.error('Error in generateTokens:', error);
+    throw error;
   }
-}
+};
+
 
 
 

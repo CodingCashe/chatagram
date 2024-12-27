@@ -323,7 +323,7 @@ export const onIntegrate = async (code: string) => {
     let insta_id;
     try {
       insta_id = await axios.get(
-        `${process.env.INSTAGRAM_BASE_URL}/me?fields=user_id&access_token=${token.accessToken}`
+        `${process.env.INSTAGRAM_BASE_URL}/me?fields=user_id&access_token=${token.access_token}`
       );
       if (!insta_id.data.user_id) {
         console.log('Instagram user ID retrieval failed.');
@@ -350,7 +350,7 @@ export const onIntegrate = async (code: string) => {
       const expire_date = today.setDate(today.getDate() + 60);
       create = await createIntegration(
         user.id,
-        token.accessToken,
+        token.access_token,
         new Date(expire_date),
         insta_id.data.user_id
       );
