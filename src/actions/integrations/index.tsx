@@ -108,43 +108,180 @@
 // };
 
 
-'use server'
+// 'use server'
 
-import { redirect } from 'next/navigation'
-import { onCurrentUser } from '../user'
-import { createIntegration, getIntegration } from './queries'
-import { generateTokens } from '@/lib/fetch'
-import axios from 'axios'
+// import { redirect } from 'next/navigation'
+// import { onCurrentUser } from '../user'
+// import { createIntegration, getIntegration } from './queries'
+// import { generateTokens } from '@/lib/fetch'
+// import axios from 'axios'
+
+// export const onOAuthInstagram = (strategy: 'INSTAGRAM' | 'CRM') => {
+//   if (strategy === 'INSTAGRAM') {
+//     return redirect(process.env.INSTAGRAM_EMBEDDED_OAUTH_URL as string)
+//   }
+// }
+
+
+
+// export const onIntegrate = async (code: string) => {
+//   const user = await onCurrentUser();
+
+//   if (!user) {
+//     return {
+//       status: 401,
+//       content: (
+//         <div>
+//           <h1>Integration Failed</h1>
+//           <p>User not authenticated.</p>
+//         </div>
+//       ),
+//     };
+//   }
+
+//   try {
+//     // Step 1: Check integration limit
+//     let integration;
+//     try {
+//       integration = await getIntegration(user.id);
+//       if (integration && integration.integrations.length >= 5) {
+//         return {
+//           status: 404,
+//           content: (
+//             <div>
+//               <h1>Integration Limit Reached</h1>
+//               <p>You have already integrated the maximum number of accounts.</p>
+//             </div>
+//           ),
+//         };
+//       }
+//     } catch (error: any) {
+//       throw new Error(`Failed to fetch integration data: ${error.message}`);
+//     }
+
+//     // Step 2: Generate tokens
+//     let token;
+//     try {
+//       token = await generateTokens(code);
+//       if (!token) {
+//         return {
+//           status: 401,
+//           content: (
+//             <div>
+//               <h1>Token Generation Failed</h1>
+//               <p>Could not generate a token with the provided code.</p>
+//             </div>
+//           ),
+//         };
+//       }
+//     } catch (error: any) {
+//       throw new Error(`Token generation error: ${error.message}`);
+//     }
+
+//     // Step 3: Retrieve Instagram user ID
+//     let insta_id;
+//     try {
+//       insta_id = await axios.get(
+//         `${process.env.INSTAGRAM_BASE_URL}/me?fields=user_id&access_token=${token.accessToken}`
+//       );
+//       if (!insta_id.data.user_id) {
+//         return {
+//           status: 401,
+//           content: (
+//             <div>
+//               <h1>Instagram ID Retrieval Failed</h1>
+//               <p>Could not retrieve Instagram user ID with the token.</p>
+//             </div>
+//           ),
+//         };
+//       }
+//     } catch (error: any) {
+//       throw new Error(`Instagram user ID retrieval error: ${error.message}`);
+//     }
+
+//     // Step 4: Create integration
+//     let create;
+//     try {
+//       const today = new Date();
+//       const expire_date = today.setDate(today.getDate() + 60);
+//       create = await createIntegration(
+//         user.id,
+//         token.accessToken,
+//         new Date(expire_date),
+//         insta_id.data.user_id
+//       );
+//     } catch (error: any) {
+//       throw new Error(`Failed to create integration: ${error.message}`);
+//     }
+
+//     // Success response
+//     return {
+//       status: 200,
+//       content: (
+//         <div>
+//           <h1>Integration Successful</h1>
+//           <p>Integration Data: {JSON.stringify(create)}</p>
+//         </div>
+//       ),
+//       data: create,
+//     };
+//   } catch (error: any) {
+//     // Final catch block
+//     return {
+//       status: 500,
+//       content: (
+//         <div>
+//           <h1>Integration Failed</h1>
+//           <p>Error: {error.message}</p>
+//         </div>
+//       ),
+//     };
+//   }
+// };
+
+'use server';
+
+import { redirect } from 'next/navigation';
+import { onCurrentUser } from '../user';
+import { createIntegration, getIntegration } from './queries';
+import { generateTokens } from '@/lib/fetch';
+import axios from 'axios';
 
 export const onOAuthInstagram = (strategy: 'INSTAGRAM' | 'CRM') => {
   if (strategy === 'INSTAGRAM') {
-    return redirect(process.env.INSTAGRAM_EMBEDDED_OAUTH_URL as string)
+    return redirect(process.env.INSTAGRAM_EMBEDDED_OAUTH_URL as string);
   }
-}
-
-
+};
 
 export const onIntegrate = async (code: string) => {
-  const user = await onCurrentUser();
-
-  if (user) {
-    return {
-      status: 401,
-      content: (
-        <div>
-          <h1>Integration Failed</h1>
-          <p>User not authenticated.</p>
-        </div>
-      ),
-    };
-  }
+  console.log('Starting integration process...');
+  let user;
 
   try {
-    // Step 1: Check integration limit
+    // Step 1: Get current user
+    user = await onCurrentUser();
+    if (!user) {
+      console.log('No authenticated user found.');
+      return {
+        status: 401,
+        content: (
+          <div>
+            <h1>Integration Failed</h1>
+            <p>User not authenticated.</p>
+          </div>
+        ),
+      };
+    }
+    console.log('User retrieved:', user);
+
+    // Step 2: Check integration limit
     let integration;
     try {
       integration = await getIntegration(user.id);
+      console.log('Current integrations:', integration);
+
       if (integration && integration.integrations.length >= 5) {
+        console.log('Integration limit reached.');
         return {
           status: 404,
           content: (
@@ -156,14 +293,16 @@ export const onIntegrate = async (code: string) => {
         };
       }
     } catch (error: any) {
+      console.error('Failed to fetch integration data:', error);
       throw new Error(`Failed to fetch integration data: ${error.message}`);
     }
 
-    // Step 2: Generate tokens
+    // Step 3: Generate tokens
     let token;
     try {
       token = await generateTokens(code);
       if (!token) {
+        console.log('Token generation failed.');
         return {
           status: 401,
           content: (
@@ -174,17 +313,20 @@ export const onIntegrate = async (code: string) => {
           ),
         };
       }
+      console.log('Token generated successfully:', token);
     } catch (error: any) {
+      console.error('Token generation error:', error);
       throw new Error(`Token generation error: ${error.message}`);
     }
 
-    // Step 3: Retrieve Instagram user ID
+    // Step 4: Retrieve Instagram user ID
     let insta_id;
     try {
       insta_id = await axios.get(
         `${process.env.INSTAGRAM_BASE_URL}/me?fields=user_id&access_token=${token.accessToken}`
       );
       if (!insta_id.data.user_id) {
+        console.log('Instagram user ID retrieval failed.');
         return {
           status: 401,
           content: (
@@ -195,11 +337,13 @@ export const onIntegrate = async (code: string) => {
           ),
         };
       }
+      console.log('Instagram user ID retrieved successfully:', insta_id.data.user_id);
     } catch (error: any) {
+      console.error('Instagram user ID retrieval error:', error);
       throw new Error(`Instagram user ID retrieval error: ${error.message}`);
     }
 
-    // Step 4: Create integration
+    // Step 5: Create integration
     let create;
     try {
       const today = new Date();
@@ -210,7 +354,9 @@ export const onIntegrate = async (code: string) => {
         new Date(expire_date),
         insta_id.data.user_id
       );
+      console.log('Integration created successfully:', create);
     } catch (error: any) {
+      console.error('Failed to create integration:', error);
       throw new Error(`Failed to create integration: ${error.message}`);
     }
 
@@ -226,7 +372,7 @@ export const onIntegrate = async (code: string) => {
       data: create,
     };
   } catch (error: any) {
-    // Final catch block
+    console.error('Final integration error:', error);
     return {
       status: 500,
       content: (
@@ -238,7 +384,6 @@ export const onIntegrate = async (code: string) => {
     };
   }
 };
-
 
 
 
