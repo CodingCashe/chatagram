@@ -379,7 +379,7 @@ export const generateTokens = async (code: string): Promise<InstagramLongLivedTo
       throw new Error('Invalid token response: missing access_token');
     }
 
-    // Fetch long-lived token
+    // Fetch long-lived tokenn
     const longTokenUrl = `https://graph.instagram.com/access_token?` +
       new URLSearchParams({
         grant_type: 'ig_exchange_token',
