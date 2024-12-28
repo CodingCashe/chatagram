@@ -323,7 +323,7 @@ export const onIntegrate = async (code: string) => {
     let insta_id;
     try {
       insta_id = await axios.get(
-        `${process.env.INSTAGRAM_BASE_URL}/me?fields=user_id&access_token=${token.access_token}`
+        `${process.env.INSTAGRAM_BASE_URL}/me?fields=id&access_token=${token.access_token}`
       );
       if (!insta_id.data.user_id) {
         console.log('Instagram user ID retrieval failed.');
