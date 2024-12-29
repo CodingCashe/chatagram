@@ -399,6 +399,13 @@ import { createIntegration, getIntegration } from './queries';
 import { generateTokens } from '@/lib/fetch';
 import axios from 'axios';
 
+export const onOAuthInstagram = (strategy: 'INSTAGRAM' | 'CRM') => {
+    if (strategy === 'INSTAGRAM') {
+      return redirect(process.env.INSTAGRAM_EMBEDDED_OAUTH_URL as string);
+    }
+  };
+  
+
 export const onIntegrate = async (code: string) => {
   console.log('Starting integration process...');
   let user;
