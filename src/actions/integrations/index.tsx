@@ -1,52 +1,52 @@
-'use server'
+// 'use server'
 
-import { redirect } from 'next/navigation'
-import { onCurrentUser } from '../user'
-import { createIntegration, getIntegration } from './queries'
-import { generateTokens } from '@/lib/fetch'
-import axios from 'axios'
+// import { redirect } from 'next/navigation'
+// import { onCurrentUser } from '../user'
+// import { createIntegration, getIntegration } from './queries'
+// import { generateTokens } from '@/lib/fetch'
+// import axios from 'axios'
 
-export const onOAuthInstagram = (strategy: 'INSTAGRAM' | 'CRM') => {
-  if (strategy === 'INSTAGRAM') {
-    return redirect(process.env.INSTAGRAM_EMBEDDED_OAUTH_URL as string)
-  }
-}
+// export const onOAuthInstagram = (strategy: 'INSTAGRAM' | 'CRM') => {
+//   if (strategy === 'INSTAGRAM') {
+//     return redirect(process.env.INSTAGRAM_EMBEDDED_OAUTH_URL as string)
+//   }
+// }
 
-export const onIntegrate = async (code: string) => {
-  const user = await onCurrentUser()
+// export const onIntegrate = async (code: string) => {
+//   const user = await onCurrentUser()
 
-  try {
-    const integration = await getIntegration(user.id)
+//   try {
+//     const integration = await getIntegration(user.id)
 
-    if (integration && integration.integrations.length < 5) {
-      const token = await generateTokens(code)
-      console.log('Token:', {token})
+//     if (integration && integration.integrations.length < 5) {
+//       const token = await generateTokens(code)
+//       console.log('Token:', {token})
 
-      if (token) {
-        const insta_id = await axios.get(
-          `${process.env.INSTAGRAM_BASE_URL}/me?fields=user_id&access_token=${token.access_token}`
-        )
+//       if (token) {
+//         const insta_id = await axios.get(
+//           `${process.env.INSTAGRAM_BASE_URL}/me?fields=user_id&access_token=${token.access_token}`
+//         )
 
-        const today = new Date()
-        const expire_date = today.setDate(today.getDate() + 60)
-        const create = await createIntegration(
-          user.id,
-          token.access_token,
-          new Date(expire_date),
-          insta_id.data.user_id
-        )
-        return { status: 200, data: create }
-      }
-      console.log('🔴 401')
-      return { status: 401 }
-    }
-    console.log('🔴 404')
-    return { status: 404 }
-  } catch (error) {
-    console.log('🔴 500', error)
-    return { status: 500 }
-  }
-}
+//         const today = new Date()
+//         const expire_date = today.setDate(today.getDate() + 60)
+//         const create = await createIntegration(
+//           user.id,
+//           token.access_token,
+//           new Date(expire_date),
+//           insta_id.data.user_id
+//         )
+//         return { status: 200, data: create }
+//       }
+//       console.log('🔴 401')
+//       return { status: 401 }
+//     }
+//     console.log('🔴 404')
+//     return { status: 404 }
+//   } catch (error) {
+//     console.log('🔴 500', error)
+//     return { status: 500 }
+//   }
+// }
 
 
 // //USING FETCH
@@ -325,8 +325,7 @@ export const onIntegrate = async (code: string) => {
 
 //     // Step 4: Retrieve Instagram user ID
 //     let insta_id;
-//     try {
-//       console.log('I AM CASHEEEEEEEEEEEEEEEEEE:',token.access_token );
+//     try {      
 //       insta_id = await axios.get(
 //         `${process.env.INSTAGRAM_BASE_URL}/me?fields=user_id,username&access_token=${token.access_token}`
         
@@ -391,6 +390,147 @@ export const onIntegrate = async (code: string) => {
 //     };
 //   }
 // };
+
+//TRIALLLL
+
+import { redirect } from 'next/navigation';
+import { onCurrentUser } from '../user';
+import { createIntegration, getIntegration } from './queries';
+import { generateTokens } from '@/lib/fetch';
+import axios from 'axios';
+
+export const onIntegrate = async (code: string) => {
+  console.log('Starting integration process...');
+  let user;
+
+  try {
+    // Step 1: Get current user
+    user = await onCurrentUser();
+    if (!user) {
+      console.log('No authenticated user found.');
+      return {
+        status: 401,
+        content: (
+          <div>
+            <h1>Integration Failed</h1>
+            <p>User not authenticated.</p>
+          </div>
+        ),
+      };
+    }
+    console.log('User retrieved:', user);
+
+    // Step 2: Check integration limit
+    let integration;
+    try {
+      integration = await getIntegration(user.id);
+      console.log('Current integrations:', integration);
+
+      if (integration && integration.integrations.length >= 5) {
+        console.log('Integration limit reached.');
+        return {
+          status: 404,
+          content: (
+            <div>
+              <h1>Integration Limit Reached</h1>
+              <p>You have already integrated the maximum number of accounts.</p>
+            </div>
+          ),
+        };
+      }
+    } catch (error: any) {
+      console.error('Failed to fetch integration data:', error);
+      throw new Error(`Failed to fetch integration data: ${error.message}`);
+    }
+
+    // Step 3: Generate tokens
+    let token;
+    try {
+      token = await generateTokens(code);
+      if (!token || !token.access_token) {
+        console.log('Token generation failed.');
+        return {
+          status: 401,
+          content: (
+            <div>
+              <h1>Token Generation Failed</h1>
+              <p>Could not generate a token with the provided code.</p>
+            </div>
+          ),
+        };
+      }
+      console.log('Token generated successfully:', token);
+    } catch (error: any) {
+      console.error('Token generation error:', error);
+      throw new Error(`Token generation error: ${error.message}`);
+    }
+
+    // Step 4: Retrieve Instagram user ID
+    let insta_id;
+    try {
+      insta_id = await axios.get(
+        `${process.env.INSTAGRAM_BASE_URL}/me?fields=id,username&access_token=${token.access_token}`
+      );
+      if (!insta_id.data.id) {
+        console.log('Instagram user ID retrieval failed.');
+        return {
+          status: 401,
+          content: (
+            <div>
+              <h1>Instagram ID Retrieval Failed</h1>
+              <p>Could not retrieve Instagram user ID with the token.</p>
+            </div>
+          ),
+        };
+      }
+      console.log('Instagram user ID retrieved successfully:', insta_id.data.id);
+    } catch (error: any) {
+      console.error('Instagram user ID retrieval error:', error);
+      throw new Error(`Instagram user ID retrieval error: ${error.message}`);
+    }
+
+    // Step 5: Create integration
+    let create;
+    try {
+      const today = new Date();
+      const expire_date = today.setDate(today.getDate() + 1); // Token expires in 1 hour
+      create = await createIntegration(
+        user.id,
+        token.access_token,
+        new Date(expire_date),
+        insta_id.data.id
+      );
+      console.log('Integration created successfully:', create);
+    } catch (error: any) {
+      console.error('Failed to create integration:', error);
+      throw new Error(`Failed to create integration: ${error.message}`);
+    }
+
+    // Success response
+    return {
+      status: 200,
+      content: (
+        <div>
+          <h1>Integration Successful</h1>
+          <p>Integration Data: {JSON.stringify(create)}</p>
+        </div>
+      ),
+      data: create,
+    };
+  } catch (error: any) {
+    console.error('Final integration error:', error);
+    return {
+      status: 500,
+      content: (
+        <div>
+          <h1>Integration Failed</h1>
+          <p>Error: {error.message}</p>
+        </div>
+      ),
+    };
+  }
+};
+
 
 
 
