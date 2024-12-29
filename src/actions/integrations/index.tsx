@@ -477,72 +477,29 @@ export const onIntegrate = async (code: string) => {
     // Step 4: Retrieve Instagram user ID
 
     let insta_id;
-try {
-  const response = await fetch(
-    `${process.env.INSTAGRAM_BASE_URL}/me?fields=id,username&access_token=${token.access_token}`
-  );
+    try {
+      insta_id = await axios.get(
+        `${process.env.INSTAGRAM_BASE_URL}/me?fields=id,username&access_token=${token.access_token}`
+      );
+      if (!insta_id.data.id) {
+        console.log('Instagram user ID retrieval failed.');
+        return {
+          status: 401,
+          content: (
+            <div>
+              <h1>Instagram ID Retrieval Failed</h1>
+              <p>Could not retrieve Instagram user ID with the token.</p>
+            </div>
+          ),
+        };
+      }
+      console.log('Instagram user ID retrieved successfully:', insta_id.data.id);
+    } catch (error: any) {
+      console.error('Instagram user ID retrieval error:', error);
+      throw new Error(`Instagram user ID retrieval error: ${error.message}`);
+    }
 
-  if (!response.ok) {
-    console.error('Failed to fetch Instagram user ID:', response.statusText);
-    return {
-      status: 401,
-      content: (
-        <div>
-          <h1>Instagram ID Retrieval Failed</h1>
-          <p>Could not retrieve Instagram user ID with the token.</p>
-        </div>
-      ),
-    };
-  }
-
-  const data = await response.json();
-
-  if (!data.id) {
-    console.log('Instagram user ID retrieval failed.');
-    return {
-      status: 401,
-      content: (
-        <div>
-          <h1>Instagram ID Retrieval Failed</h1>
-          <p>Could not retrieve Instagram user ID with the token.</p>
-        </div>
-      ),
-    };
-  }
-
-  console.log('Instagram user ID retrieved successfully:', data.id);
-} catch (error: any) {
-  console.error('Instagram user ID retrieval error:', error);
-  throw new Error(`Instagram user ID retrieval error: ${error.message}`);
-}
-
-
-
-
-    // let insta_id;
-    // try {
-    //   insta_id = await axios.get(
-    //     `${process.env.INSTAGRAM_BASE_URL}/me?fields=id,username&access_token=${token.access_token}`
-    //   );
-    //   if (!insta_id.data.id) {
-    //     console.log('Instagram user ID retrieval failed.');
-    //     return {
-    //       status: 401,
-    //       content: (
-    //         <div>
-    //           <h1>Instagram ID Retrieval Failed</h1>
-    //           <p>Could not retrieve Instagram user ID with the token.</p>
-    //         </div>
-    //       ),
-    //     };
-    //   }
-    //   console.log('Instagram user ID retrieved successfully:', insta_id.data.id);
-    // } catch (error: any) {
-    //   console.error('Instagram user ID retrieval error:', error);
-    //   throw new Error(`Instagram user ID retrieval error: ${error.message}`);
-    // }
-
-    // Step 5: Create integration
+    //Step 5: Create integration
     let create;
     try {
       const today = new Date();
@@ -583,9 +540,6 @@ try {
     };
   }
 };
-
-
-
 
 
 // 'use server'
