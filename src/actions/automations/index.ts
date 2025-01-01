@@ -138,15 +138,57 @@ export const deleteKeyword = async (id: string) => {
   }
 }
 
+// export const getProfilePosts = async () => {
+//   const user = await onCurrentUser()
+//   try {
+//     const profile = await findUser(user.id)
+//     const posts = await fetch(
+//       `${process.env.INSTAGRAM_BASE_URL}/me/media?fields=id,caption,media_url,media_type,timestamp&limit=10&access_token=${profile?.integrations[0].token}`
+//     )
+//     const parsed = await posts.json()
+//     if (parsed) return { status: 200, data: parsed }
+//     console.log('🔴 Error in getting posts')
+//     return { status: 404 }
+//   } catch (error) {
+//     console.log('🔴 server side Error in getting posts ', error)
+//     return { status: 500 }
+//   }
+// }
+
 export const getProfilePosts = async () => {
   const user = await onCurrentUser()
   try {
     const profile = await findUser(user.id)
-    const posts = await fetch(
+    const postsResponse = await fetch(
       `${process.env.INSTAGRAM_BASE_URL}/me/media?fields=id,caption,media_url,media_type,timestamp&limit=10&access_token=${profile?.integrations[0].token}`
     )
-    const parsed = await posts.json()
-    if (parsed) return { status: 200, data: parsed }
+    const posts = await postsResponse.json()
+
+    if (posts.data) {
+      // Fetch comments and likes for each post
+      const postsWithDetails = await Promise.all(
+        posts.data.map(async (post: any) => {
+          const commentsResponse = await fetch(
+            `${process.env.INSTAGRAM_BASE_URL}/${post.id}/comments?fields=id,text,username,timestamp&access_token=${profile?.integrations[0].token}`
+          )
+          const likesResponse = await fetch(
+            `${process.env.INSTAGRAM_BASE_URL}/${post.id}/likes?access_token=${profile?.integrations[0].token}`
+          )
+
+          const comments = await commentsResponse.json()
+          const likes = await likesResponse.json()
+
+          return {
+            ...post,
+            comments: comments.data || [],
+            likes: likes.data?.length || 0,
+          }
+        })
+      )
+
+      return { status: 200, data: postsWithDetails }
+    }
+
     console.log('🔴 Error in getting posts')
     return { status: 404 }
   } catch (error) {
@@ -154,6 +196,7 @@ export const getProfilePosts = async () => {
     return { status: 500 }
   }
 }
+
 
 export const savePosts = async (
   autmationId: string,
