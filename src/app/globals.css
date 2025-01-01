@@ -171,3 +171,21 @@
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
+
+/* In your global stylesheet or component style */
+@media (max-width: 640px) {
+  .notification-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .notification-item {
+    flex-direction: column; /* Stack the notification content vertically */
+    width: 100%; /* Make each notification take full width */
+  }
+
+  .notification-item img {
+    margin-bottom: 10px; /* Space out the avatar from the content */
+  }
+}
