@@ -98,6 +98,65 @@
 //   return { notifications, addNotification, markAsRead, clearAll }
 // }
 
+// import { useState, useEffect } from 'react'
+// import { useQueryAutomations } from '@/hooks/user-queries'
+// import { Notification } from '@/types/notifications'
+
+// export const useNotifications = () => {
+//   const { data } = useQueryAutomations()
+//   const [notifications, setNotifications] = useState<Notification[]>([])
+
+//   // Function to map Instagram data to notification format
+//   const mapInstagramDataToNotifications = (data: any): Notification[] => {
+//     return data?.data.map((item: any, index: number) => ({
+//       id: `notif-${index}`,
+//       type: item.listener?.commentCount ? 'comment' : item.listener?.dmCount ? 'dm' : 'like',
+//       user: {
+//         id: `user-${index}`,
+//         username: item.listener?.username || 'Unknown User',
+//         avatar: `https://i.pravatar.cc/150?img=${index + 1}`, // Placeholder avatar
+//       },
+//       action: item.listener?.commentCount
+//         ? ' commented on your post.'
+//         : item.listener?.dmCount
+//         ? ' sent you a direct message.'
+//         : ' liked your post',
+//       content: item.listener?.commentCount
+//         ? item.listener?.lastComment
+//         : item.listener?.dmCount
+//         ? item.listener?.lastDm
+//         : undefined,
+//       read: false,
+//       timestamp: new Date(item.timestamp || Date.now()).toLocaleTimeString(),
+//     })) || []
+//   }
+
+//   // Update notifications whenever Instagram data changes
+//   useEffect(() => {
+//     if (data) {
+//       const newNotifications = mapInstagramDataToNotifications(data)
+//       setNotifications(newNotifications)
+//     }
+//   }, [data])
+
+//   const addNotification = (notification: Notification) => {
+//     setNotifications((prev) => [notification, ...prev])
+//   }
+
+//   const markAsRead = (id: string) => {
+//     setNotifications((prev) =>
+//       prev.map((notif) => (notif.id === id ? { ...notif, read: true } : notif))
+//     )
+//   }
+
+//   const clearAll = () => {
+//     setNotifications([])
+//   }
+
+//   return { notifications, addNotification, markAsRead, clearAll }
+// }
+
+
 import { useState, useEffect } from 'react'
 import { useQueryAutomations } from '@/hooks/user-queries'
 import { Notification } from '@/types/notifications'
@@ -110,17 +169,17 @@ export const useNotifications = () => {
   const mapInstagramDataToNotifications = (data: any): Notification[] => {
     return data?.data.map((item: any, index: number) => ({
       id: `notif-${index}`,
-      type: item.listener?.commentCount ? 'comment' : item.listener?.dmCount ? 'dm' : 'other',
+      type: item.listener?.commentCount ? 'comment' : item.listener?.dmCount ? 'dm' : 'like',
       user: {
         id: `user-${index}`,
         username: item.listener?.username || 'Unknown User',
         avatar: `https://i.pravatar.cc/150?img=${index + 1}`, // Placeholder avatar
       },
       action: item.listener?.commentCount
-        ? 'commented on your post.'
+        ? ' commented on your post.'
         : item.listener?.dmCount
-        ? 'sent you a direct message.'
-        : 'performed an action.',
+        ? ' sent you a direct message.'
+        : ' liked your post',
       content: item.listener?.commentCount
         ? item.listener?.lastComment
         : item.listener?.dmCount
@@ -134,6 +193,9 @@ export const useNotifications = () => {
   // Update notifications whenever Instagram data changes
   useEffect(() => {
     if (data) {
+      // Log the data to see its structure
+      console.log('Received data from useQueryAutomations:', data)
+
       const newNotifications = mapInstagramDataToNotifications(data)
       setNotifications(newNotifications)
     }
