@@ -20,8 +20,6 @@ type Listener = {
   automationId: string;
   prompt: string;
   commentReply: string | null;
-  lastComment:string;
-  lastDm:string;
   dmCount: number;
   commentCount: number;
 };
