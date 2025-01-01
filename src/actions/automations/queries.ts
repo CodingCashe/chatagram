@@ -73,11 +73,36 @@ export const updateAutomation = async (
   })
 }
 
+// export const addListener = async (
+//   automationId: string,
+//   listener: 'SMARTAI' | 'MESSAGE',
+//   prompt: string,
+//   reply?: string
+// ) => {
+//   return await client.automation.update({
+//     where: {
+//       id: automationId,
+//     },
+//     data: {
+//       listener: {
+//         create: {
+//           listener,
+//           prompt,
+//           commentReply: reply,
+//         },
+//       },
+//     },
+//   })
+// }
+
+
 export const addListener = async (
   automationId: string,
   listener: 'SMARTAI' | 'MESSAGE',
   prompt: string,
-  reply?: string
+  reply?: string,
+  comment?: string,  
+  dm?: string  
 ) => {
   return await client.automation.update({
     where: {
@@ -89,11 +114,15 @@ export const addListener = async (
           listener,
           prompt,
           commentReply: reply,
+          lastComment: comment,  // Store comment content
+          lastDm: dm,  // Store DM content
         },
       },
     },
   })
 }
+
+
 
 export const addTrigger = async (automationId: string, trigger: string[]) => {
   if (trigger.length === 2) {

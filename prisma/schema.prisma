@@ -93,6 +93,8 @@ model Listener {
   listener     LISTENERS  @default(MESSAGE)
   prompt       String
   commentReply String?
+  lastComment  String?  
+  lastDm       String?
   dmCount      Int        @default(0)
   commentCount Int        @default(0)
 }
