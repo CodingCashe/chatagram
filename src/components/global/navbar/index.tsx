@@ -299,10 +299,7 @@ const Navbar = ({ slug }: Props) => {
                 </div>
               </div>
             </SheetContent>
-          </Sheet>
-          <Link href={`/dashboard/${slug}`} className="text-white text-xl font-bold">
-            Dashboard
-          </Link>
+          </Sheet>          
           <div className="flex items-center space-x-2">
             <Search />
             <CreateAutomation />
