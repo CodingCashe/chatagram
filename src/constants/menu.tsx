@@ -38,13 +38,77 @@
 //     },
 //   ]
 
+// import {
+//   HomeDuoToneWhite,
+//   AutomationDuoToneWhite,
+//   RocketDuoToneWhite,
+//   SettingsDuoToneWhite,
+// } from '@/icons'
+// import { MessageCircle, BarChart2, Users, Calendar, Zap, FileText, HelpCircle, Bell } from 'lucide-react'
+// import { v4 as uuid } from 'uuid'
+
+// export type SideBarItemProps = {
+//   id: string
+//   label: string
+//   icon: React.ReactNode
+//   subItems?: Omit<SideBarItemProps, 'subItems'>[]
+// }
+
+// export const SIDEBAR_MENU: SideBarItemProps[] = [
+//   {
+//     id: uuid(),
+//     label: 'Dashboard',
+//     icon: <HomeDuoToneWhite />,
+//   },
+//   {
+//     id: uuid(),
+//     label: 'Automations',
+//     icon: <AutomationDuoToneWhite />,
+//     subItems: [
+//       { id: uuid(), label: 'Create New', icon: <Zap size={18} /> },
+//       { id: uuid(), label: 'Templates', icon: <FileText size={18} /> },
+//       { id: uuid(), label: 'Analytics', icon: <BarChart2 size={18} /> },
+//     ]
+//   },
+//   {
+//     id: uuid(),
+//     label: 'Conversations',
+//     icon: <MessageCircle />,
+//   },
+//   {
+//     id: uuid(),
+//     label: 'Audience',
+//     icon: <Users />,
+//   },
+//   {
+//     id: uuid(),
+//     label: 'Campaigns',
+//     icon: <Calendar />,
+//   },
+//   {
+//     id: uuid(),
+//     label: 'Integrations',
+//     icon: <RocketDuoToneWhite />,
+//   },
+//   {
+//     id: uuid(),
+//     label: 'Analytics',
+//     icon: <BarChart2 />,
+//   },
+//   {
+//     id: uuid(),
+//     label: 'Settings',
+//     icon: <SettingsDuoToneWhite />,
+//   },
+// ]
+
 import {
   HomeDuoToneWhite,
   AutomationDuoToneWhite,
   RocketDuoToneWhite,
   SettingsDuoToneWhite,
 } from '@/icons'
-import { MessageCircle, BarChart2, Users, Calendar, Zap, FileText, HelpCircle, Bell } from 'lucide-react'
+import { MessageCircle, BarChart2, Users, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone } from 'lucide-react'
 import { v4 as uuid } from 'uuid'
 
 export type SideBarItemProps = {
@@ -54,51 +118,96 @@ export type SideBarItemProps = {
   subItems?: Omit<SideBarItemProps, 'subItems'>[]
 }
 
-export const SIDEBAR_MENU: SideBarItemProps[] = [
+export type SideBarGroupProps = {
+  id: string
+  label: string
+  items: SideBarItemProps[]
+}
+
+export const SIDEBAR_MENU: SideBarGroupProps[] = [
   {
     id: uuid(),
-    label: 'Dashboard',
-    icon: <HomeDuoToneWhite />,
-  },
-  {
-    id: uuid(),
-    label: 'Automations',
-    icon: <AutomationDuoToneWhite />,
-    subItems: [
-      { id: uuid(), label: 'Create New', icon: <Zap size={18} /> },
-      { id: uuid(), label: 'Templates', icon: <FileText size={18} /> },
-      { id: uuid(), label: 'Analytics', icon: <BarChart2 size={18} /> },
+    label: 'Main',
+    items: [
+      {
+        id: uuid(),
+        label: 'Dashboard',
+        icon: <HomeDuoToneWhite />,
+      },
+      {
+        id: uuid(),
+        label: 'Automations',
+        icon: <AutomationDuoToneWhite />,
+        subItems: [
+          { id: uuid(), label: 'Create New', icon: <Zap size={18} /> },
+          { id: uuid(), label: 'Templates', icon: <FileText size={18} /> },
+          { id: uuid(), label: 'Analytics', icon: <BarChart2 size={18} /> },
+        ]
+      },
+      {
+        id: uuid(),
+        label: 'Conversations',
+        icon: <MessageCircle />,
+      },
     ]
   },
   {
     id: uuid(),
-    label: 'Conversations',
-    icon: <MessageCircle />,
+    label: 'Growth',
+    items: [
+      {
+        id: uuid(),
+        label: 'Audience',
+        icon: <Users />,
+      },
+      {
+        id: uuid(),
+        label: 'Campaigns',
+        icon: <Calendar />,
+      },
+      {
+        id: uuid(),
+        label: 'Analytics',
+        icon: <BarChart2 />,
+      },
+    ]
   },
   {
     id: uuid(),
-    label: 'Audience',
-    icon: <Users />,
+    label: 'Content',
+    items: [
+      {
+        id: uuid(),
+        label: 'AI Assistant',
+        icon: <Sparkles />,
+      },
+      {
+        id: uuid(),
+        label: 'Content Planner',
+        icon: <Palette />,
+      },
+      {
+        id: uuid(),
+        label: 'Hashtag Manager',
+        icon: <Target />,
+      },
+    ]
   },
   {
     id: uuid(),
-    label: 'Campaigns',
-    icon: <Calendar />,
-  },
-  {
-    id: uuid(),
-    label: 'Integrations',
-    icon: <RocketDuoToneWhite />,
-  },
-  {
-    id: uuid(),
-    label: 'Analytics',
-    icon: <BarChart2 />,
-  },
-  {
-    id: uuid(),
-    label: 'Settings',
-    icon: <SettingsDuoToneWhite />,
+    label: 'System',
+    items: [
+      {
+        id: uuid(),
+        label: 'Integrations',
+        icon: <RocketDuoToneWhite />,
+      },
+      {
+        id: uuid(),
+        label: 'Settings',
+        icon: <SettingsDuoToneWhite />,
+      },
+    ]
   },
 ]
 
