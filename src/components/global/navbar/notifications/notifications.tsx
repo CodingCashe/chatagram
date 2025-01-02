@@ -182,11 +182,12 @@ export const Notifications: React.FC = () => {
                   ))
                 ) : (
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="p-4 text-center text-gray-500"
-                  >
+                    initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 mt-2 w-64 sm:w-72 md:w-80 bg-gray-900 rounded-lg shadow-lg overflow-hidden z-50 border border-blue-500"
+                  >                  
                     No notifications
                   </motion.div>
                 )}

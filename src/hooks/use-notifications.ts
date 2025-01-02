@@ -234,14 +234,14 @@ export const useNotifications = () => {
       type: item.listener?.commentCount ? 'comment' : item.listener?.dmCount ? 'dm' : 'like',
       user: {
         id: `user-${index}`,
-        username: item.listener?.username || 'Unknown User',
+        username: item.listener?.username || '@Cashe',
         avatar: `https://i.pravatar.cc/150?img=${index + 1}`, // Placeholder avatar
       },
       // Construct the action based on comment or dm
       action: item.listener?.commentCount
-        ? `${item.listener?.username} commented "${item.listener?.lastComment}" on your post`
+        ? `${item.listener?.username} New comment on your post`
         : item.listener?.dmCount
-        ? `${item.listener?.username} sent you a direct message: "${item.listener?.lastDm}"`
+        ? `${item.listener?.username} sent you a direct message`
         : `${item.listener?.username} liked your post`,
       content: item.listener?.commentCount
         ? item.listener?.lastComment // Showing the actual comment
