@@ -300,11 +300,11 @@ const Navbar = ({ slug }: Props) => {
               </div>
             </SheetContent>
           </Sheet>          
-          <div className="flex items-right space-x-2">
+          <div className="flex justify-end space-x-2">
             <Search />
             <CreateAutomation />
             <Notifications />
-            <TooltipProvider>
+            {/* <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button variant="ghost" size="icon">
@@ -312,7 +312,7 @@ const Navbar = ({ slug }: Props) => {
                   </Button>
                 </TooltipTrigger>                
               </Tooltip>
-            </TooltipProvider>
+            </TooltipProvider> */}
           </div>
         </div>
         <div className="px-4 py-2">

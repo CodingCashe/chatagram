@@ -679,7 +679,7 @@ const Sidebar = ({ slug }: Props) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <TooltipProvider>
+          {/* <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="ghost" size="icon" className="relative">
@@ -690,7 +690,7 @@ const Sidebar = ({ slug }: Props) => {
                 <p>Help</p>
               </TooltipContent>
             </Tooltip>
-          </TooltipProvider>
+          </TooltipProvider> */}
         </div>
       </div>
     </motion.div>
