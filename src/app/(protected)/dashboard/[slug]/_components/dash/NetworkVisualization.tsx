@@ -2,13 +2,24 @@
 
 import React, { useRef, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import * as THREE from 'three'
-import { ForceGraph3D } from 'react-force-graph'
+import ForceGraph3D, { ForceGraphMethods } from 'react-force-graph-3d'
+
+interface GraphData {
+  nodes: Array<{
+    id: number;
+    name: string;
+    val: number;
+  }>;
+  links: Array<{
+    source: number;
+    target: number;
+  }>;
+}
 
 const NetworkVisualization = () => {
-  const fgRef = useRef();
+  const fgRef = useRef<ForceGraphMethods>();
 
-  const generateRandomGraph = () => {
+  const generateRandomGraph = (): GraphData => {
     const nodes = [];
     const links = [];
     const numNodes = 100;
@@ -41,21 +52,23 @@ const NetworkVisualization = () => {
 
   useEffect(() => {
     const fg = fgRef.current;
+    if (!fg) return;
 
-    fg.d3Force('charge').strength(-120);
+    fg.d3Force('charge')?.strength(-120);
 
-    fg.d3Force('link').distance(link => {
-      return 30 + Math.random() * 20;
-    });
+    fg.d3Force('link')?.distance(() => 30 + Math.random() * 20);
 
     let angle = 0;
-    setInterval(() => {
+    const interval = setInterval(() => {
       angle += Math.PI / 300;
-      fg.cameraPosition({
-        x: 400 * Math.cos(angle),
-        z: 400 * Math.sin(angle)
-      });
+      fg.cameraPosition(
+        { x: 400 * Math.cos(angle), z: 400 * Math.sin(angle) },
+        { x: 0, y: 0, z: 0 },
+        3000
+      );
     }, 30);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
