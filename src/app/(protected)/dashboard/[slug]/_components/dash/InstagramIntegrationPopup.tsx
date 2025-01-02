@@ -51,7 +51,7 @@ const InstagramIntegrationPopup: React.FC<PopupProps> = ({ isOpen, onClose }) =>
             <h2 className="text-3xl font-bold mb-4 text-blue-300">Enhance Your Experience!</h2>
             <p className="text-gray-300 mb-6">
               Integrate your Instagram account to unlock powerful insights and automated features.
-              Don't miss out on optimizing your social media strategy!
+              Do not miss out on optimizing your social media strategy!
             </p>
             <div className="flex justify-center">
               <Button
