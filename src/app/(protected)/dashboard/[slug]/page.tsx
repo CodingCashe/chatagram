@@ -117,7 +117,6 @@ import EnhancedMetricsCard from './_components/dash/EnhancedMetricsCard'
 import ActivityFeed from './_components/dash/ActivityFeed'
 import AIPerformance from './_components/dash/AIPerformance'
 import TaskProgress from './_components/dash/TaskProgress'
-import NetworkVisualization from './_components/dash/NetworkVisualization'
 import ContentSuggestions from './_components/dash/ContentSuggestions'
 import { motion } from 'framer-motion'
 
@@ -191,8 +190,7 @@ const Page = () => {
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
-        >
-          <NetworkVisualization />
+        >         
         </motion.div>
         <motion.div
           initial={{ y: 50, opacity: 0 }}
