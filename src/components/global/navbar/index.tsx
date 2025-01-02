@@ -251,7 +251,7 @@ const Navbar = ({ slug }: Props) => {
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="lg:hidden">
-                <Menu className="h-6 w-6 text-white" />
+                <Menu className="h-10 w-10 text-white" />
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-[300px] bg-[#0e0e0e] text-white p-0">
@@ -263,9 +263,9 @@ const Navbar = ({ slug }: Props) => {
                   >
                     <LogoSmall />
                   </motion.div>
-                  <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
+                  {/* <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
                     <X className="h-6 w-6" />
-                  </Button>
+                  </Button> */}
                 </div>
                 <Separator className="bg-[#333336]" />
                 <div className="flex-1 overflow-y-auto py-4 px-2">
@@ -300,7 +300,7 @@ const Navbar = ({ slug }: Props) => {
               </div>
             </SheetContent>
           </Sheet>          
-          <div className="flex items-center space-x-2">
+          <div className="flex items-right space-x-2">
             <Search />
             <CreateAutomation />
             <Notifications />
@@ -310,10 +310,7 @@ const Navbar = ({ slug }: Props) => {
                   <Button variant="ghost" size="icon">
                     <HelpCircle className="h-6 w-6 text-white" />
                   </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Help</p>
-                </TooltipContent>
+                </TooltipTrigger>                
               </Tooltip>
             </TooltipProvider>
           </div>
