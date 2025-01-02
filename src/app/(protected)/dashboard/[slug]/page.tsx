@@ -311,9 +311,111 @@
 
 
 
+// 'use client'
+
+// import React, { useState } from 'react'
+// import { BarDuoToneBlue } from '@/icons'
+// import DoubleGradientCard from '@/components/global/double-gradient-card'
+// import { DASHBOARD_CARDS } from '@/constants/dashboard'
+// import EnhancedChart from './_components/dash/EnhancedChart'
+// import EnhancedMetricsCard from './_components/dash/EnhancedMetricsCard'
+// import ActivityFeed from './_components/dash/ActivityFeed'
+// import AIPerformance from './_components/dash/AIPerformance'
+// import TaskProgress from './_components/dash/TaskProgress'
+// import ContentSuggestions from './_components/dash/ContentSuggestions'
+// import SentimentAnalysis from './_components/dash/SentimentAnalysis'
+// import EngagementPredictor from './_components/dash/EngagementPredictor'
+// import HashtagCloud from './_components/dash/HashtagCloud'
+// import ContentCalendarGenerator from './_components/dash/ContentCalendarGenerator'
+// import VisualContentGenerator from './_components/dash/VisualContentGenerator'
+// import InstagramPostOptimizer from './_components/dash/InstagramPostOptimizer'
+// import { Button } from '@/components/ui/button'
+// import { ArrowUpDown } from 'lucide-react'
+
+// const Page = () => {
+//   const [expanded, setExpanded] = useState(false)
+
+//   return (
+//     <div className="flex flex-col gap-y-10">
+//       <div className="flex gap-5 lg:flex-row flex-col">
+//         {DASHBOARD_CARDS.map((card) => (
+//           <DoubleGradientCard
+//             key={card.id}
+//             {...card}
+//           />
+//         ))}
+//       </div>
+      
+//       <div className="border-[1px] relative border-in-active/50 p-5 rounded-xl">
+//         <span className="flex gap-x-1 z-50 items-center mb-5">
+//           <BarDuoToneBlue />
+//           <div className="z-50">
+//             <h2 className="text-2xl font-medium text-white">
+//               Automated Activity
+//             </h2>
+//             <p className="text-text-secondary text-sm">
+//               Automated 0 out of 1 interactions
+//             </p>
+//           </div>
+//         </span>
+//         <div className="w-full flex lg:flex-row flex-col gap-5">
+//           <div className="lg:w-6/12">
+//             <EnhancedChart />
+//           </div>
+//           <div className="lg:w-6/12">
+//             <EnhancedMetricsCard />
+//           </div>
+//         </div>
+//       </div>
+      
+//       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+//         <ActivityFeed />
+//         <AIPerformance />
+//       </div>
+
+//       <InstagramPostOptimizer />
+
+//       <ContentCalendarGenerator />
+
+//       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+//         <HashtagCloud />
+//         <VisualContentGenerator />
+//       </div>
+
+//       {expanded && (
+//         <>
+//           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">           
+//             <ContentSuggestions />
+//           </div>
+
+//           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+//             <SentimentAnalysis />
+//             <EngagementPredictor />
+//           </div>
+//         </>
+//       )}
+
+//       <div className="flex justify-center">
+//         <Button
+//           onClick={() => setExpanded(!expanded)}
+//           variant="outline"
+//           size="lg"
+//         >
+//           <ArrowUpDown className="mr-2 h-4 w-4" />
+//           {expanded ? 'Show Less' : 'Show More'}
+//         </Button>
+//       </div>
+
+//       <TaskProgress />
+//     </div>
+//   )
+// }
+
+// export default Page
+
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BarDuoToneBlue } from '@/icons'
 import DoubleGradientCard from '@/components/global/double-gradient-card'
 import { DASHBOARD_CARDS } from '@/constants/dashboard'
@@ -331,12 +433,46 @@ import VisualContentGenerator from './_components/dash/VisualContentGenerator'
 import InstagramPostOptimizer from './_components/dash/InstagramPostOptimizer'
 import { Button } from '@/components/ui/button'
 import { ArrowUpDown } from 'lucide-react'
+import InstagramIntegrationPopup from './_components/dash/InstagramIntegrationPopup'
+import { useQuery } from '@tanstack/react-query'
+import { onUserInfo } from '@/actions/user'
 
 const Page = () => {
   const [expanded, setExpanded] = useState(false)
+  const [showPopup, setShowPopup] = useState(false)
+  const [popupCount, setPopupCount] = useState(0)
+
+  const { data: userData } = useQuery({
+    queryKey: ['user-profile'],
+    queryFn: onUserInfo,
+  })
+
+  const isInstagramIntegrated = userData?.data?.integrations.some(
+    (integration) => integration.name === 'INSTAGRAM'
+  )
+
+  useEffect(() => {
+    if (!isInstagramIntegrated && popupCount < 2) {
+      const timer1 = setTimeout(() => {
+        setShowPopup(true)
+        setPopupCount((prev) => prev + 1)
+      }, 30000) // Show first popup after 30 seconds
+
+      const timer2 = setTimeout(() => {
+        setShowPopup(true)
+        setPopupCount((prev) => prev + 1)
+      }, 90000) // Show second popup after 90 seconds
+
+      return () => {
+        clearTimeout(timer1)
+        clearTimeout(timer2)
+      }
+    }
+  }, [isInstagramIntegrated, popupCount])
 
   return (
     <div className="flex flex-col gap-y-10">
+      {/* Existing dashboard content */}
       <div className="flex gap-5 lg:flex-row flex-col">
         {DASHBOARD_CARDS.map((card) => (
           <DoubleGradientCard
@@ -345,7 +481,9 @@ const Page = () => {
           />
         ))}
       </div>
+    
       
+      {/* ... (rest of the existing content) */}
       <div className="border-[1px] relative border-in-active/50 p-5 rounded-xl">
         <span className="flex gap-x-1 z-50 items-center mb-5">
           <BarDuoToneBlue />
@@ -407,6 +545,11 @@ const Page = () => {
       </div>
 
       <TaskProgress />
+
+      <InstagramIntegrationPopup
+        isOpen={showPopup}
+        onClose={() => setShowPopup(false)}
+      />
     </div>
   )
 }
