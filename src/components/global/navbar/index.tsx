@@ -133,10 +133,11 @@ import { useClerk } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import Search from './Search'
-import CreateAutomation from './CreateAutomation'
-import { Notifications } from './Notifications'
-import MainBreadCrumb from './MainBreadCrumb'
+//import Search from './Search'
+import Search from './search'
+import CreateAutomation from '../create-automation'
+import { Notifications } from './notifications/notifications'
+import MainBreadCrumb from '../bread-crumbs/main-bread-crumb'
 
 type Props = {
   slug: string
