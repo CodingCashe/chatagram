@@ -246,7 +246,6 @@ const Navbar = ({ slug }: Props) => {
   )
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0e0e0e] border-b border-[#333336]">
       <div className="flex flex-col">
         <div className="flex items-center justify-between px-4 py-2">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -325,8 +324,7 @@ const Navbar = ({ slug }: Props) => {
         <div className="px-4 py-2">
           <MainBreadCrumb page={pathname === `/dashboard/${slug}` ? 'Home' : pathname.split('/').pop() || ''} slug={slug} />
         </div>
-      </div>
-    </nav>
+      </div>    
   )
 }
 
