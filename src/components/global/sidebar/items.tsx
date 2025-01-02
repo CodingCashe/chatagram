@@ -54,7 +54,7 @@ const Items = ({ page, slug }: Props) => {
       )}
       
     >
-      {item.icon}
+      {/* {item.icon} */}
       {item.label}
     </Link>
   ))
