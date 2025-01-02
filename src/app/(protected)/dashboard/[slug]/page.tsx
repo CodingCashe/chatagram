@@ -328,6 +328,7 @@ import EngagementPredictor from './_components/dash/EngagementPredictor'
 import HashtagCloud from './_components/dash/HashtagCloud'
 import ContentCalendarGenerator from './_components/dash/ContentCalendarGenerator'
 import VisualContentGenerator from './_components/dash/VisualContentGenerator'
+import InstagramPostOptimizer from './_components/dash/InstagramPostOptimizer'
 import { Button } from '@/components/ui/button'
 import { ArrowUpDown } from 'lucide-react'
 
@@ -371,6 +372,8 @@ const Page = () => {
         <ActivityFeed />
         <AIPerformance />
       </div>
+
+      <InstagramPostOptimizer />
 
       <ContentCalendarGenerator />
 
