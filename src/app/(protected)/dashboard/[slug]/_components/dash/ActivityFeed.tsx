@@ -86,8 +86,8 @@ const ActivityFeed = () => {
         message: `New ${Math.random() > 0.5 ? 'comment' : 'DM'} received`,
         timestamp: new Date(),
       }
-      setActivities(prev => [newActivity, ...prev.slice(0, 19)]) // Keep only the latest 20 activities
-    }, 3000)
+      setActivities(prev => [newActivity, ...prev.slice(0, 5)]) // Keep only the latest 20 activities
+    }, 120000)
 
     return () => clearInterval(interval)
   }, [])
