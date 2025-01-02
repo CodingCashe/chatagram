@@ -87,7 +87,7 @@ const ActivityFeed = () => {
         timestamp: new Date(),
       }
       setActivities(prev => [newActivity, ...prev.slice(0, 5)]) // Keep only the latest 20 activities
-    }, 120000)
+    }, 12000)
 
     return () => clearInterval(interval)
   }, [])
