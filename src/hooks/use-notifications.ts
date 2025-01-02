@@ -219,6 +219,69 @@
 // }
 
 
+// import { useState, useEffect } from 'react'
+// import { useQueryAutomations } from '@/hooks/user-queries'
+// import { Notification } from '@/types/notifications'
+
+// export const useNotifications = () => {
+//   const { data } = useQueryAutomations()
+//   const [notifications, setNotifications] = useState<Notification[]>([])
+
+//   // Function to map Instagram data to notification format
+//   const mapInstagramDataToNotifications = (data: any): Notification[] => {
+//     return data?.data.map((item: any, index: number) => ({
+//       id: `notif-${index}`,
+//       type: item.listener?.commentCount ? 'comment' : item.listener?.dmCount ? 'dm' : 'like',
+//       user: {
+//         id: `user-${index}`,
+//         username: item.listener?.username || '@Cashe',
+//         avatar: `https://i.pravatar.cc/150?img=${index + 1}`, // Placeholder avatar
+//       },
+//       // Construct the action based on comment or dm
+//       action: item.listener?.commentCount
+//         ? `${item.listener?.username} New comment on your post`
+//         : item.listener?.dmCount
+//         ? `${item.listener?.username} sent you a direct message`
+//         : `${item.listener?.username} liked your post`,
+//       content: item.listener?.commentCount
+//         ? item.listener?.lastComment // Showing the actual comment
+//         : item.listener?.dmCount
+//         ? item.listener?.lastDm // Showing the actual DM
+//         : undefined,
+//       read: false,
+//       timestamp: new Date(item.timestamp || Date.now()).toLocaleTimeString(),
+//     })) || []
+//   }
+
+//   // Update notifications whenever Instagram data changes
+//   useEffect(() => {
+//     if (data) {
+//       // Log the data to see its structure
+//       console.log('Received data from useQueryAutomations:', data)
+
+//       const newNotifications = mapInstagramDataToNotifications(data)
+//       setNotifications(newNotifications)
+//     }
+//   }, [data])
+
+//   const addNotification = (notification: Notification) => {
+//     setNotifications((prev) => [notification, ...prev])
+//   }
+
+//   const markAsRead = (id: string) => {
+//     setNotifications((prev) =>
+//       prev.map((notif) => (notif.id === id ? { ...notif, read: true } : notif))
+//     )
+//   }
+
+//   const clearAll = () => {
+//     setNotifications([])
+//   }
+
+//   return { notifications, addNotification, markAsRead, clearAll }
+// }
+
+
 import { useState, useEffect } from 'react'
 import { useQueryAutomations } from '@/hooks/user-queries'
 import { Notification } from '@/types/notifications'
@@ -229,34 +292,34 @@ export const useNotifications = () => {
 
   // Function to map Instagram data to notification format
   const mapInstagramDataToNotifications = (data: any): Notification[] => {
-    return data?.data.map((item: any, index: number) => ({
-      id: `notif-${index}`,
-      type: item.listener?.commentCount ? 'comment' : item.listener?.dmCount ? 'dm' : 'like',
-      user: {
-        id: `user-${index}`,
-        username: item.listener?.username || '@Cashe',
-        avatar: `https://i.pravatar.cc/150?img=${index + 1}`, // Placeholder avatar
-      },
-      // Construct the action based on comment or dm
-      action: item.listener?.commentCount
-        ? `${item.listener?.username} New comment on your post`
-        : item.listener?.dmCount
-        ? `${item.listener?.username} sent you a direct message`
-        : `${item.listener?.username} liked your post`,
-      content: item.listener?.commentCount
-        ? item.listener?.lastComment // Showing the actual comment
-        : item.listener?.dmCount
-        ? item.listener?.lastDm // Showing the actual DM
-        : undefined,
-      read: false,
-      timestamp: new Date(item.timestamp || Date.now()).toLocaleTimeString(),
-    })) || []
+    return (
+      data?.data.map((item: any, index: number) => {
+        const keywordMessages = item.keywords.map(
+          (keyword: any) =>
+            `You've received new messages for the keyword "${keyword.word}" in automation "${item.name}".`
+        )
+
+        return {
+          id: `notif-${index}`,
+          type: 'engagement',
+          user: {
+            id: item.userId || `user-${index}`,
+            username: '@YourAutomation',
+            avatar: `https://i.pravatar.cc/150?img=${index + 1}`, // Placeholder avatar
+          },
+          action: `New engagements detected in automation "${item.name}"`,
+          content: keywordMessages.join(' '),
+          read: false,
+          timestamp: new Date(item.createdAt).toLocaleString(),
+        }
+      }) || []
+    )
   }
 
   // Update notifications whenever Instagram data changes
   useEffect(() => {
     if (data) {
-      // Log the data to see its structure
+      // Log the data to understand its structure
       console.log('Received data from useQueryAutomations:', data)
 
       const newNotifications = mapInstagramDataToNotifications(data)
