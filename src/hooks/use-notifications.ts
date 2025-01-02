@@ -307,7 +307,7 @@ export const useNotifications = () => {
             username: item.name,
             avatar: `https://i.pravatar.cc/150?img=${index + 1}`, // Placeholder avatar
           },
-          action: `New engagements detected in automation "${item.name}"`,
+          action: `New engagements detected`,
           content: keywordMessages.join(' '),
           read: false,
           timestamp: new Date(item.createdAt).toLocaleString(),
@@ -320,7 +320,7 @@ export const useNotifications = () => {
   useEffect(() => {
     if (data) {
       // Log the data to understand its structure
-      console.log('Received data from useQueryAutomations:', data)
+      // console.log('Received data from useQueryAutomations:', data)
 
       const newNotifications = mapInstagramDataToNotifications(data)
       setNotifications(newNotifications)
