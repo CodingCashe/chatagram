@@ -156,8 +156,9 @@ export const Notifications: React.FC = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.2 }}
-            className="absolute right-0 mt-2 w-80 bg-gray-900 rounded-lg shadow-lg overflow-hidden z-50 border border-blue-500"
+            className="absolute right-0 mt-2 w-48 sm:w-56 md:w-64 lg:w-72 xl:w-80 bg-gray-900 rounded-lg shadow-lg overflow-hidden z-50 border border-blue-500"
           >
+          
             <div className="p-4 bg-gray-800 text-blue-400 flex justify-between items-center">
               <h3 className="text-lg font-semibold">Notifications</h3>
               <Button
@@ -182,12 +183,11 @@ export const Notifications: React.FC = () => {
                   ))
                 ) : (
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-48 sm:w-56 md:w-64 lg:w-72 xl:w-80 bg-gray-900 rounded-lg shadow-lg overflow-hidden z-50 border border-blue-500"
-                  >                  
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="p-4 text-center text-gray-500"
+                  >                 
                     No notifications
                   </motion.div>
                 )}
