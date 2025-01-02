@@ -296,7 +296,7 @@ export const useNotifications = () => {
       data?.data.map((item: any, index: number) => {
         const keywordMessages = item.keywords.map(
           (keyword: any) =>
-            `You've received new messages for the keyword "${keyword.word}" in automation "${item.name}".`
+            `You've received new messages for the keyword "${keyword.word}" in this automation.`
         )
 
         return {
@@ -304,7 +304,7 @@ export const useNotifications = () => {
           type: 'engagement',
           user: {
             id: item.userId || `user-${index}`,
-            username: '@YourAutomation',
+            username: item.name,
             avatar: `https://i.pravatar.cc/150?img=${index + 1}`, // Placeholder avatar
           },
           action: `New engagements detected in automation "${item.name}"`,
@@ -343,3 +343,89 @@ export const useNotifications = () => {
 
   return { notifications, addNotification, markAsRead, clearAll }
 }
+
+
+// import { useState, useEffect } from 'react';
+// import { useQueryAutomations } from '@/hooks/user-queries';
+// import { Notification } from '@/types/notifications';
+
+// // Fetch Instagram user details
+// const fetchInstagramUserDetails = async (userId, accessToken) => {
+
+//   try {
+//     const response = await fetch(
+//       `https://graph.instagram.com/${userId}?fields=id,username,profile_picture_url&access_token=${accessToken}`
+//     );
+//     const data = await response.json();
+//     return {
+//       username: data.username || '@Unknown',
+//       avatar: data.profile_picture_url || 'https://i.pravatar.cc/150?img=placeholder',
+//     };
+//   } catch (error) {
+//     console.error('Error fetching Instagram user details:', error);
+//     return { username: '@Unknown', avatar: 'https://i.pravatar.cc/150?img=placeholder' };
+//   }
+// };
+
+// export const useNotifications = () => {
+//   const { data } = useQueryAutomations();
+//   const [notifications, setNotifications] = useState<Notification[]>([]);
+//   const [accessToken, setAccessToken] = useState('YOUR_ACCESS_TOKEN'); // Replace with your Instagram access token
+
+//   // Function to map Instagram data to notification format
+//   const mapInstagramDataToNotifications = async (data: any): Promise<Notification[]> => {
+//     return Promise.all(
+//       data?.data.map(async (item: any, index: number) => {
+//         const userDetails = await fetchInstagramUserDetails(item.userId, accessToken);
+
+//         const keywordMessages = item.keywords.map(
+//           (keyword: any) =>
+//             `You've received new messages for the keyword "${keyword.word}" in automation "${item.name}".`
+//         );
+
+//         return {
+//           id: `notif-${index}`,
+//           type: 'engagement',
+//           user: {
+//             id: item.userId || `user-${index}`,
+//             username: userDetails.username,
+//             avatar: userDetails.avatar,
+//           },
+//           action: `New engagements detected in automation "${item.name}"`,
+//           content: keywordMessages.join(' '),
+//           read: false,
+//           timestamp: new Date(item.createdAt).toLocaleString(),
+//         };
+//       }) || []
+//     );
+//   };
+
+//   // Update notifications whenever Instagram data changes
+//   useEffect(() => {
+//     const updateNotifications = async () => {
+//       if (data) {
+//         console.log('Received data from useQueryAutomations:', data);
+//         const newNotifications = await mapInstagramDataToNotifications(data);
+//         setNotifications(newNotifications);
+//       }
+//     };
+
+//     updateNotifications();
+//   }, [data, accessToken]);
+
+//   const addNotification = (notification: Notification) => {
+//     setNotifications((prev) => [notification, ...prev]);
+//   };
+
+//   const markAsRead = (id: string) => {
+//     setNotifications((prev) =>
+//       prev.map((notif) => (notif.id === id ? { ...notif, read: true } : notif))
+//     );
+//   };
+
+//   const clearAll = () => {
+//     setNotifications([]);
+//   };
+
+//   return { notifications, addNotification, markAsRead, clearAll };
+// };

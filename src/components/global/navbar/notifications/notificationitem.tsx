@@ -236,7 +236,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({ notification
       <div className="flex-shrink-0">{iconMap[notification.type]}</div>
       <div className="flex-grow text-gray-300">
         <div className="flex items-center gap-2">
-          <img src={notification.user.avatar} alt={notification.user.username} className="w-8 h-8 rounded-full border border-blue-500" />
+          {/* <img src={notification.user.avatar} alt={notification.user.username} className="w-8 h-8 rounded-full border border-blue-500" /> */}
           <div>
             <span className="text-white font-semibold">{notification.user.username}</span>
             <span className="text-gray-400"> {notification.action}</span>
