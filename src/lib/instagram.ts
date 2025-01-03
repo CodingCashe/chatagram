@@ -37,7 +37,7 @@ import axios from 'axios'
 
 
 export async function generateImage(prompt: string): Promise<{ image: string; message?: string }> {
-  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY
+  const apiKey = process.env.OPENAI_API_KEY
 
   if (!apiKey) {
     console.error('OpenAI API key is missing')
