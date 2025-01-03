@@ -248,7 +248,7 @@ const Navbar = ({ slug }: Props) => {
 
   return (
       <div className="flex flex-col">
-        <div className="flex items-center justify-between px-4 py-2">
+        <div className="flex gap-x-3 lg:gap-x-5 items-center justify-between px-4 py-2">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="lg:hidden">
