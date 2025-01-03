@@ -208,7 +208,7 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ onImageGenerated }) => 
       console.error('Error generating image:', error)
       toast({
         title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to generate image. Please try again.',
+        description: error instanceof Error ? error.message : 'Failed to generate image. Please try aggggain.',
         variant: 'destructive',
       })
     } finally {
