@@ -135,7 +135,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 //import Search from './Search'
 import Search from './search'
-import Analytics from './analytics/analytics'
 import { Plus } from 'lucide-react'
 import CreateAutomation from '../create-automation'
 import { Notifications } from './notifications/notifications'
@@ -299,7 +298,7 @@ const Navbar = ({ slug }: Props) => {
               </div>
             </SheetContent>
           </Sheet>          
-          <div className="flex items-center justify-end space-x-2">
+          <div className="flex items-end justify-end space-x-2">
             <div className="hidden sm:block">
               <Search />
             </div>
@@ -307,7 +306,6 @@ const Navbar = ({ slug }: Props) => {
               <CreateAutomation />
             </div>
             <Notifications />
-            <Analytics />
             <div className="sm:hidden">
               <Button variant="ghost" size="icon">
                 <SearchIcon className="h-5 w-5" />
