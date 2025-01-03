@@ -24,7 +24,7 @@ export async function generateImage(prompt: string): Promise<{ image: string; me
         },
       }
     )
-
+    console.log(response.data);
     const imageUrl = response.data.data[0].url
     return { image: imageUrl }
   } catch (error) {
@@ -32,6 +32,9 @@ export async function generateImage(prompt: string): Promise<{ image: string; me
     return { image: '', message: 'Failed to generate image. Please try again.' }
   }
 }
+
+
+
 
 
 
