@@ -9,18 +9,53 @@ import axios from 'axios'
 // }
 
 
+// export async function generateImage(prompt: string): Promise<{ image: string; message?: string }> {
+//   try {
+//     const response = await axios.post(
+//       'https://api.openai.com/v1/images/generations',
+//       {
+//         prompt: prompt,
+//         n: 1,
+//         size: "512x512",
+//       },
+//       {
+//         headers: {
+//           'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+//         },
+//       }
+//     )
+
+//     const imageUrl = response.data.data[0].url
+//     return { image: imageUrl }
+//   } catch (error) {
+//     console.error('Error generating image:', error)
+//     return { image: '', message: 'Failed to generate image. Please try again.' }
+//   }
+// }
+
+
+
+
 export async function generateImage(prompt: string): Promise<{ image: string; message?: string }> {
+  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY
+
+  if (!apiKey) {
+    console.error('OpenAI API key is missing')
+    return { image: '', message: 'OpenAI API key is not configured. Please check your environment variables.' }
+  }
+
   try {
     const response = await axios.post(
       'https://api.openai.com/v1/images/generations',
       {
-        prompt: "A futuristic cityscape at night with neon lights",
+        prompt: prompt,
         n: 1,
         size: "512x512",
       },
       {
         headers: {
-          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
         },
       }
     )
@@ -29,9 +64,16 @@ export async function generateImage(prompt: string): Promise<{ image: string; me
     return { image: imageUrl }
   } catch (error) {
     console.error('Error generating image:', error)
-    return { image: '', message: 'Failed to generate image. Please try again.' }
+    return { image: '', message: 'Failed to generate image. Please check your API key and try again.' }
   }
 }
+
+// ... (rest of the file remains unchanged)
+
+
+
+
+
 
 
 export async function getHashtagSuggestions(): Promise<{ hashtags: string[] }> {
