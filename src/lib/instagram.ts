@@ -20,7 +20,7 @@ export async function generateImage(prompt: string): Promise<{ image: string; me
       },
       {
         headers: {
-          'Authorization': `Bearer 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`,
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
         },
       }
     )
