@@ -9,29 +9,51 @@ import axios from 'axios'
 // }
 
 
+
 export async function generateImage(prompt: string): Promise<{ image: string; message?: string }> {
   try {
-    const response = await axios.post(
-      'https://api.openai.com/v1/images/generations',
-      {
-        prompt: prompt,
-        n: 1,
-        size: "512x512",
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        },
-      }
-    )
-    console.log(response.data);
-    const imageUrl = response.data.data[0].url
-    return { image: imageUrl }
+    const response = await axios.post('/api/generate-image', { prompt });
+
+    if (response.data && response.data.image) {
+      return { image: response.data.image };
+    } else {
+      throw new Error(response.data.error || 'Failed to generate image');
+    }
   } catch (error) {
-    console.error('Error generating image:', error)
-    return { image: '', message: 'Failed to generate image. Please try again.' }
+    console.error('Error generating image:', error);
+    if (axios.isAxiosError(error) && error.response) {
+      return { image: '', message: error.response.data.error || 'API Error' };
+    }
+    return { image: '', message: 'Failed to generate image. Please try again.' };
   }
 }
+
+
+
+
+// export async function generateImage(prompt: string): Promise<{ image: string; message?: string }> {
+//   try {
+//     const response = await axios.post(
+//       'https://api.openai.com/v1/images/generations',
+//       {
+//         prompt: prompt,
+//         n: 1,
+//         size: "512x512",
+//       },
+//       {
+//         headers: {
+//           'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+//         },
+//       }
+//     )
+    
+//     const imageUrl = response.data.data[0].url
+//     return { image: imageUrl }
+//   } catch (error) {
+//     console.error('Error generating image:', error)
+//     return { image: '', message: 'Failed to generate image. Please try again.' }
+//   }
+// }
 
 
 
