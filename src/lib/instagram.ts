@@ -1,11 +1,38 @@
 import { OptimizationResult, ScheduledPost } from '@/types'
+import axios from 'axios'
+
+// export async function generateImage(prompt: string): Promise<{ image: string; message?: string }> {
+//   // TODO: Implement image generation using an AI service (e.g., OpenAI's DALL-E)
+//   // This is a placeholder implementation
+//   console.log('Generating image with prompt:', prompt)
+//   return { image: `https://picsum.photos/512/512?random=${Math.random()}` }
+// }
+
 
 export async function generateImage(prompt: string): Promise<{ image: string; message?: string }> {
-  // TODO: Implement image generation using an AI service (e.g., OpenAI's DALL-E)
-  // This is a placeholder implementation
-  console.log('Generating image with prompt:', prompt)
-  return { image: `https://picsum.photos/512/512?random=${Math.random()}` }
+  try {
+    const response = await axios.post(
+      'https://api.openai.com/v1/images/generations',
+      {
+        prompt: prompt,
+        n: 1,
+        size: "512x512",
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+      }
+    )
+
+    const imageUrl = response.data.data[0].url
+    return { image: imageUrl }
+  } catch (error) {
+    console.error('Error generating image:', error)
+    return { image: '', message: 'Failed to generate image. Please try again.' }
+  }
 }
+
 
 export async function getHashtagSuggestions(): Promise<{ hashtags: string[] }> {
   // TODO: Implement hashtag suggestion logic
