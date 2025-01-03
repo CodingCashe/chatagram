@@ -135,6 +135,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 //import Search from './Search'
 import Search from './search'
+import Analytics from './analytics/analytics'
+import { Plus } from 'lucide-react'
 import CreateAutomation from '../create-automation'
 import { Notifications } from './notifications/notifications'
 import MainBreadCrumb from '../bread-crumbs/main-bread-crumb'
@@ -262,10 +264,7 @@ const Navbar = ({ slug }: Props) => {
                     transition={{ duration: 0.5 }}
                   >
                     <LogoSmall />
-                  </motion.div>
-                  {/* <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
-                    <X className="h-6 w-6" />
-                  </Button> */}
+                  </motion.div>                  
                 </div>
                 <Separator className="bg-[#333336]" />
                 <div className="flex-1 overflow-y-auto py-4 px-2">
@@ -300,21 +299,27 @@ const Navbar = ({ slug }: Props) => {
               </div>
             </SheetContent>
           </Sheet>          
-          <div className="flex justify-end space-x-2">
-            <Search />
-            <CreateAutomation />
+          <div className="flex items-center justify-end space-x-2">
+            <div className="hidden sm:block">
+              <Search />
+            </div>
+            <div className="hidden sm:block">
+              <CreateAutomation />
+            </div>
             <Notifications />
-            {/* <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <HelpCircle className="h-6 w-6 text-white" />
-                  </Button>
-                </TooltipTrigger>                
-              </Tooltip>
-            </TooltipProvider> */}
+            <Analytics />
+            <div className="sm:hidden">
+              <Button variant="ghost" size="icon">
+                <SearchIcon className="h-5 w-5" />
+              </Button>
+            </div>
+            <div className="sm:hidden">
+              <Button variant="ghost" size="icon">
+                <Plus className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
-        </div>
+          </div>
         <div className="px-4 py-2">
           <MainBreadCrumb page={pathname === `/dashboard/${slug}` ? 'Home' : pathname.split('/').pop() || ''} slug={slug} />
         </div>
