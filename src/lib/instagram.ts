@@ -14,13 +14,13 @@ export async function generateImage(prompt: string): Promise<{ image: string; me
     const response = await axios.post(
       'https://api.openai.com/v1/images/generations',
       {
-        prompt: prompt,
+        prompt: "A futuristic cityscape at night with neon lights",
         n: 1,
         size: "512x512",
       },
       {
         headers: {
-          'Authorization': `Bearer ${process.env.OPEN_AI_KEY}`,
+          'Authorization': `Bearer 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`,
         },
       }
     )
