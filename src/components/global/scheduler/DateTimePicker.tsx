@@ -77,7 +77,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
           </Select>
           <span className="mx-2">:</span>
           <Select
-            value={Math.floor(date.getMinutes() / 15) * 15}
+            value={(Math.floor(date.getMinutes() / 15) * 15).toString()}
             onValueChange={(value) => {
               const newDate = new Date(date)
               newDate.setMinutes(parseInt(value))

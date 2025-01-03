@@ -28,7 +28,7 @@
 //       console.error('Error generating image:', error)
 //       toast({
 //         title: 'Error',
-//         description: 'Failed to generate image. Please try again.',
+//         description: error instanceof Error ? error.message : 'Failed to generate image. Please try again.',
 //         variant: 'destructive',
 //       })
 //     } finally {
@@ -59,7 +59,7 @@ import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
-import { toast } from '@/components/ui/use-toast'
+import { toast } from '@/hooks/use-toast'
 import { generateImage } from '@/lib/instagram'
 
 interface ImageGeneratorProps {

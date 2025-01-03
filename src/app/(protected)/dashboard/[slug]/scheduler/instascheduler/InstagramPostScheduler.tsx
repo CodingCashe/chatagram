@@ -13,6 +13,7 @@ import HashtagSuggestions from '@/components/global/scheduler/HashtagSuggestions
 import { optimizePost, schedulePost } from '@/lib/instagram'
 import { OptimizationResult, ScheduledPost } from '@/types'
 
+
 const InstagramPostScheduler: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [caption, setCaption] = useState('')
@@ -40,6 +41,15 @@ const InstagramPostScheduler: React.FC = () => {
   }
 
   const handleSchedulePost = async () => {
+    if (!image) {
+      toast({
+        title: 'Error',
+        description: 'Please generate or upload an image before scheduling the post.',
+        variant: 'destructive',
+      })
+      return
+    }
+
     try {
       const result = await schedulePost({ caption, image, hashtags, scheduledTime })
       if (result.success) {
@@ -156,7 +166,7 @@ const InstagramPostScheduler: React.FC = () => {
           </div>
         )}
 
-        <Button onClick={handleSchedulePost} className="mt-4">
+        <Button onClick={handleSchedulePost} className="mt-4" disabled={!image}>
           <Calendar className="mr-2 h-4 w-4" />
           Schedule Post
         </Button>
