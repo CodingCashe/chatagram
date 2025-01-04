@@ -20,7 +20,7 @@
 //     return NextResponse.json({ error: 'Failed to generate content ideas' }, { status: 500 });
 //   }
 // }
-
+//
 import { NextResponse } from 'next/server';
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
