@@ -525,7 +525,8 @@ const Sidebar = ({ slug }: Props) => {
               whileTap={{ scale: 0.95 }}
             >
               <Link
-                href={`/dashboard/${slug}/${item.label.toLowerCase()}`}
+                // href={`/dashboard/${slug}/${item.label.toLowerCase()}`}
+                href={`/dashboard/${slug}/${item.label.toLocaleLowerCase() === 'home' ? '/' : item.label}`}
                 className={cn(
                   'flex items-center gap-x-2 rounded-lg p-2 transition-colors duration-200',
                   isActive ? 'bg-[#0f0f0f] text-white' : 'text-[#9B9CA0] hover:bg-[#0f0f0f] hover:text-white',
@@ -643,9 +644,7 @@ const Sidebar = ({ slug }: Props) => {
         "
       >
         <motion.div 
-          className="flex items-center justify-center p-2"
-          whileHover={{ scale: 1.1, rotate: 360 }}
-          transition={{ duration: 0.5 }}
+          className="flex items-center justify-center p-2"        
         >
           <LogoSmall />
         </motion.div>
