@@ -513,9 +513,66 @@ const Sidebar = ({ slug }: Props) => {
   const { signOut } = useClerk()
 
   const renderMenuItem = (item: SideBarItemProps, isSubItem = false) => {
-    const isActive = pathname === `/dashboard/${slug}/${item.label.toLowerCase()}`
+    // const isActive = pathname === `/dashboard/${slug}/${item.label.toLowerCase()}`
+    const isActive = pathname === `/dashboard/${slug}/${item.label.toLocaleLowerCase() === 'home' ? '/' : item.label}`
     const hasSubItems = item.subItems && item.subItems.length > 0
 
+    // return (
+    //   <TooltipProvider key={item.id}>
+    //     <Tooltip>
+    //       <TooltipTrigger asChild>
+    //         <motion.div
+    //           whileHover={{ scale: 1.05 }}
+    //           whileTap={{ scale: 0.95 }}
+    //         >
+    //           <Link
+    //             // href={`/dashboard/${slug}/${item.label.toLowerCase()}`}
+    //             href={`/dashboard/${slug}/${item.label.toLocaleLowerCase() === 'home' ? '/' : item.label}`}
+    //             className={cn(
+    //               'flex items-center gap-x-2 rounded-lg p-2 transition-colors duration-200',
+    //               isActive ? 'bg-[#0f0f0f] text-white' : 'text-[#9B9CA0] hover:bg-[#0f0f0f] hover:text-white',
+    //               isSubItem && 'pl-8'
+    //             )}
+    //             onClick={(e) => {
+    //               if (hasSubItems) {
+    //                 e.preventDefault()
+    //                 setExpandedItem(expandedItem === item.id ? null : item.id)
+    //               }
+    //             }}
+    //           >
+    //             {item.icon}
+    //             <span className="flex-1">{item.label}</span>
+    //             {hasSubItems && (
+    //               <ChevronDown
+    //                 className={cn(
+    //                   'transition-transform duration-200',
+    //                   expandedItem === item.id && 'rotate-180'
+    //                 )}
+    //               />
+    //             )}
+    //           </Link>
+    //         </motion.div>
+    //       </TooltipTrigger>
+    //       <TooltipContent side="right">
+    //         <p>{item.label}</p>
+    //       </TooltipContent>
+    //     </Tooltip>
+    //     {hasSubItems && (
+    //       <AnimatePresence>
+    //         {expandedItem === item.id && (
+    //           <motion.div
+    //             initial={{ opacity: 0, height: 0 }}
+    //             animate={{ opacity: 1, height: 'auto' }}
+    //             exit={{ opacity: 0, height: 0 }}
+    //             transition={{ duration: 0.2 }}
+    //           >
+    //             {item.subItems!.map((subItem) => renderMenuItem(subItem, true))}
+    //           </motion.div>
+    //         )}
+    //       </AnimatePresence>
+    //     )}
+    //   </TooltipProvider>
+    // )
     return (
       <TooltipProvider key={item.id}>
         <Tooltip>
@@ -525,8 +582,7 @@ const Sidebar = ({ slug }: Props) => {
               whileTap={{ scale: 0.95 }}
             >
               <Link
-                // href={`/dashboard/${slug}/${item.label.toLowerCase()}`}
-                href={`/dashboard/${slug}/${item.label.toLocaleLowerCase() === 'home' ? '/' : item.label}`}
+                href={`/dashboard/${slug}/${item.label.toLowerCase() === 'home' ? '/' : item.label.toLowerCase()}`}
                 className={cn(
                   'flex items-center gap-x-2 rounded-lg p-2 transition-colors duration-200',
                   isActive ? 'bg-[#0f0f0f] text-white' : 'text-[#9B9CA0] hover:bg-[#0f0f0f] hover:text-white',
