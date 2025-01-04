@@ -242,12 +242,12 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
     items: [
       {
         id: uuid(),
-        label: 'dashboard',
+        label: 'Home',
         icon: <HomeDuoToneWhite />,
       },
       {
         id: uuid(),
-        label: 'automations',
+        label: 'Automations',
         icon: <AutomationDuoToneWhite />,
         subItems: [
           { id: uuid(), label: 'Create New', icon: <Zap size={18} /> },
@@ -257,23 +257,23 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
       },
       {
         id: uuid(),
-        label: 'conversations',
+        label: 'Conversations',
         icon: <MessageCircle />,
       },
     ]
   },
   {
     id: uuid(),
-    label: 'growth',
+    label: 'Growth',
     items: [
       {
         id: uuid(),
-        label: 'audience',
+        label: 'Audience',
         icon: <Users />,
       },
       {
         id: uuid(),
-        label: 'scheduler',
+        label: 'Scheduler',
         icon: <Calendar />,
       },
       {

@@ -1,32 +1,32 @@
 import { OptimizationResult, ScheduledPost } from '@/types'
 import axios from 'axios'
 
-// export async function generateImage(prompt: string): Promise<{ image: string; message?: string }> {
-//   // TODO: Implement image generation using an AI service (e.g., OpenAI's DALL-E)
-//   // This is a placeholder implementation
-//   console.log('Generating image with prompt:', prompt)
-//   return { image: `https://picsum.photos/512/512?random=${Math.random()}` }
-// }
-
-
-
 export async function generateImage(prompt: string): Promise<{ image: string; message?: string }> {
-  try {
-    const response = await axios.post('/api/generate-image', { prompt });
-
-    if (response.data && response.data.image) {
-      return { image: response.data.image };
-    } else {
-      throw new Error(response.data.error || 'Failed to generate image');
-    }
-  } catch (error) {
-    console.error('Error generating image:', error);
-    if (axios.isAxiosError(error) && error.response) {
-      return { image: '', message: error.response.data.error || 'API Error' };
-    }
-    return { image: '', message: 'Failed to generate image. Please try again.' };
-  }
+  // TODO: Implement image generation using an AI service (e.g., OpenAI's DALL-E)
+  // This is a placeholder implementation
+  console.log('Generating image with prompt:', prompt)
+  return { image: `https://picsum.photos/512/512?random=${Math.random()}` }
 }
+
+
+
+// export async function generateImage(prompt: string): Promise<{ image: string; message?: string }> {
+//   try {
+//     const response = await axios.post('/api/generate-image', { prompt });
+
+//     if (response.data && response.data.image) {
+//       return { image: response.data.image };
+//     } else {
+//       throw new Error(response.data.error || 'Failed to generate image');
+//     }
+//   } catch (error) {
+//     console.error('Error generating image:', error);
+//     if (axios.isAxiosError(error) && error.response) {
+//       return { image: '', message: error.response.data.error || 'API Error' };
+//     }
+//     return { image: '', message: 'Failed to generate image. Please try again.' };
+//   }
+// }
 
 
 
