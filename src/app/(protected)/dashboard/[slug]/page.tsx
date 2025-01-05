@@ -424,13 +424,6 @@ import EnhancedMetricsCard from './_components/dash/EnhancedMetricsCard'
 import ActivityFeed from './_components/dash/ActivityFeed'
 import AIPerformance from './_components/dash/AIPerformance'
 import TaskProgress from './_components/dash/TaskProgress'
-import ContentSuggestions from './_components/dash/ContentSuggestions'
-import SentimentAnalysis from './_components/dash/SentimentAnalysis'
-import EngagementPredictor from './_components/dash/EngagementPredictor'
-import HashtagCloud from './_components/dash/HashtagCloud'
-import ContentCalendarGenerator from './_components/dash/ContentCalendarGenerator'
-import VisualContentGenerator from './_components/dash/VisualContentGenerator'
-import InstagramPostOptimizer from './_components/dash/InstagramPostOptimizer'
 import { Button } from '@/components/ui/button'
 import { ArrowUpDown } from 'lucide-react'
 import InstagramIntegrationPopup from './_components/dash/InstagramIntegrationPopup'
@@ -510,28 +503,6 @@ const Page = () => {
         <ActivityFeed />
         <AIPerformance />
       </div>
-
-      <InstagramPostOptimizer />
-
-      <ContentCalendarGenerator />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <HashtagCloud />
-        <VisualContentGenerator />
-      </div>
-
-      {expanded && (
-        <>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">           
-            <ContentSuggestions />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <SentimentAnalysis />
-            <EngagementPredictor />
-          </div>
-        </>
-      )}
 
       <div className="flex justify-center">
         <Button
