@@ -38,7 +38,7 @@ model Subscription {
   User       User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String?           @unique @db.Uuid
   createdAt  DateTime          @default(now())
-  plan       SUBSCRIPTION_PLAN @default(FREE)
+  plan       SUBSCRIPTION_PLAN @default(PRO)
   updatedAt  DateTime          @default(now())
   customerId String?           @unique
 }
