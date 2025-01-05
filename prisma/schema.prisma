@@ -92,7 +92,7 @@ model Listener {
   id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   Automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
   automationId String     @unique @db.Uuid
-  listener     LISTENERS  @default(MESSAGE)
+  listener     LISTENERS  @default(SMARTAI)
   prompt       String
   commentReply String?
   lastComment  String?  
