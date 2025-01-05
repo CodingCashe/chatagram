@@ -504,17 +504,6 @@ const Page = () => {
         <AIPerformance />
       </div>
 
-      <div className="flex justify-center">
-        <Button
-          onClick={() => setExpanded(!expanded)}
-          variant="outline"
-          size="lg"
-        >
-          <ArrowUpDown className="mr-2 h-4 w-4" />
-          {expanded ? 'Show Less' : 'Show More'}
-        </Button>
-      </div>
-
       <TaskProgress />
 
       <InstagramIntegrationPopup

@@ -249,58 +249,6 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
         id: uuid(),
         label: 'Automations',
         icon: <AutomationDuoToneWhite />,
-        subItems: [
-          { id: uuid(), label: 'Create New', icon: <Zap size={18} /> },
-          { id: uuid(), label: 'Templates', icon: <FileText size={18} /> },
-          { id: uuid(), label: 'Analytics', icon: <BarChart2 size={18} /> },
-        ]
-      },
-      {
-        id: uuid(),
-        label: 'Conversations',
-        icon: <MessageCircle />,
-      },
-    ]
-  },
-  {
-    id: uuid(),
-    label: 'Growth',
-    items: [
-      {
-        id: uuid(),
-        label: 'Audience',
-        icon: <Users />,
-      },
-      {
-        id: uuid(),
-        label: 'Scheduler',
-        icon: <Calendar />,
-      },
-      {
-        id: uuid(),
-        label: 'Analytics',
-        icon: <BarChart2 />,
-      },
-    ]
-  },
-  {
-    id: uuid(),
-    label: 'Content',
-    items: [
-      {
-        id: uuid(),
-        label: 'AI Assistant',
-        icon: <Sparkles />,
-      },
-      {
-        id: uuid(),
-        label: 'Content Planner',
-        icon: <Palette />,
-      },
-      {
-        id: uuid(),
-        label: 'Hashtag Manager',
-        icon: <Target />,
       },
     ]
   },

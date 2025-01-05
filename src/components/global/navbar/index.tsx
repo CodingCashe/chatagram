@@ -110,7 +110,6 @@ import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, SearchIcon, Bell, ChevronDown, HelpCircle, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Separator } from '@/components/ui/separator'
@@ -122,12 +121,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { 
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
 import { SIDEBAR_MENU, SideBarItemProps, SideBarGroupProps } from '@/constants/menu'
 import { LogoSmall } from '@/svgs/logo-small'
 import { useClerk } from '@clerk/nextjs'
@@ -164,7 +157,7 @@ const Navbar = ({ slug }: Props) => {
         transition={{ duration: 0.2 }}
       >
         <Link
-          href={`/dashboard/${slug}/${item.label.toLowerCase()}`}
+          href={`/dashboard/${slug}/${item.label === 'home' ? '/' : item.label}`}
           className={cn(
             'flex items-center gap-x-2 rounded-lg p-2 transition-colors duration-200',
             isActive ? 'bg-[#0f0f0f] text-white' : 'text-[#9B9CA0] hover:bg-[#0f0f0f] hover:text-white',
