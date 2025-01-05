@@ -1,5 +1,5 @@
 import { OptimizationResult, ScheduledPost } from '@/types'
-import axios from 'axios'
+
 
 export async function generateImage(prompt: string): Promise<{ image: string; message?: string }> {
   // TODO: Implement image generation using an AI service (e.g., OpenAI's DALL-E)
@@ -7,95 +7,6 @@ export async function generateImage(prompt: string): Promise<{ image: string; me
   console.log('Generating image with prompt:', prompt)
   return { image: `https://picsum.photos/512/512?random=${Math.random()}` }
 }
-
-
-
-// export async function generateImage(prompt: string): Promise<{ image: string; message?: string }> {
-//   try {
-//     const response = await axios.post('/api/generate-image', { prompt });
-
-//     if (response.data && response.data.image) {
-//       return { image: response.data.image };
-//     } else {
-//       throw new Error(response.data.error || 'Failed to generate image');
-//     }
-//   } catch (error) {
-//     console.error('Error generating image:', error);
-//     if (axios.isAxiosError(error) && error.response) {
-//       return { image: '', message: error.response.data.error || 'API Error' };
-//     }
-//     return { image: '', message: 'Failed to generate image. Please try again.' };
-//   }
-// }
-
-
-
-
-// export async function generateImage(prompt: string): Promise<{ image: string; message?: string }> {
-//   try {
-//     const response = await axios.post(
-//       'https://api.openai.com/v1/images/generations',
-//       {
-//         prompt: prompt,
-//         n: 1,
-//         size: "512x512",
-//       },
-//       {
-//         headers: {
-//           'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-//         },
-//       }
-//     )
-    
-//     const imageUrl = response.data.data[0].url
-//     return { image: imageUrl }
-//   } catch (error) {
-//     console.error('Error generating image:', error)
-//     return { image: '', message: 'Failed to generate image. Please try again.' }
-//   }
-// }
-
-
-
-
-
-
-
-// export async function generateImage(prompt: string): Promise<{ image: string; message?: string }> {
-//   const apiKey = process.env.OPENAI_API_KEY
-
-//   if (!apiKey) {
-//     console.error('OpenAI API key is missing')
-//     return { image: '', message: 'OpenAI API key is not configured. Please check your environment variables.' }
-//   }
-
-//   try {
-//     const response = await axios.post(
-//       'https://api.openai.com/v1/images/generations',
-//       {
-//         prompt: prompt,
-//         n: 1,
-//         size: "512x512",
-//       },
-//       {
-//         headers: {
-//           'Authorization': `Bearer ${apiKey}`,
-//           'Content-Type': 'application/json',
-//         },
-//       }
-//     )
-
-//     const imageUrl = response.data.data[0].url
-//     return { image: imageUrl }
-//   } catch (error) {
-//     console.error('Error generating image:', error)
-//     return { image: '', message: 'Failed to generate image. Please check your API key and try again.' }
-//   }
-// }
-
-
-
-
 
 
 
@@ -132,4 +43,5 @@ export async function schedulePost(post: ScheduledPost): Promise<{ success: bool
   console.log('Scheduling post:', post)
   return { success: true, message: 'Post scheduled successfully' }
 }
+
 

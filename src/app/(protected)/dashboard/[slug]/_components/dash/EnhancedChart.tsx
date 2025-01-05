@@ -269,7 +269,7 @@ const EnhancedChart: React.FC = () => {
       </CardHeader>
       <CardContent className="p-0">
         <ChartContainer config={chartConfig} className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width={'100%'} height="100%">
             <AreaChart
               data={chartData}
               margin={{

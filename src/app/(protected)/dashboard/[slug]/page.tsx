@@ -489,10 +489,10 @@ const Page = () => {
           <BarDuoToneBlue />
           <div className="z-50">
             <h2 className="text-2xl font-medium text-white">
-              Automated Activity
+              Engagement Analytics
             </h2>
             <p className="text-text-secondary text-sm">
-              Automated 0 out of 1 interactions
+              Monitor Your Dms in real time
             </p>
           </div>
         </span>

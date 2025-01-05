@@ -18,4 +18,28 @@ export interface InstagramShortLivedToken {
     INSTAGRAM_BASE_URL: string;
   }
   
+  export interface InstagramPost {
+    id: string
+    postid: string
+    caption: string | null
+    media: string
+    mediaType: 'IMAGE' | 'VIDEO' | 'CAROSEL_ALBUM'
+    scheduledFor?: Date
+    status?: 'PENDING' | 'POSTED' | 'FAILED'
+    automationId?: string
+  }
+  
+  export interface PostToInstagramParams {
+    media: string
+    caption?: string | null
+    accessToken: string
+  }
+  
+  export interface SchedulePostParams {
+    caption: string
+    image: string
+    hashtags: string[]
+    scheduledTime: Date
+  }
+  
   
