@@ -296,11 +296,14 @@ const Navbar = ({ slug }: Props) => {
             <Notifications />           
         </div>
         <div>
-          <MainBreadCrumb page={pathname === `/dashboard/${slug}` ? 'Home' : pathname.split('/').pop() || ''} slug={slug} />
+          <MainBreadCrumb page={pathname === `/dashboard/${slug}` ? 'Home' : pathname.split('/').pop() || ''} slug={slug} alternativeName="Automation Details"/>
         </div>
       </div>    
   )
 }
 
 export default Navbar
+
+
+
 
