@@ -143,6 +143,24 @@ const Navbar = ({ slug }: Props) => {
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null)
   const { signOut } = useClerk()
+  
+  
+  const getPageInfo = () => {
+    const fullPageName = pathname === `/dashboard/${slug}` ? 'Home' : pathname.split('/').pop() || '';
+    
+    // UUID regex pattern
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    
+    // Check if the page name matches the UUID pattern
+    const isUUID = uuidPattern.test(fullPageName);
+    
+    // If it's a UUID, use 'Automation' as the display name, otherwise use the full page name
+    const displayName = isUUID ? 'Automation' : fullPageName;
+
+    return { fullPageName, displayName, isUUID };
+  };
+
+  const { fullPageName, displayName, isUUID } = getPageInfo();
 
   const renderMenuItem = (item: SideBarItemProps, isSubItem = false) => {
     const isActive = pathname === `/dashboard/${slug}/${item.label.toLowerCase()}`
@@ -296,7 +314,13 @@ const Navbar = ({ slug }: Props) => {
             <Notifications />           
         </div>
         <div>
-          <MainBreadCrumb page={pathname === `/dashboard/${slug}` ? 'Home' : pathname.split('/').pop() || ''} slug={slug} alternativeName="Automation Details"/>
+          {/* <MainBreadCrumb page={pathname === `/dashboard/${slug}` ? 'Home' : pathname.split('/').pop() || ''} slug={slug} alternativeName="Automation Details"/> */}
+          <MainBreadCrumb 
+            page={fullPageName}
+            displayName={displayName}
+            slug={slug}
+            isUUID={isUUID}
+          />
         </div>
       </div>    
   )
