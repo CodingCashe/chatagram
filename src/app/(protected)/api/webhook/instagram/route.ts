@@ -153,10 +153,10 @@ export async function POST(req: NextRequest) {
                 webhook_payload.entry[0].changes[0].value.from
               )
 
-              // console.log(
-              //   'COMMENT VERSION:',
-              //   webhook_payload.entry[0].changes[0].value.from.id
-              // )
+              console.log(
+                'COMMENT VERSION:',
+                webhook_payload.entry[0].changes[0].value.from.id
+              )
 
               const direct_message = await sendPrivateMessage(
                 webhook_payload.entry[0].id,
@@ -165,7 +165,7 @@ export async function POST(req: NextRequest) {
                 automation.User?.integrations[0].token!
               )
 
-              // console.log('DM SENT', direct_message.data)
+              console.log('DM SENT', direct_message.data)
               if (direct_message.status === 200) {
                 const tracked = await trackResponses(automation.id, 'COMMENT')
 
