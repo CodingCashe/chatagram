@@ -146,7 +146,7 @@ const Navbar = ({ slug }: Props) => {
   
   
   const getPageInfo = () => {
-    const fullPageName = pathname === `/dashboard/${slug}` ? 'Home' : pathname.split('/').pop() || '';
+    const fullPageName = pathname === `/dashboard/${slug}` ? 'home' : pathname.split('/').pop() || '';
     
     // UUID regex pattern
     const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -175,7 +175,8 @@ const Navbar = ({ slug }: Props) => {
         transition={{ duration: 0.2 }}
       >
         <Link
-          href={`/dashboard/${slug}/${item.label === 'home' ? '/' : item.label}`}
+          // href={`/dashboard/${slug}/${item.label === 'home' ? '/' : item.label}`}
+          href={`/dashboard/${slug}/${item.label.toLowerCase() === 'home' ? '/' : item.label.toLowerCase()}`}
           className={cn(
             'flex items-center gap-x-2 rounded-lg p-2 transition-colors duration-200',
             isActive ? 'bg-[#0f0f0f] text-white' : 'text-[#9B9CA0] hover:bg-[#0f0f0f] hover:text-white',
