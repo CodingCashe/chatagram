@@ -250,55 +250,99 @@
 
 'use client'
 
-import React, { useMemo, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useQueryAutomations } from '@/hooks/user-queries'
 import { MessageSquare, Mail, AlertTriangle } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { getAutomations } from '@/actions/automations/queries'
+import { useAuth } from '@clerk/nextjs'
 
 type Activity = {
   id: string
   type: 'comment' | 'dm'
   message: string
   timestamp: Date
+  sender: string
+  receiver: string
+}
+
+interface Automation {
+  id: string
+  createdAt: Date
+  listener: {
+    listener: 'SMARTAI' | 'MESSAGE'
+    id: string
+    automationId: string
+    prompt: string
+    commentReply: string | null
+    lastComment: string | null
+    lastDm: string | null
+    dmCount: number
+    commentCount: number
+  } | null
+  keywords: Array<{ id: string; word: string }>
 }
 
 const ActivityFeed: React.FC = () => {
-  const { data, isLoading, error } = useQueryAutomations()
+  const [activities, setActivities] = useState<Activity[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
+  const { userId } = useAuth()
 
   useEffect(() => {
-    console.log('useQueryAutomations result:', { data, isLoading, error })
-  }, [data, isLoading, error])
+    const fetchActivities = async () => {
+      if (!userId) return
 
-  const activities: Activity[] = useMemo(() => {
-    if (!data?.data) return []
+      try {
+        setIsLoading(true)
+        
+        const automationsData = await getAutomations(userId)
+        
+        if (!automationsData || !automationsData.automations) {
+          throw new Error('No automations found')
+        }
 
-    return data.data.flatMap(item => {
-      const activities: Activity[] = []
+        let allActivities: Activity[] = []
 
-      if (item.listener?.lastComment) {
-        activities.push({
-          id: `comment-${item.id}`,
-          type: 'comment',
-          message: item.listener.lastComment,
-          timestamp: new Date(item.createdAt)
+        automationsData.automations.forEach((automation: Automation) => {
+          if (automation.listener) {
+            if (automation.listener.lastComment) {
+              allActivities.push({
+                id: `${automation.id}-comment`,
+                type: 'comment',
+                message: automation.listener.lastComment,
+                timestamp: new Date(automation.createdAt),
+                sender: 'User',
+                receiver: 'Bot'
+              })
+            }
+            if (automation.listener.lastDm) {
+              allActivities.push({
+                id: `${automation.id}-dm`,
+                type: 'dm',
+                message: automation.listener.lastDm,
+                timestamp: new Date(automation.createdAt),
+                sender: 'Bot',
+                receiver: 'User'
+              })
+            }
+          }
         })
-      }
 
-      if (item.listener?.lastDm) {
-        activities.push({
-          id: `dm-${item.id}`,
-          type: 'dm',
-          message: item.listener.lastDm,
-          timestamp: new Date(item.createdAt)
-        })
+        // Sort activities by timestamp (most recent first) and limit to 10
+        allActivities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+        setActivities(allActivities.slice(0, 10))
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('An unknown error occurred'))
+      } finally {
+        setIsLoading(false)
       }
+    }
 
-      return activities
-    }).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()).slice(0, 10)
-  }, [data])
+    fetchActivities()
+  }, [userId])
 
   const renderActivityItem = (activity: Activity) => (
     <div
@@ -345,25 +389,8 @@ const ActivityFeed: React.FC = () => {
           <AlertDescription>
             Failed to load activities. Error details:
             <pre className="mt-2 whitespace-pre-wrap text-xs">
-              {error instanceof Error ? error.message : JSON.stringify(error, null, 2)}
+              {error.message}
             </pre>
-          </AlertDescription>
-        </Alert>
-      )
-    }
-
-    if (!data || !data.data || data.data.length === 0) {
-      return (
-        <Alert>
-          <AlertTitle>No Data</AlertTitle>
-          <AlertDescription>
-            No activities found. This could be due to:
-            <ul className="list-disc list-inside mt-2">
-              <li>No recent comments or DMs</li>
-              <li>Data not properly loaded</li>
-              <li>Unexpected data structure</li>
-            </ul>
-            Check the console for more details.
           </AlertDescription>
         </Alert>
       )
