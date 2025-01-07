@@ -270,8 +270,7 @@ const Navbar = ({ slug }: Props) => {
             <SheetContent side="left" className="w-[300px] bg-[#0e0e0e] text-white p-0">
               <div className="flex flex-col h-full">
                 <div className="flex items-center justify-between p-4">
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: 360 }}
+                  <motion.div                    
                     transition={{ duration: 0.5 }}
                   >
                     <LogoSmall />
