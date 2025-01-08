@@ -513,7 +513,7 @@ export async function getVoiceflowResponse(message: string, userId: string): Pro
         {
           type: 'text',
           payload: {
-            message: "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists.",
+            message: "I'm sorry, but I'm having trouble blablaaaaa.",
           },
         },
       ],
