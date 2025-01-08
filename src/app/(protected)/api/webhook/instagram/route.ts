@@ -1685,86 +1685,36 @@ export async function POST(req: NextRequest) {
             console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
           }
 
-          if (
-            automation.listener &&
-            automation.listener.listener === 'MESSAGE'
-          ) {
-            console.log('Triggering Voiceflow for MESSAGE listener')
+          let voiceflowResponse = "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists.";
+
+          try {
             const response = await getVoiceflowResponse(
               webhook_payload.entry[0].messaging[0].message.text,
               userId
             )
-
-            const voiceflowResponse = processVoiceflowResponse(response)
-            console.log('Processed Voiceflow response:', voiceflowResponse)
-
-            const direct_message = await sendDM(
-              webhook_payload.entry[0].id,
-              webhook_payload.entry[0].messaging[0].sender.id,
-              voiceflowResponse,
-              automation.User?.integrations[0].token!
-            )
-
-            if (direct_message.status === 200) {
-              const tracked = await trackResponses(automation.id, 'DM')
-              if (tracked) {
-                return NextResponse.json(
-                  {
-                    message: 'Message sent',
-                  },
-                  { status: 200 }
-                )
-              }
-            }
+            voiceflowResponse = processVoiceflowResponse(response)
+          } catch (error) {
+            console.error('Error getting or processing Voiceflow response:', error)
           }
 
-          if (
-            automation.listener &&
-            automation.listener.listener === 'SMARTAI' &&
-            automation.User?.subscription?.plan === 'PRO'
-          ) {
-            console.log('Triggering Voiceflow for SMARTAI listener')
-            const response = await getVoiceflowResponse(
-              webhook_payload.entry[0].messaging[0].message.text,
-              userId
-            )
+          console.log('Processed Voiceflow response:', voiceflowResponse)
 
-            const voiceflowResponse = processVoiceflowResponse(response)
-            console.log('Processed Voiceflow response:', voiceflowResponse)
+          const direct_message = await sendDM(
+            webhook_payload.entry[0].id,
+            webhook_payload.entry[0].messaging[0].sender.id,
+            voiceflowResponse,
+            automation.User?.integrations[0].token!
+          )
 
-            const reciever = createChatHistory(
-              automation.id,
-              webhook_payload.entry[0].id,
-              webhook_payload.entry[0].messaging[0].sender.id,
-              webhook_payload.entry[0].messaging[0].message.text
-            )
-
-            const sender = createChatHistory(
-              automation.id,
-              webhook_payload.entry[0].id,
-              webhook_payload.entry[0].messaging[0].sender.id,
-              voiceflowResponse
-            )
-
-            await client.$transaction([reciever, sender])
-
-            const direct_message = await sendDM(
-              webhook_payload.entry[0].id,
-              webhook_payload.entry[0].messaging[0].sender.id,
-              voiceflowResponse,
-              automation.User?.integrations[0].token!
-            )
-
-            if (direct_message.status === 200) {
-              const tracked = await trackResponses(automation.id, 'DM')
-              if (tracked) {
-                return NextResponse.json(
-                  {
-                    message: 'Message sent',
-                  },
-                  { status: 200 }
-                )
-              }
+          if (direct_message.status === 200) {
+            const tracked = await trackResponses(automation.id, 'DM')
+            if (tracked) {
+              return NextResponse.json(
+                {
+                  message: 'Message sent',
+                },
+                { status: 200 }
+              )
             }
           }
         }
@@ -1968,6 +1918,4 @@ export async function POST(req: NextRequest) {
     )
   }
 }
-
-
 

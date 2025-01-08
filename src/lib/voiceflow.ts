@@ -275,8 +275,8 @@ async function retryVoiceflowCall<T>(fn: () => Promise<T>, maxRetries = 3): Prom
     try {
       return await callVoiceflowWithRateLimit(fn);
     } catch (error) {
+      console.error(`Voiceflow API call failed (attempt ${i + 1}/${maxRetries}):`, error);
       if (i === maxRetries - 1) throw error;
-      console.warn(`Voiceflow API call failed, retrying (${i + 1}/${maxRetries})...`);
       await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
     }
   }
@@ -284,36 +284,51 @@ async function retryVoiceflowCall<T>(fn: () => Promise<T>, maxRetries = 3): Prom
 }
 
 export async function getVoiceflowResponse(message: string, userId: string): Promise<VoiceflowResponse> {
-  return retryVoiceflowCall(async () => {
-    const response = await fetch(`${VOICEFLOW_API_URL}/state/user/${userId}/interact`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${VOICEFLOW_API_KEY}`,
-      },
-      body: JSON.stringify({
-        action: {
-          type: 'text',
-          payload: message,
+  try {
+    return await retryVoiceflowCall(async () => {
+      const response = await fetch(`${VOICEFLOW_API_URL}/state/user/${userId}/interact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${VOICEFLOW_API_KEY}`,
         },
-        config: {
-          tts: false,
-          stripSSML: true,
-        },
-        versionID: VOICEFLOW_VERSION_ID,
-      }),
+        body: JSON.stringify({
+          action: {
+            type: 'text',
+            payload: message,
+          },
+          config: {
+            tts: false,
+            stripSSML: true,
+          },
+          versionID: VOICEFLOW_VERSION_ID,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.text();
+        console.error(`Voiceflow API error (${response.status}):`, errorBody);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data: VoiceflowResponse = await response.json();
+      console.log('Voiceflow raw response:', JSON.stringify(data, null, 2));
+      return data;
     });
-
-    if (!response.ok) {
-      const errorBody = await response.text();
-      console.error(`Voiceflow API error (${response.status}):`, errorBody);
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data: VoiceflowResponse = await response.json();
-    console.log('Voiceflow raw response:', JSON.stringify(data, null, 2));
-    return data;
-  });
+  } catch (error) {
+    console.error('Failed to get Voiceflow response after retries:', error);
+    // Return a default response
+    return {
+      trace: [
+        {
+          type: 'text',
+          payload: {
+            message: "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists."
+          }
+        }
+      ]
+    };
+  }
 }
 
 export function processVoiceflowResponse(response: VoiceflowResponse): string {
@@ -321,7 +336,7 @@ export function processVoiceflowResponse(response: VoiceflowResponse): string {
 
   if (!response || !response.trace || !Array.isArray(response.trace)) {
     console.warn('Invalid Voiceflow response structure:', JSON.stringify(response, null, 2));
-    return 'Sorry, I couldnot process the response. Please try again.';
+    return 'Sorry, I couldn't process the response. Please try again.';
   }
 
   for (const trace of response.trace) {
@@ -359,30 +374,35 @@ export function processVoiceflowResponse(response: VoiceflowResponse): string {
 
   const trimmedResponse = processedResponse.trim();
   console.log('Processed Voiceflow response:', trimmedResponse);
-  return trimmedResponse || 'Sorry, I couldnot generate a response. Please try again.';
+  return trimmedResponse || 'Sorry, I couldn't generate a response. Please try again.';
 }
 
 export async function createVoiceflowUser(userId: string): Promise<boolean> {
-  return retryVoiceflowCall(async () => {
-    const response = await fetch(`${VOICEFLOW_API_URL}/state/user/${userId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${VOICEFLOW_API_KEY}`,
-      },
-      body: JSON.stringify({
-        versionID: VOICEFLOW_VERSION_ID,
-      }),
+  try {
+    return await retryVoiceflowCall(async () => {
+      const response = await fetch(`${VOICEFLOW_API_URL}/state/user/${userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${VOICEFLOW_API_KEY}`,
+        },
+        body: JSON.stringify({
+          versionID: VOICEFLOW_VERSION_ID,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.text();
+        console.error(`Voiceflow API error (${response.status}):`, errorBody);
+        return false;
+      }
+
+      console.log(`Voiceflow user created successfully: ${userId}`);
+      return true;
     });
-
-    if (!response.ok) {
-      const errorBody = await response.text();
-      console.error(`Voiceflow API error (${response.status}):`, errorBody);
-      return false;
-    }
-
-    console.log(`Voiceflow user created successfully: ${userId}`);
-    return true;
-  });
+  } catch (error) {
+    console.error('Failed to create Voiceflow user after retries:', error);
+    return false;
+  }
 }
 
