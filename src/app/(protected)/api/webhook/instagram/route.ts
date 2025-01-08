@@ -1685,7 +1685,7 @@ export async function POST(req: NextRequest) {
             console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
           }
 
-          let voiceflowResponse = "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists.";
+          let voiceflowResponse = "Imm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists.";
 
           try {
             const response = await getVoiceflowResponse(
