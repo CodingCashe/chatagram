@@ -323,7 +323,7 @@ export async function getVoiceflowResponse(message: string, userId: string): Pro
         {
           type: 'text',
           payload: {
-            message: "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists."
+            message: "Sorry, but I am having trouble processing your request right now. Please try again later or contact support if the issue persists."
           }
         }
       ]
@@ -336,7 +336,7 @@ export function processVoiceflowResponse(response: VoiceflowResponse): string {
 
   if (!response || !response.trace || !Array.isArray(response.trace)) {
     console.warn('Invalid Voiceflow response structure:', JSON.stringify(response, null, 2));
-    return 'Sorry, I couldn't process the response. Please try again.';
+    return 'Sorry, I couldnt process the response. Please try again.';
   }
 
   for (const trace of response.trace) {
@@ -374,7 +374,7 @@ export function processVoiceflowResponse(response: VoiceflowResponse): string {
 
   const trimmedResponse = processedResponse.trim();
   console.log('Processed Voiceflow response:', trimmedResponse);
-  return trimmedResponse || 'Sorry, I couldn't generate a response. Please try again.';
+  return trimmedResponse || 'Sorry, I couldntttt generate a response. Please try again.';
 }
 
 export async function createVoiceflowUser(userId: string): Promise<boolean> {
