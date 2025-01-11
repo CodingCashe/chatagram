@@ -2277,18 +2277,9 @@ export async function POST(req: NextRequest) {
 
         // Get Voiceflow response
         const response = await getVoiceflowResponse(userInput, userId);
-        const { text: voiceflowResponseText, buttons } = processVoiceflowResponse(response);
+        const messageToSend = processVoiceflowResponse(response);
 
-        console.log('Processed Voiceflow response:', voiceflowResponseText);
-
-        // Prepare the message to be sent
-        let messageToSend = voiceflowResponseText;
-        if (buttons.length > 0) {
-          messageToSend += '\n\nOptions:';
-          buttons.forEach((button, index) => {
-            messageToSend += `\n${index + 1}. ${button.title}`;
-          });
-        }
+        console.log('Processed Voiceflow response:', messageToSend);
 
         // Send the message
         const messageSent = isMessaging
