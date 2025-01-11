@@ -1919,298 +1919,6 @@
 //   }
 // }
 
-// import { NextRequest, NextResponse } from 'next/server'
-// import { findAutomation } from '@/actions/automations/queries'
-// import {
-//   createChatHistory,
-//   getChatHistory,
-//   getKeywordAutomation,
-//   getKeywordPost,
-//   matchKeyword,
-//   trackResponses,
-// } from '@/actions/webhook/queries'
-// import { sendDM, sendPrivateMessage } from '@/lib/fetch'
-// import { client } from '@/lib/prisma'
-// import { getVoiceflowResponse, processVoiceflowResponse, createVoiceflowUser } from '@/lib/voiceflow'
-
-// export async function GET(req: NextRequest) {
-//   const hub = req.nextUrl.searchParams.get('hub.challenge')
-//   return new NextResponse(hub)
-// }
-
-// export async function POST(req: NextRequest) {
-//   const webhook_payload = await req.json()
-//   let matcher
-
-//   try {
-//     console.log('Received webhook payload:', JSON.stringify(webhook_payload, null, 2))
-
-//     if (webhook_payload.entry[0].messaging) {
-//       matcher = await matchKeyword(
-//         webhook_payload.entry[0].messaging[0].message.text
-//       )
-//     }
-
-//     if (webhook_payload.entry[0].changes) {
-//       matcher = await matchKeyword(
-//         webhook_payload.entry[0].changes[0].value.text
-//       )
-//     }
-
-//     if (matcher && matcher.automationId) {
-//       console.log('Matched keyword, automationId:', matcher.automationId)
-
-//       if (webhook_payload.entry[0].messaging) {
-//         console.log('Processing messaging event')
-//         const automation = await getKeywordAutomation(
-//           matcher.automationId,
-//           true
-//         )
-
-//         if (automation && automation.trigger) {
-//           console.log('Automation found:', automation.id)
-//           const userId = `${webhook_payload.entry[0].id}_${webhook_payload.entry[0].messaging[0].sender.id}`
-          
-//           console.log('Attempting to create Voiceflow user:', userId)
-//           const userCreated = await createVoiceflowUser(userId)
-//           if (!userCreated) {
-//             console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
-//           }
-
-//           let voiceflowResponse = "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists.";
-
-//           try {
-//             const response = await getVoiceflowResponse(
-//               webhook_payload.entry[0].messaging[0].message.text,
-//               userId
-//             )
-//             voiceflowResponse = processVoiceflowResponse(response)
-//           } catch (error) {
-//             console.error('Error getting or processing Voiceflow response:', error)
-//           }
-
-//           console.log('Processed Voiceflow response:', voiceflowResponse)
-
-//           const direct_message = await sendDM(
-//             webhook_payload.entry[0].id,
-//             webhook_payload.entry[0].messaging[0].sender.id,
-//             voiceflowResponse,
-//             automation.User?.integrations[0].token!
-//           )
-
-//           if (direct_message.status === 200) {
-//             const tracked = await trackResponses(automation.id, 'DM')
-//             if (tracked) {
-//               return NextResponse.json(
-//                 {
-//                   message: 'Message sent',
-//                 },
-//                 { status: 200 }
-//               )
-//             }
-//           }
-//         }
-//       }
-
-//       if (
-//         webhook_payload.entry[0].changes &&
-//         webhook_payload.entry[0].changes[0].field === 'comments'
-//       ) {
-//         const automation = await getKeywordAutomation(
-//           matcher.automationId,
-//           false
-//         )
-
-//         const automations_post = await getKeywordPost(
-//           webhook_payload.entry[0].changes[0].value.media.id,
-//           automation?.id!
-//         )
-
-//         if (automation && automations_post && automation.trigger) {
-//           console.log('Matched comment automation')
-//           if (automation.listener) {
-//             console.log('Processing comment automation')
-//             const userId = `${webhook_payload.entry[0].id}_${webhook_payload.entry[0].changes[0].value.from.id}`
-            
-//             console.log('Attempting to create Voiceflow user:', userId)
-//             const userCreated = await createVoiceflowUser(userId)
-//             if (!userCreated) {
-//               console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
-//             }
-
-//             if (automation.listener.listener === 'MESSAGE') {
-//               console.log('Triggering Voiceflow for MESSAGE comment listener')
-//               const response = await getVoiceflowResponse(
-//                 webhook_payload.entry[0].changes[0].value.text,
-//                 userId
-//               )
-
-//               const voiceflowResponse = processVoiceflowResponse(response)
-//               console.log('Processed Voiceflow response:', voiceflowResponse)
-
-//               const direct_message = await sendPrivateMessage(
-//                 webhook_payload.entry[0].id,
-//                 webhook_payload.entry[0].changes[0].value.id,
-//                 voiceflowResponse,
-//                 automation.User?.integrations[0].token!
-//               )
-
-//               console.log('DM sent:', direct_message.data)
-//               if (direct_message.status === 200) {
-//                 const tracked = await trackResponses(automation.id, 'COMMENT')
-
-//                 if (tracked) {
-//                   return NextResponse.json(
-//                     {
-//                       message: 'Message sent',
-//                     },
-//                     { status: 200 }
-//                   )
-//                 }
-//               }
-//             }
-//             if (
-//               automation.listener.listener === 'SMARTAI' &&
-//               automation.User?.subscription?.plan === 'PRO'
-//             ) {
-//               console.log('Triggering Voiceflow for SMARTAI comment listener')
-//               const response = await getVoiceflowResponse(
-//                 webhook_payload.entry[0].changes[0].value.text,
-//                 userId
-//               )
-
-//               const voiceflowResponse = processVoiceflowResponse(response)
-//               console.log('Processed Voiceflow response:', voiceflowResponse)
-
-//               const reciever = createChatHistory(
-//                 automation.id,
-//                 webhook_payload.entry[0].id,
-//                 webhook_payload.entry[0].changes[0].value.from.id,
-//                 webhook_payload.entry[0].changes[0].value.text
-//               )
-
-//               const sender = createChatHistory(
-//                 automation.id,
-//                 webhook_payload.entry[0].id,
-//                 webhook_payload.entry[0].changes[0].value.from.id,
-//                 voiceflowResponse
-//               )
-
-//               await client.$transaction([reciever, sender])
-
-//               const direct_message = await sendPrivateMessage(
-//                 webhook_payload.entry[0].id,
-//                 webhook_payload.entry[0].changes[0].value.id,
-//                 voiceflowResponse,
-//                 automation.User?.integrations[0].token!
-//               )
-
-//               if (direct_message.status === 200) {
-//                 const tracked = await trackResponses(automation.id, 'COMMENT')
-
-//                 if (tracked) {
-//                   return NextResponse.json(
-//                     {
-//                       message: 'Message sent',
-//                     },
-//                     { status: 200 }
-//                   )
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-
-//     if (!matcher) {
-//       const customer_history = await getChatHistory(
-//         webhook_payload.entry[0].messaging[0].recipient.id,
-//         webhook_payload.entry[0].messaging[0].sender.id
-//       )
-
-//       if (customer_history.history.length > 0) {
-//         const automation = await findAutomation(customer_history.automationId!)
-
-//         if (
-//           automation?.User?.subscription?.plan === 'PRO' &&
-//           automation.listener?.listener === 'SMARTAI'
-//         ) {
-//           const userId = `${webhook_payload.entry[0].messaging[0].recipient.id}_${webhook_payload.entry[0].messaging[0].sender.id}`
-          
-//           console.log('Attempting to create Voiceflow user:', userId)
-//           const userCreated = await createVoiceflowUser(userId)
-//           if (!userCreated) {
-//             console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
-//           }
-
-//           console.log('Triggering Voiceflow for unmatched SMARTAI message')
-//           const response = await getVoiceflowResponse(
-//             webhook_payload.entry[0].messaging[0].message.text,
-//             userId
-//           )
-
-//           const voiceflowResponse = processVoiceflowResponse(response)
-//           console.log('Processed Voiceflow response:', voiceflowResponse)
-
-//           const reciever = createChatHistory(
-//             automation.id,
-//             webhook_payload.entry[0].id,
-//             webhook_payload.entry[0].messaging[0].sender.id,
-//             webhook_payload.entry[0].messaging[0].message.text
-//           )
-
-//           const sender = createChatHistory(
-//             automation.id,
-//             webhook_payload.entry[0].id,
-//             webhook_payload.entry[0].messaging[0].sender.id,
-//             voiceflowResponse
-//           )
-//           await client.$transaction([reciever, sender])
-
-//           const direct_message = await sendDM(
-//             webhook_payload.entry[0].id,
-//             webhook_payload.entry[0].messaging[0].sender.id,
-//             voiceflowResponse,
-//             automation.User?.integrations[0].token!
-//           )
-
-//           if (direct_message.status === 200) {
-//             return NextResponse.json(
-//               {
-//                 message: 'Message sent',
-//               },
-//               { status: 200 }
-//             )
-//           }
-//         }
-//       }
-
-//       return NextResponse.json(
-//         {
-//           message: 'No automation set',
-//         },
-//         { status: 200 }
-//       )
-//     }
-//     return NextResponse.json(
-//       {
-//         message: 'No automation set',
-//       },
-//       { status: 200 }
-//     )
-//   } catch (error) {
-//     console.error('Unhandled error in POST function:', error)
-//     return NextResponse.json(
-//       {
-//         message: 'Error processing request',
-//         error: error instanceof Error ? error.message : String(error),
-//       },
-//       { status: 500 }
-//     )
-//   }
-// }
-
 import { NextRequest, NextResponse } from 'next/server'
 import { findAutomation } from '@/actions/automations/queries'
 import {
@@ -2237,103 +1945,395 @@ export async function POST(req: NextRequest) {
   try {
     console.log('Received webhook payload:', JSON.stringify(webhook_payload, null, 2))
 
-    const isMessaging = !!webhook_payload.entry[0].messaging;
-    const isComment = webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === 'comments';
+    if (webhook_payload.entry[0].messaging) {
+      matcher = await matchKeyword(
+        webhook_payload.entry[0].messaging[0].message.text
+      )
+    }
 
-    if (isMessaging || isComment) {
-      const userInput = isMessaging
-        ? webhook_payload.entry[0].messaging[0].message.text
-        : webhook_payload.entry[0].changes[0].value.text;
+    if (webhook_payload.entry[0].changes) {
+      matcher = await matchKeyword(
+        webhook_payload.entry[0].changes[0].value.text
+      )
+    }
 
-      const userId = isMessaging
-        ? `${webhook_payload.entry[0].id}_${webhook_payload.entry[0].messaging[0].sender.id}`
-        : `${webhook_payload.entry[0].id}_${webhook_payload.entry[0].changes[0].value.from.id}`;
+    if (matcher && matcher.automationId) {
+      console.log('Matched keyword, automationId:', matcher.automationId)
 
-      let automation;
+      if (webhook_payload.entry[0].messaging) {
+        console.log('Processing messaging event')
+        const automation = await getKeywordAutomation(
+          matcher.automationId,
+          true
+        )
 
-      // Check for existing conversation or keyword match
-      const customerHistory = await getChatHistory(
-        webhook_payload.entry[0].id,
-        isMessaging ? webhook_payload.entry[0].messaging[0].sender.id : webhook_payload.entry[0].changes[0].value.from.id
-      );
+        if (automation && automation.trigger) {
+          console.log('Automation found:', automation.id)
+          const userId = `${webhook_payload.entry[0].id}_${webhook_payload.entry[0].messaging[0].sender.id}`
+          
+          console.log('Attempting to create Voiceflow user:', userId)
+          const userCreated = await createVoiceflowUser(userId)
+          if (!userCreated) {
+            console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
+          }
 
-      if (customerHistory.history.length > 0) {
-        automation = await findAutomation(customerHistory.automationId!);
-      } else {
-        matcher = await matchKeyword(userInput);
-        if (matcher && matcher.automationId) {
-          automation = await getKeywordAutomation(matcher.automationId, isMessaging);
+          let voiceflowResponse = "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists.";
+
+          try {
+            const response = await getVoiceflowResponse(
+              webhook_payload.entry[0].messaging[0].message.text,
+              userId
+            )
+            voiceflowResponse = processVoiceflowResponse(response)
+          } catch (error) {
+            console.error('Error getting or processing Voiceflow response:', error)
+          }
+
+          console.log('Processed Voiceflow response:', voiceflowResponse)
+
+          const direct_message = await sendDM(
+            webhook_payload.entry[0].id,
+            webhook_payload.entry[0].messaging[0].sender.id,
+            voiceflowResponse,
+            automation.User?.integrations[0].token!
+          )
+
+          if (direct_message.status === 200) {
+            const tracked = await trackResponses(automation.id, 'DM')
+            if (tracked) {
+              return NextResponse.json(
+                {
+                  message: 'Message sent',
+                },
+                { status: 200 }
+              )
+            }
+          }
         }
       }
 
-      if (automation && (automation.trigger || (automation.User?.subscription?.plan === 'PRO' && automation.listener?.listener === 'SMARTAI'))) {
-        console.log('Processing message with Voiceflow');
+      if (
+        webhook_payload.entry[0].changes &&
+        webhook_payload.entry[0].changes[0].field === 'comments'
+      ) {
+        const automation = await getKeywordAutomation(
+          matcher.automationId,
+          false
+        )
 
-        // Ensure Voiceflow user exists
-        const userCreated = await createVoiceflowUser(userId);
-        if (!userCreated) {
-          console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`);
-        }
+        const automations_post = await getKeywordPost(
+          webhook_payload.entry[0].changes[0].value.media.id,
+          automation?.id!
+        )
 
-        // Get Voiceflow response
-        const response = await getVoiceflowResponse(userInput, userId);
-        const messageToSend = processVoiceflowResponse(response);
+        if (automation && automations_post && automation.trigger) {
+          console.log('Matched comment automation')
+          if (automation.listener) {
+            console.log('Processing comment automation')
+            const userId = `${webhook_payload.entry[0].id}_${webhook_payload.entry[0].changes[0].value.from.id}`
+            
+            console.log('Attempting to create Voiceflow user:', userId)
+            const userCreated = await createVoiceflowUser(userId)
+            if (!userCreated) {
+              console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
+            }
 
-        console.log('Processed Voiceflow response:', messageToSend);
+            if (automation.listener.listener === 'MESSAGE') {
+              console.log('Triggering Voiceflow for MESSAGE comment listener')
+              const response = await getVoiceflowResponse(
+                webhook_payload.entry[0].changes[0].value.text,
+                userId
+              )
 
-        // Send the message
-        const messageSent = isMessaging
-          ? await sendDM(
-              webhook_payload.entry[0].id,
-              webhook_payload.entry[0].messaging[0].sender.id,
-              messageToSend,
-              automation.User?.integrations[0].token!
-            )
-          : await sendPrivateMessage(
-              webhook_payload.entry[0].id,
-              webhook_payload.entry[0].changes[0].value.id,
-              messageToSend,
-              automation.User?.integrations[0].token!
-            );
+              const voiceflowResponse = processVoiceflowResponse(response)
+              console.log('Processed Voiceflow response:', voiceflowResponse)
 
-        if (messageSent.status === 200) {
-          // Update chat history
-          const receiver = createChatHistory(
-            automation.id,
-            webhook_payload.entry[0].id,
-            isMessaging ? webhook_payload.entry[0].messaging[0].sender.id : webhook_payload.entry[0].changes[0].value.from.id,
-            userInput
-          );
+              const direct_message = await sendPrivateMessage(
+                webhook_payload.entry[0].id,
+                webhook_payload.entry[0].changes[0].value.id,
+                voiceflowResponse,
+                automation.User?.integrations[0].token!
+              )
 
-          const sender = createChatHistory(
-            automation.id,
-            webhook_payload.entry[0].id,
-            isMessaging ? webhook_payload.entry[0].messaging[0].sender.id : webhook_payload.entry[0].changes[0].value.from.id,
-            messageToSend
-          );
+              console.log('DM sent:', direct_message.data)
+              if (direct_message.status === 200) {
+                const tracked = await trackResponses(automation.id, 'COMMENT')
 
-          await client.$transaction([receiver, sender]);
+                if (tracked) {
+                  return NextResponse.json(
+                    {
+                      message: 'Message sent',
+                    },
+                    { status: 200 }
+                  )
+                }
+              }
+            }
+            if (
+              automation.listener.listener === 'SMARTAI' &&
+              automation.User?.subscription?.plan === 'PRO'
+            ) {
+              console.log('Triggering Voiceflow for SMARTAI comment listener')
+              const response = await getVoiceflowResponse(
+                webhook_payload.entry[0].changes[0].value.text,
+                userId
+              )
 
-          // Track response
-          const tracked = await trackResponses(automation.id, isMessaging ? 'DM' : 'COMMENT');
+              const voiceflowResponse = processVoiceflowResponse(response)
+              console.log('Processed Voiceflow response:', voiceflowResponse)
 
-          if (tracked) {
-            return NextResponse.json({ message: 'Message sent' }, { status: 200 });
+              const reciever = createChatHistory(
+                automation.id,
+                webhook_payload.entry[0].id,
+                webhook_payload.entry[0].changes[0].value.from.id,
+                webhook_payload.entry[0].changes[0].value.text
+              )
+
+              const sender = createChatHistory(
+                automation.id,
+                webhook_payload.entry[0].id,
+                webhook_payload.entry[0].changes[0].value.from.id,
+                voiceflowResponse
+              )
+
+              await client.$transaction([reciever, sender])
+
+              const direct_message = await sendPrivateMessage(
+                webhook_payload.entry[0].id,
+                webhook_payload.entry[0].changes[0].value.id,
+                voiceflowResponse,
+                automation.User?.integrations[0].token!
+              )
+
+              if (direct_message.status === 200) {
+                const tracked = await trackResponses(automation.id, 'COMMENT')
+
+                if (tracked) {
+                  return NextResponse.json(
+                    {
+                      message: 'Message sent',
+                    },
+                    { status: 200 }
+                  )
+                }
+              }
+            }
           }
         }
       }
     }
 
-    return NextResponse.json({ message: 'No automation set' }, { status: 200 });
+    if (!matcher) {
+      const customer_history = await getChatHistory(
+        webhook_payload.entry[0].messaging[0].recipient.id,
+        webhook_payload.entry[0].messaging[0].sender.id
+      )
+
+      if (customer_history.history.length > 0) {
+        const automation = await findAutomation(customer_history.automationId!)
+
+        if (
+          automation?.User?.subscription?.plan === 'PRO' &&
+          automation.listener?.listener === 'SMARTAI'
+        ) {
+          const userId = `${webhook_payload.entry[0].messaging[0].recipient.id}_${webhook_payload.entry[0].messaging[0].sender.id}`
+          
+          console.log('Attempting to create Voiceflow user:', userId)
+          const userCreated = await createVoiceflowUser(userId)
+          if (!userCreated) {
+            console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
+          }
+
+          console.log('Triggering Voiceflow for unmatched SMARTAI message')
+          const response = await getVoiceflowResponse(
+            webhook_payload.entry[0].messaging[0].message.text,
+            userId
+          )
+
+          const voiceflowResponse = processVoiceflowResponse(response)
+          console.log('Processed Voiceflow response:', voiceflowResponse)
+
+          const reciever = createChatHistory(
+            automation.id,
+            webhook_payload.entry[0].id,
+            webhook_payload.entry[0].messaging[0].sender.id,
+            webhook_payload.entry[0].messaging[0].message.text
+          )
+
+          const sender = createChatHistory(
+            automation.id,
+            webhook_payload.entry[0].id,
+            webhook_payload.entry[0].messaging[0].sender.id,
+            voiceflowResponse
+          )
+          await client.$transaction([reciever, sender])
+
+          const direct_message = await sendDM(
+            webhook_payload.entry[0].id,
+            webhook_payload.entry[0].messaging[0].sender.id,
+            voiceflowResponse,
+            automation.User?.integrations[0].token!
+          )
+
+          if (direct_message.status === 200) {
+            return NextResponse.json(
+              {
+                message: 'Message sent',
+              },
+              { status: 200 }
+            )
+          }
+        }
+      }
+
+      return NextResponse.json(
+        {
+          message: 'No automation set',
+        },
+        { status: 200 }
+      )
+    }
+    return NextResponse.json(
+      {
+        message: 'No automation set',
+      },
+      { status: 200 }
+    )
   } catch (error) {
-    console.error('Unhandled error in POST function:', error);
+    console.error('Unhandled error in POST function:', error)
     return NextResponse.json(
       {
         message: 'Error processing request',
         error: error instanceof Error ? error.message : String(error),
       },
       { status: 500 }
-    );
+    )
   }
 }
+
+// import { NextRequest, NextResponse } from 'next/server'
+// import { findAutomation } from '@/actions/automations/queries'
+// import {
+//   createChatHistory,
+//   getChatHistory,
+//   getKeywordAutomation,
+//   getKeywordPost,
+//   matchKeyword,
+//   trackResponses,
+// } from '@/actions/webhook/queries'
+// import { sendDM, sendPrivateMessage } from '@/lib/fetch'
+// import { client } from '@/lib/prisma'
+// import { getVoiceflowResponse, processVoiceflowResponse, createVoiceflowUser } from '@/lib/voiceflow'
+
+// export async function GET(req: NextRequest) {
+//   const hub = req.nextUrl.searchParams.get('hub.challenge')
+//   return new NextResponse(hub)
+// }
+
+// export async function POST(req: NextRequest) {
+//   const webhook_payload = await req.json()
+//   let matcher
+
+//   try {
+//     console.log('Received webhook payload:', JSON.stringify(webhook_payload, null, 2))
+
+//     const isMessaging = !!webhook_payload.entry[0].messaging;
+//     const isComment = webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === 'comments';
+
+//     if (isMessaging || isComment) {
+//       const userInput = isMessaging
+//         ? webhook_payload.entry[0].messaging[0].message.text
+//         : webhook_payload.entry[0].changes[0].value.text;
+
+//       const userId = isMessaging
+//         ? `${webhook_payload.entry[0].id}_${webhook_payload.entry[0].messaging[0].sender.id}`
+//         : `${webhook_payload.entry[0].id}_${webhook_payload.entry[0].changes[0].value.from.id}`;
+
+//       let automation;
+
+//       // Check for existing conversation or keyword match
+//       const customerHistory = await getChatHistory(
+//         webhook_payload.entry[0].id,
+//         isMessaging ? webhook_payload.entry[0].messaging[0].sender.id : webhook_payload.entry[0].changes[0].value.from.id
+//       );
+
+//       if (customerHistory.history.length > 0) {
+//         automation = await findAutomation(customerHistory.automationId!);
+//       } else {
+//         matcher = await matchKeyword(userInput);
+//         if (matcher && matcher.automationId) {
+//           automation = await getKeywordAutomation(matcher.automationId, isMessaging);
+//         }
+//       }
+
+//       if (automation && (automation.trigger || (automation.User?.subscription?.plan === 'PRO' && automation.listener?.listener === 'SMARTAI'))) {
+//         console.log('Processing message with Voiceflow');
+
+//         // Ensure Voiceflow user exists
+//         const userCreated = await createVoiceflowUser(userId);
+//         if (!userCreated) {
+//           console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`);
+//         }
+
+//         // Get Voiceflow response
+//         const response = await getVoiceflowResponse(userInput, userId);
+//         const messageToSend = processVoiceflowResponse(response);
+
+//         console.log('Processed Voiceflow response:', messageToSend);
+
+//         // Send the message
+//         const messageSent = isMessaging
+//           ? await sendDM(
+//               webhook_payload.entry[0].id,
+//               webhook_payload.entry[0].messaging[0].sender.id,
+//               messageToSend,
+//               automation.User?.integrations[0].token!
+//             )
+//           : await sendPrivateMessage(
+//               webhook_payload.entry[0].id,
+//               webhook_payload.entry[0].changes[0].value.id,
+//               messageToSend,
+//               automation.User?.integrations[0].token!
+//             );
+
+//         if (messageSent.status === 200) {
+//           // Update chat history
+//           const receiver = createChatHistory(
+//             automation.id,
+//             webhook_payload.entry[0].id,
+//             isMessaging ? webhook_payload.entry[0].messaging[0].sender.id : webhook_payload.entry[0].changes[0].value.from.id,
+//             userInput
+//           );
+
+//           const sender = createChatHistory(
+//             automation.id,
+//             webhook_payload.entry[0].id,
+//             isMessaging ? webhook_payload.entry[0].messaging[0].sender.id : webhook_payload.entry[0].changes[0].value.from.id,
+//             messageToSend
+//           );
+
+//           await client.$transaction([receiver, sender]);
+
+//           // Track response
+//           const tracked = await trackResponses(automation.id, isMessaging ? 'DM' : 'COMMENT');
+
+//           if (tracked) {
+//             return NextResponse.json({ message: 'Message sent' }, { status: 200 });
+//           }
+//         }
+//       }
+//     }
+
+//     return NextResponse.json({ message: 'No automation set' }, { status: 200 });
+//   } catch (error) {
+//     console.error('Unhandled error in POST function:', error);
+//     return NextResponse.json(
+//       {
+//         message: 'Error processing request',
+//         error: error instanceof Error ? error.message : String(error),
+//       },
+//       { status: 500 }
+//     );
+//   }
+// }
 
