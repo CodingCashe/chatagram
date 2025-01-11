@@ -691,32 +691,19 @@ export async function getVoiceflowResponse(userInput: string, userId: string): P
   }
 }
 
-export function processVoiceflowResponse(traces: VoiceflowResponse[]): { text: string, buttons: any[] } {
-  let text = '';
-  let buttons: any[] = [];
-
+export function processVoiceflowResponse(traces: VoiceflowResponse[]): string {
+  let result = '';
   for (let trace of traces) {
-    switch (trace.type) {
-      case 'text':
-        text += trace.payload.message + '\n';
-        break;
-      case 'choice':
-        buttons = trace.payload.buttons.map((button: any) => ({
-          type: 'postback',
-          title: button.name,
-          payload: button.request.payload
-        }));
-        break;
-      case 'end':
-        // Handle end of conversation if needed
-        break;
-      default:
-        // Handle other trace types if needed
-        break;
+    if (trace.type === 'text') {
+      result += trace.payload.message + '\n';
+    } else if (trace.type === 'choice') {
+      result += '\nOptions:\n';
+      for (let button of trace.payload.buttons) {
+        result += `- ${button.name}\n`;
+      }
     }
   }
-
-  return { text: text.trim(), buttons };
+  return result.trim();
 }
 
 export async function createVoiceflowUser(userId: string): Promise<boolean> {
@@ -763,5 +750,4 @@ export async function resetVoiceflowUser(userId: string): Promise<boolean> {
     return false;
   }
 }
-
 
