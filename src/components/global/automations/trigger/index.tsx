@@ -145,7 +145,7 @@ const Trigger = ({ id }: Props) => {
   return (
     <TriggerButton label="Add Trigger">
       <div className="flex flex-col gap-y-4 bg-background-90 p-6 rounded-2xl shadow-xl">
-      <ScrollArea className="h-[60vh] pr-4">
+      <ScrollArea>
         {AUTOMATION_TRIGGERS.map((trigger) => (
           <motion.div
             key={trigger.id}
