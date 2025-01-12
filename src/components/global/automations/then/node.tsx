@@ -67,7 +67,7 @@ import { useQueryAutomation } from '@/hooks/user-queries'
 import { PlaneBlue, SmartAi, Warning } from '@/icons'
 import React from 'react'
 import PostButton from '../post'
-import { motion } from 'framer-motion'
+import { motion, type MotionProps } from 'framer-motion'
 
 type Props = {
   id: string
@@ -82,7 +82,7 @@ const ThenNode = ({ id }: Props) => {
   }
 
   return (
-    <motion
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="w-full lg:w-10/12 relative xl:w-6/12 p-1 rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"
@@ -97,15 +97,15 @@ const ThenNode = ({ id }: Props) => {
           <span className="h-[9px] w-[9px] bg-blue-500 rounded-full animate-pulse" />
         </div>
         <div className="flex gap-x-2 items-center bg-background-80 p-3 rounded-xl shadow-inner">
-          <Warning className="text-yellow-400" />
+          <Warning />
           <span className="text-lg font-semibold">Then...</span>
         </div>
         <div className="bg-background-80 p-4 rounded-xl flex flex-col gap-y-3 shadow-lg">
           <div className="flex gap-x-3 items-center">
             {data.data.listener.listener === 'MESSAGE' ? (
-              <PlaneBlue className="text-blue-400 w-8 h-8" />
+              <PlaneBlue  />
             ) : (
-              <SmartAi className="text-green-400 w-8 h-8" />
+              <SmartAi />
             )}
             <p className="text-xl font-semibold">
               {data.data.listener.listener === 'MESSAGE'
@@ -121,7 +121,7 @@ const ThenNode = ({ id }: Props) => {
           <PostButton id={id} />
         ) : null}
       </div>
-    </motion>
+    </motion.div>
   )
 }
 
