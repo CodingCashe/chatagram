@@ -454,7 +454,6 @@ const PopOver = ({ children, trigger, className }: Props) => {
   const [maxHeight, setMaxHeight] = useState<string>('auto')
   const [maxWidth, setMaxWidth] = useState<string>('auto')
   const contentRef = useRef<HTMLDivElement>(null)
-  const particleRef = useRef<HTMLDivElement>(null)
   const isMobile = useMediaQuery('(max-width: 640px)')
 
   useEffect(() => {
@@ -481,46 +480,6 @@ const PopOver = ({ children, trigger, className }: Props) => {
     return () => window.removeEventListener('resize', updateDimensions)
   }, [])
 
-  useEffect(() => {
-    const particle = particleRef.current
-    if (!particle || !contentRef.current) return
-
-    let position = 0
-    let color = 0
-
-    const animateParticle = () => {
-      if (!particle || !contentRef.current) return
-
-      const rect = contentRef.current.getBoundingClientRect()
-      const perimeter = 2 * (rect.width + rect.height)
-      
-      position = (position + 2) % perimeter
-      color = (color + 2) % 360
-
-      let x, y
-      if (position < rect.width) {
-        x = position
-        y = 0
-      } else if (position < rect.width + rect.height) {
-        x = rect.width
-        y = position - rect.width
-      } else if (position < 2 * rect.width + rect.height) {
-        x = rect.width - (position - (rect.width + rect.height))
-        y = rect.height
-      } else {
-        x = 0
-        y = rect.height - (position - (2 * rect.width + rect.height))
-      }
-
-      particle.style.transform = `translate(${x}px, ${y}px)`
-      particle.style.backgroundColor = `hsl(${color}, 100%, 50%)`
-
-      requestAnimationFrame(animateParticle)
-    }
-
-    animateParticle()
-  }, [])
-
   return (
     <Popover>
       <PopoverTrigger asChild>{trigger}</PopoverTrigger>
@@ -533,7 +492,6 @@ const PopOver = ({ children, trigger, className }: Props) => {
           isMobile ? 'w-full' : 'min-w-[300px]',
           'min-h-[200px]',
           'relative',
-          'animate-border-glow',
           className
         )}
         align="end"
@@ -544,18 +502,8 @@ const PopOver = ({ children, trigger, className }: Props) => {
           maxWidth,
           boxShadow: '0 0 15px rgba(51, 82, 204, 0.3), 0 4px 11px rgba(0, 0, 0, 0.1)',
           background: 'linear-gradient(45deg, #1D1D1D, #1D1D1D) padding-box, linear-gradient(45deg, #3352CC, #FF00FF, #00FFFF, #3352CC) border-box',
-          backgroundSize: '400% 400%',
-          animation: 'gradient 15s ease infinite, borderGlow 2s ease-in-out infinite alternate'
         }}
       >
-        <div 
-          ref={particleRef}
-          className="absolute w-3 h-3 rounded-full bg-blue-500 z-10 blur-[2px]"
-          style={{ 
-            transition: 'transform 0.1s linear, background-color 0.5s ease',
-            boxShadow: '0 0 10px 2px rgba(0, 255, 255, 0.7)'
-          }}
-        />
         <div 
           className="relative z-20 overflow-y-auto p-4"
           style={{ 
