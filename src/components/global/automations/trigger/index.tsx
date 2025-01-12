@@ -213,7 +213,7 @@ const EnhancedTrigger = ({ id }: Props) => {
         />
         {data?.data?.trigger.length > 1 && (
           <>
-            <div className="relative w-full my-8">
+            <div className="relative w-full my-2">
               <p className="absolute transform px-4 py-2 -translate-y-1/2 top-1/2 left-1/2 -translate-x-1/2 bg-background-90 text-text-primary font-semibold rounded-full z-10">
                 or
               </p>
