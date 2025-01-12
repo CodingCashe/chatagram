@@ -350,10 +350,13 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
                 Smart AI
               </GradientButton>
             ) : (
-              <span className="inline-flex items-center gap-2 px-4 py-1 text-xs font-semibold uppercase text-white bg-[#1D1D1D] rounded-full shadow-sm -my-[3px]">
+              <GradientButton
+                type="BUTTON"
+                className="text-xs bg-background-80 text-white hover:bg-background-80 px-4 py-1 -my-[3px] flex items-center gap-2"
+              >
                 <Zap size={14} />
-                Standard Plan
-              </span>
+                Free
+              </GradientButton>
             )}
           </div>
         </div>
