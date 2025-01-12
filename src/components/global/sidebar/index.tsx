@@ -479,6 +479,8 @@ import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { LogoSmall } from '@/svgs/logo-small'
 import { Separator } from '@/components/ui/separator'
+import UpgradeCard from './upgrade'
+import { SubscriptionPlan } from '../subscription-plan'
 import { Button } from '@/components/ui/button'
 import { 
   Tooltip,
@@ -510,69 +512,11 @@ const Sidebar = ({ slug }: Props) => {
   const pathname = usePathname()
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null)
-  const { signOut } = useClerk()
+  const { signOut, user } = useClerk()
 
   const renderMenuItem = (item: SideBarItemProps, isSubItem = false) => {
-    // const isActive = pathname === `/dashboard/${slug}/${item.label.toLowerCase()}`
     const isActive = pathname === `/dashboard/${slug}/${item.label.toLocaleLowerCase() === 'home' ? '/' : item.label}`
     const hasSubItems = item.subItems && item.subItems.length > 0
-
-    // return (
-    //   <TooltipProvider key={item.id}>
-    //     <Tooltip>
-    //       <TooltipTrigger asChild>
-    //         <motion.div
-    //           whileHover={{ scale: 1.05 }}
-    //           whileTap={{ scale: 0.95 }}
-    //         >
-    //           <Link
-    //             // href={`/dashboard/${slug}/${item.label.toLowerCase()}`}
-    //             href={`/dashboard/${slug}/${item.label.toLocaleLowerCase() === 'home' ? '/' : item.label}`}
-    //             className={cn(
-    //               'flex items-center gap-x-2 rounded-lg p-2 transition-colors duration-200',
-    //               isActive ? 'bg-[#0f0f0f] text-white' : 'text-[#9B9CA0] hover:bg-[#0f0f0f] hover:text-white',
-    //               isSubItem && 'pl-8'
-    //             )}
-    //             onClick={(e) => {
-    //               if (hasSubItems) {
-    //                 e.preventDefault()
-    //                 setExpandedItem(expandedItem === item.id ? null : item.id)
-    //               }
-    //             }}
-    //           >
-    //             {item.icon}
-    //             <span className="flex-1">{item.label}</span>
-    //             {hasSubItems && (
-    //               <ChevronDown
-    //                 className={cn(
-    //                   'transition-transform duration-200',
-    //                   expandedItem === item.id && 'rotate-180'
-    //                 )}
-    //               />
-    //             )}
-    //           </Link>
-    //         </motion.div>
-    //       </TooltipTrigger>
-    //       <TooltipContent side="right">
-    //         <p>{item.label}</p>
-    //       </TooltipContent>
-    //     </Tooltip>
-    //     {hasSubItems && (
-    //       <AnimatePresence>
-    //         {expandedItem === item.id && (
-    //           <motion.div
-    //             initial={{ opacity: 0, height: 0 }}
-    //             animate={{ opacity: 1, height: 'auto' }}
-    //             exit={{ opacity: 0, height: 0 }}
-    //             transition={{ duration: 0.2 }}
-    //           >
-    //             {item.subItems!.map((subItem) => renderMenuItem(subItem, true))}
-    //           </motion.div>
-    //         )}
-    //       </AnimatePresence>
-    //     )}
-    //   </TooltipProvider>
-    // )
     return (
       <TooltipProvider key={item.id}>
         <Tooltip>
@@ -710,6 +654,11 @@ const Sidebar = ({ slug }: Props) => {
         </div>
 
         <Separator className="bg-[#333336]" />
+        <SubscriptionPlan type="PRO">
+           <div className="flex-1 flex flex-col justify-end">
+             <UpgradeCard />
+           </div>
+         </SubscriptionPlan>
 
         <div className="flex items-center justify-between px-2">
           <DropdownMenu>
@@ -719,6 +668,7 @@ const Sidebar = ({ slug }: Props) => {
                   <AvatarImage src="https://github.com/shadcn.png" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
+                <span>{user?.firstName} {user?.lastName}</span>
               </motion.div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
@@ -734,7 +684,7 @@ const Sidebar = ({ slug }: Props) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          {/* <TooltipProvider>
+          <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="ghost" size="icon" className="relative">
@@ -745,7 +695,7 @@ const Sidebar = ({ slug }: Props) => {
                 <p>Help</p>
               </TooltipContent>
             </Tooltip>
-          </TooltipProvider> */}
+          </TooltipProvider>
         </div>
       </div>
     </motion.div>
