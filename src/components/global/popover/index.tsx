@@ -171,7 +171,7 @@ const PopOver = ({ children, trigger, className }: Props) => {
         const availableHeight = Math.max(topSpace, bottomSpace)
         const availableWidth = Math.max(leftSpace, rightSpace)
 
-        setMaxHeight(`${Math.max(availableHeight - 20, 200)}px`) // Ensure at least 200px height
+        setMaxHeight(`${Math.max(availableHeight - 20, 350)}px`) // Ensure at least 200px height
         setMaxWidth(`${availableWidth - 20}px`)
       }
     }
