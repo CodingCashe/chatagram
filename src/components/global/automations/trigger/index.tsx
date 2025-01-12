@@ -181,7 +181,7 @@
 
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ActiveTrigger from './active'
 import { Separator } from '@/components/ui/separator'
@@ -194,11 +194,7 @@ import Keywords from './keywords'
 import { Button } from '@/components/ui/button'
 import Loader from '../../loader'
 import { useQueryAutomation } from '@/hooks/user-queries'
-import { Input } from '@/components/ui/input'
-import { Moon, Sun, Search } from 'lucide-react'
-import confetti from 'canvas-confetti'
-import SimpleBar from 'simplebar-react'
-import 'simplebar-react/dist/simplebar.min.css'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 type Props = {
   id: string
@@ -207,29 +203,6 @@ type Props = {
 const EnhancedTrigger = ({ id }: Props) => {
   const { types, onSetTrigger, onSaveTrigger, isPending } = useTriggers(id)
   const { data } = useQueryAutomation(id)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [isDarkMode, setIsDarkMode] = useState(false)
-  const [showConfetti, setShowConfetti] = useState(false)
-
-  useEffect(() => {
-    if (showConfetti) {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      })
-      setTimeout(() => setShowConfetti(false), 3000)
-    }
-  }, [showConfetti])
-
-  const filteredTriggers = AUTOMATION_TRIGGERS.filter(trigger =>
-    trigger.label.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
-  const handleSaveTrigger = () => {
-    onSaveTrigger()
-    setShowConfetti(true)
-  }
 
   if (data?.data && data?.data?.trigger.length > 0) {
     return (
@@ -262,47 +235,24 @@ const EnhancedTrigger = ({ id }: Props) => {
 
   return (
     <TriggerButton label="Add Trigger">
-      <div className={cn(
-        "flex flex-col gap-y-4 p-6 rounded-2xl shadow-xl transition-all duration-300",
-        isDarkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
-      )}>
-        <div className="flex justify-between items-center mb-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <Input
-              type="text"
-              placeholder="Search triggers..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 rounded-full border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-            />
-          </div>
-          <Button
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            variant="outline"
-            size="icon"
-            className="rounded-full"
-          >
-            {isDarkMode ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}
-          </Button>
-        </div>
-        <SimpleBar style={{ maxHeight: '60vh' }} autoHide={false}>
+      <div className="flex flex-col gap-y-4 bg-background-90 p-6 rounded-2xl shadow-xl">
+        <ScrollArea className="h-[60vh] pr-4">
           <AnimatePresence>
-            {filteredTriggers.map((trigger) => (
+            {AUTOMATION_TRIGGERS.map((trigger) => (
               <motion.div
                 key={trigger.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
-                whileHover={{ scale: 1.03, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
+                whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => onSetTrigger(trigger.type)}
                 className={cn(
-                  'rounded-xl flex cursor-pointer flex-col p-4 gap-y-2 transition-all duration-300 backdrop-blur-md',
+                  'text-white rounded-xl flex cursor-pointer flex-col p-4 gap-y-2 transition-all duration-300 mb-4',
                   !types?.find((t) => t === trigger.type)
-                    ? isDarkMode ? 'bg-gray-800 bg-opacity-60 hover:bg-gray-700' : 'bg-gray-100 bg-opacity-60 hover:bg-gray-200'
-                    : 'bg-gradient-to-br from-blue-600 to-indigo-800 shadow-lg text-white'
+                    ? 'bg-background-80 hover:bg-background-70'
+                    : 'bg-gradient-to-br from-[#3352CC] to-[#1C2D70] shadow-lg'
                 )}
               >
                 <div className="flex gap-x-3 items-center">
@@ -313,12 +263,12 @@ const EnhancedTrigger = ({ id }: Props) => {
               </motion.div>
             ))}
           </AnimatePresence>
-        </SimpleBar>
+        </ScrollArea>
         <Keywords id={id} />
         <Button
-          onClick={handleSaveTrigger}
+          onClick={onSaveTrigger}
           disabled={types?.length === 0}
-          className="bg-gradient-to-br from-blue-600 to-indigo-800 font-medium text-white hover:from-blue-700 hover:to-indigo-900 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-gradient-to-br from-[#3352CC] to-[#1C2D70] font-medium text-white hover:from-[#4363DD] hover:to-[#2D3E81] transition-all duration-300 transform hover:scale-105"
         >
           <Loader state={isPending}>Create Trigger</Loader>
         </Button>
