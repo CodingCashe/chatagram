@@ -57,93 +57,78 @@
 
 // export default PopOver
 
-
-
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import * as PopoverPrimitive from '@radix-ui/react-popover'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
+import { useMediaQuery } from '@/hooks/use-media-query'
 
-type PopOverProps = {
-  trigger: React.ReactNode
-  children: React.ReactNode | ((props: { close: () => void }) => React.ReactNode)
+type Props = {
+  trigger: JSX.Element
+  children: React.ReactNode
   className?: string
 }
 
-const PopOver: React.FC<PopOverProps> = ({ children, trigger, className }) => {
-  const [isOpen, setIsOpen] = useState(false)
+const PopOver = ({ children, trigger, className }: Props) => {
+  const [maxHeight, setMaxHeight] = useState<string>('auto')
+  const [maxWidth, setMaxWidth] = useState<string>('auto')
   const contentRef = useRef<HTMLDivElement>(null)
-  const [maxHeight, setMaxHeight] = useState<string>('80vh')
+  const isMobile = useMediaQuery('(max-width: 640px)')
 
   useEffect(() => {
-    const updateMaxHeight = () => {
+    const updateDimensions = () => {
       if (contentRef.current) {
         const viewportHeight = window.innerHeight
+        const viewportWidth = window.innerWidth
         const contentRect = contentRef.current.getBoundingClientRect()
         const topSpace = contentRect.top
         const bottomSpace = viewportHeight - contentRect.bottom
-        const availableSpace = Math.max(topSpace, bottomSpace)
-        setMaxHeight(`${Math.min(availableSpace - 20, viewportHeight * 0.8)}px`)
+        const leftSpace = contentRect.left
+        const rightSpace = viewportWidth - contentRect.right
+
+        const availableHeight = Math.max(topSpace, bottomSpace)
+        const availableWidth = Math.max(leftSpace, rightSpace)
+
+        setMaxHeight(`${availableHeight - 20}px`) // 20px for padding
+        setMaxWidth(`${availableWidth - 20}px`) // 20px for padding
       }
     }
 
-    if (isOpen) {
-      updateMaxHeight()
-      window.addEventListener('resize', updateMaxHeight)
-    }
-
-    return () => window.removeEventListener('resize', updateMaxHeight)
-  }, [isOpen])
+    updateDimensions()
+    window.addEventListener('resize', updateDimensions)
+    return () => window.removeEventListener('resize', updateDimensions)
+  }, [])
 
   return (
-    <PopoverPrimitive.Root open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverPrimitive.Trigger asChild>
-        {trigger}
-      </PopoverPrimitive.Trigger>
-      <AnimatePresence>
-        {isOpen && (
-          <PopoverPrimitive.Portal forceMount>
-            <PopoverPrimitive.Content
-              asChild
-              sideOffset={5}
-              align="end"
-              className={cn(
-                "z-50 w-screen max-w-sm lg:max-w-3xl",
-                className
-              )}
-            >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-              >
-                <div
-                  ref={contentRef}
-                  className="overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 shadow-lg ring-1 ring-black ring-opacity-5"
-                >
-                  <motion.div
-                    initial={{ height: 0 }}
-                    animate={{ height: 'auto' }}
-                    exit={{ height: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    style={{ maxHeight }}
-                    className="relative grid gap-8 overflow-y-auto p-7"
-                  >
-                    {typeof children === 'function' 
-                      ? children({ close: () => setIsOpen(false) }) 
-                      : children}
-                  </motion.div>
-                  <div className="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-blue-500 to-purple-500 opacity-10" />
-                </div>
-              </motion.div>
-            </PopoverPrimitive.Content>
-          </PopoverPrimitive.Portal>
+    <Popover>
+      <PopoverTrigger asChild>{trigger}</PopoverTrigger>
+      <PopoverContent
+        ref={contentRef}
+        className={cn(
+          'bg-[#1D1D1D] shadow-lg rounded-xl overflow-hidden',
+          'border border-gray-700',
+          'max-w-[95vw]', // Ensure it doesn't exceed viewport width
+          isMobile ? 'w-full' : 'min-w-[300px]',
+          className
         )}
-      </AnimatePresence>
-    </PopoverPrimitive.Root>
+        align="end"
+        side="bottom"
+        sideOffset={5}
+        style={{ maxHeight, maxWidth }}
+      >
+        <div 
+          className="overflow-y-auto p-4"
+          style={{ maxHeight: `calc(${maxHeight} - 2rem)` }}
+        >
+          {children}
+        </div>
+      </PopoverContent>
+    </Popover>
   )
 }
 
