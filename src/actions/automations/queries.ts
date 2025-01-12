@@ -208,3 +208,26 @@ export const deleteAutomationQuery = async (autmationId: string) => {
     return null
   }
 }
+
+
+export async function createOrUpdateConversationState(userId: string, isActive: boolean) {
+  return await client.conversationState.upsert({
+    where: { userId },
+    update: { 
+      isActive,
+      updatedAt: new Date()
+    },
+    create: {
+      userId,
+      isActive,
+    }
+  })
+}
+
+export async function getConversationState(userId: string) {
+  return await client.conversationState.findUnique({
+    where: { userId }
+  })
+}
+
+

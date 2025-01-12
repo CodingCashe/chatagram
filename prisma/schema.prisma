@@ -88,6 +88,16 @@ model Post {
   automationId String?     @db.Uuid
 }
 
+model ConversationState {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  isActive  Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
 model Listener {
   id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   Automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
@@ -136,5 +146,9 @@ enum LISTENERS {
   SMARTAI
   MESSAGE
 }
+
+
+
+
 
 
