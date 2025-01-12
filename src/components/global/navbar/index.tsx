@@ -107,12 +107,15 @@
 'use client'
 
 import React, { useState } from 'react'
+import { SubscriptionPlan } from '../subscription-plan'
+import UpgradeCard from '../sidebar/upgrade'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, SearchIcon, Bell, ChevronDown, HelpCircle, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Separator } from '@/components/ui/separator'
+import { onBoardUser } from '@/actions/user'
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -142,6 +145,7 @@ const Navbar = ({ slug }: Props) => {
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null)
   const { signOut } = useClerk()
+  const user = onBoardUser()
   
   
   const getPageInfo = () => {
@@ -280,6 +284,11 @@ const Navbar = ({ slug }: Props) => {
                   {SIDEBAR_MENU.map((group) => renderGroup(group))}
                 </div>
                 <Separator className="bg-[#333336]" />
+                <SubscriptionPlan type="FREE">
+                   <div className="flex-1 flex flex-col justify-end">
+                     <UpgradeCard />
+                   </div>
+                 </SubscriptionPlan>
                 <div className="p-4">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -288,7 +297,7 @@ const Navbar = ({ slug }: Props) => {
                           <AvatarImage src="https://github.com/shadcn.png" />
                           <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <span>My Account</span>
+                        <span>YourName</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
@@ -312,8 +321,7 @@ const Navbar = ({ slug }: Props) => {
             <CreateAutomation />
             <Notifications />           
         </div>
-        <div>
-          {/* <MainBreadCrumb page={pathname === `/dashboard/${slug}` ? 'Home' : pathname.split('/').pop() || ''} slug={slug} alternativeName="Automation Details"/> */}
+        <div>          
           <MainBreadCrumb 
             page={fullPageName}
             displayName={displayName}
