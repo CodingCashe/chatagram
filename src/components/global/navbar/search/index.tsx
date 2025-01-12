@@ -459,7 +459,7 @@ const Search = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="absolute z-10 w-full mt-2 bg-white border border-[#3352CC] rounded-lg shadow-lg"
+            className="absolute z-10 w-40 mt-4 bg-black border border-[#3352CC] rounded-lg shadow-lg"
           >
             <ul
               ref={listRef}
