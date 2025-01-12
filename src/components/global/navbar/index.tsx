@@ -144,8 +144,8 @@ const Navbar = ({ slug }: Props) => {
   const [isOpen, setIsOpen] = useState(false)
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null)
-  const { signOut } = useClerk()
-  const user = onBoardUser()
+  const { signOut, user } = useClerk()
+  
   
   
   const getPageInfo = () => {
@@ -297,7 +297,7 @@ const Navbar = ({ slug }: Props) => {
                           <AvatarImage src="https://github.com/shadcn.png" />
                           <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <span>YourName</span>
+                        <span>{user?.firstName} {user?.lastName}</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
