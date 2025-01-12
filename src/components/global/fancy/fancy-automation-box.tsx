@@ -286,6 +286,7 @@ import GradientButton from '../gradient-button';
 import { ActiveIndicator } from '../indicators/active-indicator';
 import { InactiveIndicator } from '../indicators/inactive-indicator';
 import { Sparkles, Zap, Trash2, Settings } from 'lucide-react';
+import AutomationStats from './automation-stats';
 
 type Keyword = {
   id: string;
@@ -328,20 +329,18 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
     }
   }, [isHovered]);
 
-
   return (
     <div
-      className="relative bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-xl border-[1px] border-[#545454] transition-all duration-300 hover:shadow-lg hover:border-[#6A6A6A] group"
+      className="relative bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-xl transition-all duration-300 hover:shadow-lg group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="absolute inset-0 opacity-10 mix-blend-overlay" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E\")" }}></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 shimmer"></div>
-      <div className="absolute -top-px left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
-      <div className="relative z-10 p-6 group">
+      <div className="absolute inset-0 rounded-xl border border-[#545454] opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-10 transition-opacity duration-700 rounded-xl overflow-hidden subtle-shimmer"></div>
+      <div className="absolute -top-px left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+      <div className="relative z-10 p-6">
         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 flex items-center justify-center z-10">
-          <div className="bg-[#1D1D1D] px-1 rounded-full border-[1px] border-[#545454] shadow-lg">
+          <div className="bg-[#1D1D1D] px-1 rounded-full border border-[#545454] shadow-sm">
             {automation.listener?.listener === 'SMARTAI' ? (
               <GradientButton
                 type="BUTTON"
@@ -351,7 +350,7 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
                 Smart AI
               </GradientButton>
             ) : (
-              <span className="inline-flex items-center gap-2 px-4 py-1 text-xs font-semibold uppercase text-white bg-[#1D1D1D] rounded-full shadow-md -my-[3px]">
+              <span className="inline-flex items-center gap-2 px-4 py-1 text-xs font-semibold uppercase text-white bg-[#1D1D1D] rounded-full shadow-sm -my-[3px]">
                 <Zap size={14} />
                 Standard Plan
               </span>
@@ -362,19 +361,19 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
           {automation.active ? <ActiveIndicator /> : <InactiveIndicator />}
         </div>
         <div className="mt-4">
-          <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent transition-all duration-300 group-hover:scale-105">
+          <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
             {automation.name}
           </h2>
-          <div className="flex flex-wrap gap-2 mb-4 transition-all duration-300 group-hover:scale-105">
+          <div className="flex flex-wrap gap-2 mb-4">
             {automation.keywords.map((keyword, key) => (
               <div
                 key={keyword.id}
                 className={cn(
                   'rounded-full px-3 py-1 text-xs capitalize backdrop-blur-sm',
-                  (key + 1) % 1 === 0 && 'bg-keyword-green/30 border-[1px] border-keyword-green',
-                  (key + 1) % 2 === 0 && 'bg-keyword-purple/30 border-[1px] border-keyword-purple',
-                  (key + 1) % 3 === 0 && 'bg-keyword-yellow/30 border-[1px] border-keyword-yellow',
-                  (key + 1) % 4 === 0 && 'bg-keyword-red/30 border-[1px] border-keyword-red'
+                  (key + 1) % 1 === 0 && 'bg-keyword-green/30 border border-keyword-green/50',
+                  (key + 1) % 2 === 0 && 'bg-keyword-purple/30 border border-keyword-purple/50',
+                  (key + 1) % 3 === 0 && 'bg-keyword-yellow/30 border border-keyword-yellow/50',
+                  (key + 1) % 4 === 0 && 'bg-keyword-red/30 border border-keyword-red/50'
                 )}
               >
                 {keyword.word}
@@ -382,10 +381,11 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
             ))}
           </div>
           {automation.keywords.length === 0 && (
-            <div className="rounded-full border-[1px] border-dashed border-white/60 px-3 py-1 inline-block mb-4">
+            <div className="rounded-full border border-dashed border-white/30 px-3 py-1 inline-block mb-4">
               <p className="text-sm text-[#bfc0c3]">No Keywords</p>
             </div>
           )}
+          <AutomationStats automation={automation} />
           <p className="text-sm font-light text-[#9B9CA0] mb-4">
             Created {getRelativeTime(automation.createdAt)}
           </p>
@@ -431,21 +431,5 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
   );
 };
 
-const shimmerAnimation = `
-  @keyframes shimmer {
-    0% {
-      transform: translateX(-100%);
-    }
-    100% {
-      transform: translateX(100%);
-    }
-  }
-  .shimmer {
-    animation: shimmer 2s infinite;
-  }
-`;
-
-const styleElement = document.createElement('style');
-styleElement.textContent = shimmerAnimation;
-document.head.appendChild(styleElement);
+export default FancyAutomationBox;
 
