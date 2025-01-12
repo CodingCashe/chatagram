@@ -180,8 +180,8 @@ export const EnhancedAutomationBox: React.FC<EnhancedAutomationBoxProps> = ({ au
   return (
     <div
       className="relative bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-xl border-[1px] border-[#545454] overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-[#6A6A6A]"
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       <div className="relative z-10 p-6 group">
@@ -198,7 +198,7 @@ export const EnhancedAutomationBox: React.FC<EnhancedAutomationBoxProps> = ({ au
             ) : (
               <span className="inline-flex items-center gap-2 px-4 py-1 text-xs font-semibold uppercase text-white bg-[#1D1D1D] rounded-full shadow-md -my-[3px]">
                 <Zap size={14} />
-                Standard Plan
+                Standard
               </span>
             )}
           </div>
