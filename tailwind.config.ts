@@ -204,31 +204,30 @@ const config = {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
+          },
         },
         "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-        "spin-slow": {
-          from: { transform: "rotate(0deg)" },
-          to: { transform: "rotate(360deg)" },
-        },
-        "border-pulse": {
-          "0%, 100%": {
-            boxShadow: "0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3), 0 0 45px rgba(255, 255, 255, 0.1)",
+          from: {
+            height: "var(--radix-accordion-content-height)",
           },
-          "50%": {
-            boxShadow: "0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 255, 255, 0.5), 0 0 90px rgba(255, 255, 255, 0.3)",
+          to: {
+            height: "0",
           },
+        },
+        "subtle-glow": {
+          "0%, 100%": { boxShadow: "0 0 5px rgba(51, 82, 204, 0.3), 0 0 10px rgba(51, 82, 204, 0.2)" },
+          "50%": { boxShadow: "0 0 10px rgba(51, 82, 204, 0.5), 0 0 20px rgba(51, 82, 204, 0.3)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "spin-slow": "spin-slow 10s linear infinite",
-        "border-pulse": "border-pulse 3s infinite",
+        "subtle-glow": "subtle-glow 4s ease-in-out infinite",
       },
     },
   },

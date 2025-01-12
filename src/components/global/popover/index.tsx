@@ -268,13 +268,13 @@ const PopOver = ({ children, trigger, className }: Props) => {
       <PopoverContent
         ref={contentRef}
         className={cn(
-          'bg-[#1D1D1D] shadow-lg rounded-xl overflow-hidden',
+          'bg-gradient-to-br from-background-90 to-background-80',
+          'shadow-lg rounded-xl overflow-hidden',
+          'border border-light-blue/20',
           'max-w-[95vw]',
           isMobile ? 'w-full' : 'min-w-[300px]',
           'min-h-[200px]',
-          'relative',
-          'border-none',
-          'animate-border-pulse',
+          'animate-subtle-glow',
           className
         )}
         align="end"
@@ -282,11 +282,8 @@ const PopOver = ({ children, trigger, className }: Props) => {
         sideOffset={5}
         style={{ maxHeight, maxWidth }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 opacity-75 blur-[2px] rounded-xl" />
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 opacity-75 blur-[2px] rounded-xl animate-spin-slow" />
-        <div className="absolute inset-[2px] bg-[#1D1D1D] rounded-lg z-10" />
         <div 
-          className="relative z-20 overflow-y-auto p-4"
+          className="relative z-10 overflow-y-auto p-4"
           style={{ 
             maxHeight: `calc(${maxHeight} - 2rem)`,
             minHeight: '180px'
