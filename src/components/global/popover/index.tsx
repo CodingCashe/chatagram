@@ -493,13 +493,11 @@ const PopOver = ({ children, trigger, className }: Props) => {
 
       const rect = contentRef.current.getBoundingClientRect()
       const perimeter = 2 * (rect.width + rect.height)
+      
+      position = (position + 2) % perimeter
+      color = (color + 2) % 360
 
-      position = (position + 2) % perimeter // Adjust speed by increasing step size
-      color = (color + 1) % 360
-
-      let x = 0
-      let y = 0
-
+      let x, y
       if (position < rect.width) {
         x = position
         y = 0
@@ -520,7 +518,7 @@ const PopOver = ({ children, trigger, className }: Props) => {
       requestAnimationFrame(animateParticle)
     }
 
-    requestAnimationFrame(animateParticle)
+    animateParticle()
   }, [])
 
   return (
@@ -530,11 +528,12 @@ const PopOver = ({ children, trigger, className }: Props) => {
         ref={contentRef}
         className={cn(
           'bg-[#1D1D1D] shadow-lg rounded-xl overflow-hidden',
-          'border border-[#3352CC33]',
+          'border-4 border-transparent',
           'max-w-[95vw]',
           isMobile ? 'w-full' : 'min-w-[300px]',
           'min-h-[200px]',
           'relative',
+          'animate-border-glow',
           className
         )}
         align="end"
@@ -543,16 +542,20 @@ const PopOver = ({ children, trigger, className }: Props) => {
         style={{ 
           maxHeight, 
           maxWidth,
-          boxShadow: '0 0 0 1px rgba(51, 82, 204, 0.2), 0 4px 11px rgba(0, 0, 0, 0.1)'
+          boxShadow: '0 0 15px rgba(51, 82, 204, 0.3), 0 4px 11px rgba(0, 0, 0, 0.1)',
+          background: 'linear-gradient(45deg, #1D1D1D, #1D1D1D) padding-box, linear-gradient(45deg, #3352CC, #FF00FF, #00FFFF, #3352CC) border-box',
+          backgroundSize: '400% 400%',
+          animation: 'gradient 15s ease infinite, borderGlow 2s ease-in-out infinite alternate'
         }}
       >
-        {/* Particle for animation */}
         <div 
           ref={particleRef}
-          className="absolute w-2 h-2 rounded-full bg-blue-500 z-10"
-          style={{ transition: 'background-color 0.5s ease' }}
+          className="absolute w-3 h-3 rounded-full bg-blue-500 z-10 blur-[2px]"
+          style={{ 
+            transition: 'transform 0.1s linear, background-color 0.5s ease',
+            boxShadow: '0 0 10px 2px rgba(0, 255, 255, 0.7)'
+          }}
         />
-        {/* Content */}
         <div 
           className="relative z-20 overflow-y-auto p-4"
           style={{ 
@@ -568,3 +571,4 @@ const PopOver = ({ children, trigger, className }: Props) => {
 }
 
 export default PopOver
+

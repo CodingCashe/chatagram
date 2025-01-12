@@ -189,3 +189,28 @@
     margin-bottom: 10px; /* Space out the avatar from the content */
   }
 }
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes borderGlow {
+  from {
+    box-shadow: 0 0 5px rgba(51, 82, 204, 0.3), 0 4px 11px rgba(0, 0, 0, 0.1);
+  }
+  to {
+    box-shadow: 0 0 20px rgba(51, 82, 204, 0.6), 0 4px 11px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.animate-border-glow {
+  animation: borderGlow 2s ease-in-out infinite alternate;
+}
