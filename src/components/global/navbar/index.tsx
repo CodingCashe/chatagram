@@ -481,12 +481,6 @@ const Navbar = ({ slug }: Props) => {
 
   return (
     <div className="flex flex-col">
-      <FixedNavbar 
-        slug={slug}
-        fullPageName={fullPageName}
-        displayName={displayName}
-        isUUID={isUUID}
-      />
       {/* Add a spacer div to push content below the fixed navbar */}
       <div className="h-[100px]" /> {/* Adjust the height based on your navbar's actual height */}
       <div className="flex gap-x-3 lg:gap-x-5 items-center justify-between px-4 py-2">
@@ -518,7 +512,13 @@ const Navbar = ({ slug }: Props) => {
               </div>
             </div>
           </SheetContent>
-        </Sheet>          
+        </Sheet>
+        <FixedNavbar 
+          slug={slug}
+          fullPageName={fullPageName}
+          displayName={displayName}
+          isUUID={isUUID}
+        />          
       </div>
       <div>
         <MainBreadCrumb 
