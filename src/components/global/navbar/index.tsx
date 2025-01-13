@@ -136,6 +136,7 @@ import CreateAutomation from '../create-automation'
 import { Notifications } from './notifications/notifications'
 import MainBreadCrumb from '../bread-crumbs/main-bread-crumb'
 import EnhancedUserProfile from '../sidebar/userProfile'
+import { useSheetState } from '@/hooks/useSheetState'
 
 type Props = {
   slug: string
@@ -143,7 +144,8 @@ type Props = {
 
 const Navbar = ({ slug }: Props) => {
   const pathname = usePathname()
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpenn, setIsOpenn] = useState(false)
+  const { isOpen, openSheet, closeSheet } = useSheetState()
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null)
   const { signOut, user } = useClerk()
@@ -192,7 +194,7 @@ const Navbar = ({ slug }: Props) => {
               e.preventDefault()
               setExpandedItem(expandedItem === item.id ? null : item.id)
             } else {
-              setIsOpen(false)
+              setIsOpenn(false)
             }
           }}
         >
@@ -266,7 +268,7 @@ const Navbar = ({ slug }: Props) => {
   return (
       <div className="flex flex-col">
         <div className="flex gap-x-3 lg:gap-x-5 items-center justify-between px-4 py-2">
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <Sheet open={isOpen} onOpenChange={openSheet}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="lg:hidden">
                 <Menu className="h-10 w-10 text-white" />
