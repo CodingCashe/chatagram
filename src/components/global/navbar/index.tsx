@@ -134,6 +134,7 @@ import Search from './search'
 import CreateAutomation from '../create-automation'
 import { Notifications } from './notifications/notifications'
 import MainBreadCrumb from '../bread-crumbs/main-bread-crumb'
+import EnhancedUserProfile from '../sidebar/userProfile'
 
 type Props = {
   slug: string
@@ -145,6 +146,7 @@ const Navbar = ({ slug }: Props) => {
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null)
   const { signOut, user } = useClerk()
+
   
   
   
@@ -289,7 +291,10 @@ const Navbar = ({ slug }: Props) => {
                      <UpgradeCard />
                    </div>
                  </SubscriptionPlan>
-                <div className="p-4">
+                 <div className="relative">
+                  <EnhancedUserProfile onSignOut={signOut} />
+                </div>
+                {/* <div className="p-4">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="w-full justify-start">
@@ -313,7 +318,7 @@ const Navbar = ({ slug }: Props) => {
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
-                </div>
+                </div> */}
               </div>
             </SheetContent>
           </Sheet>          
