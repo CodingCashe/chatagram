@@ -310,6 +310,7 @@
 import React from 'react'
 import { SubscriptionPlan } from '../subscription-plan'
 import UpgradeCard from '../sidebar/upgrade'
+import UpgradedCard from '../sidebar/upgraded'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, HelpCircle, LogOut } from 'lucide-react'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
@@ -451,7 +452,7 @@ const Navbar = ({ slug }: Props) => {
       <ArrowTrigger isOpen={isOpen} onClick={isOpen ? closeSheet : openSheet} />
       <Sheet open={isOpen} onOpenChange={closeSheet}>
         <SheetContent side="left" className="w-[300px] bg-[#0e0e0e] text-white p-0">
-          <div className="flex flex-col h-[100px]">
+          <div className="flex flex-col h-full">
             <div className="flex items-center justify-between p-4">
               <motion.div transition={{ duration: 0.5 }}>
                 <LogoSmall />
@@ -467,13 +468,18 @@ const Navbar = ({ slug }: Props) => {
                 <UpgradeCard />
               </div>
             </SubscriptionPlan>
+            <SubscriptionPlan type="PRO">
+              <div className="flex-1 flex flex-col justify-end">
+                <UpgradedCard userName="" />
+              </div>
+            </SubscriptionPlan>
             <div className="relative">
               <EnhancedUserProfile onSignOut={signOut} />
             </div>
           </div>
         </SheetContent>
       </Sheet>  
-      <div className="flex gap-x-3 lg:gap-x-5 items-center justify-between px-4 py-2">
+      <div className="flex gap-x-3 lg:gap-x-5 mb-20 items-center justify-between px-4 py-2">
         <FixedNavbar 
           slug={slug}
           fullPageName={fullPageName}
