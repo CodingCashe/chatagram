@@ -710,6 +710,7 @@ import React, { useState } from 'react'
 import { LogoSmall } from '@/svgs/logo-small'
 import { Separator } from '@/components/ui/separator'
 import UpgradeCard from './upgrade'
+import UpgradedCard from './upgraded'
 import { SubscriptionPlan } from '../subscription-plan'
 import { Button } from '@/components/ui/button'
 import { 
@@ -846,7 +847,13 @@ const Sidebar = ({ slug }: Props) => {
         </div>
 
         <Separator className="bg-[#333336]" />
+        
         <SubscriptionPlan type="PRO">
+           <div className="flex-1 flex flex-col justify-end">
+             <UpgradedCard userName="Member" />
+           </div>
+         </SubscriptionPlan>
+         <SubscriptionPlan type="FREE">
            <div className="flex-1 flex flex-col justify-end">
              <UpgradeCard />
            </div>
