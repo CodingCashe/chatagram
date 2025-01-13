@@ -71,24 +71,24 @@ const ArrowTrigger: React.FC<ArrowTriggerProps> = ({ isOpen, onClick }) => {
   return (
     <motion.div
       className={cn(
-        "fixed left-0 top-0 h-screen z-50 cursor-pointer",
-        "w-6 flex items-center justify-start",
+        "fixed left-0 top-1/2 -translate-y-1/2 z-50 cursor-pointer",
+        "w-6 h-12 flex items-center justify-start",
         isOpen && "left-[300px]"
       )}
       onClick={onClick}
       animate={{ left: isOpen ? 300 : 0 }}
       transition={{ duration: 0.3 }}
     >
-      <svg width="24" height="100vh" viewBox="0 0 24 100" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="24" height="48" viewBox="0 0 24 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <filter id="glow">
-          <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+          <feGaussianBlur stdDeviation="0.5" result="coloredBlur"/>
           <feMerge>
             <feMergeNode in="coloredBlur"/>
             <feMergeNode in="SourceGraphic"/>
           </feMerge>
         </filter>
         <path 
-          d="M0 0 C8 0 24 20 24 50 C24 80 8 100 0 100"
+          d="M0 0 C4 0 24 20 24 24 C24 28 4 48 0 48"
           stroke="#333336"
           strokeWidth="1"
           fill="none"
@@ -96,8 +96,8 @@ const ArrowTrigger: React.FC<ArrowTriggerProps> = ({ isOpen, onClick }) => {
         />
       </svg>
       <motion.div
-        className="absolute left-0"
-        animate={{ x: [0, 3, 0] }}
+        className="absolute left-0.5"
+        animate={{ x: [0, 2, 0] }}
         transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
       >
         <ChevronRight
