@@ -672,12 +672,12 @@ const Navbar = ({ slug }: Props) => {
             </div>
             <Separator className="bg-[#333336]" />
             <SubscriptionPlan type="FREE">
-              <div className="flex-1 flex flex-col gap-x-2 gap-y-2 justify-end">
+              <div className="flex-1 flex flex-col justify-end">
                 <UpgradeCard />
               </div>
             </SubscriptionPlan>
             <SubscriptionPlan type="PRO">
-              <div className="flex-1 flex flex-col gap-x-2 gap-y-2 justify-end">
+              <div className="flex-1 flex flex-col justify-end">
                 <UpgradedCard userName="Member"/>
               </div>
             </SubscriptionPlan>
