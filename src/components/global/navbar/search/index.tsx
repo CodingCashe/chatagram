@@ -373,6 +373,123 @@
 // export default Search;
 
 
+// 'use client'
+
+// import React, { useState, useEffect, useCallback, useRef } from 'react'
+// import { motion, AnimatePresence } from 'framer-motion'
+// import { SearchIcon, X } from 'lucide-react'
+// import { Input } from '@/components/ui/input'
+// import { getAllAutomations } from '@/actions/automations'
+// import debounce from 'lodash.debounce'
+// import { useRouter, usePathname } from 'next/navigation'
+
+// type Automation = {
+//   id: string
+//   name: string
+//   active: boolean
+// }
+
+// const Search = () => {
+//   const [searchTerm, setSearchTerm] = useState('')
+//   const [automations, setAutomations] = useState<Automation[]>([])
+//   const [filteredAutomations, setFilteredAutomations] = useState<Automation[]>([])
+//   const [isOpen, setIsOpen] = useState(false)
+//   const inputRef = useRef<HTMLInputElement>(null)
+//   const listRef = useRef<HTMLUListElement>(null)
+//   const router = useRouter()
+//   const pathname = usePathname()
+
+//   useEffect(() => {
+//     const fetchAutomations = async () => {
+//       const result = await getAllAutomations()
+//       if (result.status === 200) {
+//         setAutomations(result.data)
+//       }
+//     }
+//     fetchAutomations()
+//   }, [])
+
+//   const debouncedSearch = useCallback(
+//     debounce((searchTerm: string) => {
+//       const filtered = automations.filter(automation =>
+//         automation.name.toLowerCase().includes(searchTerm.toLowerCase())
+//       )
+//       setFilteredAutomations(filtered)
+//       setIsOpen(searchTerm.length > 0)
+//     }, 300),
+//     [automations]
+//   )
+
+//   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     const value = e.target.value
+//     setSearchTerm(value)
+//     debouncedSearch(value)
+//   }
+
+//   return (
+//     <div className="flex items-center w-full space-x-4">
+//       <div className="flex items-center border-2 border-[#3352CC] rounded-full px-4 py-1 flex-1">
+//         <SearchIcon className="text-[#3352CC] mr-2" />
+//         <Input
+//           ref={inputRef}
+//           placeholder="Search automation by name"
+//           className="w-full border-none focus:ring-0"
+//           value={searchTerm}
+//           onChange={handleSearch}
+//         />
+//         {searchTerm && (
+//           <button
+//             className="ml-2 text-[#3352CC]"
+//             onClick={() => {
+//               setSearchTerm('')
+//               setFilteredAutomations([])
+//               setIsOpen(false)
+//               inputRef.current?.focus()
+//             }}
+//           >
+//             <X size={20} />
+//           </button>
+//         )}
+//       </div>
+
+//       <AnimatePresence>
+//         {isOpen && (
+//           <motion.div
+//             initial={{ opacity: 0, y: -10 }}
+//             animate={{ opacity: 1, y: 0 }}
+//             exit={{ opacity: 0, y: -10 }}
+//             transition={{ duration: 0.2 }}
+//             className="absolute z-10 w-40 mt-4 bg-black border border-[#3352CC] rounded-lg shadow-lg"
+//           >
+//             <ul
+//               ref={listRef}
+//               className="max-h-60 overflow-y-auto divide-y divide-[#E0E0E0]"
+//             >
+//               {filteredAutomations.map((automation, index) => (
+//                 <li
+//                   key={automation.id}
+//                   className="p-2 hover:bg-[#f0f5ff] cursor-pointer text-[#3352CC] text-sm"
+//                   onClick={() => {
+//                     router.push(`${pathname}/${automation.id}`)
+//                     setIsOpen(false)
+//                   }}
+//                 >
+//                   {automation.name}
+//                 </li>
+//               ))}
+//               {filteredAutomations.length === 0 && searchTerm && (
+//                 <li className="p-2 text-gray-500 text-sm">No automations found</li>
+//               )}
+//             </ul>
+//           </motion.div>
+//         )}
+//       </AnimatePresence>
+//     </div>
+//   )
+// }
+
+// export default Search
+
 'use client'
 
 import React, { useState, useEffect, useCallback, useRef } from 'react'
@@ -427,8 +544,8 @@ const Search = () => {
   }
 
   return (
-    <div className="flex items-center w-full space-x-4">
-      <div className="flex items-center border-2 border-[#3352CC] rounded-full px-4 py-1 flex-1">
+    <div className="relative w-full">
+      <div className="flex items-center border-2 border-[#3352CC] rounded-full px-4 py-1">
         <SearchIcon className="text-[#3352CC] mr-2" />
         <Input
           ref={inputRef}
@@ -439,7 +556,7 @@ const Search = () => {
         />
         {searchTerm && (
           <button
-            className="ml-2 text-[#3352CC]"
+            className="ml-2 text-[#3352CC] hover:text-[#2241B8] transition-colors"
             onClick={() => {
               setSearchTerm('')
               setFilteredAutomations([])
@@ -455,30 +572,31 @@ const Search = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
-            className="absolute z-10 w-40 mt-4 bg-black border border-[#3352CC] rounded-lg shadow-lg"
+            className="absolute z-10 w-full mt-2 bg-gray-900 border border-gray-700 rounded-lg shadow-lg overflow-hidden"
           >
             <ul
               ref={listRef}
-              className="max-h-60 overflow-y-auto divide-y divide-[#E0E0E0]"
+              className="max-h-60 overflow-y-auto divide-y divide-gray-700 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-800"
             >
               {filteredAutomations.map((automation, index) => (
                 <li
                   key={automation.id}
-                  className="p-2 hover:bg-[#f0f5ff] cursor-pointer text-[#3352CC] text-sm"
+                  className="p-3 hover:bg-gray-800 cursor-pointer text-gray-200 text-sm transition-colors duration-150 ease-in-out flex items-center space-x-3"
                   onClick={() => {
                     router.push(`${pathname}/${automation.id}`)
                     setIsOpen(false)
                   }}
                 >
-                  {automation.name}
+                  <span className={`w-2 h-2 rounded-full ${automation.active ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                  <span>{automation.name}</span>
                 </li>
               ))}
               {filteredAutomations.length === 0 && searchTerm && (
-                <li className="p-2 text-gray-500 text-sm">No automations found</li>
+                <li className="p-3 text-gray-400 text-sm">No automations found</li>
               )}
             </ul>
           </motion.div>
@@ -489,3 +607,4 @@ const Search = () => {
 }
 
 export default Search
+

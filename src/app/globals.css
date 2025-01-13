@@ -189,3 +189,24 @@
     margin-bottom: 10px; /* Space out the avatar from the content */
   }
 }
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@keyframes subtleShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.subtle-shimmer {
+  animation: subtleShimmer 3s ease-in-out infinite;
+}
+
+/* Add any other global styles here */
