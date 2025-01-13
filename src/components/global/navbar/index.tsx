@@ -268,12 +268,13 @@ const Navbar = ({ slug }: Props) => {
   return (
       <div className="flex flex-col">
         <div className="flex gap-x-3 lg:gap-x-5 items-center justify-between px-4 py-2">
-          <Sheet open={isOpen} onOpenChange={openSheet}>
-            <SheetTrigger asChild>
+          {/* <Sheet open={isOpen} onOpenChange={openSheet}> */}
+          <Sheet open={isOpen} onOpenChange={closeSheet}>
+            {/* <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="lg:hidden">
                 <Menu className="h-10 w-10 text-white" />
               </Button>
-            </SheetTrigger>
+            </SheetTrigger> */}
             <SheetContent side="left" className="w-[300px] bg-[#0e0e0e] text-white p-0">
               <div className="flex flex-col h-full">
                 <div className="flex items-center justify-between p-4">
