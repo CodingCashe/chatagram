@@ -660,7 +660,7 @@ const Navbar = ({ slug }: Props) => {
       <ArrowTrigger isOpen={isOpen} onClick={isOpen ? closeSheet : openSheet} />
       <Sheet open={isOpen} onOpenChange={closeSheet}>
         <SheetContent side="left" className="w-[300px] bg-[#0e0e0e] text-white p-0">
-          <div className="flex flex-col h-full">
+          <div className="flex gap-x-3 lg:gap-x-5 items-center justify-between px-4 py-2">
             <div className="flex items-center justify-between p-4">
               <motion.div transition={{ duration: 0.5 }}>
                 <LogoSmall />
@@ -672,29 +672,30 @@ const Navbar = ({ slug }: Props) => {
             </div>
             <Separator className="bg-[#333336]" />
             <SubscriptionPlan type="FREE">
-              <div className="flex-1 flex flex-col justify-end">
+              <div className="flex-1 flex flex-col gap-x-2 gap-y-2 justify-end">
                 <UpgradeCard />
               </div>
             </SubscriptionPlan>
             <SubscriptionPlan type="PRO">
-              <div className="flex-1 flex flex-col justify-end">
+              <div className="flex-1 flex flex-col gap-x-2 gap-y-2 justify-end">
                 <UpgradedCard userName="Member"/>
               </div>
             </SubscriptionPlan>
+            <Separator className="bg-[#333336]" />
             <div className="relative">
               <EnhancedUserProfile onSignOut={signOut} />
             </div>
           </div>
         </SheetContent>
       </Sheet>  
-      <div className="flex gap-x-3 lg:gap-x-5 items-center justify-between px-4 py-2">
+      {/* <div className="flex gap-x-3 lg:gap-x-5 items-center justify-between px-4 py-2"> */}
         <FixedNavbar 
           slug={slug}
           fullPageName={fullPageName}
           displayName={displayName}
           isUUID={isUUID}
         />         
-      </div>
+      {/* </div> */}
       <div>          
         <MainBreadCrumb 
           page={fullPageName}
