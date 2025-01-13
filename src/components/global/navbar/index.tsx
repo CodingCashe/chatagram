@@ -767,7 +767,7 @@ const Navbar = ({ slug }: Props) => {
         transition={{ duration: 0.2 }}
       >
         <Link
-          href={`/dashboard/${slug}/${item.label.toLowerCase() === 'home' ? '' : item.label.toLowerCase()}`}
+          href={`/dashboard/${slug}/${item.label.toLowerCase() === 'home' ? '/' : item.label.toLowerCase()}`}
           className={cn(
             'flex items-center gap-x-2 rounded-lg p-2 transition-colors duration-200',
             isActive ? 'bg-[#0f0f0f] text-white' : 'text-[#9B9CA0] hover:bg-[#0f0f0f] hover:text-white',
@@ -783,7 +783,7 @@ const Navbar = ({ slug }: Props) => {
           }}
         >
           {item.icon}
-          <span className="flex-1 text-sm">{item.label}</span>
+          <span className="flex-1">{item.label}</span>
           {hasSubItems && (
             <ChevronDown
               className={cn(
@@ -855,7 +855,7 @@ const Navbar = ({ slug }: Props) => {
       <Sheet open={isOpen} onOpenChange={closeSheet}>
         <SheetContent 
           side="left" 
-          className="w-[250px] bg-[#0e0e0e] text-white p-0 m-0 border-r-0 border-t-2 border-b-2 border-r-2 border-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-r-2xl"
+          className="w-[250px] bg-[#0e0e0e] text-white p-0 m-2 rounded-r-xl border-t-2 border-r-2 border-b-2 border-gradient-to-b from-purple-500 via-pink-500 to-red-500"
         >
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-between p-4">
@@ -865,7 +865,7 @@ const Navbar = ({ slug }: Props) => {
             </div>
             <Separator className="bg-[#333336]" />
             
-            <div className="flex-1 overflow-y-auto py-4 px-2 space-y-4">
+            <div className="flex-1 overflow-y-auto py-4 px-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
               {SIDEBAR_MENU.map((group) => renderGroup(group))}
             </div>
             <Separator className="bg-[#333336]" />
@@ -886,7 +886,7 @@ const Navbar = ({ slug }: Props) => {
           </div>
         </SheetContent>
       </Sheet>  
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1">
         <FixedNavbar 
           slug={slug}
           fullPageName={fullPageName}
@@ -898,8 +898,8 @@ const Navbar = ({ slug }: Props) => {
           displayName={displayName}
           slug={slug}
           isUUID={isUUID}
-        />
-      </div>    
+        />      
+      </div>
     </div>    
   )
 }

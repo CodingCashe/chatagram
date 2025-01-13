@@ -49,6 +49,7 @@ const ArrowTrigger: React.FC<ArrowTriggerProps> = ({ isOpen, onClick }) => {
       className={cn(
         "fixed left-0 top-1/2 -translate-y-1/2 z-50 cursor-pointer",
         "w-6 h-24 flex items-center justify-center",
+        "md:hidden",
         isOpen && "left-[300px]"
       )}
       onClick={onClick}
@@ -83,4 +84,43 @@ const ArrowTrigger: React.FC<ArrowTriggerProps> = ({ isOpen, onClick }) => {
 }
 
 export default ArrowTrigger
+
+// import { motion } from "framer-motion";
+// import cn from "classnames";
+
+// const Sidebar = ({ isOpen, onClose }) => {
+//   return (
+//     <motion.div
+//       onClick={onClose}
+//       className={cn(
+//         "fixed left-0 top-1/2 -translate-y-1/2 z-50 cursor-pointer",
+//         "w-5 h-20 flex items-center justify-center",
+//         "md:hidden", // Hide on medium screens and larger
+//         isOpen && "left-[250px]"
+//       )}
+//       animate={{ left: isOpen ? 250 : 0 }}
+//     >
+//       <motion.div
+//         className="absolute left-0.5"
+//         onClick={(e) => {
+//           e.stopPropagation();
+//         }}
+//       >
+//         <svg width="20" height="80" viewBox="0 0 20 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+//           <path
+//             d="M0 0C0 0 10 0 16 0C18 13.3333 20 26.6667 20 40C20 53.3333 18 66.6667 16 80C10 80 0 80 0 80V0Z"
+//             fill="#0e0e0e"
+//           />
+//           <path
+//             d="M0 0C0 0 10 0 16 0C18 13.3333 20 26.6667 20 40C20 53.3333 18 66.6667 16 80C10 80 0 80 0 80V0Z"
+//             stroke="#333336"
+//             strokeWidth="1"
+//           />
+//         </svg>
+//       </motion.div>
+//     </motion.div>
+//   );
+// };
+
+// export default Sidebar;
 
