@@ -660,7 +660,7 @@ const Navbar = ({ slug }: Props) => {
       <ArrowTrigger isOpen={isOpen} onClick={isOpen ? closeSheet : openSheet} />
       <Sheet open={isOpen} onOpenChange={closeSheet}>
         <SheetContent side="left" className="w-[300px] bg-[#0e0e0e] text-white p-0">
-          <div className="flex flex-col">
+          <div className="flex flex-col h-100">
             <div className="flex items-center justify-between p-4">
               <motion.div transition={{ duration: 0.5 }}>
                 <LogoSmall />
@@ -672,16 +672,16 @@ const Navbar = ({ slug }: Props) => {
             </div>
             <Separator className="bg-[#333336]" />
             <SubscriptionPlan type="FREE">
-              <div className="flex-1 flex flex-col justify-end">
+              <div className="flex-1 flex flex-col">
                 <UpgradeCard />
               </div>
             </SubscriptionPlan>
             <SubscriptionPlan type="PRO">
-              <div className="flex-1 flex flex-col justify-end">
+              <div className="flex-1 flex flex-col">
                 <UpgradedCard userName="Member"/>
               </div>
             </SubscriptionPlan>
-            <Separator className="bg-[#333336]" />
+
             <div className="relative">
               <EnhancedUserProfile onSignOut={signOut} />
             </div>
