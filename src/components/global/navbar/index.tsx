@@ -361,6 +361,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import EnhancedUserProfile from '../sidebar/userProfile'
 import FixedNavbar from '../mainNavBar/navber'
+import MainBreadCrumb from '../bread-crumbs/main-bread-crumb'
 
 type Props = {
   slug: string
@@ -518,6 +519,14 @@ const Navbar = ({ slug }: Props) => {
             </div>
           </SheetContent>
         </Sheet>          
+      </div>
+      <div>
+        <MainBreadCrumb 
+          page={fullPageName}
+          displayName={displayName}
+          slug={slug}
+          isUUID={isUUID}
+        />
       </div>
     </div>    
   )

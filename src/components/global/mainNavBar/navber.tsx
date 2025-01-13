@@ -21,14 +21,6 @@ const FixedNavbar: React.FC<FixedNavbarProps> = ({ slug, fullPageName, displayNa
         <CreateAutomation />
         <Notifications />
       </div>
-      <div>
-        <MainBreadCrumb 
-          page={fullPageName}
-          displayName={displayName}
-          slug={slug}
-          isUUID={isUUID}
-        />
-      </div>
     </div>
   )
 }
