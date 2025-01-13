@@ -7,7 +7,7 @@ type Props = {
 
 const UpgradedCard = ({ userName }: Props) => {
   return (
-    <div className="bg-gradient-to-br from-[#2A2A2A] to-[#3D3D3D] p-3 rounded-2xl flex flex-col gap-y-2 shadow-lg">
+    <div className="bg-gradient-to-br from-[#2A2A2A] to-[#3D3D3D] p-2 m-3 rounded-2xl flex flex-col gap-y-2 shadow-lg">
       <div className="flex items-center justify-between">
         <span className="text-sm font-semibold">
           <Crown className="inline-block text-yellow-400 mr-1" size={18} />
