@@ -17,17 +17,17 @@ const UpgradedCard = ({ userName }: Props) => {
         </span>
       </div>
       <p className="text-[#E0E0E0] text-xs">
-        Hello, <span className="font-medium">{userName}</span>
+        <span className="font-medium">You are using:</span>
       </p>
       <div className="bg-[#252525] rounded-xl p-2">
         <ul className="text-[#B0B0B0] text-xs space-y-1">
           <li className="flex items-center">
             <Rocket className="text-[#CC3BD4] mr-1" size={12} />
-            Unlimited AI
+            Smart AI responses
           </li>
           <li className="flex items-center">
             <Shield className="text-[#D064AC] mr-1" size={12} />
-            Pro features
+            Unlimited Automations!
           </li>
         </ul>
       </div>
