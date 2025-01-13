@@ -18,10 +18,10 @@ const FixedNavbar: React.FC<FixedNavbarProps> = ({ slug, fullPageName, displayNa
   return (
     <div className="fixed w-full top-0 right-0 z-50">
       <div className="flex gap-x-3 lg:gap-x-5 items-center justify-between px-4 py-2">
+        <MenuButton />
         <Search />
         <CreateAutomation />
-        <Notifications />
-        <MenuButton />
+        <Notifications />        
       </div>
     </div>
   )
