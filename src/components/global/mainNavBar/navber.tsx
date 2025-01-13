@@ -17,8 +17,7 @@ type FixedNavbarProps = {
 const FixedNavbar: React.FC<FixedNavbarProps> = ({ slug, fullPageName, displayName, isUUID }) => {
   return (
     <div className="fixed top-0 right-0 z-50">
-      <div className="flex gap-x-3 lg:gap-x-5 items-center justify-between px-4 py-2"> 
-        <MenuButton />     
+      <div className="flex gap-x-3 lg:gap-x-5 items-center justify-between px-4 py-2">             
         <Search />
         <CreateAutomation />
         <Notifications />        
