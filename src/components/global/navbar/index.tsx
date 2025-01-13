@@ -323,7 +323,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import FixedNavbar from '../mainNavBar/navber'
 import MainBreadCrumb from '../bread-crumbs/main-bread-crumb'
-import EnhancedUserProfile from '../sidebar/userProfile'
+import UserProfile from '../sidebar/userProfile'
 import { useSheetState } from '@/hooks/useSheetState'
 import ArrowTrigger from '@/components/global/arrow/arrowTrigger'
 
@@ -474,7 +474,7 @@ const Navbar = ({ slug }: Props) => {
               </div>
             </SubscriptionPlan>
             <div className="relative">
-              <EnhancedUserProfile onSignOut={signOut} />
+              <UserProfile onSignOut={signOut} />
             </div>
           </div>
         </SheetContent>

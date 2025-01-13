@@ -725,7 +725,7 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { ChevronDown, HelpCircle } from 'lucide-react'
 import { useClerk } from '@clerk/nextjs'
-import EnhancedUserProfile from './userProfile'
+import UserProfile from './userProfile'
 
 type Props = {
   slug: string
@@ -860,7 +860,7 @@ const Sidebar = ({ slug }: Props) => {
          </SubscriptionPlan>
 
         <div className="w-full">
-          <EnhancedUserProfile onSignOut={signOut} />
+          <UserProfile onSignOut={signOut} />
         </div>
 
         {/* <TooltipProvider>
