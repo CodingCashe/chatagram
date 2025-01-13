@@ -640,13 +640,13 @@ interface Automation {
   listener: Listener | null;
 }
 
-interface EnhancedAutomationBoxProps {
+interface FancyAutomationBoxProps {
   automation: Automation;
   onDelete: () => void;
   pathname: string;
 }
 
-export const EnhancedAutomationBox: React.FC<EnhancedAutomationBoxProps> = ({ automation, onDelete, pathname }) => {
+export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automation, onDelete, pathname }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -766,5 +766,5 @@ export const EnhancedAutomationBox: React.FC<EnhancedAutomationBoxProps> = ({ au
   );
 };
 
-export default EnhancedAutomationBox;
+export default FancyAutomationBox;
 
