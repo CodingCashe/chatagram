@@ -707,7 +707,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { LogoSmall } from '@/svgs/logo-small'
 import { Separator } from '@/components/ui/separator'
 import UpgradeCard from './upgrade'
@@ -744,54 +743,40 @@ const Sidebar = ({ slug }: Props) => {
       <TooltipProvider key={item.id}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <Link
+              href={`/dashboard/${slug}/${item.label.toLowerCase() === 'home' ? '/' : item.label.toLowerCase()}`}
+              className={cn(
+                'flex items-center gap-x-2 rounded-lg p-2 transition-colors duration-200',
+                isActive ? 'bg-[#0f0f0f] text-white' : 'text-[#9B9CA0] hover:bg-[#0f0f0f] hover:text-white',
+                isSubItem && 'pl-8'
+              )}
+              onClick={(e) => {
+                if (hasSubItems) {
+                  e.preventDefault()
+                  setExpandedItem(expandedItem === item.id ? null : item.id)
+                }
+              }}
             >
-              <Link
-                href={`/dashboard/${slug}/${item.label.toLowerCase() === 'home' ? '/' : item.label.toLowerCase()}`}
-                className={cn(
-                  'flex items-center gap-x-2 rounded-lg p-2 transition-colors duration-200',
-                  isActive ? 'bg-[#0f0f0f] text-white' : 'text-[#9B9CA0] hover:bg-[#0f0f0f] hover:text-white',
-                  isSubItem && 'pl-8'
-                )}
-                onClick={(e) => {
-                  if (hasSubItems) {
-                    e.preventDefault()
-                    setExpandedItem(expandedItem === item.id ? null : item.id)
-                  }
-                }}
-              >
-                {item.icon}
-                <span className="flex-1">{item.label}</span>
-                {hasSubItems && (
-                  <ChevronDown
-                    className={cn(
-                      'transition-transform duration-200',
-                      expandedItem === item.id && 'rotate-180'
-                    )}
-                  />
-                )}
-              </Link>
-            </motion.div>
+              {item.icon}
+              <span className="flex-1">{item.label}</span>
+              {hasSubItems && (
+                <ChevronDown
+                  className={cn(
+                    'transition-transform duration-200',
+                    expandedItem === item.id && 'rotate-180'
+                  )}
+                />
+              )}
+            </Link>
           </TooltipTrigger>
           <TooltipContent side="right">
             <p>{item.label}</p>
           </TooltipContent>
         </Tooltip>
-        {hasSubItems && (
-          <AnimatePresence>
-            {expandedItem === item.id && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                {item.subItems!.map((subItem) => renderMenuItem(subItem, true))}
-              </motion.div>
-            )}
-          </AnimatePresence>
+        {hasSubItems && expandedItem === item.id && (
+          <div className="pl-4">
+            {item.subItems!.map((subItem) => renderMenuItem(subItem, true))}
+          </div>
         )}
       </TooltipProvider>
     )
@@ -799,40 +784,26 @@ const Sidebar = ({ slug }: Props) => {
 
   const renderGroup = (group: SideBarGroupProps) => (
     <div key={group.id} className="mb-4">
-      <motion.div
-        initial={false}
-        animate={{ rotate: expandedGroup === group.id ? 180 : 0 }}
-        transition={{ duration: 0.2 }}
+      <div
         onClick={() => setExpandedGroup(expandedGroup === group.id ? null : group.id)}
         className="flex items-center cursor-pointer mb-2 text-[#9B9CA0] hover:text-white"
       >
-        <ChevronDown className="mr-2" />
+        <ChevronDown className={cn(
+          "mr-2 transition-transform duration-200",
+          expandedGroup === group.id && "rotate-180"
+        )} />
         <span className="text-xs uppercase font-semibold">{group.label}</span>
-      </motion.div>
-      <AnimatePresence initial={false}>
-        {(expandedGroup === group.id || expandedGroup === null) && (
-          <motion.div
-            initial="collapsed"
-            animate="open"
-            exit="collapsed"
-            variants={{
-              open: { opacity: 1, height: "auto" },
-              collapsed: { opacity: 0, height: 0 }
-            }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
-          >
-            {group.items.map((item) => renderMenuItem(item))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </div>
+      {(expandedGroup === group.id || expandedGroup === null) && (
+        <div>
+          {group.items.map((item) => renderMenuItem(item))}
+        </div>
+      )}
     </div>
   )
 
   return (
-    <motion.div
-      initial={{ x: -250 }}
-      animate={{ x: 0 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+    <div
       className="
         w-[250px]
         border-[2px]
@@ -866,27 +837,14 @@ const Sidebar = ({ slug }: Props) => {
           overflow-hidden
         "
       >
-        <motion.div 
-          className="flex items-center justify-center p-2"        
-        >
+        <div className="flex items-center justify-center p-2">
           <LogoSmall />
-        </motion.div>
+        </div>
 
         <div className="flex-1 overflow-y-auto py-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
           {SIDEBAR_MENU.map((group) => renderGroup(group))}
         </div>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" className="absolute bottom-4 right-4">
-                <HelpCircle className="h-5 w-5 text-[#9B9CA0]" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Help</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+
         <Separator className="bg-[#333336]" />
         <SubscriptionPlan type="PRO">
            <div className="flex-1 flex flex-col justify-end">
@@ -894,7 +852,7 @@ const Sidebar = ({ slug }: Props) => {
            </div>
          </SubscriptionPlan>
 
-        <div className="relative">
+        <div className="w-full">
           <EnhancedUserProfile onSignOut={signOut} />
         </div>
 
@@ -911,7 +869,7 @@ const Sidebar = ({ slug }: Props) => {
           </Tooltip>
         </TooltipProvider> */}
       </div>
-    </motion.div>
+    </div>
   )
 }
 
