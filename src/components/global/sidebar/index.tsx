@@ -875,18 +875,6 @@ const Sidebar = ({ slug }: Props) => {
         <div className="flex-1 overflow-y-auto py-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
           {SIDEBAR_MENU.map((group) => renderGroup(group))}
         </div>
-
-        <Separator className="bg-[#333336]" />
-        <SubscriptionPlan type="PRO">
-           <div className="flex-1 flex flex-col justify-end">
-             <UpgradeCard />
-           </div>
-         </SubscriptionPlan>
-
-        <div className="relative">
-          <EnhancedUserProfile onSignOut={signOut} />
-        </div>
-
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -899,6 +887,29 @@ const Sidebar = ({ slug }: Props) => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+        <Separator className="bg-[#333336]" />
+        <SubscriptionPlan type="PRO">
+           <div className="flex-1 flex flex-col justify-end">
+             <UpgradeCard />
+           </div>
+         </SubscriptionPlan>
+
+        <div className="relative">
+          <EnhancedUserProfile onSignOut={signOut} />
+        </div>
+
+        {/* <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="absolute bottom-4 right-4">
+                <HelpCircle className="h-5 w-5 text-[#9B9CA0]" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Help</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider> */}
       </div>
     </motion.div>
   )

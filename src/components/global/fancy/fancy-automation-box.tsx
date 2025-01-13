@@ -497,7 +497,7 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="absolute inset-0 rounded-xl border border-[#545454] opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-10 transition-opacity duration-700 rounded-xl overflow-hidden subtle-shimmer"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-10 transition-opacity duration-7000 rounded-xl overflow-hidden"></div>
       <div className="absolute -top-px left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
       <div className="relative z-10 p-6 flex">
         <div className="w-1/2 pr-4">
@@ -512,10 +512,13 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
                   Smart AI
                 </GradientButton>
               ) : (
-                <span className="inline-flex items-center gap-2 px-4 py-1 text-xs font-semibold uppercase text-white bg-[#1D1D1D] rounded-full shadow-sm -my-[3px]">
+                <GradientButton
+                  type="BUTTON"
+                  className="text-xs bg-background-80 text-white hover:bg-background-80 px-4 py-1 -my-[3px] flex items-center gap-2"
+                >
                   <Zap size={14} />
-                  Standard Plan
-                </span>
+                  Free
+                </GradientButton>
               )}
             </div>
           </div>
