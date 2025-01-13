@@ -513,6 +513,200 @@
 
 // export default Navbar
 
+// 'use client'
+
+// import React from 'react'
+// import { SubscriptionPlan } from '../subscription-plan'
+// import UpgradeCard from '../sidebar/upgrade'
+// import UpgradedCard from '../sidebar/upgraded'
+// import { motion, AnimatePresence } from 'framer-motion'
+// import { ChevronDown } from 'lucide-react'
+// import { Sheet, SheetContent } from '@/components/ui/sheet'
+// import { Separator } from '@/components/ui/separator'
+// import { SIDEBAR_MENU, SideBarItemProps, SideBarGroupProps } from '@/constants/menu'
+// import { LogoSmall } from '@/svgs/logo-small'
+// import { useClerk } from '@clerk/nextjs'
+// import { cn } from '@/lib/utils'
+// import Link from 'next/link'
+// import { usePathname } from 'next/navigation'
+// import FixedNavbar from '../mainNavBar/navber'
+// import MainBreadCrumb from '../bread-crumbs/main-bread-crumb'
+// import EnhancedUserProfile from '../sidebar/userProfile'
+// import { useSheetState } from '@/hooks/useSheetState'
+// import ArrowTrigger from '@/components/global/arrow/arrowTrigger'
+
+// type Props = {
+//   slug: string
+// }
+
+// const Navbar = ({ slug }: Props) => {
+//   const pathname = usePathname()
+//   const { isOpen, openSheet, closeSheet } = useSheetState()
+//   const [expandedItem, setExpandedItem] = React.useState<string | null>(null)
+//   const [expandedGroup, setExpandedGroup] = React.useState<string | null>(null)
+//   const { signOut, user } = useClerk()
+
+//   const getPageInfo = () => {
+//     const fullPageName = pathname === `/dashboard/${slug}` ? 'home' : pathname.split('/').pop() || '';
+    
+//     const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    
+//     const isUUID = uuidPattern.test(fullPageName);
+    
+//     const displayName = isUUID ? 'Automation' : fullPageName;
+
+//     return { fullPageName, displayName, isUUID };
+//   };
+
+//   const { fullPageName, displayName, isUUID } = getPageInfo();
+
+//   const renderMenuItem = (item: SideBarItemProps, isSubItem = false) => {
+//     const isActive = pathname === `/dashboard/${slug}/${item.label.toLowerCase()}`
+//     const hasSubItems = item.subItems && item.subItems.length > 0
+
+//     return (
+//       <motion.div
+//         key={item.id}
+//         initial={{ opacity: 0, y: -10 }}
+//         animate={{ opacity: 1, y: 0 }}
+//         exit={{ opacity: 0, y: -10 }}
+//         transition={{ duration: 0.2 }}
+//       >
+//         <Link
+//           href={`/dashboard/${slug}/${item.label.toLowerCase() === 'home' ? '/' : item.label.toLowerCase()}`}
+//           className={cn(
+//             'flex items-center gap-x-2 rounded-lg p-2 transition-colors duration-200',
+//             isActive ? 'bg-[#0f0f0f] text-white' : 'text-[#9B9CA0] hover:bg-[#0f0f0f] hover:text-white',
+//             isSubItem && 'pl-8'
+//           )}
+//           onClick={(e) => {
+//             if (hasSubItems) {
+//               e.preventDefault()
+//               setExpandedItem(expandedItem === item.id ? null : item.id)
+//             } else {
+//               closeSheet()
+//             }
+//           }}
+//         >
+//           {item.icon}
+//           <span className="flex-1">{item.label}</span>
+//           {hasSubItems && (
+//             <ChevronDown
+//               className={cn(
+//                 'transition-transform duration-200',
+//                 expandedItem === item.id && 'rotate-180'
+//               )}
+//             />
+//           )}
+//         </Link>
+//         <AnimatePresence>
+//           {hasSubItems && expandedItem === item.id && (
+//             <motion.div
+//               initial={{ opacity: 0, height: 0 }}
+//               animate={{ opacity: 1, height: 'auto' }}
+//               exit={{ opacity: 0, height: 0 }}
+//               transition={{ duration: 0.2 }}
+//               className="pl-4 mt-2"
+//             >
+//               {item.subItems!.map((subItem) => renderMenuItem(subItem, true))}
+//             </motion.div>
+//           )}
+//         </AnimatePresence>
+//       </motion.div>
+//     )
+//   }
+
+//   const renderGroup = (group: SideBarGroupProps) => (
+//     <motion.div
+//       key={group.id}
+//       initial={{ opacity: 0, y: -10 }}
+//       animate={{ opacity: 1, y: 0 }}
+//       exit={{ opacity: 0, y: -10 }}
+//       transition={{ duration: 0.2 }}
+//       className="mb-4"
+//     >
+//       <motion.div
+//         onClick={() => setExpandedGroup(expandedGroup === group.id ? null : group.id)}
+//         className="flex items-center cursor-pointer mb-2 text-[#9B9CA0] hover:text-white"
+//         whileHover={{ scale: 1.05 }}
+//         whileTap={{ scale: 0.95 }}
+//       >
+//         <ChevronDown
+//           className={cn(
+//             'mr-2 transition-transform duration-200',
+//             expandedGroup === group.id && 'rotate-180'
+//           )}
+//         />
+//         <span className="text-xs uppercase font-semibold">{group.label}</span>
+//       </motion.div>
+//       <AnimatePresence>
+//         {(expandedGroup === group.id || expandedGroup === null) && (
+//           <motion.div
+//             initial={{ opacity: 0, height: 0 }}
+//             animate={{ opacity: 1, height: 'auto' }}
+//             exit={{ opacity: 0, height: 0 }}
+//             transition={{ duration: 0.2 }}
+//             className="pl-4"
+//           >
+//             {group.items.map((item) => renderMenuItem(item))}
+//           </motion.div>
+//         )}
+//       </AnimatePresence>
+//     </motion.div>
+//   )
+
+//   return (
+//     <div className="flex flex-col">
+//       <ArrowTrigger isOpen={isOpen} onClick={isOpen ? closeSheet : openSheet} />
+//       <Sheet open={isOpen} onOpenChange={closeSheet}>
+//         <SheetContent side="left" className="w-[250px] bg-[#0e0e0e] text-white p-0 m">
+//           <div className="flex flex-col">
+//             <div className="flex items-center justify-between p-4">
+//               <motion.div transition={{ duration: 0.5 }}>
+//                 <LogoSmall />
+//               </motion.div>                  
+//             </div>
+//             <Separator className="bg-[#333336]" />
+            
+//             <div className="flex-1 overflow-y-auto py-4 px-2">
+//               {SIDEBAR_MENU.map((group) => renderGroup(group))}
+//             </div>
+//             <Separator className="bg-[#333336]" />
+//             <SubscriptionPlan type="FREE">
+//               <div className="flex-1 flex flex-col justify-end">
+//                 <UpgradeCard />
+//               </div>
+//             </SubscriptionPlan>
+//             <SubscriptionPlan type="PRO">
+//               <div className="flex-1 flex flex-col justify-end">
+//                 <UpgradedCard userName="Member"/>
+//               </div>
+//             </SubscriptionPlan>
+
+//             <div className="relative">
+//               <EnhancedUserProfile onSignOut={signOut} />
+//             </div>
+//           </div>
+//         </SheetContent>
+//       </Sheet>  
+//         <FixedNavbar 
+//           slug={slug}
+//           fullPageName={fullPageName}
+//           displayName={displayName}
+//           isUUID={isUUID}
+//         />                     
+//         <MainBreadCrumb 
+//           page={fullPageName}
+//           displayName={displayName}
+//           slug={slug}
+//           isUUID={isUUID}
+//         />      
+//     </div>    
+//   )
+// }
+
+// export default Navbar
+
 'use client'
 
 import React from 'react'
@@ -573,7 +767,7 @@ const Navbar = ({ slug }: Props) => {
         transition={{ duration: 0.2 }}
       >
         <Link
-          href={`/dashboard/${slug}/${item.label.toLowerCase() === 'home' ? '/' : item.label.toLowerCase()}`}
+          href={`/dashboard/${slug}/${item.label.toLowerCase() === 'home' ? '' : item.label.toLowerCase()}`}
           className={cn(
             'flex items-center gap-x-2 rounded-lg p-2 transition-colors duration-200',
             isActive ? 'bg-[#0f0f0f] text-white' : 'text-[#9B9CA0] hover:bg-[#0f0f0f] hover:text-white',
@@ -589,7 +783,7 @@ const Navbar = ({ slug }: Props) => {
           }}
         >
           {item.icon}
-          <span className="flex-1">{item.label}</span>
+          <span className="flex-1 text-sm">{item.label}</span>
           {hasSubItems && (
             <ChevronDown
               className={cn(
@@ -656,31 +850,32 @@ const Navbar = ({ slug }: Props) => {
   )
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col min-h-screen">
       <ArrowTrigger isOpen={isOpen} onClick={isOpen ? closeSheet : openSheet} />
       <Sheet open={isOpen} onOpenChange={closeSheet}>
-        <SheetContent side="left" className="w-[250px] bg-[#0e0e0e] text-white p-0 m">
-          <div className="flex flex-col">
+        <SheetContent 
+          side="left" 
+          className="w-[250px] bg-[#0e0e0e] text-white p-0 m-0 border-r-0 border-t-2 border-b-2 border-r-2 border-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-r-2xl"
+        >
+          <div className="flex flex-col h-full">
             <div className="flex items-center justify-between p-4">
               <motion.div transition={{ duration: 0.5 }}>
                 <LogoSmall />
               </motion.div>                  
             </div>
             <Separator className="bg-[#333336]" />
-            <div className="flex-1 overflow-y-auto py-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
+            
+            <div className="flex-1 overflow-y-auto py-4 px-2 space-y-4">
               {SIDEBAR_MENU.map((group) => renderGroup(group))}
             </div>
-            {/* <div className="flex-1 overflow-y-auto py-4 px-2">
-              {SIDEBAR_MENU.map((group) => renderGroup(group))}
-            </div> */}
             <Separator className="bg-[#333336]" />
             <SubscriptionPlan type="FREE">
-              <div className="flex-1 flex flex-col">
+              <div className="flex-1 flex flex-col justify-end">
                 <UpgradeCard />
               </div>
             </SubscriptionPlan>
             <SubscriptionPlan type="PRO">
-              <div className="flex-1 flex flex-col">
+              <div className="flex-1 flex flex-col justify-end">
                 <UpgradedCard userName="Member"/>
               </div>
             </SubscriptionPlan>
@@ -691,6 +886,7 @@ const Navbar = ({ slug }: Props) => {
           </div>
         </SheetContent>
       </Sheet>  
+      <div className="flex-1 flex flex-col">
         <FixedNavbar 
           slug={slug}
           fullPageName={fullPageName}
@@ -702,7 +898,8 @@ const Navbar = ({ slug }: Props) => {
           displayName={displayName}
           slug={slug}
           isUUID={isUUID}
-        />      
+        />
+      </div>    
     </div>    
   )
 }
