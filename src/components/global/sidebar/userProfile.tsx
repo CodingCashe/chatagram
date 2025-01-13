@@ -31,12 +31,6 @@ const SimplifiedUserProfile: React.FC<SimplifiedUserProfileProps> = ({ onSignOut
           <Mail className="mr-2 h-4 w-4 text-blue-400" />
           <span>{user.primaryEmailAddress?.emailAddress}</span>
         </div>
-        {user.publicMetadata.location && (
-          <div className="flex items-center text-sm">
-            <MapPin className="mr-2 h-4 w-4 text-blue-400" />
-            <span>{user.publicMetadata.location as string}</span>
-          </div>
-        )}
       </CardContent>
       <CardFooter>
         <Button 
