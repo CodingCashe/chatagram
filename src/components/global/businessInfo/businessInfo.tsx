@@ -1293,6 +1293,7 @@ const formSchema = z.object({
   responseLanguage: z.string().min(1, 'Response language is required'),
   businessHours: z.string().min(1, 'Business hours are required'),
   promotionMessage: z.string().min(1, 'Promotion message is required'),
+  autoReplyEnabled: z.boolean(), // Add this field
 })
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -1358,18 +1359,6 @@ export function BusinessInfoForm() {
     return () => clearInterval(interval);
   }, []);
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     const stars = document.querySelectorAll('.star')
-  //     stars.forEach((star) => {
-  //       star.classList.remove('animate-twinkle')
-  //       void star.offsetWidth
-  //       star.classList.add('animate-twinkle')
-  //     })
-  //   }, 3000)
-
-  //   return () => clearInterval(interval)
-  // }, [])
 
   return (
     <motion.div
