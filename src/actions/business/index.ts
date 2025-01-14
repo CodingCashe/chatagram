@@ -4,17 +4,36 @@ import { onCurrentUser } from '../user'
 import { createBusinessQuery, getBusinessQuery, updateBusinessQuery, deleteBusinessQuery } from './queries'
 import { Business } from '@prisma/client'
 
-export const createBusiness = async (data: Omit<Business, 'id' | 'createdAt' | 'updatedAt' | 'userId' | 'autoReplyEnabled'>) => {
-  const user = await onCurrentUser()
+// export const createBusiness = async (data: Omit<Business, 'id' | 'createdAt' | 'updatedAt' | 'userId' | 'autoReplyEnabled'>) => {
+//   const user = await onCurrentUser()
+//   try {
+//     const business = await createBusinessQuery({ ...data, userId: user.id })
+//     if (business) return { status: 200, data: business }
+//     return { status: 404, data: 'Failed to create business' }
+//   } catch (error) {
+//     console.error('Error creating business:', error)
+//     return { status: 500, data: 'An error occurred while creating the business' }
+//   }
+// }
+export const createBusiness = async (
+  data: Omit<Business, 'id' | 'createdAt' | 'updatedAt' | 'userId'>
+) => {
+  const user = await onCurrentUser();
   try {
-    const business = await createBusinessQuery({ ...data, userId: user.id })
-    if (business) return { status: 200, data: business }
-    return { status: 404, data: 'Failed to create business' }
+    // Add autoReplyEnabled with a default value if not provided
+    const business = await createBusinessQuery({
+      ...data,
+      userId: user.id,
+      autoReplyEnabled: data.autoReplyEnabled ?? false,
+    });
+    if (business) return { status: 200, data: business };
+    return { status: 404, data: 'Failed to create business' };
   } catch (error) {
-    console.error('Error creating business:', error)
-    return { status: 500, data: 'An error occurred while creating the business' }
+    console.error('Error creating business:', error);
+    return { status: 500, data: 'An error occurred while creating the business' };
   }
-}
+};
+
 
 export const getBusiness = async () => {
   const user = await onCurrentUser()
