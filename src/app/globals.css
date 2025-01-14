@@ -210,37 +210,3 @@
 }
 
 /* Add any other global styles here */
-
-@keyframes twinkle {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes tilt {
-  0%,
-  50%,
-  100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(1deg);
-  }
-  75% {
-    transform: rotate(-1deg);
-  }
-}
-
-.animate-twinkle {
-  animation: twinkle 300s infinite;
-}
-
-.animate-tilt {
-  animation: tilt 100s infinite linear;
-}
