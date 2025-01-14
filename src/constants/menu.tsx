@@ -266,6 +266,11 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
         label: 'Settings',
         icon: <SettingsDuoToneWhite />,
       },
+      {
+        id: uuid(),
+        label: 'Information',
+        icon: <SettingsDuoToneWhite />,
+      },
     ]
   },
 ]
