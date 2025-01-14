@@ -1,14 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// This is your Prisma schema file, updated with the necessary changes.
 
 generator client {
   provider = "prisma-client-js"
@@ -29,6 +19,7 @@ model User {
   subscription Subscription?
   integrations Integrations[]
   automations  Automation[]
+  businesses   Business[]     // Added relationship to Business
 }
 
 model Business {
@@ -45,9 +36,9 @@ model Business {
   promotionMessage    String
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
+  userId              String   @db.Uuid
+  User                User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Link to the User model
 }
-
-
 
 model Subscription {
   id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -112,8 +103,6 @@ model ConversationState {
   updatedAt DateTime @updatedAt
 }
 
-
-
 model Listener {
   id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   Automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
@@ -140,7 +129,7 @@ model Keyword {
   Automation   Automation? @relation(fields: [automationId], references: [id], onDelete: Cascade)
   automationId String?     @db.Uuid
 
-  @@unique([automationId, word]) //this constraints ensure user cant use the same keyword on multiple automations
+  @@unique([automationId, word]) // Ensure users can't use the same keyword on multiple automations
 }
 
 enum SUBSCRIPTION_PLAN {
@@ -162,9 +151,3 @@ enum LISTENERS {
   SMARTAI
   MESSAGE
 }
-
-
-
-
-
-

@@ -846,7 +846,12 @@ const Sidebar = ({ slug }: Props) => {
           {SIDEBAR_MENU.map((group) => renderGroup(group))}
         </div>
 
-        <Separator className="bg-[#333336]" />
+        <div className="px-16">
+          <Separator
+            orientation="horizontal"
+            className="bg-[#333336]"
+          />
+        </div>
         
         <SubscriptionPlan type="PRO">
            <div className="flex-1 flex flex-col justify-end">
@@ -858,6 +863,13 @@ const Sidebar = ({ slug }: Props) => {
              <UpgradeCard />
            </div>
          </SubscriptionPlan>
+
+         <div className="px-16">
+            <Separator
+              orientation="horizontal"
+              className="bg-[#333336]"
+            />
+         </div>
 
         <div className="w-full">
           <UserProfile onSignOut={signOut} />
