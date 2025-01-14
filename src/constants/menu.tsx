@@ -216,6 +216,7 @@ import {
   AutomationDuoToneWhite,
   RocketDuoToneWhite,
   SettingsDuoToneWhite,
+  PencilDuoToneBlack,
 } from '@/icons'
 import { MessageCircle, BarChart2, Users, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone } from 'lucide-react'
 import { v4 as uuid } from 'uuid'
@@ -269,7 +270,7 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
       {
         id: uuid(),
         label: 'Information',
-        icon: <SettingsDuoToneWhite />,
+        icon: <PencilDuoToneBlack />,
       },
     ]
   },
