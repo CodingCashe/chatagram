@@ -658,6 +658,100 @@
 //   }
 // }
 
+// import axios from 'axios';
+
+// const API_KEY = process.env.VOICEFLOW_API_KEY;
+// const PROJECT_ID = process.env.VOICEFLOW_PROJECT_ID;
+// const VERSION_ID = process.env.VOICEFLOW_VERSION_ID;
+
+// interface VoiceflowResponse {
+//   type: string;
+//   payload: any;
+// }
+
+// export async function getVoiceflowResponse(userInput: string, userId: string): Promise<VoiceflowResponse[]> {
+//   try {
+//     const response = await axios.post(
+//       `https://general-runtime.voiceflow.com/state/user/${userId}/interact`,
+//       { request: { type: 'text', payload: userInput } },
+//       {
+//         headers: {
+//           'Authorization': API_KEY,
+//           'versionID': VERSION_ID,
+//           "accept": "application/json",
+//           "content-type": "application/json"
+//         }
+//       }
+//     );
+
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error interacting with Voiceflow:', error);
+//     throw error;
+//   }
+// }
+
+// export function processVoiceflowResponse(traces: VoiceflowResponse[]): string {
+//   let result = '';
+//   for (let trace of traces) {
+//     if (trace.type === 'text') {
+//       result += trace.payload.message + '\n';
+//     } else if (trace.type === 'choice') {
+//       result += '\nOptions:\n';
+//       for (let button of trace.payload.buttons) {
+//         result += `- ${button.name}\n`;
+//       }
+//     }
+//   }
+//   return result.trim();
+// }
+
+// export async function createVoiceflowUser(userId: string): Promise<boolean> {
+//   try {
+//     await axios.put(
+//       'https://api.voiceflow.com/v2/transcripts',
+//       {
+//         projectID: PROJECT_ID,
+//         versionID: VERSION_ID,
+//         sessionID: userId
+//       },
+//       {
+//         headers: {
+//           'accept': 'application/json',
+//           'content-type': 'application/json',
+//           'Authorization': API_KEY
+//         }
+//       }
+//     );
+//     return true;
+//   } catch (error) {
+//     console.error('Error creating Voiceflow user:', error);
+//     return false;
+//   }
+// }
+
+// export async function resetVoiceflowUser(userId: string): Promise<boolean> {
+//   try {
+//     const response = await axios.post(
+//       `https://general-runtime.voiceflow.com/state/user/${userId}/interact`,
+//       { request: { type: 'reset' } },
+//       {
+//         headers: {
+//           'Authorization': API_KEY,
+//           'versionID': VERSION_ID,
+//           "accept": "application/json",
+//           "content-type": "application/json"
+//         }
+//       }
+//     );
+//     return response.status === 200;
+//   } catch (error) {
+//     console.error('Error resetting Voiceflow user:', error);
+//     return false;
+//   }
+// }
+
+
 import axios from 'axios';
 
 const API_KEY = process.env.VOICEFLOW_API_KEY;
@@ -671,15 +765,25 @@ interface VoiceflowResponse {
 
 export async function getVoiceflowResponse(userInput: string, userId: string): Promise<VoiceflowResponse[]> {
   try {
+    // Static test variables
+    const testVariables = {
+      business_name: 'Test Business',
+      business_info: 'This is a sample business info for testing.',
+      owner_name: 'John Doe',
+    };
+
     const response = await axios.post(
       `https://general-runtime.voiceflow.com/state/user/${userId}/interact`,
-      { request: { type: 'text', payload: userInput } },
+      {
+        request: { type: 'text', payload: userInput },
+        state: { variables: testVariables }, // Inject test variables here
+      },
       {
         headers: {
           'Authorization': API_KEY,
           'versionID': VERSION_ID,
-          "accept": "application/json",
-          "content-type": "application/json"
+          'accept': 'application/json',
+          'content-type': 'application/json',
         }
       }
     );
@@ -713,13 +817,13 @@ export async function createVoiceflowUser(userId: string): Promise<boolean> {
       {
         projectID: PROJECT_ID,
         versionID: VERSION_ID,
-        sessionID: userId
+        sessionID: userId,
       },
       {
         headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'Authorization': API_KEY
+          'Authorization': API_KEY,
         }
       }
     );
@@ -739,8 +843,8 @@ export async function resetVoiceflowUser(userId: string): Promise<boolean> {
         headers: {
           'Authorization': API_KEY,
           'versionID': VERSION_ID,
-          "accept": "application/json",
-          "content-type": "application/json"
+          'accept': 'application/json',
+          'content-type': 'application/json',
         }
       }
     );
@@ -750,4 +854,3 @@ export async function resetVoiceflowUser(userId: string): Promise<boolean> {
     return false;
   }
 }
-
