@@ -31,6 +31,22 @@ model User {
   automations  Automation[]
 }
 
+model Business {
+  id                  String   @id @default(cuid())
+  businessName        String
+  businessType        String
+  businessDescription String
+  industry            String
+  instagramHandle     String
+  welcomeMessage      String
+  responseLanguage    String
+  businessHours       String
+  autoReplyEnabled    Boolean
+  promotionMessage    String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
 
 
 model Subscription {
