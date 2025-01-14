@@ -1,3 +1,4 @@
+'use client'
 import { BusinessInfoForm } from '@/components/global/businessInfo/businessInfo'
 
 export default function Home() {
