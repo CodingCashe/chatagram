@@ -24,7 +24,7 @@ model User {
 
 
 model Business {
-  id                  String   @id @default(cuid())
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   businessName        String
   businessType        String
   businessDescription String
@@ -37,8 +37,8 @@ model Business {
   promotionMessage    String
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
-  userId              String   @db.Uuid
-  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String?  @db.Uuid
+  user                User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 
