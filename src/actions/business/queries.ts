@@ -43,6 +43,14 @@ export const createBusinessQuery = async (data: Omit<Business, 'id' | 'createdAt
   });
 };
 
+// export const createBusinessQuery = async (data: Omit<Business, 'id' | 'createdAt' | 'updatedAt'>) => {
+//   return await client.business.create({
+//     data: {
+//       ...data,
+//     },
+//   });
+// };
+
 export const getBusinessQuery = async (userId: string) => {
   return await client.business.findFirst({
     where: {

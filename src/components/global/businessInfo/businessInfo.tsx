@@ -1275,7 +1275,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { createBusiness } from '@/actions/business/index'
+import { createNewBusiness } from '@/actions/businfo'
 import { FormSummary } from './formSummary'
 import { ErrorMessage } from './errorMessage'
 import { useToast } from "@/hooks/use-toast"
@@ -1319,7 +1319,7 @@ function BusinessForm() {
     setIsLoading(true)
     setError(null)
     try {
-      const result = await createBusiness(data)
+      const result = await createNewBusiness(data)
       console.log('Business created:', result)
       if (result.status === 200) {
         setFormData(data)
@@ -1329,10 +1329,10 @@ function BusinessForm() {
           description: "Business information submitted successfully!",
         })
       } else {
-        setError(result.error || 'An unknown error occurred')
+        setError(result.data || 'An unknown error occurred')
         toast({
           title: "Error",
-          description: result.error || "Failed to submit business information. Please try again.",
+          description: result.status || "Failed to submit business information. Please try again.",
           variant: "destructive",
         })
       }
