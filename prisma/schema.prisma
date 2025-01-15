@@ -22,6 +22,7 @@ model User {
   businesses   Business[]     // Added relationship to Business
 }
 
+
 model Business {
   id                  String   @id @default(cuid())
   businessName        String
@@ -37,8 +38,10 @@ model Business {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
   userId              String   @db.Uuid
-  User                User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Link to the User model
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+
 
 model Subscription {
   id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -151,3 +154,8 @@ enum LISTENERS {
   SMARTAI
   MESSAGE
 }
+
+
+
+
+

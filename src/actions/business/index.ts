@@ -66,6 +66,28 @@ import { onCurrentUser } from '../user'
 import { createBusinessQuery, getBusinessQuery, updateBusinessQuery, deleteBusinessQuery } from './queries'
 import { Business } from '@prisma/client'
 
+// export const createBusiness = async (data: FormSchema) => {
+//   console.log('Starting createBusiness function', { data });
+//   const user = await onCurrentUser();
+//   console.log('Current user fetched', { userId: user.id });
+//   try {
+//     console.log('Attempting to create business', { ...data, userId: user.id });
+//     const business = await createBusinessQuery({
+//       ...data,
+//       userId: user.id,
+//     });
+//     if (business) {
+//       console.log('Business created successfully', { businessId: business.id });
+//       return { status: 200, data: business };
+//     }
+//     console.warn('Failed to create business, no error thrown but no business returned');
+//     return { status: 404, error: 'Failed to create business' };
+//   } catch (error) {
+//     console.error('Error creating business:', error);
+//     return { status: 500, error: 'An error occurred while creating the business' };
+//   }
+// };
+
 export const createBusiness = async (data: FormSchema) => {
   console.log('Starting createBusiness function', { data });
   const user = await onCurrentUser();
@@ -84,7 +106,10 @@ export const createBusiness = async (data: FormSchema) => {
     return { status: 404, error: 'Failed to create business' };
   } catch (error) {
     console.error('Error creating business:', error);
-    return { status: 500, error: 'An error occurred while creating the business' };
+    if (error instanceof Error) {
+      return { status: 500, error: error.message };
+    }
+    return { status: 500, error: 'An unknown error occurred while creating the business' };
   }
 };
 export const getBusiness = async () => {
@@ -141,9 +166,6 @@ export const deleteBusiness = async (id: string) => {
     return { status: 500, data: 'An error occurred while deleting the business' }
   }
 }
-
-
-
 
 
 
