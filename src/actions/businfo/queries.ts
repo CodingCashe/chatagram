@@ -1,11 +1,16 @@
-// 'use server'
-
 // import { client } from '@/lib/prisma'
 
 // export const createBusiness = async (clerkId: string, businessData: {
-//   name: string
-//   description?: string
-//   industry?: string
+//   businessName: string
+//   businessType: string
+//   businessDescription: string
+//   industry: string
+//   instagramHandle: string
+//   welcomeMessage: string
+//   responseLanguage: string
+//   businessHours: string
+//   autoReplyEnabled: boolean
+//   promotionMessage: string
 // }) => {
 //   return await client.user.update({
 //     where: {
@@ -40,7 +45,7 @@
 //       id,
 //     },
 //     include: {
-//       User: {
+//       user: {
 //         select: {
 //           subscription: true,
 //         },
@@ -51,11 +56,18 @@
 
 // export const updateBusiness = async (
 //   id: string,
-//   update: {
-//     name?: string
-//     description?: string
-//     industry?: string
-//   }
+//   update: Partial<{
+//     businessName: string
+//     businessType: string
+//     businessDescription: string
+//     industry: string
+//     instagramHandle: string
+//     welcomeMessage: string
+//     responseLanguage: string
+//     businessHours: string
+//     autoReplyEnabled: boolean
+//     promotionMessage: string
+//   }>
 // ) => {
 //   return await client.business.update({
 //     where: { id },
@@ -79,19 +91,9 @@
 'use server'
 
 import { client } from '@/lib/prisma'
+import { FormSchema } from '@/components/global/businessInfo/businessInfo'
 
-export const createBusiness = async (clerkId: string, businessData: {
-  businessName: string
-  businessType: string
-  businessDescription: string
-  industry: string
-  instagramHandle: string
-  welcomeMessage: string
-  responseLanguage: string
-  businessHours: string
-  autoReplyEnabled: boolean
-  promotionMessage: string
-}) => {
+export const createBusiness = async (clerkId: string, businessData: FormSchema) => {
   return await client.user.update({
     where: {
       clerkId,
@@ -136,18 +138,7 @@ export const findBusiness = async (id: string) => {
 
 export const updateBusiness = async (
   id: string,
-  update: Partial<{
-    businessName: string
-    businessType: string
-    businessDescription: string
-    industry: string
-    instagramHandle: string
-    welcomeMessage: string
-    responseLanguage: string
-    businessHours: string
-    autoReplyEnabled: boolean
-    promotionMessage: string
-  }>
+  update: Partial<FormSchema>
 ) => {
   return await client.business.update({
     where: { id },
@@ -167,4 +158,6 @@ export const deleteBusiness = async (businessId: string) => {
     return null
   }
 }
+
+
 
