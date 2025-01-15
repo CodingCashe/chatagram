@@ -1014,261 +1014,9 @@
 //   )
 // }
 
-'use client'
-
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import { createBusiness } from '@/actions/business'
-import { FormSummary } from './formSummary'
-import { ErrorMessage } from './errorMessage'
-import { useToast } from "@/hooks/use-toast"
-import { ToastViewport } from "@/components/ui/toast"
-
-const formSchema = z.object({
-  businessName: z.string().min(1, 'Business name is required'),
-  businessType: z.string().min(1, 'Business type is required'),
-  businessDescription: z.string().min(10, 'Description must be at least 10 characters'),
-  industry: z.string().min(1, 'Industry is required'),
-  instagramHandle: z.string().min(1, 'Instagram handle is required'),
-  welcomeMessage: z.string().min(1, 'Welcome message is required'),
-  responseLanguage: z.string().min(1, 'Response language is required'),
-  businessHours: z.string().min(1, 'Business hours are required'),
-  promotionMessage: z.string().min(1, 'Promotion message is required'),
-  autoReplyEnabled: z.boolean(), // Add this field
-})
-
-type FormSchema = z.infer<typeof formSchema>;
-
-export function BusinessInfoForm() {
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [formData, setFormData] = useState<FormSchema | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const { register, handleSubmit, formState: { errors }, reset, getValues, setValue, watch } = useForm<FormSchema>({
-    resolver: zodResolver(formSchema),
-  })
-  const { toast } = useToast()
-
-  const onSubmit = async (data: FormSchema) => {
-    setIsLoading(true)
-    try {
-      const result = await createBusiness(data)
-      console.log('Business created:', result)
-      setFormData(data)
-      setIsSubmitted(true)
-      toast({
-        title: "Success",
-        description: "Business information submitted successfully!",
-      })
-    } catch (error) {
-      console.error('Error creating business:', error)
-      toast({
-        title: "Error",
-        description: "Failed to submit business information. Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleEdit = () => {
-    setIsSubmitted(false)
-  }
-
-  const handleConfirm = () => {
-    // Here you can perform any final submission logic
-    console.log('Form confirmed and submitted')
-    reset() // Reset the form
-    setIsSubmitted(false)
-    setFormData(null)
-  }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full max-w-6xl mx-auto p-8 bg-gradient-to-br from-[#2A2A2A] to-[#3D3D3D] rounded-xl shadow-2xl text-gray-100"
-    >
-      <h1 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple-400 to-pink-600 text-transparent bg-clip-text">
-        Business Information Form
-      </h1>
-      <AnimatePresence mode="wait">
-        {!isSubmitted ? (
-          <motion.form
-            key="form"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onSubmit={handleSubmit(onSubmit)}
-            className="space-y-6"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium mb-1" htmlFor="businessName">
-                  Business Name
-                </label>
-                <Input
-                  id="businessName"
-                  {...register('businessName')}
-                  className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300"
-                  placeholder="Enter your business name"
-                />
-                <ErrorMessage error={errors.businessName} />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1" htmlFor="businessType">
-                  Business Type
-                </label>
-                <Select onValueChange={(value) => setValue('businessType', value)} defaultValue={watch('businessType')}>
-                  <SelectTrigger className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300">
-                    <SelectValue placeholder="Select business type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Retail">Retail</SelectItem>
-                    <SelectItem value="Service">Service</SelectItem>
-                    <SelectItem value="E-Commerce">E-Commerce</SelectItem>
-                    <SelectItem value="Agency">Agency</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="businessDescription">
-                Business Description
-              </label>
-              <Textarea
-                id="businessDescription"
-                {...register('businessDescription')}
-                className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300"
-                placeholder="Describe your business"
-                rows={4}
-              />
-              <ErrorMessage error={errors.businessDescription} />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium mb-1" htmlFor="industry">
-                  Industry
-                </label>
-                <Select onValueChange={(value) => setValue('industry', value)} defaultValue={watch('industry')}>
-                  <SelectTrigger className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300">
-                    <SelectValue placeholder="Select industry" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Fashion">Fashion</SelectItem>
-                    <SelectItem value="Beauty">Beauty</SelectItem>
-                    <SelectItem value="Technology">Technology</SelectItem>
-                    <SelectItem value="Health">Health</SelectItem>
-                    <SelectItem value="Food">Food</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1" htmlFor="instagramHandle">
-                  Instagram Handle
-                </label>
-                <Input
-                  id="instagramHandle"
-                  {...register('instagramHandle')}
-                  className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300"
-                  placeholder="@yourbusiness"
-                />
-                <ErrorMessage error={errors.instagramHandle} />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="welcomeMessage">
-                Welcome Message
-              </label>
-              <Textarea
-                id="welcomeMessage"
-                {...register('welcomeMessage')}
-                className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300"
-                placeholder="Enter your welcome message"
-                rows={3}
-              />
-              <ErrorMessage error={errors.welcomeMessage} />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium mb-1" htmlFor="responseLanguage">
-                  Response Language
-                </label>
-                <Select onValueChange={(value) => setValue('responseLanguage', value)} defaultValue={watch('responseLanguage')}>
-                  <SelectTrigger className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300">
-                    <SelectValue placeholder="Select language" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="English">English</SelectItem>
-                    <SelectItem value="Spanish">Spanish</SelectItem>
-                    <SelectItem value="French">French</SelectItem>
-                    <SelectItem value="German">German</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1" htmlFor="businessHours">
-                  Business Hours
-                </label>
-                <Input
-                  id="businessHours"
-                  {...register('businessHours')}
-                  className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300"
-                  placeholder="e.g., Mon-Fri 9AM-5PM"
-                />
-                <ErrorMessage error={errors.businessHours} />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="promotionMessage">
-                Promotion Message
-              </label>
-              <Textarea
-                id="promotionMessage"
-                {...register('promotionMessage')}
-                className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300"
-                placeholder="Enter your default promotion message"
-                rows={3}
-              />
-              <ErrorMessage error={errors.promotionMessage} />
-            </div>
-            <div className="text-center">
-              <Button
-                type="submit"
-                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
-                disabled={isLoading}
-              >
-                {isLoading ? 'Submitting...' : 'Submit'}
-              </Button>
-            </div>
-          </motion.form>
-        ) : (
-          <FormSummary
-            data={formData!}
-            onEdit={handleEdit}
-            onConfirm={handleConfirm}
-          />
-        )}
-      </AnimatePresence>
-      <ToastViewport />
-    </motion.div>
-  )
-}
-
 // 'use client'
 
-// import { useState, useEffect } from 'react'
+// import { useState } from 'react'
 // import { motion, AnimatePresence } from 'framer-motion'
 // import { useForm } from 'react-hook-form'
 // import { zodResolver } from '@hookform/resolvers/zod'
@@ -1277,12 +1025,11 @@ export function BusinessInfoForm() {
 // import { Textarea } from "@/components/ui/textarea"
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 // import { Button } from "@/components/ui/button"
-// import { createBusiness } from '@/actions/business'
+// import { createBusiness } from '@/actions/business/index'
 // import { FormSummary } from './formSummary'
 // import { ErrorMessage } from './errorMessage'
 // import { useToast } from "@/hooks/use-toast"
 // import { ToastViewport } from "@/components/ui/toast"
-// import { Sparkles, Star, Zap } from 'lucide-react'
 
 // const formSchema = z.object({
 //   businessName: z.string().min(1, 'Business name is required'),
@@ -1299,16 +1046,11 @@ export function BusinessInfoForm() {
 
 // type FormSchema = z.infer<typeof formSchema>;
 
-// const inputVariants = {
-//   focus: { scale: 1.02, boxShadow: "0 0 0 2px rgba(124, 58, 237, 0.5)" },
-// }
-
 // export function BusinessInfoForm() {
 //   const [isSubmitted, setIsSubmitted] = useState(false)
 //   const [formData, setFormData] = useState<FormSchema | null>(null)
 //   const [isLoading, setIsLoading] = useState(false)
-//   const [activeField, setActiveField] = useState<string | null>(null)
-//   const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm<FormSchema>({
+//   const { register, handleSubmit, formState: { errors }, reset, getValues, setValue, watch } = useForm<FormSchema>({
 //     resolver: zodResolver(formSchema),
 //   })
 //   const { toast } = useToast()
@@ -1341,56 +1083,23 @@ export function BusinessInfoForm() {
 //   }
 
 //   const handleConfirm = () => {
+//     // Here you can perform any final submission logic
 //     console.log('Form confirmed and submitted')
-//     reset()
+//     reset() // Reset the form
 //     setIsSubmitted(false)
 //     setFormData(null)
 //   }
-
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       const stars = document.querySelectorAll<HTMLElement>('.star'); // Explicitly define the type as HTMLElement
-//       stars.forEach((star) => {
-//         star.classList.remove('animate-twinkle');
-//         void star.offsetWidth; // Ensure this works without error
-//         star.classList.add('animate-twinkle');
-//       });
-//     }, 3000);
-  
-//     return () => clearInterval(interval);
-//   }, []);
-
 
 //   return (
 //     <motion.div
 //       initial={{ opacity: 0, y: 20 }}
 //       animate={{ opacity: 1, y: 0 }}
 //       transition={{ duration: 0.5 }}
-//       className="w-full max-w-6xl mx-auto p-8 bg-gradient-to-br from-[#1a1a2e] to-[#16213e] rounded-xl shadow-2xl text-gray-100 relative overflow-hidden"
+//       className="w-full max-w-6xl mx-auto p-8 bg-gradient-to-br from-[#2A2A2A] to-[#3D3D3D] rounded-xl shadow-2xl text-gray-100"
 //     >
-//       <div className="absolute inset-0 overflow-hidden">
-//         {[...Array(50)].map((_, i) => (
-//           <div
-//             key={i}
-//             className="star absolute w-1 h-1 bg-white rounded-full animate-twinkle"
-//             style={{
-//               top: `${Math.random() * 100}%`,
-//               left: `${Math.random() * 100}%`,
-//               animationDelay: `${Math.random() * 5}s`,
-//             }}
-//           />
-//         ))}
-//       </div>
-//       <motion.h1
-//         className="text-5xl font-bold mb-8 text-center bg-gradient-to-r from-purple-400 to-pink-600 text-transparent bg-clip-text relative"
-//         initial={{ y: -50, opacity: 0 }}
-//         animate={{ y: 0, opacity: 1 }}
-//         transition={{ delay: 0.2, duration: 0.8, type: "spring" }}
-//       >
-//         <Sparkles className="inline-block mr-2 text-yellow-400" />
+//       <h1 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple-400 to-pink-600 text-transparent bg-clip-text">
 //         Business Information Form
-//         <Sparkles className="inline-block ml-2 text-yellow-400" />
-//       </motion.h1>
+//       </h1>
 //       <AnimatePresence mode="wait">
 //         {!isSubmitted ? (
 //           <motion.form
@@ -1399,45 +1108,27 @@ export function BusinessInfoForm() {
 //             animate={{ opacity: 1 }}
 //             exit={{ opacity: 0 }}
 //             onSubmit={handleSubmit(onSubmit)}
-//             className="space-y-6 relative z-10"
+//             className="space-y-6"
 //           >
 //             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//               <motion.div
-//                 variants={inputVariants}
-//                 whileFocus="focus"
-//                 className="relative"
-//               >
+//               <div>
 //                 <label className="block text-sm font-medium mb-1" htmlFor="businessName">
 //                   Business Name
 //                 </label>
 //                 <Input
 //                   id="businessName"
 //                   {...register('businessName')}
-//                   className="w-full bg-gray-800 bg-opacity-50 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300 backdrop-blur-sm"
+//                   className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300"
 //                   placeholder="Enter your business name"
-//                   onFocus={() => setActiveField('businessName')}
-//                   onBlur={() => setActiveField(null)}
 //                 />
 //                 <ErrorMessage error={errors.businessName} />
-//                 {activeField === 'businessName' && (
-//                   <motion.div
-//                     className="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"
-//                     initial={{ opacity: 0 }}
-//                     animate={{ opacity: 0.75 }}
-//                     exit={{ opacity: 0 }}
-//                   />
-//                 )}
-//               </motion.div>
-//               <motion.div
-//                 variants={inputVariants}
-//                 whileFocus="focus"
-//                 className="relative"
-//               >
+//               </div>
+//               <div>
 //                 <label className="block text-sm font-medium mb-1" htmlFor="businessType">
 //                   Business Type
 //                 </label>
 //                 <Select onValueChange={(value) => setValue('businessType', value)} defaultValue={watch('businessType')}>
-//                   <SelectTrigger className="w-full bg-gray-800 bg-opacity-50 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300 backdrop-blur-sm">
+//                   <SelectTrigger className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300">
 //                     <SelectValue placeholder="Select business type" />
 //                   </SelectTrigger>
 //                   <SelectContent>
@@ -1448,46 +1139,28 @@ export function BusinessInfoForm() {
 //                     <SelectItem value="Other">Other</SelectItem>
 //                   </SelectContent>
 //                 </Select>
-//               </motion.div>
+//               </div>
 //             </div>
-//             <motion.div
-//               variants={inputVariants}
-//               whileFocus="focus"
-//               className="relative"
-//             >
+//             <div>
 //               <label className="block text-sm font-medium mb-1" htmlFor="businessDescription">
 //                 Business Description
 //               </label>
 //               <Textarea
 //                 id="businessDescription"
 //                 {...register('businessDescription')}
-//                 className="w-full bg-gray-800 bg-opacity-50 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300 backdrop-blur-sm"
+//                 className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300"
 //                 placeholder="Describe your business"
 //                 rows={4}
-//                 onFocus={() => setActiveField('businessDescription')}
-//                 onBlur={() => setActiveField(null)}
 //               />
 //               <ErrorMessage error={errors.businessDescription} />
-//               {activeField === 'businessDescription' && (
-//                 <motion.div
-//                   className="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"
-//                   initial={{ opacity: 0 }}
-//                   animate={{ opacity: 0.75 }}
-//                   exit={{ opacity: 0 }}
-//                 />
-//               )}
-//             </motion.div>
+//             </div>
 //             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//               <motion.div
-//                 variants={inputVariants}
-//                 whileFocus="focus"
-//                 className="relative"
-//               >
+//               <div>
 //                 <label className="block text-sm font-medium mb-1" htmlFor="industry">
 //                   Industry
 //                 </label>
 //                 <Select onValueChange={(value) => setValue('industry', value)} defaultValue={watch('industry')}>
-//                   <SelectTrigger className="w-full bg-gray-800 bg-opacity-50 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300 backdrop-blur-sm">
+//                   <SelectTrigger className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300">
 //                     <SelectValue placeholder="Select industry" />
 //                   </SelectTrigger>
 //                   <SelectContent>
@@ -1499,72 +1172,40 @@ export function BusinessInfoForm() {
 //                     <SelectItem value="Other">Other</SelectItem>
 //                   </SelectContent>
 //                 </Select>
-//               </motion.div>
-//               <motion.div
-//                 variants={inputVariants}
-//                 whileFocus="focus"
-//                 className="relative"
-//               >
+//               </div>
+//               <div>
 //                 <label className="block text-sm font-medium mb-1" htmlFor="instagramHandle">
 //                   Instagram Handle
 //                 </label>
 //                 <Input
 //                   id="instagramHandle"
 //                   {...register('instagramHandle')}
-//                   className="w-full bg-gray-800 bg-opacity-50 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300 backdrop-blur-sm"
+//                   className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300"
 //                   placeholder="@yourbusiness"
-//                   onFocus={() => setActiveField('instagramHandle')}
-//                   onBlur={() => setActiveField(null)}
 //                 />
 //                 <ErrorMessage error={errors.instagramHandle} />
-//                 {activeField === 'instagramHandle' && (
-//                   <motion.div
-//                     className="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"
-//                     initial={{ opacity: 0 }}
-//                     animate={{ opacity: 0.75 }}
-//                     exit={{ opacity: 0 }}
-//                   />
-//                 )}
-//               </motion.div>
+//               </div>
 //             </div>
-//             <motion.div
-//               variants={inputVariants}
-//               whileFocus="focus"
-//               className="relative"
-//             >
+//             <div>
 //               <label className="block text-sm font-medium mb-1" htmlFor="welcomeMessage">
 //                 Welcome Message
 //               </label>
 //               <Textarea
 //                 id="welcomeMessage"
 //                 {...register('welcomeMessage')}
-//                 className="w-full bg-gray-800 bg-opacity-50 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300 backdrop-blur-sm"
+//                 className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300"
 //                 placeholder="Enter your welcome message"
 //                 rows={3}
-//                 onFocus={() => setActiveField('welcomeMessage')}
-//                 onBlur={() => setActiveField(null)}
 //               />
 //               <ErrorMessage error={errors.welcomeMessage} />
-//               {activeField === 'welcomeMessage' && (
-//                 <motion.div
-//                   className="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"
-//                   initial={{ opacity: 0 }}
-//                   animate={{ opacity: 0.75 }}
-//                   exit={{ opacity: 0 }}
-//                 />
-//               )}
-//             </motion.div>
+//             </div>
 //             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//               <motion.div
-//                 variants={inputVariants}
-//                 whileFocus="focus"
-//                 className="relative"
-//               >
+//               <div>
 //                 <label className="block text-sm font-medium mb-1" htmlFor="responseLanguage">
 //                   Response Language
 //                 </label>
 //                 <Select onValueChange={(value) => setValue('responseLanguage', value)} defaultValue={watch('responseLanguage')}>
-//                   <SelectTrigger className="w-full bg-gray-800 bg-opacity-50 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300 backdrop-blur-sm">
+//                   <SelectTrigger className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300">
 //                     <SelectValue placeholder="Select language" />
 //                   </SelectTrigger>
 //                   <SelectContent>
@@ -1575,80 +1216,41 @@ export function BusinessInfoForm() {
 //                     <SelectItem value="Other">Other</SelectItem>
 //                   </SelectContent>
 //                 </Select>
-//               </motion.div>
-//               <motion.div
-//                 variants={inputVariants}
-//                 whileFocus="focus"
-//                 className="relative"
-//               >
+//               </div>
+//               <div>
 //                 <label className="block text-sm font-medium mb-1" htmlFor="businessHours">
 //                   Business Hours
 //                 </label>
 //                 <Input
 //                   id="businessHours"
 //                   {...register('businessHours')}
-//                   className="w-full bg-gray-800 bg-opacity-50 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300 backdrop-blur-sm"
+//                   className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300"
 //                   placeholder="e.g., Mon-Fri 9AM-5PM"
-//                   onFocus={() => setActiveField('businessHours')}
-//                   onBlur={() => setActiveField(null)}
 //                 />
 //                 <ErrorMessage error={errors.businessHours} />
-//                 {activeField === 'businessHours' && (
-//                   <motion.div
-//                     className="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"
-//                     initial={{ opacity: 0 }}
-//                     animate={{ opacity: 0.75 }}
-//                     exit={{ opacity: 0 }}
-//                   />
-//                 )}
-//               </motion.div>
+//               </div>
 //             </div>
-//             <motion.div
-//               variants={inputVariants}
-//               whileFocus="focus"
-//               className="relative"
-//             >
+//             <div>
 //               <label className="block text-sm font-medium mb-1" htmlFor="promotionMessage">
 //                 Promotion Message
 //               </label>
 //               <Textarea
 //                 id="promotionMessage"
 //                 {...register('promotionMessage')}
-//                 className="w-full bg-gray-800 bg-opacity-50 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300 backdrop-blur-sm"
+//                 className="w-full bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 transition-colors duration-300"
 //                 placeholder="Enter your default promotion message"
 //                 rows={3}
-//                 onFocus={() => setActiveField('promotionMessage')}
-//                 onBlur={() => setActiveField(null)}
 //               />
 //               <ErrorMessage error={errors.promotionMessage} />
-//               {activeField === 'promotionMessage' && (
-//                 <motion.div
-//                   className="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"
-//                   initial={{ opacity: 0 }}
-//                   animate={{ opacity: 0.75 }}
-//                   exit={{ opacity: 0 }}
-//                 />
-//               )}
-//             </motion.div>
+//             </div>
 //             <div className="text-center">
-//               <motion.button
+//               <Button
 //                 type="submit"
-//                 className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg relative overflow-hidden group"
+//                 className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
 //                 disabled={isLoading}
-//                 whileHover={{ scale: 1.05 }}
-//                 whileTap={{ scale: 0.95 }}
 //               >
-//                 <span className="relative z-10">
-//                   {isLoading ? 'Submitting...' : 'Submit'}
-//                 </span>
-//                 <motion.div
-//                   className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-//                   initial={{ opacity: 0 }}
-//                   animate={{ opacity: [0, 1, 0] }}
-//                   transition={{ duration: 1.5, repeat: Infinity }}
-//                 />
-//                 <Zap className="absolute right-2 top-1/2 transform -translate-y-1/2 text-yellow-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-//               </motion.button>
+//                 {isLoading ? 'Submitting...' : 'Submit'}
+//               </Button>
 //             </div>
 //           </motion.form>
 //         ) : (
@@ -1663,4 +1265,215 @@ export function BusinessInfoForm() {
 //     </motion.div>
 //   )
 // }
+
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
+import { createBusiness } from '@/actions/business/index'
+import { FormSummary } from './formSummary'
+import { ErrorMessage } from './errorMessage'
+import { useToast } from "@/hooks/use-toast"
+import { ToastViewport } from "@/components/ui/toast"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+
+export const FormSchema = z.object({
+  businessName: z.string().min(1, { message: 'Business name is required' }),
+  businessType: z.string().min(1, { message: 'Business type is required' }),
+  businessDescription: z.string().min(10, { message: 'Description must be at least 10 characters' }),
+  industry: z.string().min(1, { message: 'Industry is required' }),
+  instagramHandle: z.string().min(1, { message: 'Instagram handle is required' }),
+  welcomeMessage: z.string().min(1, { message: 'Welcome message is required' }),
+  responseLanguage: z.string().min(1, { message: 'Response language is required' }),
+  businessHours: z.string().min(1, { message: 'Business hours are required' }),
+  promotionMessage: z.string().min(1, { message: 'Promotion message is required' }),
+  autoReplyEnabled: z.boolean().default(false),
+})
+
+export type FormSchema = z.infer<typeof FormSchema>
+
+function BusinessForm() {
+  const [formData, setFormData] = useState<FormSchema | null>(null)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<FormSchema>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      autoReplyEnabled: false,
+    },
+  })
+  const { toast } = useToast()
+
+  const onSubmit = async (data: FormSchema) => {
+    setIsLoading(true)
+    setError(null)
+    try {
+      const result = await createBusiness(data)
+      console.log('Business created:', result)
+      if (result.status === 200) {
+        setFormData(data)
+        setIsSubmitted(true)
+        toast({
+          title: "Success",
+          description: "Business information submitted successfully!",
+        })
+      } else {
+        setError(result.error || 'An unknown error occurred')
+        toast({
+          title: "Error",
+          description: result.error || "Failed to submit business information. Please try again.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error('Error creating business:', error)
+      setError('An unexpected error occurred')
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleEdit = () => {
+    setIsSubmitted(false)
+  }
+
+  const handleConfirm = () => {
+    console.log('Form confirmed and submitted')
+    setIsSubmitted(false)
+    setFormData(null)
+  }
+
+  return (
+    <AnimatePresence>
+      {!isSubmitted ? (
+        <motion.form
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4"
+        >
+          <Input
+            placeholder="Enter your business name"
+            {...register('businessName')}
+          />
+          {errors.businessName && <ErrorMessage>{errors.businessName.message}</ErrorMessage>}
+          
+          <Select onValueChange={(value) => setValue('businessType', value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select Business Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Retail">Retail</SelectItem>
+              <SelectItem value="Service">Service</SelectItem>
+              <SelectItem value="Manufacturing">Manufacturing</SelectItem>
+              <SelectItem value="Tech">Tech</SelectItem>
+            </SelectContent>
+          </Select>
+          {errors.businessType && <ErrorMessage>{errors.businessType.message}</ErrorMessage>}
+          
+          <Textarea
+            placeholder="Enter your business description"
+            {...register('businessDescription')}
+          />
+          {errors.businessDescription && <ErrorMessage>{errors.businessDescription.message}</ErrorMessage>}
+          
+          <Select onValueChange={(value) => setValue('industry', value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select Industry" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Fashion">Fashion</SelectItem>
+              <SelectItem value="Food">Food</SelectItem>
+              <SelectItem value="Technology">Technology</SelectItem>
+              <SelectItem value="Healthcare">Healthcare</SelectItem>
+            </SelectContent>
+          </Select>
+          {errors.industry && <ErrorMessage>{errors.industry.message}</ErrorMessage>}
+          
+          <Input
+            placeholder="Enter your Instagram handle"
+            {...register('instagramHandle')}
+          />
+          {errors.instagramHandle && <ErrorMessage>{errors.instagramHandle.message}</ErrorMessage>}
+          
+          <Textarea
+            placeholder="Enter your welcome message"
+            {...register('welcomeMessage')}
+          />
+          {errors.welcomeMessage && <ErrorMessage>{errors.welcomeMessage.message}</ErrorMessage>}
+          
+          <Select onValueChange={(value) => setValue('responseLanguage', value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select Response Language" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="English">English</SelectItem>
+              <SelectItem value="Spanish">Spanish</SelectItem>
+              <SelectItem value="French">French</SelectItem>
+              <SelectItem value="German">German</SelectItem>
+            </SelectContent>
+          </Select>
+          {errors.responseLanguage && <ErrorMessage>{errors.responseLanguage.message}</ErrorMessage>}
+          
+          <Input
+            placeholder="Enter your business hours"
+            {...register('businessHours')}
+          />
+          {errors.businessHours && <ErrorMessage>{errors.businessHours.message}</ErrorMessage>}
+          
+          <Textarea
+            placeholder="Enter your promotion message"
+            {...register('promotionMessage')}
+          />
+          {errors.promotionMessage && <ErrorMessage>{errors.promotionMessage.message}</ErrorMessage>}
+          
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="autoReplyEnabled"
+              {...register('autoReplyEnabled')}
+            />
+            <label htmlFor="autoReplyEnabled">Enable Auto Reply</label>
+          </div>
+          
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? 'Submitting...' : 'Submit'}
+          </Button>
+          {error && (
+            <Alert variant="destructive">
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+        </motion.form>
+      ) : (
+        <FormSummary 
+          data={formData!} 
+          onEdit={handleEdit}
+          onConfirm={handleConfirm}
+        />
+      )}
+      <ToastViewport />
+    </AnimatePresence>
+  )
+}
+
+export default BusinessForm
 

@@ -5,7 +5,6 @@ export const createBusinessQuery = async (data: Omit<Business, 'id' | 'createdAt
   return await client.business.create({
     data: {
       ...data,
-      autoReplyEnabled: false, // Set a default value
     },
   })
 }
