@@ -24,24 +24,33 @@
 
 'use client'
 
-import { useParams } from 'next/navigation'
-import BusinessInfo from '@/components/global/businessInfo/infoCard'
+// import { useParams } from 'next/navigation'
+// import BusinessManager from '@/components/global/businessInfo/businessManager'
+// import { ToastProvider } from "@/components/ui/toast"
+
+// export default function BusinessInfoPage() {
+//   const params = useParams()
+//   const businessId = params.businessId as string
+
+//   if (!businessId) {
+//     return <div>Error: Business ID not found</div>
+//   }
+
+//   return (
+//     <ToastProvider>
+//       <BusinessManager />
+//     </ToastProvider>
+//   )
+// }
+
+
+import BusinessManager from '@/components/global/businessInfo/businessManager'
 import { ToastProvider } from "@/components/ui/toast"
 
 export default function BusinessInfoPage() {
-  const params = useParams()
-  const businessId = params.businessId as string
-
-  if (!businessId) {
-    return <div>Error: Business ID not found</div>
-  }
-
-  return (
+    return (
     <ToastProvider>
-      <BusinessInfo businessId={businessId} />
+      <BusinessManager />
     </ToastProvider>
   )
 }
-
-
-

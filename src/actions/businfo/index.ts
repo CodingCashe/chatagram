@@ -213,13 +213,26 @@ export const createNewBusiness = async (businessData: FormSchema) => {
 export const getAllBusinesses = async () => {
   const user = await onCurrentUser()
   try {
-    const businesses = await getBusinesses(user.id)
-    if (businesses) return { status: 200, data: businesses }
-    return { status: 404, data: [] }
+    const result = await getBusinesses(user.id)
+    if (result && result.businesses) {
+      return { status: 200, data: { businesses: result.businesses } }
+    }
+    return { status: 404, data: { businesses: [] } }
   } catch (error) {
-    return { status: 500, data: [] }
+    return { status: 500, data: { businesses: [] } }
   }
 }
+
+// export const getAllBusinesses = async () => {
+//   const user = await onCurrentUser()
+//   try {
+//     const businesses = await getBusinesses(user.id)
+//     if (businesses) return { status: 200, data: businesses }
+//     return { status: 404, data: [] }
+//   } catch (error) {
+//     return { status: 500, data: [] }
+//   }
+// }
 
 export const getBusinessInfo = async (id: string) => {
   await onCurrentUser()
