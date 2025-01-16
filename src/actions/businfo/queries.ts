@@ -127,7 +127,7 @@ export const findBusiness = async (id: string) => {
       id,
     },
     include: {
-      User: {
+      user: {
         select: {
           subscription: true,
         },
