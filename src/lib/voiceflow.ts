@@ -755,77 +755,33 @@
 import axios from 'axios';
 import { PrismaClient } from '@prisma/client';
 const client = new PrismaClient();
+import {getAllBusinesses} from '@/actions/businfo'
 
 const API_KEY = process.env.VOICEFLOW_API_KEY;
 const PROJECT_ID = process.env.VOICEFLOW_PROJECT_ID;
 const VERSION_ID = process.env.VOICEFLOW_VERSION_ID;
+
 
 interface VoiceflowResponse {
   type: string;
   payload: any;
 }
 
-interface BusinessVariables {
-    business_name: string;
-    business_type: string;
-    business_info: string;
-    industry: string;
-    instagram_handle: string;
-    welcome_message: string;
-    response_language: string;
-    business_hours: string;
-    promotion_message: string;
-  }
-
-  // async function fetchBusinessVariables(userId: string): Promise<BusinessVariables> {
-  //   const user = await client.user.findUnique({
-  //     where: { id: userId },
-  //     include: {
-  //       businesses: true
-  //     }
-  //   });
-  
-  //   if (!user || !user.businesses || user.businesses.length === 0) {
-  //     throw new Error('No business information found for this user');
-  //   }
-  
-  //   const business = user.businesses[0]; // Fetch the first (and only) business
-  
-  //   return {
-  //     business_name: business.businessName,
-  //     business_type: business.businessType,
-  //     business_info: business.businessDescription,
-  //     industry: business.industry,
-  //     instagram_handle: business.instagramHandle,
-  //     welcome_message: business.welcomeMessage,
-  //     response_language: business.responseLanguage,
-  //     business_hours: business.businessHours,
-  //     promotion_message: business.promotionMessage,
-  //   };
-  // }
   
 
 export async function getVoiceflowResponse(userInput: string, userId: string): Promise<VoiceflowResponse[]> {
   try {
-    const user = await client.user.findUnique({
-      where: { id: userId },
-      include: {
-        businesses: true
-      }
-    });
+    const busresult = await getAllBusinesses()
+    
   
-    if (!user || !user.businesses || user.businesses.length === 0) {
-      throw new Error('No business information found for this user');
-    }
-  
-    const business = user.businesses[0]; // Fetch the first (and only) business
+    const bus = busresult.data.businesses[0] // Fetch the first (and only) business
   
     // Static test variables
     const BusinessVariables = {
-      business_name: business.businessName,
-      business_type: business.businessType,
+      business_name: bus.businessName,
+      business_type: bus.businessType,
       owner_name: 'John Doe',
-      welcome_message: business.welcomeMessage
+      welcome_message: bus.welcomeMessage
     };
 
     const response = await axios.post(
