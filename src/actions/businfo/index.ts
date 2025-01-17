@@ -223,17 +223,6 @@ export const getAllBusinesses = async () => {
   }
 }
 
-// export const getAllBusinesses = async () => {
-//   const user = await onCurrentUser()
-//   try {
-//     const businesses = await getBusinesses(user.id)
-//     if (businesses) return { status: 200, data: businesses }
-//     return { status: 404, data: [] }
-//   } catch (error) {
-//     return { status: 500, data: [] }
-//   }
-// }
-
 export const getBusinessInfo = async (id: string) => {
   await onCurrentUser()
   try {
