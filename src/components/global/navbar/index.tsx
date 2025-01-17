@@ -451,14 +451,14 @@ const Navbar = ({ slug }: Props) => {
     <div className="flex flex-col">
       <ArrowTrigger isOpen={isOpen} onClick={isOpen ? closeSheet : openSheet} />
       <Sheet open={isOpen} onOpenChange={closeSheet}>
-        <SheetContent side="left" className="w-[300px] bg-[#0e0e0e] text-white p-2 m-3 rounded-2xl">
+        <SheetContent side="left" className="w-[260px] bg-[#0e0e0e] text-white p-1 mb-2 mt-2 rounded-2xl">
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-between p-4">
               <motion.div transition={{ duration: 0.5 }}>
                 <LogoSmall />
               </motion.div>                  
             </div>
-            <div className="px-16">
+            <div className="px-16 m-2">
               <Separator
                 orientation="horizontal"
                 className="bg-[#333336]"
@@ -467,7 +467,7 @@ const Navbar = ({ slug }: Props) => {
             <div className="flex-1 overflow-y-auto py-4 px-2">
               {SIDEBAR_MENU.map((group) => renderGroup(group))}
             </div>
-            <div className="px-16">
+            <div className="px-16 m-2">
               <Separator
                 orientation="horizontal"
                 className="bg-[#333336]"
