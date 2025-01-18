@@ -45,12 +45,25 @@
 
 
 import BusinessManager from '@/components/global/businessInfo/businessManager'
+import BusinessDataDisplay from '@/components/global/businessInfo/testing'
 import { ToastProvider } from "@/components/ui/toast"
 
 export default function BusinessInfoPage() {
     return (
     <ToastProvider>
       <BusinessManager />
+      <BusinessDataDisplay />
     </ToastProvider>
   )
 }
+
+// import BusinessDataDisplay from '@/components/BusinessDataDisplay'
+
+// export default function TestPage() {
+//   return (
+//     <div className="container mx-auto py-8">
+//       <h1 className="text-2xl font-bold mb-4">Business Data Test</h1>
+//       <BusinessDataDisplay />
+//     </div>
+//   )
+// }

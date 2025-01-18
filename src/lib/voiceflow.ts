@@ -1114,6 +1114,121 @@
 // }
 
 
+// import axios from 'axios';
+// import { getAllBusinesses } from '@/actions/businfo';
+
+// const API_KEY = process.env.VOICEFLOW_API_KEY;
+// const PROJECT_ID = process.env.VOICEFLOW_PROJECT_ID;
+// const VERSION_ID = process.env.VOICEFLOW_VERSION_ID;
+
+// interface VoiceflowResponse {
+//   type: string;
+//   payload: any;
+// }
+
+// export async function getVoiceflowResponse(userInput: string, userId: string): Promise<VoiceflowResponse[]> {
+//   try {
+//     // Fetch business data
+//     const businessResponse = await getAllBusinesses();
+    
+//     if (businessResponse.status !== 200 || !businessResponse.data) {
+//       throw new Error('Failed to fetch business data');
+//     }
+
+//     const businessData = businessResponse.data.businesses[0];
+
+//     const BusinessVariables = {
+//       business_name: businessData.businessName || "Alternate name",
+//       welcome_message: businessData.welcomeMessage || "Alternate Welcome",
+//       business_industry: businessData.industry || "Alternate industry",
+//       // Add more business-related variables as needed
+//     };
+
+//     const response = await axios.post(
+//       `https://general-runtime.voiceflow.com/state/user/${userId}/interact`,
+//       {
+//         request: { type: 'text', payload: userInput },
+//         state: { variables: BusinessVariables },
+//       },
+//       {
+//         headers: {
+//           'Authorization': API_KEY,
+//           'versionID': VERSION_ID,
+//           'accept': 'application/json',
+//           'content-type': 'application/json',
+//         }
+//       }
+//     );
+
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error interacting with Voiceflow:', error);
+//     throw error;
+//   }
+// }
+
+// // The rest of the file remains unchanged
+
+// export function processVoiceflowResponse(traces: VoiceflowResponse[]): string {
+//   let result = '';
+//   for (let trace of traces) {
+//     if (trace.type === 'text') {
+//       result += trace.payload.message + '\n';
+//     } else if (trace.type === 'choice') {
+//       result += '\nOptions:\n';
+//       for (let button of trace.payload.buttons) {
+//         result += `- ${button.name}\n`;
+//       }
+//     }
+//   }
+//   return result.trim();
+// }
+
+// export async function createVoiceflowUser(userId: string): Promise<boolean> {
+//   try {
+//     await axios.put(
+//       'https://api.voiceflow.com/v2/transcripts',
+//       {
+//         projectID: PROJECT_ID,
+//         versionID: VERSION_ID,
+//         sessionID: userId,
+//       },
+//       {
+//         headers: {
+//           'accept': 'application/json',
+//           'content-type': 'application/json',
+//           'Authorization': API_KEY,
+//         }
+//       }
+//     );
+//     return true;
+//   } catch (error) {
+//     console.error('Error creating Voiceflow user:', error);
+//     return false;
+//   }
+// }
+
+// export async function resetVoiceflowUser(userId: string): Promise<boolean> {
+//   try {
+//     const response = await axios.post(
+//       `https://general-runtime.voiceflow.com/state/user/${userId}/interact`,
+//       { request: { type: 'reset' } },
+//       {
+//         headers: {
+//           'Authorization': API_KEY,
+//           'versionID': VERSION_ID,
+//           'accept': 'application/json',
+//           'content-type': 'application/json',
+//         }
+//       }
+//     );
+//     return response.status === 200;
+//   } catch (error) {
+//     console.error('Error resetting Voiceflow user:', error);
+//     return false;
+//   }
+// }
+
 import axios from 'axios';
 import { getAllBusinesses } from '@/actions/businfo';
 
@@ -1126,21 +1241,28 @@ interface VoiceflowResponse {
   payload: any;
 }
 
+interface BusinessData {
+  businessName: string;
+  welcomeMessage: string;
+  industry: string;
+  // Add other properties as needed
+}
+
 export async function getVoiceflowResponse(userInput: string, userId: string): Promise<VoiceflowResponse[]> {
   try {
     // Fetch business data
     const businessResponse = await getAllBusinesses();
     
-    if (businessResponse.status !== 200 || !businessResponse.data) {
-      throw new Error('Failed to fetch business data');
+    if (businessResponse.status !== 200 || !businessResponse.data || !businessResponse.data.businesses.length) {
+      throw new Error('Failed to fetch business data or no businesses found');
     }
 
-    const businessData = businessResponse.data.businesses[0];
+    const businessData: BusinessData = businessResponse.data.businesses[0];
 
-    const BusinessVariables = {
-      business_name: businessData.businessName || "Alternate name",
-      welcome_message: businessData.welcomeMessage || "Alternate Welcome",
-      business_industry: businessData.industry || "Alternate industry",
+    const businessVariables = {
+      business_name: businessData.businessName || "Default Business Name",
+      welcome_message: businessData.welcomeMessage || "Welcome to our business!",
+      business_industry: businessData.industry || "General",
       // Add more business-related variables as needed
     };
 
@@ -1148,7 +1270,7 @@ export async function getVoiceflowResponse(userInput: string, userId: string): P
       `https://general-runtime.voiceflow.com/state/user/${userId}/interact`,
       {
         request: { type: 'text', payload: userInput },
-        state: { variables: BusinessVariables },
+        state: { variables: businessVariables },
       },
       {
         headers: {
@@ -1167,16 +1289,14 @@ export async function getVoiceflowResponse(userInput: string, userId: string): P
   }
 }
 
-// The rest of the file remains unchanged
-
 export function processVoiceflowResponse(traces: VoiceflowResponse[]): string {
   let result = '';
-  for (let trace of traces) {
+  for (const trace of traces) {
     if (trace.type === 'text') {
       result += trace.payload.message + '\n';
     } else if (trace.type === 'choice') {
       result += '\nOptions:\n';
-      for (let button of trace.payload.buttons) {
+      for (const button of trace.payload.buttons) {
         result += `- ${button.name}\n`;
       }
     }
