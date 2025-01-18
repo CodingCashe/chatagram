@@ -516,7 +516,6 @@
 
 // export default Page
 
-'use client'
 
 import React, { useState, useEffect, Suspense } from 'react'
 import { BarDuoToneBlue } from '@/icons'

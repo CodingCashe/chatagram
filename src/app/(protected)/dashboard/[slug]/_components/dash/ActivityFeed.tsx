@@ -256,7 +256,8 @@ import { MessageSquare, Mail, AlertTriangle } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { getAutomations } from '@/actions/automations/queries'
+// import { getAutomations } from '@/actions/automations/queries'
+import {getAllAutomations} from '@/actions/automations'
 import { useAuth } from '@clerk/nextjs'
 
 type Activity = {
@@ -298,15 +299,15 @@ const ActivityFeed: React.FC = () => {
       try {
         setIsLoading(true)
         
-        const automationsData = await getAutomations(userId)
+        const automationsData = await getAllAutomations()
         
-        if (!automationsData || !automationsData.automations) {
+        if (!automationsData || !automationsData.data) {
           throw new Error('No automations found')
         }
 
         let allActivities: Activity[] = []
 
-        automationsData.automations.forEach((automation: Automation) => {
+        automationsData.data.forEach((automation: Automation) => {
           if (automation.listener) {
             if (automation.listener.lastComment) {
               allActivities.push({

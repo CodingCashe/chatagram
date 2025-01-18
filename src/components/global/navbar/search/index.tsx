@@ -545,7 +545,7 @@ const Search = () => {
 
   return (
     <div className="relative w-full">
-      <div className="flex items-center border-2 border-[#3352CC] rounded-full px-4 py-1">
+      <div className="flex items-center border-2 border-[#3352CC] rounded-full px-4 py-1 bg-[#0A0A0B]">
         <SearchIcon className="text-[#3352CC] mr-2" />
         <Input
           ref={inputRef}

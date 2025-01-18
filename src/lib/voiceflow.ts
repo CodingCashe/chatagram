@@ -1231,7 +1231,6 @@
 
 import axios from 'axios';
 import { getAllBusinesses } from '@/actions/businfo';
-
 const API_KEY = process.env.VOICEFLOW_API_KEY;
 const PROJECT_ID = process.env.VOICEFLOW_PROJECT_ID;
 const VERSION_ID = process.env.VOICEFLOW_VERSION_ID;
@@ -1245,7 +1244,6 @@ interface BusinessData {
   businessName: string;
   welcomeMessage: string;
   industry: string;
-  // Add other properties as needed
 }
 
 export async function fetchBusinessVariables(): Promise<Record<string, string>> {
@@ -1262,13 +1260,13 @@ export async function fetchBusinessVariables(): Promise<Record<string, string>> 
       business_name: businessData.businessName || 'Default Business Name',
       welcome_message: businessData.welcomeMessage || 'Welcome to our business!',
       business_industry: businessData.industry || 'General',
-      // Add more business-related variables as needed
     };
   } catch (error) {
     console.error('Error fetching business variables:', error);
     throw error;
   }
 }
+
 export async function getVoiceflowResponse(userInput: string, userId: string): Promise<VoiceflowResponse[]> {
   let businessVariables: Record<string, string> = {
     business_name: 'Default Business Name',
@@ -1277,14 +1275,12 @@ export async function getVoiceflowResponse(userInput: string, userId: string): P
   };
 
   try {
-    // Attempt to fetch business variables
     businessVariables = await fetchBusinessVariables();
   } catch (error) {
     console.warn('Failed to fetch business variables, using default values:', error);
   }
 
   try {
-    // Proceed with Voiceflow API interaction
     const response = await axios.post(
       `https://general-runtime.voiceflow.com/state/user/${userId}/interact`,
       {
@@ -1308,48 +1304,6 @@ export async function getVoiceflowResponse(userInput: string, userId: string): P
   }
 }
 
-// export async function getVoiceflowResponse(userInput: string, userId: string): Promise<VoiceflowResponse[]> {
-//   try {
-//     // Fetch business data
-//     const businessResponse = await getAllBusinesses();
-    
-//     if (businessResponse.status !== 200 || !businessResponse.data || !businessResponse.data.businesses.length) {
-//       throw new Error('Failed to fetch business data or no businesses found');
-//     }
-
-//     const businessData: BusinessData = businessResponse.data.businesses[0];
-
-//     const businessVariables = {
-//       business_name: businessData.businessName || "Default Business Name",
-//       welcome_message: businessData.welcomeMessage || "Welcome to our business!",
-//       business_industry: businessData.industry || "General",
-//       // Add more business-related variables as needed
-//     };
-  
-
-
-//     const response = await axios.post(
-//       `https://general-runtime.voiceflow.com/state/user/${userId}/interact`,
-//       {
-//         request: { type: 'text', payload: userInput },
-//         state: { variables: businessVariables },
-//       },
-//       {
-//         headers: {
-//           'Authorization': API_KEY,
-//           'versionID': VERSION_ID,
-//           'accept': 'application/json',
-//           'content-type': 'application/json',
-//         }
-//       }
-//     );
-
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error interacting with Voiceflow:', error);
-//     throw error;
-//   }
-// }
 
 export function processVoiceflowResponse(traces: VoiceflowResponse[]): string {
   let result = '';
@@ -1410,4 +1364,3 @@ export async function resetVoiceflowUser(userId: string): Promise<boolean> {
     return false;
   }
 }
-
