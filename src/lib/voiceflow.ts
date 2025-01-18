@@ -1250,21 +1250,28 @@ interface BusinessData {
 
 export async function getVoiceflowResponse(userInput: string, userId: string): Promise<VoiceflowResponse[]> {
   try {
-    // Fetch business data
-    const businessResponse = await getAllBusinesses();
+    // // Fetch business data
+    // const businessResponse = await getAllBusinesses();
     
-    if (businessResponse.status !== 200 || !businessResponse.data || !businessResponse.data.businesses.length) {
-      throw new Error('Failed to fetch business data or no businesses found');
-    }
+    // if (businessResponse.status !== 200 || !businessResponse.data || !businessResponse.data.businesses.length) {
+    //   throw new Error('Failed to fetch business data or no businesses found');
+    // }
 
-    const businessData: BusinessData = businessResponse.data.businesses[0];
+    // const businessData: BusinessData = businessResponse.data.businesses[0];
 
+    // const businessVariables = {
+    //   business_name: businessData.businessName || "Default Business Name",
+    //   welcome_message: businessData.welcomeMessage || "Welcome to our business!",
+    //   business_industry: businessData.industry || "General",
+    //   // Add more business-related variables as needed
+    // };
     const businessVariables = {
-      business_name: businessData.businessName || "Default Business Name",
-      welcome_message: businessData.welcomeMessage || "Welcome to our business!",
-      business_industry: businessData.industry || "General",
+      business_name: "Default Business Name",
+      welcome_message: "Welcome to our business!",
+      business_industry: "General",
       // Add more business-related variables as needed
     };
+
 
     const response = await axios.post(
       `https://general-runtime.voiceflow.com/state/user/${userId}/interact`,
