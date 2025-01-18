@@ -1115,7 +1115,7 @@
 
 
 import axios from 'axios';
-import { getBusinessInfo } from '@/actions/businfo';
+import { getAllBusinesses } from '@/actions/businfo';
 
 const API_KEY = process.env.VOICEFLOW_API_KEY;
 const PROJECT_ID = process.env.VOICEFLOW_PROJECT_ID;
@@ -1126,21 +1126,21 @@ interface VoiceflowResponse {
   payload: any;
 }
 
-export async function getVoiceflowResponse(userInput: string, userId: string, businessId: string): Promise<VoiceflowResponse[]> {
+export async function getVoiceflowResponse(userInput: string, userId: string): Promise<VoiceflowResponse[]> {
   try {
     // Fetch business data
-    const businessResponse = await getBusinessInfo(businessId);
+    const businessResponse = await getAllBusinesses();
     
     if (businessResponse.status !== 200 || !businessResponse.data) {
       throw new Error('Failed to fetch business data');
     }
 
-    const businessData = businessResponse.data;
+    const businessData = businessResponse.data.businesses[0];
 
     const BusinessVariables = {
-      business_name: businessData.businessName,
-      welcome_message: businessData.welcomeMessage || "Alternate Name",
-      business_industry: businessData.industry || "Alternate name",
+      business_name: businessData.businessName || "Alternate name",
+      welcome_message: businessData.welcomeMessage || "Alternate Welcome",
+      business_industry: businessData.industry || "Alternate industry",
       // Add more business-related variables as needed
     };
 
