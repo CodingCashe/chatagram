@@ -278,9 +278,9 @@ export const toggleAutoReply = async (businessId: string, autoReplyEnabled: bool
 }
 
 // Add this new function
-export const getBusinessForWebhook = async () => {
+export const getBusinessForWebhook = async (businessId: string) => {
   try {
-    const result = await getBusinessesForWebhook()
+    const result = await getBusinessesForWebhook(businessId)
     if (result) {
       return { status: 200, data: { business: result } }
     }

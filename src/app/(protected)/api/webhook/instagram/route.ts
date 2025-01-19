@@ -2795,14 +2795,27 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    let voiceflowResponse = "I am sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists."
+    let businessVariables = {}
+    if (automation?.userId) {
+      // Fetch the business associated with the user of this automation
+      const business = await client.business.findFirst({
+        where: { userId: automation.userId }
+      })
+
+      if (business) {
+        businessVariables = {
+          business_name: business.businessName,
+          welcome_message: business.welcomeMessage,
+          business_industry: business.industry,
+        }
+      }
+    }
+
+    let voiceflowResponse = "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists."
 
     try {
-      // Fetch business variables
-      const businessVariables = await fetchBusinessVariables()
-      
-      // Pass business variables to getVoiceflowResponse
-      const response = await getVoiceflowResponse(userMessage, userId)
+      // Use the businessVariables in the Voiceflow response
+      const response = await getVoiceflowResponse(userMessage, userId, businessVariables)
       voiceflowResponse = processVoiceflowResponse(response)
     } catch (error) {
       console.error('Error getting or processing Voiceflow response:', error)
@@ -2883,4 +2896,3 @@ export async function POST(req: NextRequest) {
     )
   }
 }
-
