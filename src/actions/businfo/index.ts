@@ -191,6 +191,7 @@
 
 import { onCurrentUser } from '../user'
 import {
+  getBusinessesForWebhook,
   createBusiness,
   getBusinesses,
   findBusiness,
@@ -273,6 +274,20 @@ export const toggleAutoReply = async (businessId: string, autoReplyEnabled: bool
     return { status: 404, data: 'Oops! could not find business' }
   } catch (error) {
     return { status: 500, data: 'Oops! something went wrong' }
+  }
+}
+
+// Add this new function
+export const getBusinessForWebhook = async () => {
+  try {
+    const result = await getBusinessesForWebhook()
+    if (result) {
+      return { status: 200, data: { business: result } }
+    }
+    return { status: 404, data: { business: null } }
+  } catch (error) {
+    console.error('Error fetching business for webhook:', error)
+    return { status: 500, data: { business: null } }
   }
 }
 

@@ -161,3 +161,12 @@ export const deleteBusiness = async (businessId: string) => {
 
 
 
+// Add this new function
+export const getBusinessesForWebhook = async () => {
+  return await client.business.findFirst({
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+}
+
