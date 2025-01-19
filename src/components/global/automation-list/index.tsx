@@ -82,7 +82,8 @@ const AutomationList = ({ id }: Props) => {
   if (!automations.length) {
     return (
       <div className="h-[70vh] flex justify-center items-center flex-col gap-y-3">
-        <h3 className="text-lg text-gray-400">No Automations Yet</h3>
+        <h3 className="text-lg text-gray-400">No automations yet.</h3>
+        <h3 className="text-lg text-gray-400">Click the button to create one.</h3>
         <CreateAutomation />
       </div>
     );
