@@ -154,4 +154,3 @@ const InstagramIntegrationPopup: React.FC<PopupProps> = ({ isOpen, onClose }) =>
 }
 
 export default InstagramIntegrationPopup
-
