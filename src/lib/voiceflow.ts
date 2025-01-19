@@ -1645,7 +1645,7 @@
 // }
 
 import axios, { AxiosError } from 'axios';
-import { getAllBusinesses } from '@/actions/businfo';
+import { getBusinessForWebhook } from '@/actions/businfo';
 
 const API_KEY = process.env.VOICEFLOW_API_KEY;
 const PROJECT_ID = process.env.VOICEFLOW_PROJECT_ID;
@@ -1666,7 +1666,7 @@ export async function fetchBusinessVariables(): Promise<Record<string, string>> 
   console.log('Entering fetchBusinessVariables function');
   try {
     console.log('Attempting to call getAllBusinesses');
-    const businessResponse = await getAllBusinesses();
+    const businessResponse = await getBusinessForWebhook();
     console.log('getAllBusinesses response:', JSON.stringify(businessResponse, null, 2));
 
     if (businessResponse.status !== 200) {
@@ -1680,17 +1680,17 @@ export async function fetchBusinessVariables(): Promise<Record<string, string>> 
       throw new Error('No data received from getAllBusinesses');
     }
 
-    if (!businessResponse.data.businesses || !Array.isArray(businessResponse.data.businesses)) {
+    if (!businessResponse.data.business || !Array.isArray(businessResponse.data.business)) {
       console.error('Invalid businesses data structure:', JSON.stringify(businessResponse.data, null, 2));
       throw new Error('Invalid businesses data structure');
     }
 
-    if (businessResponse.data.businesses.length === 0) {
+    if (businessResponse.data.business.length === 0) {
       console.error('No businesses found in the response');
       throw new Error('No businesses found');
     }
 
-    const businessData: BusinessData = businessResponse.data.businesses[0];
+    const businessData: BusinessData = businessResponse.data.business[0];
     console.log('First business data:', JSON.stringify(businessData, null, 2));
 
     if (!businessData.businessName && !businessData.welcomeMessage && !businessData.industry) {
