@@ -958,11 +958,8 @@ import { DASHBOARD_CARDS } from "@/constants/dashboard"
 import EnhancedMetricsCard from "./_components/dash/EnhancedMetricsCard"
 import ActivityFeed from "./_components/dash/ActivityFeed"
 import AIPerformance from "./_components/dash/AIPerformance"
-import TaskProgress from "./_components/dash/TaskProgress"
-import { RecentActivity } from "./_components/dash/recent-activity"
-import { ResponseTracker } from "./_components/dash/response-tracker"
-import { ChatHistory } from "./_components/dash/chat-history"
 import EngagementInsights from "./_components/dash/EngagementInsights"
+import HashtagCloud from './_components/dash/HashtagCloud'
 
 export default async function DashboardPage() {
   const user = await onCurrentUser()
@@ -1010,25 +1007,11 @@ export default async function DashboardPage() {
           </Suspense>
         </div>
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Suspense fallback={<div>Loading recent activity...</div>}>
-          <RecentActivity />
-        </Suspense>
-        <Suspense fallback={<div>Loading response tracker...</div>}>
-          <ResponseTracker />
-        </Suspense>
-        <Suspense fallback={<div>Loading chat history...</div>}>
-          <ChatHistory />
-        </Suspense>
-      </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ActivityFeed />
         <AIPerformance />
       </div>
-
-      <TaskProgress />
+      <HashtagCloud />
     </div>
   )
 }
