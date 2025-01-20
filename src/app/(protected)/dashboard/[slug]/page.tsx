@@ -639,7 +639,118 @@
 
 // export default Page
 
-import { Suspense } from 'react'
+// import { Suspense } from 'react'
+// import { RecentKeywords } from "./_components/newdash/recent-keywords"
+// import { getDashboardData } from "@/actions/dashboard/dashboard"
+// import { onCurrentUser } from "@/actions/user"
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+// import { AutomationList } from "./_components/newdash/automation-list"
+// import { RecentDms } from "./_components/newdash/recent-dms"
+// import { ActiveConversations } from "./_components/newdash/active-conversations"
+// import { BarDuoToneBlue } from '@/icons'
+// import DoubleGradientCard from '@/components/global/double-gradient-card'
+// import { DASHBOARD_CARDS } from '@/constants/dashboard'
+// import EnhancedChart from './_components/dash/EnhancedChart'
+// import EnhancedMetricsCard from './_components/dash/EnhancedMetricsCard'
+// import ActivityFeed from './_components/dash/ActivityFeed'
+// import AIPerformance from './_components/dash/AIPerformance'
+// import TaskProgress from './_components/dash/TaskProgress'
+// import { AutomationOverview } from './_components/dash/automation-overview'
+// import { KeywordPerformance } from './_components/dash/keyword-performance'
+// import { RecentActivity } from './_components/dash/recent-activity'
+// import { ResponseTracker } from './_components/dash/response-tracker'
+// import { ChatHistory } from './_components/dash/chat-history'
+// //import InstagramIntegrationPopupWrapper from './_components/dash/InstagramIntegrationPopupWrapper'
+
+// export default async function DashboardPage() {
+//   const user = await onCurrentUser()
+//   const dashboardData = await getDashboardData(user.id)
+//   return (
+//     <div className="flex flex-col gap-y-10">
+//       <div className="flex gap-5 lg:flex-row flex-col">
+//         {DASHBOARD_CARDS.map((card) => (
+//           <DoubleGradientCard
+//             key={card.id}
+//             {...card}
+//           />
+//         ))}
+//       </div>
+      
+//       <div className="border-[1px] relative border-in-active/50 p-5 rounded-xl">
+//         <span className="flex gap-x-1 z-50 items-center mb-5">
+//           <BarDuoToneBlue />
+//           <div className="z-50">
+//             <h2 className="text-2xl font-medium text-white">
+//               Engagement Analytics
+//             </h2>
+//             <p className="text-text-secondary text-sm">
+//               Monitor Your DMs in real time
+//             </p>
+//           </div>
+//         </span>
+//         <div className="w-full flex lg:flex-row flex-col gap-5">
+//           <div className="lg:w-6/12">
+//             <EnhancedChart />
+//           </div>
+//           <div className="lg:w-6/12">
+//             <EnhancedMetricsCard />
+//           </div>
+//         </div>
+//       </div>
+      
+//       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+//         <Suspense fallback={<div>Loading automation overview...</div>}>
+//           <AutomationOverview />
+//         </Suspense>
+//         <Suspense fallback={<div>Loading keyword performance...</div>}>
+//           <KeywordPerformance />
+//         </Suspense>
+//       </div>
+
+//       <div className="container mx-auto p-6 space-y-6">
+//         <h1 className="text-3xl font-bold text-white mb-6">Instagram Bot Dashboard</h1>
+//         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//           <Suspense fallback={<Card className="w-full h-[300px] animate-pulse bg-gray-800" />}>
+//             <AutomationList automations={dashboardData.automations} />
+//           </Suspense>
+//           <Suspense fallback={<Card className="w-full h-[300px] animate-pulse bg-gray-800" />}>
+//             <RecentDms dms={dashboardData.recentDms} automations={dashboardData.automations} />
+//           </Suspense>
+//           <Suspense fallback={<Card className="w-full h-[200px] animate-pulse bg-gray-800" />}>
+//             <ActiveConversations count={dashboardData.activeConversations} />
+//           </Suspense>
+//           <Suspense fallback={<Card className="w-full h-[200px] animate-pulse bg-gray-800" />}>
+//             <RecentKeywords keywords={dashboardData.recentKeywords} />
+//           </Suspense>
+//         </div>
+//       </div>
+
+//       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+//         <Suspense fallback={<div>Loading recent activity...</div>}>
+//           <RecentActivity />
+//         </Suspense>
+//         <Suspense fallback={<div>Loading response tracker...</div>}>
+//           <ResponseTracker />
+//         </Suspense>
+//         <Suspense fallback={<div>Loading chat history...</div>}>
+//           <ChatHistory />
+//         </Suspense>
+//       </div>
+
+//       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+//         <ActivityFeed />
+//         <AIPerformance />
+//       </div>
+
+//       <TaskProgress />
+
+//       {/* <InstagramIntegrationPopupWrapper /> */}
+//     </div>
+//   )
+// }
+
+
+import { Suspense } from "react"
 import { RecentKeywords } from "./_components/newdash/recent-keywords"
 import { getDashboardData } from "@/actions/dashboard/dashboard"
 import { onCurrentUser } from "@/actions/user"
@@ -647,19 +758,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AutomationList } from "./_components/newdash/automation-list"
 import { RecentDms } from "./_components/newdash/recent-dms"
 import { ActiveConversations } from "./_components/newdash/active-conversations"
-import { BarDuoToneBlue } from '@/icons'
-import DoubleGradientCard from '@/components/global/double-gradient-card'
-import { DASHBOARD_CARDS } from '@/constants/dashboard'
-import EnhancedChart from './_components/dash/EnhancedChart'
-import EnhancedMetricsCard from './_components/dash/EnhancedMetricsCard'
-import ActivityFeed from './_components/dash/ActivityFeed'
-import AIPerformance from './_components/dash/AIPerformance'
-import TaskProgress from './_components/dash/TaskProgress'
-import { AutomationOverview } from './_components/dash/automation-overview'
-import { KeywordPerformance } from './_components/dash/keyword-performance'
-import { RecentActivity } from './_components/dash/recent-activity'
-import { ResponseTracker } from './_components/dash/response-tracker'
-import { ChatHistory } from './_components/dash/chat-history'
+import { BarDuoToneBlue } from "@/icons"
+import DoubleGradientCard from "@/components/global/double-gradient-card"
+import { DASHBOARD_CARDS } from "@/constants/dashboard"
+import EnhancedChart from "./_components/dash/EnhancedChart"
+import EnhancedMetricsCard from "./_components/dash/EnhancedMetricsCard"
+import ActivityFeed from "./_components/dash/ActivityFeed"
+import AIPerformance from "./_components/dash/AIPerformance"
+import TaskProgress from "./_components/dash/TaskProgress"
+import { AutomationOverview } from "./_components/dash/automation-overview"
+import { KeywordPerformance } from "./_components/dash/keyword-performance"
+import { RecentActivity } from "./_components/dash/recent-activity"
+import { ResponseTracker } from "./_components/dash/response-tracker"
+import { ChatHistory } from "./_components/dash/chat-history"
 //import InstagramIntegrationPopupWrapper from './_components/dash/InstagramIntegrationPopupWrapper'
 
 export default async function DashboardPage() {
@@ -669,35 +780,28 @@ export default async function DashboardPage() {
     <div className="flex flex-col gap-y-10">
       <div className="flex gap-5 lg:flex-row flex-col">
         {DASHBOARD_CARDS.map((card) => (
-          <DoubleGradientCard
-            key={card.id}
-            {...card}
-          />
+          <DoubleGradientCard key={card.id} {...card} />
         ))}
       </div>
-      
+
       <div className="border-[1px] relative border-in-active/50 p-5 rounded-xl">
         <span className="flex gap-x-1 z-50 items-center mb-5">
           <BarDuoToneBlue />
           <div className="z-50">
-            <h2 className="text-2xl font-medium text-white">
-              Engagement Analytics
-            </h2>
-            <p className="text-text-secondary text-sm">
-              Monitor Your DMs in real time
-            </p>
+            <h2 className="text-2xl font-medium text-white">Engagement Analytics</h2>
+            <p className="text-text-secondary text-sm">Monitor Your DMs in real time</p>
           </div>
         </span>
         <div className="w-full flex lg:flex-row flex-col gap-5">
           <div className="lg:w-6/12">
-            <EnhancedChart />
+            <EnhancedChart userId={user.id} />
           </div>
           <div className="lg:w-6/12">
             <EnhancedMetricsCard />
           </div>
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Suspense fallback={<div>Loading automation overview...</div>}>
           <AutomationOverview />
@@ -748,3 +852,4 @@ export default async function DashboardPage() {
     </div>
   )
 }
+
