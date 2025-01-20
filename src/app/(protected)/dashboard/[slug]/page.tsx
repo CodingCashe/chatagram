@@ -1007,11 +1007,11 @@ export default async function DashboardPage() {
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <HashtagCloud />
+        <ContentSuggestions />
         <AIPerformance />
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">           
-        <ContentSuggestions />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"> 
+      <HashtagCloud />          
       </div>
     </div>
   )

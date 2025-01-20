@@ -12,9 +12,9 @@ interface Automation {
 
 export function AutomationList({ automations }: { automations: Automation[] }) {
   return (
-    <Card className="w-full bg-gray-900 text-white">
+    <Card className="w-full bg-gray-800 text-white">
       <CardHeader>
-        <CardTitle>Automations</CardTitle>
+        <CardTitle>My Automations</CardTitle>
       </CardHeader>
       <CardContent>
         <ScrollArea className="h-[200px]">
