@@ -959,8 +959,6 @@ import EnhancedMetricsCard from "./_components/dash/EnhancedMetricsCard"
 import ActivityFeed from "./_components/dash/ActivityFeed"
 import AIPerformance from "./_components/dash/AIPerformance"
 import TaskProgress from "./_components/dash/TaskProgress"
-import { AutomationOverview } from "./_components/dash/automation-overview"
-import { KeywordPerformance } from "./_components/dash/keyword-performance"
 import { RecentActivity } from "./_components/dash/recent-activity"
 import { ResponseTracker } from "./_components/dash/response-tracker"
 import { ChatHistory } from "./_components/dash/chat-history"
@@ -993,15 +991,6 @@ export default async function DashboardPage() {
             <EnhancedMetricsCard />
           </div>
         </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Suspense fallback={<div>Loading automation overview...</div>}>
-          <AutomationOverview />
-        </Suspense>
-        <Suspense fallback={<div>Loading keyword performance...</div>}>
-          <KeywordPerformance />
-        </Suspense>
       </div>
 
       <div className="container mx-auto p-6 space-y-6">
