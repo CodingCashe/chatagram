@@ -30,7 +30,7 @@ const EngagementHeatmap: React.FC<EngagementHeatmapProps> = ({ data }) => {
           className="aspect-square rounded-sm relative group"
           style={{ backgroundColor: getColor(day.dms + day.comments) }}
         >
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-50 text-white text-xs rounded-sm">
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-50 text-white text-xs rounded-sm p-2">
             <div className="text-center">
               <div>{new Date(day.date).toLocaleDateString()}</div>
               <div>DMs: {day.dms}</div>

@@ -990,18 +990,17 @@ export default async function DashboardPage() {
       </div>
 
       <div className="container mx-auto p-6 space-y-6">
-        <h1 className="text-3xl font-bold text-white mb-6">Instagram Bot Dashboard</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Suspense fallback={<Card className="w-full h-[300px] animate-pulse bg-gray-800" />}>
+          <Suspense fallback={<Card className="w-full h-[300px] animate-pulse" />}>
             <AutomationList automations={dashboardData.automations} />
           </Suspense>
-          <Suspense fallback={<Card className="w-full h-[300px] animate-pulse bg-gray-800" />}>
+          <Suspense fallback={<Card className="w-full h-[300px] animate-pulse" />}>
             <RecentDms dms={dashboardData.recentDms} automations={dashboardData.automations} />
           </Suspense>
-          <Suspense fallback={<Card className="w-full h-[200px] animate-pulse bg-gray-800" />}>
+          <Suspense fallback={<Card className="w-full h-[200px] animate-pulse " />}>
             <ActiveConversations count={dashboardData.activeConversations} />
           </Suspense>
-          <Suspense fallback={<Card className="w-full h-[200px] animate-pulse bg-gray-800" />}>
+          <Suspense fallback={<Card className="w-full h-[200px] animate-pulse" />}>
             <RecentKeywords keywords={dashboardData.recentKeywords} />
           </Suspense>
         </div>

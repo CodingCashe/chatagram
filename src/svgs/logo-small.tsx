@@ -61,13 +61,7 @@ export const LogoSmall: React.FC<LogoProps> = ({ maxWidth = 300, maxHeight = 100
         <circle cx="50" cy="50" r="18" fill="none" stroke="white" strokeWidth="2" />
         <circle cx="73" cy="27" r="5" fill="white" />
 
-        {/* Message bubble */}
-        <path
-          d="M60 70 Q 80 70, 80 50 Q 80 30, 60 30 L 40 30 Q 20 30, 20 50 Q 20 70, 40 70 L 50 70 L 45 80 L 60 70"
-          fill="white"
-          opacity="0.8"
-        >
-        </path>
+    
 
 
         {/* Company name */}
@@ -75,7 +69,7 @@ export const LogoSmall: React.FC<LogoProps> = ({ maxWidth = 300, maxHeight = 100
           x="110"
           y="50"
           fontFamily="Arial, sans-serif"
-          fontSize="24"
+          fontSize="28"
           fontWeight="bold"
           fill="#405DE6"
           filter="url(#glow)"
@@ -84,8 +78,8 @@ export const LogoSmall: React.FC<LogoProps> = ({ maxWidth = 300, maxHeight = 100
         </text>
 
         {/* Tagline */}
-        <text x="110" y="75" fontFamily="Arial, sans-serif" fontSize="10" fill="#833AB4">
-          Streamline Your Instagram DMs
+        <text x="110" y="75" fontFamily="Arial, sans-serif" fontSize="12" fill="#833AB4">
+          Engage.Automate.Grow
         </text>
       </svg>
     </div>
@@ -107,6 +101,7 @@ const styles = {
     verticalAlign: "top",
   },
 } as const
+
 
 export default LogoSmall
 
