@@ -6,7 +6,14 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 interface Keyword {
   id: string
   word: string
-  Automation: { name: string }
+  automationId: string | null
+  Automation: {
+    id: string
+    name: string
+    createdAt: Date
+    active: boolean
+    userId: string | null
+  } | null
 }
 
 export function RecentKeywords({ keywords }: { keywords: Keyword[] }) {
@@ -20,7 +27,7 @@ export function RecentKeywords({ keywords }: { keywords: Keyword[] }) {
           {keywords.map((keyword) => (
             <div key={keyword.id} className="mb-4">
               <p className="font-semibold">{keyword.word}</p>
-              <p className="text-sm text-gray-400">Automation: {keyword.Automation.name}</p>
+              <p className="text-sm text-gray-400">Automation: {keyword.Automation?.name || "N/A"}</p>
             </div>
           ))}
         </ScrollArea>
