@@ -17,7 +17,7 @@ export function AutomationStats({ stats }: { stats: AutomationStat[] }) {
   }))
 
   return (
-    <Card className="w-full bg-gray-900 text-white">
+    <Card className="w-full bg-gray-800 text-white">
       <CardHeader>
         <CardTitle>Automation Statistics</CardTitle>
       </CardHeader>

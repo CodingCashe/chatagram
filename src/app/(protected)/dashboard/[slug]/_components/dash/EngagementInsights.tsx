@@ -252,7 +252,7 @@
 
 "use client"
 
-import React from "react"
+import type React from "react"
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -294,7 +294,6 @@ const EngagementInsights: React.FC<{ userId: string }> = ({ userId }) => {
   const processEngagementData = (dashboardData: any): EngagementData[] => {
     const engagementMap = new Map<string, EngagementData>()
 
-    // Process engagementData (DMs)
     dashboardData.engagementData?.forEach((engagement: any) => {
       const date = new Date(engagement.createdAt).toISOString().split("T")[0]
       const existingData = engagementMap.get(date) || { date, dms: 0, comments: 0 }
@@ -302,7 +301,6 @@ const EngagementInsights: React.FC<{ userId: string }> = ({ userId }) => {
       engagementMap.set(date, existingData)
     })
 
-    // Process commentData
     dashboardData.commentData?.forEach((comment: any) => {
       const date = new Date(comment.Automation?.createdAt).toISOString().split("T")[0]
       const existingData = engagementMap.get(date) || { date, dms: 0, comments: 0 }
@@ -310,7 +308,6 @@ const EngagementInsights: React.FC<{ userId: string }> = ({ userId }) => {
       engagementMap.set(date, existingData)
     })
 
-    // Convert map to array and sort by date
     return Array.from(engagementMap.values()).sort((a, b) => a.date.localeCompare(b.date))
   }
 
@@ -327,44 +324,56 @@ const EngagementInsights: React.FC<{ userId: string }> = ({ userId }) => {
   }
 
   return (
-    <Card className="w-full max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
+    <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-lg md:text-xl">Engagement Insights</CardTitle>
+        <CardTitle>Engagement Insights</CardTitle>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="heatmap">
-          <TabsList className="flex flex-wrap gap-2 sm:gap-4 justify-center sm:justify-start">
-            <TabsTrigger value="heatmap" className="flex items-center gap-2 text-sm sm:text-base">
-              <Calendar className="w-5 h-5 sm:w-6 sm:h-6" />
+        <Tabs defaultValue="heatmap" className="tabs-container">
+          <TabsList className="grid w-full grid-cols-3 sm:flex sm:flex-col">
+            <TabsTrigger
+              value="heatmap"
+              className="hover:scale-105 transition-transform duration-200"
+            >
+              <Calendar className="w-4 h-4 mr-2" />
               Heatmap
             </TabsTrigger>
-            <TabsTrigger value="trends" className="flex items-center gap-2 text-sm sm:text-base">
-              <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6" />
+            <TabsTrigger
+              value="trends"
+              className="hover:scale-105 transition-transform duration-200"
+            >
+              <TrendingUp className="w-4 h-4 mr-2" />
               Trends
             </TabsTrigger>
-            <TabsTrigger value="insights" className="flex items-center gap-2 text-sm sm:text-base">
-              <Zap className="w-5 h-5 sm:w-6 sm:h-6" />
+            <TabsTrigger
+              value="insights"
+              className="hover:scale-105 transition-transform duration-200"
+            >
+              <Zap className="w-4 h-4 mr-2" />
               Insights
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="heatmap">
-            <div className="overflow-x-auto">
-              <ClientOnly>
-                <EngagementHeatmap data={data} />
-              </ClientOnly>
-            </div>
+          <TabsContent
+            value="heatmap"
+            className="hover:scale-105 transition-transform duration-300 p-4 rounded-lg bg-gray-100"
+          >
+            <ClientOnly>
+              <EngagementHeatmap data={data} />
+            </ClientOnly>
           </TabsContent>
-          <TabsContent value="trends">
-            <div className="overflow-x-auto">
-              <EngagementTrends data={data} />
-            </div>
+          <TabsContent
+            value="trends"
+            className="hover:scale-105 transition-transform duration-300 p-4 rounded-lg bg-gray-100"
+          >
+            <EngagementTrends data={data} />
           </TabsContent>
-          <TabsContent value="insights">
-            <div className="overflow-x-auto">
-              <ClientOnly>
-                <EngagementInsightPanel data={data} />
-              </ClientOnly>
-            </div>
+          <TabsContent
+            value="insights"
+            className="hover:scale-105 transition-transform duration-300 p-4 rounded-lg bg-gray-100"
+          >
+            <ClientOnly>
+              <EngagementInsightPanel data={data} />
+            </ClientOnly>
           </TabsContent>
         </Tabs>
       </CardContent>
