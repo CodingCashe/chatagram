@@ -9,8 +9,10 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Calendar, TrendingUp, Zap } from "lucide-react"
 import { getDashboardData } from "@/actions/dashboard/dashboard"
 import EngagementHeatmap from "./EngagementHeatmap"
+import dynamic from "next/dynamic"
 import EngagementTrends from "./EngagementTrends"
 import EngagementInsightPanel from "./EngagementInsightPanel"
+import ClientOnly from "./ClientOnly"
 
 interface EngagementData {
   date: string
@@ -45,18 +47,18 @@ const EngagementInsights: React.FC<{ userId: string }> = ({ userId }) => {
     const engagementMap = new Map<string, EngagementData>()
 
     // Process engagementData (DMs)
-    dashboardData.engagementData.forEach((engagement: any) => {
+    dashboardData.engagementData?.forEach((engagement: any) => {
       const date = new Date(engagement.createdAt).toISOString().split("T")[0]
       const existingData = engagementMap.get(date) || { date, dms: 0, comments: 0 }
-      existingData.dms += engagement._count.id
+      existingData.dms += engagement._count?.id || 0
       engagementMap.set(date, existingData)
     })
 
     // Process commentData
-    dashboardData.commentData.forEach((comment: any) => {
-      const date = new Date(comment.Automation.createdAt).toISOString().split("T")[0]
+    dashboardData.commentData?.forEach((comment: any) => {
+      const date = new Date(comment.Automation?.createdAt).toISOString().split("T")[0]
       const existingData = engagementMap.get(date) || { date, dms: 0, comments: 0 }
-      existingData.comments += comment.commentCount
+      existingData.comments += comment.commentCount || 0
       engagementMap.set(date, existingData)
     })
 
@@ -70,6 +72,10 @@ const EngagementInsights: React.FC<{ userId: string }> = ({ userId }) => {
 
   if (error) {
     return <div className="text-center text-red-500 py-10">{error}</div>
+  }
+
+  if (data.length === 0) {
+    return <div className="text-center py-10">No engagement data available.</div>
   }
 
   return (
@@ -105,13 +111,17 @@ const EngagementInsights: React.FC<{ userId: string }> = ({ userId }) => {
             transition={{ duration: 0.3 }}
           >
             <TabsContent value="heatmap" className="mt-0">
-              <EngagementHeatmap data={data} />
+              <ClientOnly>
+                <EngagementHeatmap data={data} />
+              </ClientOnly>
             </TabsContent>
             <TabsContent value="trends" className="mt-0">
               <EngagementTrends data={data} />
             </TabsContent>
             <TabsContent value="insights" className="mt-0">
-              <EngagementInsightPanel data={data} />
+              <ClientOnly>
+                <EngagementInsightPanel data={data} />
+              </ClientOnly>
             </TabsContent>
           </motion.div>
         </AnimatePresence>
