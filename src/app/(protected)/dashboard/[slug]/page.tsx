@@ -725,15 +725,15 @@
 import { Suspense } from "react"
 import dynamic from "next/dynamic"
 
-const KeywordMatch = dynamic(() => import("../components/KeywordMatch"), {
+const KeywordMatch = dynamic(() => import("./_components/dash/keywordMatch"), {
   loading: () => <div>Loading Keyword Match...</div>,
 })
 
-const KeywordAutomation = dynamic(() => import("../components/KeywordAutomation"), {
+const KeywordAutomation = dynamic(() => import("./_components/dash/keyword-performance"), {
   loading: () => <div>Loading Keyword Automation...</div>,
 })
 
-const ChatHistory = dynamic(() => import("../components/ChatHistory"), {
+const ChatHistory = dynamic(() => import("./_components/dash/chat-history"), {
   loading: () => <div>Loading Chat History...</div>,
 })
 
