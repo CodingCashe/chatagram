@@ -202,7 +202,7 @@ export function RecentDms({ dms, automations }: { dms: Dm[]; automations: Automa
         <ScrollArea className="h-[400px] pr-4">
           <div className="space-y-4">
             {filteredDms.map((dm) => {
-              const isClient = dm.senderId !== BOT_ID
+              const isClient = dm.senderId == BOT_ID
               return (
                 <div key={dm.id} className={`flex ${isClient ? "justify-end" : "justify-start"}`}>
                   <div className={`flex items-end space-x-2 ${isClient ? "flex-row-reverse" : "flex-row"}`}>
