@@ -764,7 +764,7 @@ import { DASHBOARD_CARDS } from "@/constants/dashboard"
 import EnhancedChart from "./_components/dash/EnhancedChart"
 import EnhancedMetricsCard from "./_components/dash/EnhancedMetricsCard"
 import ActivityFeed from "./_components/dash/ActivityFeed"
-import AIPerformance from "./_components/dash/AIPerformance"
+import HashtagCloud from './_components/dash/HashtagCloud'
 import TaskProgress from "./_components/dash/TaskProgress"
 import { AutomationOverview } from "./_components/dash/automation-overview"
 import { KeywordPerformance } from "./_components/dash/keyword-performance"
@@ -794,7 +794,7 @@ export default async function DashboardPage() {
         </span>
         <div className="w-full flex lg:flex-row flex-col gap-5">
           <div className="lg:w-6/12">
-            <EnhancedChart userId={user.id} />
+            <EnhancedChart />
           </div>
           <div className="lg:w-6/12">
             <EnhancedMetricsCard />
@@ -812,7 +812,6 @@ export default async function DashboardPage() {
       </div>
 
       <div className="container mx-auto p-6 space-y-6">
-        <h1 className="text-3xl font-bold text-white mb-6">Instagram Bot Dashboard</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Suspense fallback={<Card className="w-full h-[300px] animate-pulse bg-gray-800" />}>
             <AutomationList automations={dashboardData.automations} />
@@ -843,9 +842,8 @@ export default async function DashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ActivityFeed />
-        <AIPerformance />
+        <HashtagCloud />
       </div>
-
       <TaskProgress />
 
       {/* <InstagramIntegrationPopupWrapper /> */}
