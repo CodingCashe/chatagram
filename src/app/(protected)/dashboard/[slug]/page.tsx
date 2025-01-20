@@ -723,33 +723,30 @@
 // }
 
 import { Suspense } from "react"
-import dynamic from "next/dynamic"
+import { getDashboardData } from "@/actions/dashboard/dashboard"
+import { onCurrentUser } from "@/actions/user"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { AutomationList } from "./_components/newdash/automation-list"
+import { RecentDms } from "./_components/newdash/recent-dms"
+import { ActiveConversations } from "./_components/newdash/active-conversations"
+import { RecentKeywords } from "./_components/newdash/recent-keywords"
 
-const KeywordMatch = dynamic(() => import("./_components/dash/keywordMatch"), {
-  loading: () => <div>Loading Keyword Match...</div>,
-})
+export default async function DashboardPage() {
+  const user = await onCurrentUser()
+  const dashboardData = await getDashboardData(user.id)
 
-const KeywordAutomation = dynamic(() => import("./_components/dash/keyword-performance"), {
-  loading: () => <div>Loading Keyword Automation...</div>,
-})
-
-const ChatHistory = dynamic(() => import("./_components/dash/chat-history"), {
-  loading: () => <div>Loading Chat History...</div>,
-})
-
-export default function Dashboard() {
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Suspense fallback={<div>Loading Keyword Match...</div>}>
-          <KeywordMatch />
+    <div className="container mx-auto p-6 space-y-6">
+      <h1 className="text-3xl font-bold text-white mb-6">Instagram Bot Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Suspense fallback={<Card className="w-full h-[300px] animate-pulse bg-gray-800" />}>
+          <AutomationList automations={dashboardData.automations} />
         </Suspense>
-        <Suspense fallback={<div>Loading Keyword Automation...</div>}>
-          <KeywordAutomation />
+        <Suspense fallback={<Card className="w-full h-[300px] animate-pulse bg-gray-800" />}>
+          <RecentDms dms={dashboardData.recentDms} />
         </Suspense>
-        <Suspense fallback={<div>Loading Chat History...</div>}>
-          <ChatHistory />
+        <Suspense fallback={<Card className="w-full h-[200px] animate-pulse bg-gray-800" />}>
+          <ActiveConversations count={dashboardData.activeConversations} />
         </Suspense>
       </div>
     </div>

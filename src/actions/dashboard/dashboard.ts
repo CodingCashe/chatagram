@@ -1,31 +1,37 @@
 "use server"
 
-import { matchKeyword, getKeywordAutomation, getChatHistory } from "@/actions/webhook/queries"
+import { client } from "@/lib/prisma"
+import { getAutomations } from "../automations/queries"
 
-export async function fetchKeywordMatch(keyword: string) {
+export async function getDashboardData(userId: string) {
   try {
-    return await matchKeyword(keyword)
-  } catch (error) {
-    console.error("Error fetching keyword match:", error)
-    throw new Error("Failed to fetch keyword match")
-  }
-}
+    const automations = await getAutomations(userId)
 
-export async function fetchKeywordAutomation(automationId: string, dm: boolean) {
-  try {
-    return await getKeywordAutomation(automationId, dm)
-  } catch (error) {
-    console.error("Error fetching keyword automation:", error)
-    throw new Error("Failed to fetch keyword automation")
-  }
-}
+    const activeConversations = await client.conversationState.count({
+      where: { isActive: true },
+    })
 
-export async function fetchChatHistory(sender: string, receiver: string) {
-  try {
-    return await getChatHistory(sender, receiver)
+    const recentDms = await client.dms.findMany({
+      take: 5,
+      orderBy: { createdAt: "desc" },
+      include: { Automation: true },
+    })
+
+    const recentKeywords = await client.keyword.findMany({
+      take: 5,
+      orderBy: { Automation: { createdAt: "desc" } },
+      include: { Automation: true },
+    })
+
+    return {
+      automations: automations?.automations || [],
+      activeConversations,
+      recentDms,
+      recentKeywords,
+    }
   } catch (error) {
-    console.error("Error fetching chat history:", error)
-    throw new Error("Failed to fetch chat history")
+    console.error("Error fetching dashboard data:", error)
+    throw new Error("Failed to fetch dashboard data")
   }
 }
 
