@@ -951,6 +951,7 @@ import { onCurrentUser } from "@/actions/user"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AutomationList } from "./_components/newdash/automation-list"
 import { RecentDms } from "./_components/newdash/recent-dms"
+import ContentSuggestions from './_components/dash/ContentSuggestions'
 import { ActiveConversations } from "./_components/newdash/active-conversations"
 import { BarDuoToneBlue } from "@/icons"
 import DoubleGradientCard from "@/components/global/double-gradient-card"
@@ -1008,6 +1009,9 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <HashtagCloud />
         <AIPerformance />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">           
+        <ContentSuggestions />
       </div>
     </div>
   )
