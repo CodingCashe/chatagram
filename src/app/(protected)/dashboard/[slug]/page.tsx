@@ -956,7 +956,6 @@ import { BarDuoToneBlue } from "@/icons"
 import DoubleGradientCard from "@/components/global/double-gradient-card"
 import { DASHBOARD_CARDS } from "@/constants/dashboard"
 import EnhancedMetricsCard from "./_components/dash/EnhancedMetricsCard"
-import ActivityFeed from "./_components/dash/ActivityFeed"
 import AIPerformance from "./_components/dash/AIPerformance"
 import EngagementInsights from "./_components/dash/EngagementInsights"
 import HashtagCloud from './_components/dash/HashtagCloud'
@@ -1008,10 +1007,9 @@ export default async function DashboardPage() {
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ActivityFeed />
+        <HashtagCloud />
         <AIPerformance />
       </div>
-      <HashtagCloud />
     </div>
   )
 }

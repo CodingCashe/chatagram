@@ -1,14 +1,14 @@
-
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import type React from "react"
+import { useEffect, useState } from "react"
 
-interface ChatalLogoProps {
+interface LogoProps {
   maxWidth?: number
   maxHeight?: number
 }
 
-export const LogoSmall: React.FC<ChatalLogoProps> = ({ maxWidth = 300, maxHeight = 100 }) => {
+export const LogoSmall: React.FC<LogoProps> = ({ maxWidth = 300, maxHeight = 100 }) => {
   const [dimensions, setDimensions] = useState({ width: maxWidth, height: maxHeight })
 
   useEffect(() => {
@@ -19,16 +19,18 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ maxWidth = 300, maxHeight
     }
 
     updateDimensions()
-    window.addEventListener('resize', updateDimensions)
-    return () => window.removeEventListener('resize', updateDimensions)
+    window.addEventListener("resize", updateDimensions)
+    return () => window.removeEventListener("resize", updateDimensions)
   }, [maxWidth, maxHeight])
 
   return (
-    <div style={{
-      width: '100%',
-      maxWidth: `${dimensions.width}px`,
-      ...styles.logoWrapper,
-    }}>
+    <div
+      style={{
+        width: "100%",
+        maxWidth: `${dimensions.width}px`,
+        ...styles.logoWrapper,
+      }}
+    >
       <svg
         width="100%"
         height="100%"
@@ -39,133 +41,51 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ maxWidth = 300, maxHeight
         style={styles.svg}
       >
         <defs>
-          <linearGradient id="bubbleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#260AFF" />
-            <stop offset="100%" stopColor="#0A68FF" />
+          <linearGradient id="instagramGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#405DE6" />
+            <stop offset="50%" stopColor="#5851DB" />
+            <stop offset="100%" stopColor="#833AB4" />
           </linearGradient>
-          <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
             <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-          <clipPath id="chatBubbleClip">
-            <path d="M10 50 Q 10 10, 50 10 Q 90 10, 90 50 Q 90 90, 50 90 Q 30 90, 20 80 L 5 95 L 15 75 Q 10 65, 10 50" />
-          </clipPath>
         </defs>
-        
-        {/* Main chat bubble */}
-        <g clipPath="url(#chatBubbleClip)">
-          <rect width="100" height="100" fill="url(#bubbleGradient)" />
-          {/* <circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.1)" /> */}
-          <circle cx="50" cy="50" r="40" fill="#1B5CFF" />
-          <path
-            d="M30 30 Q 50 0, 70 30 Q 100 50, 70 70 Q 50 100, 30 70 Q 0 50, 30 30"
-            fill="#2563EB"
-            transform="rotate(45 50 50)"
-          >
-            <animateTransform
-              attributeName="transform"
-              type="rotate"
-              from="0 50 50"
-              to="360 50 50"
-              dur="40s"
-              repeatCount="indefinite"
-            />
-          </path>
-        </g>
-        
-        {/* Automation representation */}
-        <g transform="translate(50, 50)">
-          <circle r="25" fill="none" stroke="#FFD700" strokeWidth="2" strokeDasharray="5,5">
-            <animateTransform
-              attributeName="transform"
-              type="rotate"
-              from="0"
-              to="360"
-              dur="20s"
-              repeatCount="indefinite"
-            />
-          </circle>
-          <circle r="18" fill="none" stroke="#FFD700" strokeWidth="2" strokeDasharray="3,3">
-            <animateTransform
-              attributeName="transform"
-              type="rotate"
-              from="360"
-              to="0"
-              dur="14s"
-              repeatCount="indefinite"
-            />
-          </circle>
-        </g>
-        
-        {/* AI/Automation core */}
-        <g transform="translate(50, 50)">
-          <path
-            d="M-10 -10 L10 10 M-10 10 L10 -10"
-            fill="#AABBFF"
-            strokeWidth="3"
-            strokeLinecap="round"
-          >
-            <animateTransform
-              attributeName="transform"
-              type="scale"
-              values="1;1.2;1"
-              dur="13s"
-              repeatCount="indefinite"
-            />
-          </path>
-        </g>
-        
-        {/* Dynamic message lines */}
-        <g>
-          <path d="M15 40 Q 30 20, 45 40" stroke="#FFFFFF" strokeWidth="2" fill="none">
-            <animate
-              attributeName="d"
-              values="M15 40 Q 30 20, 45 40;M15 40 Q 30 60, 45 40;M15 40 Q 30 20, 45 40"
-              dur="13s"
-              repeatCount="indefinite"
-            />
-          </path>
-          <path d="M55 60 Q 70 80, 85 60" stroke="#FFFFFF" strokeWidth="2" fill="none">
-            <animate
-              attributeName="d"
-              values="M55 60 Q 70 80, 85 60;M55 60 Q 70 40, 85 60;M55 60 Q 70 80, 85 60"
-              dur="13s"
-              repeatCount="indefinite"
-            />
-          </path>
-        </g>
-        
-        {/* Company name with dynamic effect */}
+
+        {/* Instagram-inspired camera outline */}
+        <rect x="10" y="10" width="80" height="80" rx="20" ry="20" fill="url(#instagramGradient)" />
+        <rect x="15" y="15" width="70" height="70" rx="18" ry="18" fill="none" stroke="white" strokeWidth="2" />
+        <circle cx="50" cy="50" r="18" fill="none" stroke="white" strokeWidth="2" />
+        <circle cx="73" cy="27" r="5" fill="white" />
+
+        {/* Message bubble */}
+        <path
+          d="M60 70 Q 80 70, 80 50 Q 80 30, 60 30 L 40 30 Q 20 30, 20 50 Q 20 70, 40 70 L 50 70 L 45 80 L 60 70"
+          fill="white"
+          opacity="0.8"
+        >
+        </path>
+
+
+        {/* Company name */}
         <text
-          x="120"
-          y="60"
+          x="110"
+          y="50"
           fontFamily="Arial, sans-serif"
-          fontSize="40"
+          fontSize="24"
           fontWeight="bold"
-          fill="#2563EB"
-          filter="url(#neonGlow)"
+          fill="#405DE6"
+          filter="url(#glow)"
         >
           Chatal
-          <animate
-            attributeName="opacity"
-            values="1;0.7;1"
-            dur="13s"
-            repeatCount="indefinite"
-          />
         </text>
-        
+
         {/* Tagline */}
-        <text
-          x="120"
-          y="80"
-          fontFamily="Arial, sans-serif"
-          fontSize="14"
-          fill="#AABBFF"
-        >
-          Automate. Engage. Grow.
+        <text x="110" y="75" fontFamily="Arial, sans-serif" fontSize="10" fill="#833AB4">
+          Streamline Your Instagram DMs
         </text>
       </svg>
     </div>
@@ -174,21 +94,213 @@ export const LogoSmall: React.FC<ChatalLogoProps> = ({ maxWidth = 300, maxHeight
 
 const styles = {
   logoWrapper: {
-    '@media (max-width: 768px)': {
-      maxWidth: '240px',
+    "@media (max-width: 768px)": {
+      maxWidth: "240px",
     },
-    '@media (max-width: 480px)': {
-      maxWidth: '180px',
+    "@media (max-width: 480px)": {
+      maxWidth: "180px",
     },
   },
   svg: {
-    display: 'block',
-    margin: '0',
-    verticalAlign: 'top',
+    display: "block",
+    margin: "0",
+    verticalAlign: "top",
   },
 } as const
 
 export default LogoSmall
+
+
+// "use client"
+
+// import React, { useEffect, useState } from 'react'
+
+// interface ChatalLogoProps {
+//   maxWidth?: number
+//   maxHeight?: number
+// }
+
+// export const LogoSmall: React.FC<ChatalLogoProps> = ({ maxWidth = 300, maxHeight = 100 }) => {
+//   const [dimensions, setDimensions] = useState({ width: maxWidth, height: maxHeight })
+
+//   useEffect(() => {
+//     const updateDimensions = () => {
+//       const width = Math.min(maxWidth, window.innerWidth * 0.8)
+//       const height = (width / maxWidth) * maxHeight
+//       setDimensions({ width, height })
+//     }
+
+//     updateDimensions()
+//     window.addEventListener('resize', updateDimensions)
+//     return () => window.removeEventListener('resize', updateDimensions)
+//   }, [maxWidth, maxHeight])
+
+//   return (
+//     <div style={{
+//       width: '100%',
+//       maxWidth: `${dimensions.width}px`,
+//       ...styles.logoWrapper,
+//     }}>
+//       <svg
+//         width="100%"
+//         height="100%"
+//         viewBox="0 0 300 100"
+//         preserveAspectRatio="xMidYMid meet"
+//         fill="none"
+//         xmlns="http://www.w3.org/2000/svg"
+//         style={styles.svg}
+//       >
+//         <defs>
+//           <linearGradient id="bubbleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+//             <stop offset="0%" stopColor="#260AFF" />
+//             <stop offset="100%" stopColor="#0A68FF" />
+//           </linearGradient>
+//           <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+//             <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+//             <feMerge>
+//               <feMergeNode in="coloredBlur"/>
+//               <feMergeNode in="SourceGraphic"/>
+//             </feMerge>
+//           </filter>
+//           <clipPath id="chatBubbleClip">
+//             <path d="M10 50 Q 10 10, 50 10 Q 90 10, 90 50 Q 90 90, 50 90 Q 30 90, 20 80 L 5 95 L 15 75 Q 10 65, 10 50" />
+//           </clipPath>
+//         </defs>
+        
+//         {/* Main chat bubble */}
+//         <g clipPath="url(#chatBubbleClip)">
+//           <rect width="100" height="100" fill="url(#bubbleGradient)" />
+//           {/* <circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.1)" /> */}
+//           <circle cx="50" cy="50" r="40" fill="#1B5CFF" />
+//           <path
+//             d="M30 30 Q 50 0, 70 30 Q 100 50, 70 70 Q 50 100, 30 70 Q 0 50, 30 30"
+//             fill="#2563EB"
+//             transform="rotate(45 50 50)"
+//           >
+//             <animateTransform
+//               attributeName="transform"
+//               type="rotate"
+//               from="0 50 50"
+//               to="360 50 50"
+//               dur="40s"
+//               repeatCount="indefinite"
+//             />
+//           </path>
+//         </g>
+        
+//         {/* Automation representation */}
+//         <g transform="translate(50, 50)">
+//           <circle r="25" fill="none" stroke="#FFD700" strokeWidth="2" strokeDasharray="5,5">
+//             <animateTransform
+//               attributeName="transform"
+//               type="rotate"
+//               from="0"
+//               to="360"
+//               dur="20s"
+//               repeatCount="indefinite"
+//             />
+//           </circle>
+//           <circle r="18" fill="none" stroke="#FFD700" strokeWidth="2" strokeDasharray="3,3">
+//             <animateTransform
+//               attributeName="transform"
+//               type="rotate"
+//               from="360"
+//               to="0"
+//               dur="14s"
+//               repeatCount="indefinite"
+//             />
+//           </circle>
+//         </g>
+        
+//         {/* AI/Automation core */}
+//         <g transform="translate(50, 50)">
+//           <path
+//             d="M-10 -10 L10 10 M-10 10 L10 -10"
+//             fill="#AABBFF"
+//             strokeWidth="3"
+//             strokeLinecap="round"
+//           >
+//             <animateTransform
+//               attributeName="transform"
+//               type="scale"
+//               values="1;1.2;1"
+//               dur="13s"
+//               repeatCount="indefinite"
+//             />
+//           </path>
+//         </g>
+        
+//         {/* Dynamic message lines */}
+//         <g>
+//           <path d="M15 40 Q 30 20, 45 40" stroke="#FFFFFF" strokeWidth="2" fill="none">
+//             <animate
+//               attributeName="d"
+//               values="M15 40 Q 30 20, 45 40;M15 40 Q 30 60, 45 40;M15 40 Q 30 20, 45 40"
+//               dur="13s"
+//               repeatCount="indefinite"
+//             />
+//           </path>
+//           <path d="M55 60 Q 70 80, 85 60" stroke="#FFFFFF" strokeWidth="2" fill="none">
+//             <animate
+//               attributeName="d"
+//               values="M55 60 Q 70 80, 85 60;M55 60 Q 70 40, 85 60;M55 60 Q 70 80, 85 60"
+//               dur="13s"
+//               repeatCount="indefinite"
+//             />
+//           </path>
+//         </g>
+        
+//         {/* Company name with dynamic effect */}
+//         <text
+//           x="120"
+//           y="60"
+//           fontFamily="Arial, sans-serif"
+//           fontSize="40"
+//           fontWeight="bold"
+//           fill="#2563EB"
+//           filter="url(#neonGlow)"
+//         >
+//           Chatal
+//           <animate
+//             attributeName="opacity"
+//             values="1;0.7;1"
+//             dur="13s"
+//             repeatCount="indefinite"
+//           />
+//         </text>
+        
+//         {/* Tagline */}
+//         <text
+//           x="120"
+//           y="80"
+//           fontFamily="Arial, sans-serif"
+//           fontSize="14"
+//           fill="#AABBFF"
+//         >
+//           Automate. Engage. Grow.
+//         </text>
+//       </svg>
+//     </div>
+//   )
+// }
+
+// const styles = {
+//   logoWrapper: {
+//     '@media (max-width: 768px)': {
+//       maxWidth: '240px',
+//     },
+//     '@media (max-width: 480px)': {
+//       maxWidth: '180px',
+//     },
+//   },
+//   svg: {
+//     display: 'block',
+//     margin: '0',
+//     verticalAlign: 'top',
+//   },
+// } as const
+
+// export default LogoSmall
 
 
 // export const LogoSmall = () => {
