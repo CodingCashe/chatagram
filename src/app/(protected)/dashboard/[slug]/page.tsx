@@ -1126,6 +1126,7 @@
 import { Suspense } from "react"
 import { RecentKeywords } from "./_components/newdash/recent-keywords"
 import { getDashboardData } from "@/actions/dashboard"
+import { getDashboardDati } from "@/actions/dashboard/dashboard"
 import { onCurrentUser } from "@/actions/user"
 import { Card, CardContent } from "@/components/ui/card"
 import { AutomationList } from "./_components/newdash/automation-list"
