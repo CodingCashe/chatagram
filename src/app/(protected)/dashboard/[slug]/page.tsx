@@ -963,7 +963,7 @@ import HashtagCloud from './_components/dash/HashtagCloud'
 
 export default async function DashboardPage() {
   const user = await onCurrentUser()
-  const dashboardData = await getDashboardData(user.id)
+  const dashboardData = await getDashboardData()
   return (
     <div className="flex flex-col gap-y-10">
       <div className="flex gap-5 lg:flex-row flex-col">

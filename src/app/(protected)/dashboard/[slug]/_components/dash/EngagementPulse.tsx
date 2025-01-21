@@ -224,7 +224,7 @@ const EngagementPulse: React.FC<{ userId: string }> = ({ userId }) => {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const dashboardData: DashboardData = await getDashboardData(userId)
+        const dashboardData: DashboardData = await getDashboardData()
         const processedData = processEngagementData(dashboardData)
         setData(processedData)
       } catch (err) {
