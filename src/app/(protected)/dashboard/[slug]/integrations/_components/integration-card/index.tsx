@@ -49,173 +49,85 @@
 
 // export default IntegrationCard
 
-
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useRef } from "react"
-import { motion, useAnimation, useMotionValue, useTransform } from "framer-motion"
 import { useQuery } from "@tanstack/react-query"
-import type * as THREE from "three"
-import { Canvas, useFrame, useThree } from "@react-three/fiber"
+import { motion } from "framer-motion"
 import { onOAuthInstagram } from "@/actions/integrations"
 import { onUserInfo } from "@/actions/user"
 import { Button } from "@/components/ui/button"
+import { InstagramLogoIcon, LightningBoltIcon, CheckCircledIcon } from "@radix-ui/react-icons"
 
 type Props = {
   title: string
   description: string
-  icon: React.ReactNode
   strategy: "INSTAGRAM" | "CRM"
 }
 
-const FloatingIcon: React.FC<{ icon: React.ReactNode }> = ({ icon }) => {
-  const iconRef = useRef<THREE.Mesh>(null)
-  const { viewport } = useThree()
-
-  useFrame((state) => {
-    if (iconRef.current) {
-      iconRef.current.rotation.y = Math.sin(state.clock.elapsedTime) * 0.2
-      iconRef.current.position.y = Math.sin(state.clock.elapsedTime * 2) * 0.1
-    }
-  })
-
-  return (
-    <mesh ref={iconRef} scale={[viewport.width / 15, viewport.width / 15, 1]}>
-      <planeGeometry args={[1, 1]} />
-      <meshBasicMaterial transparent>
-        <canvasTexture attach="map" image={renderToCanvas(icon)} />
-      </meshBasicMaterial>
-    </mesh>
-  )
-}
-
-const renderToCanvas = (icon: React.ReactNode): HTMLCanvasElement => {
-  const canvas = document.createElement("canvas")
-  canvas.width = 128
-  canvas.height = 128
-  const ctx = canvas.getContext("2d")
-  if (ctx) {
-    ctx.fillStyle = "white"
-    ctx.font = "64px Arial"
-    ctx.textAlign = "center"
-    ctx.textBaseline = "middle"
-    ctx.fillText(icon as string, 64, 64)
-  }
-  return canvas
-}
-
-const IntegrationCard: React.FC<Props> = ({ description, icon, strategy, title }) => {
-  const [isHovered, setIsHovered] = useState(false)
-  const [isConnected, setIsConnected] = useState(false)
-  const cardRef = useRef<HTMLDivElement>(null)
-  const controls = useAnimation()
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  const rotateX = useTransform(y, [-100, 100], [30, -30])
-  const rotateY = useTransform(x, [-100, 100], [-30, 30])
-
+const IntegrationCard: React.FC<Props> = ({ description, strategy, title }) => {
   const { data } = useQuery({
     queryKey: ["user-profile"],
     queryFn: onUserInfo,
   })
 
-  useEffect(() => {
-    const integrated = data?.data?.integrations.find((integration) => integration.name === strategy)
-    setIsConnected(!!integrated)
-  }, [data, strategy])
+  const integrated = data?.data?.integrations.find((integration) => integration.name === strategy)
 
-  const onInstaOAuth = async () => {
-    await onOAuthInstagram(strategy)
-    setIsConnected(true)
-  }
+  const onInstaOAuth = () => onOAuthInstagram(strategy)
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const rect = cardRef.current?.getBoundingClientRect()
-    if (rect) {
-      const mouseX = event.clientX - rect.left
-      const mouseY = event.clientY - rect.top
-      x.set(mouseX - rect.width / 2)
-      y.set(mouseY - rect.height / 2)
+  const getIcon = () => {
+    switch (strategy) {
+      case "INSTAGRAM":
+        return <InstagramLogoIcon className="w-8 h-8 text-pink-500" />
+      case "CRM":
+        return <LightningBoltIcon className="w-8 h-8 text-blue-500" />
+      default:
+        return null
     }
   }
-
-  const handleMouseEnter = () => setIsHovered(true)
-  const handleMouseLeave = () => setIsHovered(false)
-
-  useEffect(() => {
-    if (isHovered) {
-      controls.start({
-        scale: 1.05,
-        transition: { duration: 0.3 },
-      })
-    } else {
-      controls.start({
-        scale: 1,
-        transition: { duration: 0.3 },
-      })
-    }
-  }, [isHovered, controls])
 
   return (
     <motion.div
-      ref={cardRef}
-      className="relative overflow-hidden border-2 border-[#3352CC] rounded-2xl p-6 bg-gradient-to-br from-[#1C2D70] to-[#3352CC] text-white shadow-2xl"
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-        perspective: 1000,
-      }}
-      animate={controls}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 p-1"
     >
-      <div className="relative z-10 flex flex-col items-center sm:items-start sm:flex-row gap-6">
-        <div className="w-24 h-24 relative">
-          <Canvas>
-            <FloatingIcon icon={icon} />
-          </Canvas>
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-20" />
+      <div className="relative z-10 p-6 flex flex-col sm:flex-row items-center sm:items-start gap-6">
+        <div className="flex-shrink-0 w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center">
+          {getIcon()}
         </div>
         <div className="flex-1 text-center sm:text-left">
-          <h3 className="text-2xl font-bold mb-2">{title}</h3>
-          <p className="text-[#D1D5DB] text-lg">{description}</p>
+          <h3 className="text-2xl font-bold mb-2 text-white">{title}</h3>
+          <p className="text-gray-300 text-lg mb-4">{description}</p>
+          <Button
+            onClick={onInstaOAuth}
+            disabled={integrated?.name === strategy}
+            className={`
+              relative overflow-hidden rounded-full text-lg px-8 py-3 font-medium
+              ${
+                integrated
+                  ? "bg-green-600 hover:bg-green-700"
+                  : "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              }
+              transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500
+            `}
+          >
+            <span className="relative z-10 flex items-center justify-center">
+              {integrated ? (
+                <>
+                  <CheckCircledIcon className="w-5 h-5 mr-2" />
+                  Connected
+                </>
+              ) : (
+                "Connect"
+              )}
+            </span>
+          </Button>
         </div>
-        <Button
-          onClick={onInstaOAuth}
-          disabled={isConnected}
-          className={`
-            relative overflow-hidden rounded-full text-lg px-8 py-3 font-medium
-            ${
-              isConnected
-                ? "bg-green-500 hover:bg-green-600"
-                : "bg-gradient-to-r from-[#3352CC] to-[#1C2D70] hover:from-[#1C2D70] hover:to-[#3352CC]"
-            }
-            transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3352CC]
-          `}
-        >
-          <span className="relative z-10">{isConnected ? "Connected" : "Connect"}</span>
-          <motion.div
-            className="absolute inset-0 bg-white"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={isConnected ? { scale: 30, opacity: 0.2 } : { scale: 0, opacity: 0 }}
-            transition={{ duration: 0.6 }}
-          />
-        </Button>
       </div>
-      <div className="absolute inset-0 bg-gradient-to-br from-transparent to-[#3352CC] opacity-30" />
-      <motion.div
-        className="absolute inset-0 bg-[url('/particle-bg.png')] bg-repeat"
-        animate={{
-          backgroundPosition: ["0% 0%", "100% 100%"],
-        }}
-        transition={{
-          repeat: Number.POSITIVE_INFINITY,
-          repeatType: "reverse",
-          duration: 20,
-        }}
-      />
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 to-pink-600" />
     </motion.div>
   )
 }
