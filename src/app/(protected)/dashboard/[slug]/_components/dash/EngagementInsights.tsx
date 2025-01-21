@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Calendar, TrendingUp, Zap } from "lucide-react"
-import { getDashboardData } from "@/actions/dashboard/dashboard"
+import { getDashboardDati } from "@/actions/dashboard/dashboard"
 import EngagementHeatmap from "./EngagementHeatmap"
 import EngagementTrends from "./EngagementTrends"
 import EngagementInsightPanel from "./EngagementInsightPanel"
@@ -26,7 +26,7 @@ const EngagementInsights: React.FC<{ userId: string }> = ({ userId }) => {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const dashboardData = await getDashboardData(userId)
+        const dashboardData = await getDashboardDati(userId)
         const processedData = processEngagementData(dashboardData)
         setData(processedData)
       } catch (err) {
