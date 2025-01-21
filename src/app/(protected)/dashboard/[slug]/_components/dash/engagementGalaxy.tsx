@@ -108,7 +108,7 @@ const EngagementGalaxy: React.FC<EngagementGalaxyProps> = ({ data }) => {
           <Star size={16} className="mr-1 text-blue-400" /> Comments
         </div>
       </div>
-      <div className="absolute top-2 right-2 bg-gray-800 bg-opacity-50 rounded p-2">
+      <div className="absolute top-2 right-2 bg-opacity-50 rounded p-2">
         <select className="bg-transparent text-white text-xs sm:text-sm outline-none">
           <option value="week">Last Week</option>
           <option value="month">Last Month</option>
