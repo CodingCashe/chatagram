@@ -2738,11 +2738,12 @@ export async function POST(req: NextRequest) {
   try {
     console.log('Received webhook payload:', JSON.stringify(webhook_payload, null, 2))
 
-    let userId, userMessage, pageId, senderId
+    let userId, userMessage, pageId, senderId, recipientId
 
     if (webhook_payload.entry[0].messaging) {
       pageId = webhook_payload.entry[0].id
       senderId = webhook_payload.entry[0].messaging[0].sender.id
+      recipientId = webhook_payload.entry[0].messaging[0].recipient.id
       userMessage = webhook_payload.entry[0].messaging[0].message.text
       userId = `${pageId}_${senderId}`
     } else if (webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === 'comments') {

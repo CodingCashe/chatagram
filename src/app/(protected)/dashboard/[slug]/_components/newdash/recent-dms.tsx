@@ -192,7 +192,7 @@ interface Automation {
   name: string
 }
 
-const BOT_ID = "1336784737460417"
+const BOT_ID = "17841444435951291"
 
 export function RecentDms({
   dms,
