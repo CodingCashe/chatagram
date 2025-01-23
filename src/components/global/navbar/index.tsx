@@ -317,6 +317,7 @@ import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { Separator } from '@/components/ui/separator'
 import { SIDEBAR_MENU, SideBarItemProps, SideBarGroupProps } from '@/constants/menu'
 import { LogoSmall } from '@/svgs/logo-small'
+import ChatalLogo from '@/svgs/chatal-logo'
 import { useClerk } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
@@ -455,7 +456,7 @@ const Navbar = ({ slug }: Props) => {
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-between p-4">
               <motion.div transition={{ duration: 0.5 }}>
-                <LogoSmall />
+                <ChatalLogo width={100} height={100} color="#0066cc" />
               </motion.div>                  
             </div>
             <div className="px-16 m-2">

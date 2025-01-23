@@ -708,6 +708,7 @@
 
 import React, { useState } from 'react'
 import { LogoSmall } from '@/svgs/logo-small'
+import ChatalLogo from '@/svgs/chatal-logo'
 import { Separator } from '@/components/ui/separator'
 import UpgradeCard from './upgrade'
 import UpgradedCard from './upgraded'
@@ -839,7 +840,7 @@ const Sidebar = ({ slug }: Props) => {
         "
       >
         <div className="flex items-center justify-center p-2">
-          <LogoSmall />
+        <ChatalLogo width={100} height={100} color="#0066cc" />
         </div>
 
         <div className="flex-1 overflow-y-auto py-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">

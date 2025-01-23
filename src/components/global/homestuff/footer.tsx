@@ -43,6 +43,7 @@
 // }
 
 import { Facebook, TwitterIcon, InstagramIcon, LinkedinIcon } from 'lucide-react';
+import ChatalLogo from '@/svgs/chatal-logo';
 import {LogoSmall} from '@/svgs/logo-small'
 
 export default function Footer() {
@@ -51,7 +52,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
              <div className="flex items-center gap-2">
-               <LogoSmall />
+               <ChatalLogo width={200} height={200} color="#0066cc"/>
              </div>
           <p className="text-gray-400">Revolutionizing Instagram DM automation for businesses and influencers.</p>
         </div>
