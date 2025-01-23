@@ -87,8 +87,8 @@ const ChatalLogo: React.FC<ChatalLogoProps> = ({
         <p
           style={{
             fontFamily: "Arial, sans-serif",
-            fontSize: "14px",
-            color: "#833AB4",
+            fontSize: "12px",
+            color: "#0066cc",
             margin: 0,
           }}
         >
