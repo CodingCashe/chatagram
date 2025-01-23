@@ -13,7 +13,7 @@ interface DMInsightsProps {
 const DMInsights: React.FC<DMInsightsProps> = ({ data }) => {
   const insights = useMemo(() => {
     const totalDMs = data.reduce((sum, day) => sum + day.dms, 0)
-    const avgDMs = totalDMs / data.length
+    const avgDMs = (totalDMs/2) / data.length
     const maxDMs = Math.max(...data.map((d) => d.dms))
     const minDMs = Math.min(...data.map((d) => d.dms))
 
@@ -27,7 +27,7 @@ const DMInsights: React.FC<DMInsightsProps> = ({ data }) => {
       {
         title: "Total DMs",
         value: totalDMs,
-        description: `You've received ${totalDMs} DMs in total.`,
+        description: `You've received ${totalDMs/2} DMs and comments in total.`,
         icon: MessageCircle,
         color: "text-blue-500",
       },
