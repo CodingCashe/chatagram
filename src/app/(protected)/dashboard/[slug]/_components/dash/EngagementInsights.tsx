@@ -362,6 +362,160 @@
 
 // export default EngagementInsights
 
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect } from "react"
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+// import { Star, TrendingUp, Zap } from "lucide-react"
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+// import { getAutomationsForUser, getEngagementDataForAutomation } from "@/actions/dashboard"
+// import EngagementGalaxy from "./engagementGalaxy"
+// import EngagementTrends from "./EngagementTrends"
+// import EngagementInsightPanel from "./EngagementInsightPanel"
+// import ClientOnly from "./ClientOnly"
+// import type { AutomationOption, EngagementData, Automation } from "@/types/dashboard"
+
+// const EngagementInsights: React.FC = () => {
+//   const [automations, setAutomations] = useState<AutomationOption[]>([])
+//   const [selectedAutomation, setSelectedAutomation] = useState<string | null>(null)
+//   const [data, setData] = useState<EngagementData[]>([])
+//   const [loading, setLoading] = useState(true)
+//   const [error, setError] = useState<string | null>(null)
+
+//   useEffect(() => {
+//     const fetchAutomations = async () => {
+//       const fetchedAutomations: Automation[] = await getAutomationsForUser()
+//       setAutomations(
+//         fetchedAutomations.map((automation) => ({
+//           value: automation.id,
+//           label: automation.name,
+//         })),
+//       )
+//     }
+//     fetchAutomations()
+//   }, [])
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       if (!selectedAutomation) return
+
+//       try {
+//         setLoading(true)
+//         const { engagementData, commentData } = await getEngagementDataForAutomation(selectedAutomation)
+//         const processedData = processEngagementData(engagementData, commentData)
+//         setData(processedData)
+//       } catch (err) {
+//         setError("Failed to fetch engagement data")
+//       } finally {
+//         setLoading(false)
+//       }
+//     }
+
+//     fetchData()
+//   }, [selectedAutomation])
+
+//   const processEngagementData = (engagementData: any, commentData: any): EngagementData[] => {
+//     const engagementMap = new Map<string, EngagementData>()
+
+//     // Process engagementData (DMs)
+//     engagementData?.forEach((engagement: any) => {
+//       const date = new Date(engagement.createdAt).toISOString().split("T")[0]
+//       const existingData = engagementMap.get(date) || { date, dms: 0, comments: 0 }
+//       existingData.dms += engagement._count?.id || 0
+//       engagementMap.set(date, existingData)
+//     })
+
+//     // Process commentData
+//     if (commentData) {
+//       const date = new Date(commentData.Automation?.createdAt).toISOString().split("T")[0]
+//       const existingData = engagementMap.get(date) || { date, dms: 0, comments: 0 }
+//       existingData.comments += commentData.commentCount || 0
+//       engagementMap.set(date, existingData)
+//     }
+
+//     // Convert map to array and sort by date
+//     return Array.from(engagementMap.values()).sort((a, b) => a.date.localeCompare(b.date))
+//   }
+
+//   if (automations.length === 0) {
+//     return <div className="text-center py-10">No automations available.</div>
+//   }
+
+//   return (
+//     <Card className="w-full max-w-4xl mx-auto">
+//       <CardHeader>
+//         <CardTitle className="text-xl sm:text-2xl">Engagement Insights</CardTitle>
+//       </CardHeader>
+//       <CardContent>
+//         <Select onValueChange={setSelectedAutomation}>
+//           <SelectTrigger className="w-full mb-4">
+//             <SelectValue placeholder="Select an automation" />
+//           </SelectTrigger>
+//           <SelectContent>
+//             {automations.map((automation) => (
+//               <SelectItem key={automation.value} value={automation.value}>
+//                 {automation.label}
+//               </SelectItem>
+//             ))}
+//           </SelectContent>
+//         </Select>
+
+//         {selectedAutomation ? (
+//           loading ? (
+//             <div className="text-center py-10">Loading engagement insights...</div>
+//           ) : error ? (
+//             <div className="text-center text-red-500 py-10">{error}</div>
+//           ) : data.length === 0 ? (
+//             <div className="text-center py-10">No engagement data available for this automation.</div>
+//           ) : (
+//             <Tabs defaultValue="trends" className="w-full">
+//               <TabsList className="grid w-full grid-cols-3 mb-4">
+//                 <TabsTrigger value="galaxy" className="text-xs sm:text-sm">
+//                   <Star className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+//                   <span className="hidden sm:inline">Galaxy</span>
+//                   <span className="sm:hidden">Glxy</span>
+//                 </TabsTrigger>
+//                 <TabsTrigger value="trends" className="text-xs sm:text-sm">
+//                   <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+//                   <span className="hidden sm:inline">Trends</span>
+//                   <span className="sm:hidden">Trend</span>
+//                 </TabsTrigger>
+//                 <TabsTrigger value="insights" className="text-xs sm:text-sm">
+//                   <Zap className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+//                   <span className="hidden sm:inline">Insights</span>
+//                   <span className="sm:hidden">Insgt</span>
+//                 </TabsTrigger>
+//               </TabsList>
+//               <div className="mt-4 sm:mt-6">
+//                 <TabsContent value="galaxy">
+//                   <ClientOnly>
+//                     <EngagementGalaxy data={data} />
+//                   </ClientOnly>
+//                 </TabsContent>
+//                 <TabsContent value="trends">
+//                   <EngagementTrends data={data} />
+//                 </TabsContent>
+//                 <TabsContent value="insights">
+//                   <ClientOnly>
+//                     <EngagementInsightPanel data={data} />
+//                   </ClientOnly>
+//                 </TabsContent>
+//               </div>
+//             </Tabs>
+//           )
+//         ) : (
+//           <div className="text-center py-10">Please select an automation to view insights.</div>
+//         )}
+//       </CardContent>
+//     </Card>
+//   )
+// }
+
+// export default EngagementInsights
+
+
 "use client"
 
 import type React from "react"
@@ -386,16 +540,25 @@ const EngagementInsights: React.FC = () => {
 
   useEffect(() => {
     const fetchAutomations = async () => {
-      const fetchedAutomations: Automation[] = await getAutomationsForUser()
-      setAutomations(
-        fetchedAutomations.map((automation) => ({
+      try {
+        const fetchedAutomations: Automation[] = await getAutomationsForUser()
+        const mappedAutomations = fetchedAutomations.map((automation) => ({
           value: automation.id,
           label: automation.name,
-        })),
-      )
+        }))
+        setAutomations(mappedAutomations)
+
+        // Automatically select the first automation if available
+        if (mappedAutomations.length > 0 && !selectedAutomation) {
+          setSelectedAutomation(mappedAutomations[0].value)
+        }
+      } catch (err) {
+        console.error("Error fetching automations:", err)
+        setError("Failed to fetch automations")
+      }
     }
     fetchAutomations()
-  }, [])
+  }, [selectedAutomation])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -403,10 +566,12 @@ const EngagementInsights: React.FC = () => {
 
       try {
         setLoading(true)
+        setError(null)
         const { engagementData, commentData } = await getEngagementDataForAutomation(selectedAutomation)
         const processedData = processEngagementData(engagementData, commentData)
         setData(processedData)
       } catch (err) {
+        console.error("Error fetching engagement data:", err)
         setError("Failed to fetch engagement data")
       } finally {
         setLoading(false)
@@ -449,7 +614,7 @@ const EngagementInsights: React.FC = () => {
         <CardTitle className="text-xl sm:text-2xl">Engagement Insights</CardTitle>
       </CardHeader>
       <CardContent>
-        <Select onValueChange={setSelectedAutomation}>
+        <Select value={selectedAutomation || undefined} onValueChange={setSelectedAutomation}>
           <SelectTrigger className="w-full mb-4">
             <SelectValue placeholder="Select an automation" />
           </SelectTrigger>
@@ -462,51 +627,47 @@ const EngagementInsights: React.FC = () => {
           </SelectContent>
         </Select>
 
-        {selectedAutomation ? (
-          loading ? (
-            <div className="text-center py-10">Loading engagement insights...</div>
-          ) : error ? (
-            <div className="text-center text-red-500 py-10">{error}</div>
-          ) : data.length === 0 ? (
-            <div className="text-center py-10">No engagement data available for this automation.</div>
-          ) : (
-            <Tabs defaultValue="trends" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 mb-4">
-                <TabsTrigger value="galaxy" className="text-xs sm:text-sm">
-                  <Star className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                  <span className="hidden sm:inline">Galaxy</span>
-                  <span className="sm:hidden">Glxy</span>
-                </TabsTrigger>
-                <TabsTrigger value="trends" className="text-xs sm:text-sm">
-                  <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                  <span className="hidden sm:inline">Trends</span>
-                  <span className="sm:hidden">Trend</span>
-                </TabsTrigger>
-                <TabsTrigger value="insights" className="text-xs sm:text-sm">
-                  <Zap className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                  <span className="hidden sm:inline">Insights</span>
-                  <span className="sm:hidden">Insgt</span>
-                </TabsTrigger>
-              </TabsList>
-              <div className="mt-4 sm:mt-6">
-                <TabsContent value="galaxy">
-                  <ClientOnly>
-                    <EngagementGalaxy data={data} />
-                  </ClientOnly>
-                </TabsContent>
-                <TabsContent value="trends">
-                  <EngagementTrends data={data} />
-                </TabsContent>
-                <TabsContent value="insights">
-                  <ClientOnly>
-                    <EngagementInsightPanel data={data} />
-                  </ClientOnly>
-                </TabsContent>
-              </div>
-            </Tabs>
-          )
+        {loading ? (
+          <div className="text-center py-10">Loading engagement insights...</div>
+        ) : error ? (
+          <div className="text-center text-red-500 py-10">{error}</div>
+        ) : data.length === 0 ? (
+          <div className="text-center py-10">No engagement data available for this automation.</div>
         ) : (
-          <div className="text-center py-10">Please select an automation to view insights.</div>
+          <Tabs defaultValue="trends" className="w-full">
+            <TabsList className="grid w-full grid-cols-3 mb-4">
+              <TabsTrigger value="galaxy" className="text-xs sm:text-sm">
+                <Star className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Galaxy</span>
+                <span className="sm:hidden">Glxy</span>
+              </TabsTrigger>
+              <TabsTrigger value="trends" className="text-xs sm:text-sm">
+                <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Trends</span>
+                <span className="sm:hidden">Trend</span>
+              </TabsTrigger>
+              <TabsTrigger value="insights" className="text-xs sm:text-sm">
+                <Zap className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Insights</span>
+                <span className="sm:hidden">Insgt</span>
+              </TabsTrigger>
+            </TabsList>
+            <div className="mt-4 sm:mt-6">
+              <TabsContent value="galaxy">
+                <ClientOnly>
+                  <EngagementGalaxy data={data} />
+                </ClientOnly>
+              </TabsContent>
+              <TabsContent value="trends">
+                <EngagementTrends data={data} />
+              </TabsContent>
+              <TabsContent value="insights">
+                <ClientOnly>
+                  <EngagementInsightPanel data={data} />
+                </ClientOnly>
+              </TabsContent>
+            </div>
+          </Tabs>
         )}
       </CardContent>
     </Card>
