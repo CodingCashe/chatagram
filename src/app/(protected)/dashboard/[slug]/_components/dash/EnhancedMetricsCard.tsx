@@ -213,7 +213,7 @@ const EnhancedMetricsCard = () => {
 
   const metrics = [
     { title: "Comments", value: comments, subtext: "On your posts", icon: MessageSquare },
-    { title: "Direct Messages", value: dms, subtext: "On your account", icon: Mail },
+    { title: "Dms", value: dms, subtext: "On your account", icon: Mail },
   ]
 
   return (
