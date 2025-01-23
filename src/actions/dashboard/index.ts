@@ -224,6 +224,46 @@ export async function getAutomationsForUser(): Promise<Automation[]> {
   }
 }
 
+// export async function getEngagementDataForAutomation(automationId: string): Promise<{
+//   engagementData: EngagementData[]
+//   commentData: { Automation: { createdAt: Date }; commentCount: number } | null
+// }> {
+//   try {
+//     const engagementData = await getEngagementDataForAutomationQuery(automationId)
+//     const commentData = await getCommentDataForAutomationQuery(automationId)
+
+//     const processedEngagementData = engagementData.map((data) => ({
+//       date: new Date(data.createdAt).toISOString().split("T")[0],
+//       dms: data._count.id,
+//       comments: 0, // We'll update this with comment data later
+//     }))
+
+//     // If commentData exists, add it to the corresponding date in processedEngagementData
+//     if (commentData && commentData.Automation) {
+//       const commentDate = new Date(commentData.Automation.createdAt).toISOString().split("T")[0]
+//       const existingDataIndex = processedEngagementData.findIndex((data) => data.date === commentDate)
+
+//       if (existingDataIndex !== -1) {
+//         processedEngagementData[existingDataIndex].comments = commentData.commentCount
+//       } else {
+//         processedEngagementData.push({
+//           date: commentDate,
+//           dms: 0,
+//           comments: commentData.commentCount,
+//         })
+//       }
+//     }
+
+//     return {
+//       engagementData: processedEngagementData,
+//       commentData,
+//     }
+//   } catch (error) {
+//     console.error("Error fetching engagement data:", error)
+//     return { engagementData: [], commentData: null }
+//   }
+// }
+
 export async function getEngagementDataForAutomation(automationId: string): Promise<{
   engagementData: EngagementData[]
   commentData: { Automation: { createdAt: Date }; commentCount: number } | null
@@ -232,27 +272,31 @@ export async function getEngagementDataForAutomation(automationId: string): Prom
     const engagementData = await getEngagementDataForAutomationQuery(automationId)
     const commentData = await getCommentDataForAutomationQuery(automationId)
 
-    const processedEngagementData = engagementData.map((data) => ({
-      date: new Date(data.createdAt).toISOString().split("T")[0],
-      dms: data._count.id,
-      comments: 0, // We'll update this with comment data later
-    }))
+    // Create a map to aggregate DM counts by date
+    const engagementMap = new Map<string, { dms: number; comments: number }>()
 
-    // If commentData exists, add it to the corresponding date in processedEngagementData
+    // Process engagement data (DMs)
+    engagementData.forEach((data) => {
+      const date = new Date(data.createdAt).toISOString().split("T")[0]
+      const existingData = engagementMap.get(date) || { dms: 0, comments: 0 }
+      existingData.dms += data._count.id
+      engagementMap.set(date, existingData)
+    })
+
+    // Process comment data
     if (commentData && commentData.Automation) {
       const commentDate = new Date(commentData.Automation.createdAt).toISOString().split("T")[0]
-      const existingDataIndex = processedEngagementData.findIndex((data) => data.date === commentDate)
-
-      if (existingDataIndex !== -1) {
-        processedEngagementData[existingDataIndex].comments = commentData.commentCount
-      } else {
-        processedEngagementData.push({
-          date: commentDate,
-          dms: 0,
-          comments: commentData.commentCount,
-        })
-      }
+      const existingData = engagementMap.get(commentDate) || { dms: 0, comments: 0 }
+      existingData.comments = commentData.commentCount
+      engagementMap.set(commentDate, existingData)
     }
+
+    // Convert map to array and sort by date
+    const processedEngagementData = Array.from(engagementMap, ([date, data]) => ({
+      date,
+      dms: data.dms,
+      comments: data.comments,
+    })).sort((a, b) => a.date.localeCompare(b.date))
 
     return {
       engagementData: processedEngagementData,
