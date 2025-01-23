@@ -8,6 +8,7 @@ interface ChatalLogoProps {
 
 const ChatalLogo: React.FC<ChatalLogoProps> = ({ width = 100, height = 100, color = "#0066cc" }) => {
   return (
+    <div>
     <svg width={width} height={height} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="100" height="100" rx="10" fill={color} />
       <path d="M20 30H80V70L60 50H20V30Z" fill="white" stroke="white" strokeWidth="2" />
@@ -32,6 +33,7 @@ const ChatalLogo: React.FC<ChatalLogoProps> = ({ width = 100, height = 100, colo
           Engage.Automate.Grow
         </text>
     </svg>
+    </div>
   )
 }
 

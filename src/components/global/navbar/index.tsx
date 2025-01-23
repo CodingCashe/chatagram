@@ -456,7 +456,7 @@ const Navbar = ({ slug }: Props) => {
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-between p-4">
               <motion.div transition={{ duration: 0.5 }}>
-                <ChatalLogo width={40} height={40} color="#0066cc" />
+                <ChatalLogo width={60} height={60} color="#0066cc" />
               </motion.div>                  
             </div>
             <div className="px-16 m-2">

@@ -52,7 +52,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
              <div className="flex items-center gap-2">
-               <ChatalLogo width={50} height={50} color="#0066cc"/>
+               <ChatalLogo width={70} height={70} color="#0066cc"/>
              </div>
           <p className="text-gray-400">Revolutionizing Instagram DM automation for businesses and influencers.</p>
         </div>

@@ -840,7 +840,7 @@ const Sidebar = ({ slug }: Props) => {
         "
       >
         <div className="flex items-center justify-center p-2">
-        <ChatalLogo width={40} height={40} color="#0066cc" />
+        <ChatalLogo width={60} height={60} color="#0066cc" />
         </div>
 
         <div className="flex-1 overflow-y-auto py-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
