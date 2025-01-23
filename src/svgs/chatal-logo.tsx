@@ -14,6 +14,23 @@ const ChatalLogo: React.FC<ChatalLogoProps> = ({ width = 100, height = 100, colo
       <circle cx="35" cy="50" r="5" fill={color} />
       <circle cx="50" cy="50" r="5" fill={color} />
       <circle cx="65" cy="50" r="5" fill={color} />
+
+      <text
+          x="110"
+          y="50"
+          fontFamily="Arial, sans-serif"
+          fontSize="28"
+          fontWeight="bold"
+          fill="#405DE6"
+          filter="url(#glow)"
+        >
+          Chatal
+        </text>
+
+        {/* Tagline */}
+        <text x="110" y="75" fontFamily="Arial, sans-serif" fontSize="14" fill="#833AB4">
+          Engage.Automate.Grow
+        </text>
     </svg>
   )
 }
