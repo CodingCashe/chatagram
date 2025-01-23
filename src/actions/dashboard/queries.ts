@@ -426,26 +426,26 @@ export async function getDashboardDataQuery(userId: string) {
   }
 }
 
-export async function getEngagementDataForAutomationQuery(automationId: string) {
-  const sixMonthsAgo = new Date()
-  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
+// export async function getEngagementDataForAutomationQuery(automationId: string) {
+//   const sixMonthsAgo = new Date()
+//   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
 
-  return await client.dms.groupBy({
-    by: ["createdAt"],
-    where: {
-      automationId: automationId,
-      createdAt: {
-        gte: sixMonthsAgo,
-      },
-    },
-    _count: {
-      id: true,
-    },
-    orderBy: {
-      createdAt: "asc",
-    },
-  })
-}
+//   return await client.dms.groupBy({
+//     by: ["createdAt"],
+//     where: {
+//       automationId: automationId,
+//       createdAt: {
+//         gte: sixMonthsAgo,
+//       },
+//     },
+//     _count: {
+//       id: true,
+//     },
+//     orderBy: {
+//       createdAt: "asc",
+//     },
+//   })
+// }
 
 export async function getCommentDataForAutomationQuery(automationId: string) {
   const sixMonthsAgo = new Date()
@@ -516,5 +516,28 @@ export async function getAutomationsForUserQuery(userId: string): Promise<Automa
         }
       : null,
   }))
+}
+
+
+
+export async function getEngagementDataForAutomationQuery(automationId: string) {
+  const sixMonthsAgo = new Date()
+  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
+
+  return await client.dms.groupBy({
+    by: ["createdAt"],
+    where: {
+      automationId: automationId,
+      createdAt: {
+        gte: sixMonthsAgo,
+      },
+    },
+    _count: {
+      id: true,
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  })
 }
 

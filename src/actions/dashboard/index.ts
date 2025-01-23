@@ -93,6 +93,82 @@
 //   }
 // }
 
+// "use server"
+
+// import type { DashboardData, Automation, EngagementData } from "@/types/dashboard"
+// import { onCurrentUser } from "../user"
+// import {
+//   getDashboardDataQuery,
+//   getEngagementDataForAutomationQuery,
+//   getCommentDataForAutomationQuery,
+//   getRecentDmsQuery,
+//   getRecentKeywordsQuery,
+//   getAutomationsForUserQuery,
+// } from "./queries"
+
+// export async function getDashboardData(): Promise<DashboardData> {
+//   const user = await onCurrentUser()
+//   try {
+//     const dashboardData = await getDashboardDataQuery(user.id)
+//     const recentDms = await getRecentDmsQuery()
+//     const recentKeywords = await getRecentKeywordsQuery()
+//     const engagementData = await getEngagementDataForAutomationQuery(dashboardData.automations[0]?.id || "")
+//     const commentData = await getCommentDataForAutomationQuery(dashboardData.automations[0]?.id || "")
+
+//     return {
+//       status: 200,
+//       data: {
+//         ...dashboardData,
+//         recentDms,
+//         recentKeywords,
+//         engagementData,
+//         commentData: commentData ? [commentData] : [],
+//       },
+//     }
+//   } catch (error) {
+//     console.error("Error fetching dashboard data:", error)
+//     return { status: 500, data: null }
+//   }
+// }
+
+// export async function getAutomationsForUser(): Promise<Automation[]> {
+//   const user = await onCurrentUser()
+//   try {
+//     const automations = await getAutomationsForUserQuery(user.id)
+//     return automations.map((automation) => ({
+//       id: automation.id,
+//       name: automation.name,
+//       active: automation.active,
+//       createdAt: automation.createdAt,
+//       listener: automation.listener,
+//     }))
+//   } catch (error) {
+//     console.error("Error fetching automations:", error)
+//     return []
+//   }
+// }
+
+// export async function getEngagementDataForAutomation(automationId: string): Promise<{
+//   engagementData: EngagementData[]
+//   commentData: { Automation: { createdAt: Date }; commentCount: number } | null
+// }> {
+//   try {
+//     const engagementData = await getEngagementDataForAutomationQuery(automationId)
+//     const commentData = await getCommentDataForAutomationQuery(automationId)
+//     return {
+//       engagementData: engagementData.map((data) => ({
+//         date: data.createdAt.toISOString().split("T")[0],
+//         dms: data._count.id,
+//         comments: 0, // We'll update this with comment data later
+//       })),
+//       commentData,
+//     }
+//   } catch (error) {
+//     console.error("Error fetching engagement data:", error)
+//     return { engagementData: [], commentData: null }
+//   }
+// }
+
 "use server"
 
 import type { DashboardData, Automation, EngagementData } from "@/types/dashboard"
@@ -155,12 +231,31 @@ export async function getEngagementDataForAutomation(automationId: string): Prom
   try {
     const engagementData = await getEngagementDataForAutomationQuery(automationId)
     const commentData = await getCommentDataForAutomationQuery(automationId)
+
+    const processedEngagementData = engagementData.map((data) => ({
+      date: new Date(data.createdAt).toISOString().split("T")[0],
+      dms: data._count.id,
+      comments: 0, // We'll update this with comment data later
+    }))
+
+    // If commentData exists, add it to the corresponding date in processedEngagementData
+    if (commentData && commentData.Automation) {
+      const commentDate = new Date(commentData.Automation.createdAt).toISOString().split("T")[0]
+      const existingDataIndex = processedEngagementData.findIndex((data) => data.date === commentDate)
+
+      if (existingDataIndex !== -1) {
+        processedEngagementData[existingDataIndex].comments = commentData.commentCount
+      } else {
+        processedEngagementData.push({
+          date: commentDate,
+          dms: 0,
+          comments: commentData.commentCount,
+        })
+      }
+    }
+
     return {
-      engagementData: engagementData.map((data) => ({
-        date: data.createdAt.toISOString().split("T")[0],
-        dms: data._count.id,
-        comments: 0, // We'll update this with comment data later
-      })),
+      engagementData: processedEngagementData,
       commentData,
     }
   } catch (error) {
