@@ -48,7 +48,6 @@ export interface AutomationOption {
 export interface EngagementData {
   date: string
   dms: number
-  comments: number
 }
 
 export interface DashboardData {
