@@ -239,7 +239,7 @@ export default function Home() {
       <header className="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
           <div className="flex items-center gap-0">
-            <ChatalLogo width={200} height={200} color="#0066cc"/>
+            <ChatalLogo width={50} height={50} color="#0066cc"/>
           </div>
 
           <Button 
