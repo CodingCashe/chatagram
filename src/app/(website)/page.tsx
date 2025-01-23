@@ -201,6 +201,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronRight, Zap, DollarSign, Shield, Mail } from 'lucide-react';
 import { LogoSmall } from '@/svgs/logo-small';
+import ChatalLogo from '@/svgs/chatal-logo';
 import Link from 'next/link';
 import Hero from '@/components/global/homestuff/hero';
 import PricingPlans from '@/components/global/homestuff/pricing-plans';
@@ -238,7 +239,7 @@ export default function Home() {
       <header className="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
           <div className="flex items-center gap-0">
-            <LogoSmall />
+            <ChatalLogo />
           </div>
 
           <Button 
