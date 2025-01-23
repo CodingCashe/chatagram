@@ -1164,7 +1164,7 @@ export default async function DashboardPage() {
         </span>
         <div className="w-full flex lg:flex-row flex-col gap-5">
           <div className="lg:w-6/12">
-            <EngagementInsights userId={user.id} />
+            <EngagementInsights />
           </div>
           <div className="lg:w-6/12">
             <EnhancedMetricsCard />
