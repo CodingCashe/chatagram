@@ -1,65 +1,54 @@
-'use server'
+"use server"
 
-import { client } from '@/lib/prisma'
+import { client } from "@/lib/prisma"
 
-export interface Message {
-  role: 'user' | 'assistant';
-  content: string;
+
+interface StoreChatMessagesParams {
+  userId: string
+  pageId: string
+  senderId: string
+  userMessage: string
+  botResponse: string
+  automationId: string
 }
 
-export interface Conversation {
-  id: string;
-  senderId: string | null;
-  reciever: string | null;
-  messages: Message[];
-  lastMessage: string;
-}
-
-export async function getChats(automationId: string): Promise<Conversation[]> {
+export async function storeChatMessages({
+  userId,
+  pageId,
+  senderId,
+  userMessage,
+  botResponse,
+  automationId,
+}: StoreChatMessagesParams) {
   try {
-    const chats = await client.dms.findMany({
-      where: {
-        automationId: automationId,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-      select: {
-        id: true,
-        senderId: true,
-        reciever: true,
-        message: true,
-        createdAt: true,
-      },
-    });
+    const result = await client.$transaction([
+      client.message.create({
+        data: {
+          userId,
+          pageId,
+          senderId,
+          message: userMessage,
+          isFromBot: false,
+          automationId,
+        },
+      }),
+      client.message.create({
+        data: {
+          userId,
+          pageId,
+          senderId: pageId, // For bot messages, senderId is the page ID
+          message: botResponse,
+          isFromBot: true,
+          automationId,
+        },
+      }),
+    ])
 
-    const conversations: Record<string, Conversation> = {};
-
-    chats.forEach(chat => {
-      const conversationId = `${chat.senderId}_${chat.reciever}`;
-      if (!conversations[conversationId]) {
-        conversations[conversationId] = {
-          id: conversationId,
-          senderId: chat.senderId,
-          reciever: chat.reciever,
-          messages: [],
-          lastMessage: '',
-        };
-      }
-      
-      conversations[conversationId].messages.push({
-        role: chat.senderId === automationId ? 'assistant' : 'user',
-        content: chat.message || '',
-      });
-      
-      if (!conversations[conversationId].lastMessage) {
-        conversations[conversationId].lastMessage = chat.message || '';
-      }
-    });
-
-    return Object.values(conversations);
+    console.log("Chat messages stored:", result)
+    return { success: true, messages: result }
   } catch (error) {
-    console.error('Error fetching chats:', error);
-    throw new Error('Failed to fetch chats');
+    console.error("Error storing chat messages:", error)
+    return { success: false, error: error instanceof Error ? error.message : String(error) }
   }
 }
+
