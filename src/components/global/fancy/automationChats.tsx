@@ -452,6 +452,121 @@
 
 
 
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect } from "react"
+// import { motion, AnimatePresence } from "framer-motion"
+// import { ChevronRight, MessageCircle, User } from "lucide-react"
+// import { ScrollArea } from "@/components/ui/scroll-area"
+// import { getChatHistori } from "@/actions/webhook/queries"
+// import { type Conversation, Message } from "@/types/chat"
+
+// interface AutomationChatsProps {
+//   automationId: string
+// }
+
+// const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
+//   const [conversations, setConversations] = useState<Conversation[]>([])
+//   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
+//   const [isLoading, setIsLoading] = useState(true)
+
+//   useEffect(() => {
+//     const fetchChats = async () => {
+//       setIsLoading(true)
+//       try {
+//         const result = await getChatHistori(automationId)
+//         setConversations(result.conversations)
+//       } catch (error) {
+//         console.error("Error fetching chats:", error)
+//       } finally {
+//         setIsLoading(false)
+//       }
+//     }
+
+//     fetchChats()
+//   }, [automationId])
+
+//   if (isLoading) {
+//     return <div>Loading chats...</div>
+//   }
+
+//   return (
+//     <div className="h-full flex flex-col">
+//       <h3 className="text-lg font-semibold mb-4">Recent Conversations</h3>
+//       <ScrollArea className="flex-grow">
+//         <AnimatePresence mode="wait">
+//           {!selectedConversation ? (
+//             <motion.div
+//               initial={{ opacity: 0 }}
+//               animate={{ opacity: 1 }}
+//               exit={{ opacity: 0 }}
+//               transition={{ duration: 0.2 }}
+//             >
+//               {conversations.map((conversation) => (
+//                 <div
+//                   key={conversation.userId}
+//                   className="flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg cursor-pointer transition-colors duration-200"
+//                   onClick={() => setSelectedConversation(conversation)}
+//                 >
+//                   <div>
+//                     <p className="font-medium">User {conversation.userId}</p>
+//                     <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+//                       {conversation.messages[conversation.messages.length - 1]?.content ?? "No messages"}
+//                     </p>
+//                   </div>
+//                   <ChevronRight size={20} className="text-gray-400" />
+//                 </div>
+//               ))}
+//             </motion.div>
+//           ) : (
+//             <motion.div
+//               initial={{ opacity: 0 }}
+//               animate={{ opacity: 1 }}
+//               exit={{ opacity: 0 }}
+//               transition={{ duration: 0.2 }}
+//             >
+//               <button
+//                 className="mb-4 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200"
+//                 onClick={() => setSelectedConversation(null)}
+//               >
+//                 ← Back to conversations
+//               </button>
+//               <h4 className="font-medium mb-2">Conversation with User {selectedConversation.userId}</h4>
+//               <ScrollArea className="h-64 md:h-96">
+//                 {selectedConversation.messages.map((message, index) => (
+//                   <div
+//                     key={index}
+//                     className={`flex items-start mb-4 ${
+//                       message.role === "assistant" ? "justify-start" : "justify-end"
+//                     }`}
+//                   >
+//                     {message.role === "assistant" && (
+//                       <MessageCircle size={24} className="mr-2 text-blue-500 flex-shrink-0" />
+//                     )}
+//                     <div
+//                       className={`max-w-[80%] p-3 rounded-lg ${
+//                         message.role === "assistant"
+//                           ? "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100"
+//                           : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100"
+//                       }`}
+//                     >
+//                       {message.content}
+//                     </div>
+//                     {message.role === "user" && <User size={24} className="ml-2 text-gray-500 flex-shrink-0" />}
+//                   </div>
+//                 ))}
+//               </ScrollArea>
+//             </motion.div>
+//           )}
+//         </AnimatePresence>
+//       </ScrollArea>
+//     </div>
+//   )
+// }
+
+// export default AutomationChats
+
 "use client"
 
 import type React from "react"
@@ -470,15 +585,26 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchChats = async () => {
       setIsLoading(true)
+      setError(null)
       try {
+        console.log(`Fetching chat history for automation ID: ${automationId}`)
         const result = await getChatHistori(automationId)
-        setConversations(result.conversations)
+        console.log("Chat history result:", result)
+
+        if (result && result.conversations) {
+          setConversations(result.conversations)
+          console.log(`Successfully fetched ${result.conversations.length} conversations`)
+        } else {
+          throw new Error("Invalid response structure from getChatHistori")
+        }
       } catch (error) {
-        console.error("Error fetching chats:", error)
+        console.error("Error in fetchChats:", error)
+        setError(`Failed to fetch chats: ${error instanceof Error ? error.message : String(error)}`)
       } finally {
         setIsLoading(false)
       }
@@ -491,76 +617,90 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     return <div>Loading chats...</div>
   }
 
+  if (error) {
+    return <div className="text-red-500">Error: {error}</div>
+  }
+
   return (
     <div className="h-full flex flex-col">
       <h3 className="text-lg font-semibold mb-4">Recent Conversations</h3>
-      <ScrollArea className="flex-grow">
-        <AnimatePresence mode="wait">
-          {!selectedConversation ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              {conversations.map((conversation) => (
-                <div
-                  key={conversation.userId}
-                  className="flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg cursor-pointer transition-colors duration-200"
-                  onClick={() => setSelectedConversation(conversation)}
-                >
-                  <div>
-                    <p className="font-medium">User {conversation.userId}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                      {conversation.messages[conversation.messages.length - 1]?.content ?? "No messages"}
-                    </p>
-                  </div>
-                  <ChevronRight size={20} className="text-gray-400" />
-                </div>
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <button
-                className="mb-4 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200"
-                onClick={() => setSelectedConversation(null)}
+      {conversations.length === 0 ? (
+        <div>No conversations found.</div>
+      ) : (
+        <ScrollArea className="flex-grow">
+          <AnimatePresence mode="wait">
+            {!selectedConversation ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
               >
-                ← Back to conversations
-              </button>
-              <h4 className="font-medium mb-2">Conversation with User {selectedConversation.userId}</h4>
-              <ScrollArea className="h-64 md:h-96">
-                {selectedConversation.messages.map((message, index) => (
+                {conversations.map((conversation) => (
                   <div
-                    key={index}
-                    className={`flex items-start mb-4 ${
-                      message.role === "assistant" ? "justify-start" : "justify-end"
-                    }`}
+                    key={conversation.userId}
+                    className="flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg cursor-pointer transition-colors duration-200"
+                    onClick={() => {
+                      console.log("Selected conversation:", conversation)
+                      setSelectedConversation(conversation)
+                    }}
                   >
-                    {message.role === "assistant" && (
-                      <MessageCircle size={24} className="mr-2 text-blue-500 flex-shrink-0" />
-                    )}
-                    <div
-                      className={`max-w-[80%] p-3 rounded-lg ${
-                        message.role === "assistant"
-                          ? "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100"
-                          : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100"
-                      }`}
-                    >
-                      {message.content}
+                    <div>
+                      <p className="font-medium">User {conversation.userId}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                        {conversation.messages[conversation.messages.length - 1]?.content ?? "No messages"}
+                      </p>
                     </div>
-                    {message.role === "user" && <User size={24} className="ml-2 text-gray-500 flex-shrink-0" />}
+                    <ChevronRight size={20} className="text-gray-400" />
                   </div>
                 ))}
-              </ScrollArea>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </ScrollArea>
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <button
+                  className="mb-4 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200"
+                  onClick={() => {
+                    console.log("Returning to conversation list")
+                    setSelectedConversation(null)
+                  }}
+                >
+                  ← Back to conversations
+                </button>
+                <h4 className="font-medium mb-2">Conversation with User {selectedConversation.userId}</h4>
+                <ScrollArea className="h-64 md:h-96">
+                  {selectedConversation.messages.map((message, index) => (
+                    <div
+                      key={index}
+                      className={`flex items-start mb-4 ${
+                        message.role === "assistant" ? "justify-start" : "justify-end"
+                      }`}
+                    >
+                      {message.role === "assistant" && (
+                        <MessageCircle size={24} className="mr-2 text-blue-500 flex-shrink-0" />
+                      )}
+                      <div
+                        className={`max-w-[80%] p-3 rounded-lg ${
+                          message.role === "assistant"
+                            ? "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100"
+                            : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100"
+                        }`}
+                      >
+                        {message.content}
+                      </div>
+                      {message.role === "user" && <User size={24} className="ml-2 text-gray-500 flex-shrink-0" />}
+                    </div>
+                  ))}
+                </ScrollArea>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </ScrollArea>
+      )}
     </div>
   )
 }

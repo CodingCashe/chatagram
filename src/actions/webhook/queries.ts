@@ -128,53 +128,6 @@ export const getChatHistory = async (sender: string, reciever: string) => {
 }
 
 
-// // ... (previous code remains unchanged)
-
-// export const getChatHistori = async (automationId: string) => {
-//   const history = await client.dms.findMany({
-//     where: {
-//       automationId: automationId,
-//     },
-//     orderBy: { createdAt: "asc" },
-//   })
-
-//   const chatSession = history.map((chat) => {
-//     return {
-//       role: chat.senderId === automationId ? "assistant" : "user",
-//       content: chat.message ?? "",
-//       senderId: chat.senderId ?? "",
-//       receiverId: chat.reciever ?? "",
-//     }
-//   })
-
-//   // Group messages by unique conversations (unique receiverId)
-//   const groupedChats = chatSession.reduce(
-//     (acc, message) => {
-//       const key = message.role === "assistant" ? message.receiverId : message.senderId
-//       if (key) {
-//         if (!acc[key]) {
-//           acc[key] = []
-//         }
-//         acc[key].push(message)
-//       }
-//       return acc
-//     },
-//     {} as Record<string, typeof chatSession>,
-//   )
-
-//   return {
-//     conversations: Object.entries(groupedChats).map(([userId, messages]) => ({
-//       userId,
-//       messages,
-//     })),
-//     automationId: automationId,
-//   }
-// }
-
-
-
-// ... (previous code remains unchanged)
-
 export const getChatHistori = async (
   automationId: string,
 ): Promise<{ conversations: Conversation[]; automationId: string }> => {
@@ -187,7 +140,7 @@ export const getChatHistori = async (
 
   const chatSession: Message[] = history.map((chat) => {
     return {
-      role: chat.senderId === automationId ? "assistant" : "user",
+      role: chat.senderId === '17841444435951291' ?  "assistant" : "user",
       content: chat.message ?? "",
       senderId: chat.senderId ?? "",
       receiverId: chat.reciever ?? "",
