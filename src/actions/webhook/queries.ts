@@ -1,3 +1,4 @@
+"use server"
 import { client } from '@/lib/prisma'
 import type { Message, Conversation } from "@/types/chat"
 
@@ -128,7 +129,7 @@ export const getChatHistory = async (sender: string, reciever: string) => {
 }
 
 
-export const getChatHistori = async (
+export const getChatHistore = async (
   automationId: string,
 ): Promise<{ conversations: Conversation[]; automationId: string }> => {
   const history = await client.dms.findMany({
@@ -141,6 +142,57 @@ export const getChatHistori = async (
   const chatSession: Message[] = history.map((chat) => {
     return {
       role: chat.senderId === '17841444435951291' ?  "assistant" : "user",
+      content: chat.message ?? "",
+      senderId: chat.senderId ?? "",
+      receiverId: chat.reciever ?? "",
+    }
+  })
+
+  // Group messages by unique conversations (unique receiverId)
+  const groupedChats = chatSession.reduce(
+    (acc, message) => {
+      const key = message.role === "assistant" ? message.receiverId : message.senderId
+      if (key) {
+        if (!acc[key]) {
+          acc[key] = []
+        }
+        acc[key].push(message)
+      }
+      return acc
+    },
+    {} as Record<string, Message[]>,
+  )
+
+  const conversations: Conversation[] = Object.entries(groupedChats).map(([userId, messages]) => ({
+    userId,
+    messages,
+  }))
+
+  return {
+    conversations,
+    automationId,
+  }
+}
+
+// ... (rest of the code remains unchanged)
+
+
+
+// ... (previous functions remain unchanged)
+
+export const getChatHistori = async (
+  automationId: string,
+): Promise<{ conversations: Conversation[]; automationId: string }> => {
+  const history = await client.dms.findMany({
+    where: {
+      automationId: automationId,
+    },
+    orderBy: { createdAt: "asc" },
+  })
+
+  const chatSession: Message[] = history.map((chat) => {
+    return {
+      role: chat.senderId === "17841444435951291" ? "assistant" : "user",
       content: chat.message ?? "",
       senderId: chat.senderId ?? "",
       receiverId: chat.reciever ?? "",
