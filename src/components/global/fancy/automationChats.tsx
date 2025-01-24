@@ -337,41 +337,158 @@
 // export default AutomationChats;
 
 
-'use client'
+// 'use client'
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, MessageCircle, User } from 'lucide-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { getChats, Conversation, Message } from '@/actions/chats/chatAction';
+// import React, { useState, useEffect } from 'react';
+// import { motion, AnimatePresence } from 'framer-motion';
+// import { ChevronRight, MessageCircle, User } from 'lucide-react';
+// import { ScrollArea } from '@/components/ui/scroll-area';
+// import { getChats, Conversation, Message } from '@/actions/chats/chatAction';
+
+// interface AutomationChatsProps {
+//   automationId: string;
+// }
+
+// const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
+//   const [conversations, setConversations] = useState<Conversation[]>([]);
+//   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
+//   const [isLoading, setIsLoading] = useState(true);
+
+//   useEffect(() => {
+//     const fetchChats = async () => {
+//       setIsLoading(true);
+//       try {
+//         const data = await getChats(automationId);
+//         setConversations(data);
+//       } catch (error) {
+//         console.error('Error fetching chats:', error);
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     };
+
+//     fetchChats();
+//   }, [automationId]);
+
+//   if (isLoading) {
+//     return <div>Loading chats...</div>;
+//   }
+
+//   return (
+//     <div className="h-full flex flex-col">
+//       <h3 className="text-lg font-semibold mb-4">Recent Conversations</h3>
+//       <ScrollArea className="flex-grow">
+//         <AnimatePresence mode="wait">
+//           {!selectedConversation ? (
+//             <motion.div
+//               initial={{ opacity: 0 }}
+//               animate={{ opacity: 1 }}
+//               exit={{ opacity: 0 }}
+//               transition={{ duration: 0.2 }}
+//             >
+//               {conversations.map((conversation) => (
+//                 <div
+//                   key={conversation.id}
+//                   className="flex items-center justify-between p-2 hover:bg-white/5 rounded-lg cursor-pointer transition-colors duration-200"
+//                   onClick={() => setSelectedConversation(conversation)}
+//                 >
+//                   <div>
+//                     <p className="font-medium">User {conversation.senderId === automationId ? conversation.reciever : conversation.senderId}</p>
+//                     <p className="text-sm text-gray-400 truncate">{conversation.lastMessage}</p>
+//                   </div>
+//                   <ChevronRight size={20} className="text-gray-400" />
+//                 </div>
+//               ))}
+//             </motion.div>
+//           ) : (
+//             <motion.div
+//               initial={{ opacity: 0 }}
+//               animate={{ opacity: 1 }}
+//               exit={{ opacity: 0 }}
+//               transition={{ duration: 0.2 }}
+//             >
+//               <button
+//                 className="mb-4 text-blue-400 hover:text-blue-300 transition-colors duration-200"
+//                 onClick={() => setSelectedConversation(null)}
+//               >
+//                 ← Back to conversations
+//               </button>
+//               <h4 className="font-medium mb-2">Conversation with User {selectedConversation.senderId === automationId ? selectedConversation.reciever : selectedConversation.senderId}</h4>
+//               <ScrollArea className="h-64 md:h-96">
+//                 {selectedConversation.messages.map((message, index) => (
+//                   <div
+//                     key={index}
+//                     className={`flex items-start mb-4 ${
+//                       message.role === 'assistant' ? 'justify-start' : 'justify-end'
+//                     }`}
+//                   >
+//                     {message.role === 'assistant' && (
+//                       <MessageCircle size={24} className="mr-2 text-blue-400 flex-shrink-0" />
+//                     )}
+//                     <div
+//                       className={`max-w-[80%] p-3 rounded-lg ${
+//                         message.role === 'assistant'
+//                           ? 'bg-blue-500/20 text-white'
+//                           : 'bg-gray-700 text-white'
+//                       }`}
+//                     >
+//                       {message.content}
+//                     </div>
+//                     {message.role === 'user' && (
+//                       <User size={24} className="ml-2 text-gray-400 flex-shrink-0" />
+//                     )}
+//                   </div>
+//                 ))}
+//               </ScrollArea>
+//             </motion.div>
+//           )}
+//         </AnimatePresence>
+//       </ScrollArea>
+//     </div>
+//   );
+// };
+
+// export default AutomationChats;
+
+
+
+"use client"
+
+import type React from "react"
+import { useState, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ChevronRight, MessageCircle, User } from "lucide-react"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { getChatHistori } from "@/actions/webhook/queries"
+import { type Conversation, Message } from "@/types/chat"
 
 interface AutomationChatsProps {
-  automationId: string;
+  automationId: string
 }
 
 const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [conversations, setConversations] = useState<Conversation[]>([])
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchChats = async () => {
-      setIsLoading(true);
+      setIsLoading(true)
       try {
-        const data = await getChats(automationId);
-        setConversations(data);
+        const result = await getChatHistori(automationId)
+        setConversations(result.conversations)
       } catch (error) {
-        console.error('Error fetching chats:', error);
+        console.error("Error fetching chats:", error)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
+    }
 
-    fetchChats();
-  }, [automationId]);
+    fetchChats()
+  }, [automationId])
 
   if (isLoading) {
-    return <div>Loading chats...</div>;
+    return <div>Loading chats...</div>
   }
 
   return (
@@ -388,13 +505,15 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
             >
               {conversations.map((conversation) => (
                 <div
-                  key={conversation.id}
-                  className="flex items-center justify-between p-2 hover:bg-white/5 rounded-lg cursor-pointer transition-colors duration-200"
+                  key={conversation.userId}
+                  className="flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg cursor-pointer transition-colors duration-200"
                   onClick={() => setSelectedConversation(conversation)}
                 >
                   <div>
-                    <p className="font-medium">User {conversation.senderId === automationId ? conversation.reciever : conversation.senderId}</p>
-                    <p className="text-sm text-gray-400 truncate">{conversation.lastMessage}</p>
+                    <p className="font-medium">User {conversation.userId}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                      {conversation.messages[conversation.messages.length - 1]?.content ?? "No messages"}
+                    </p>
                   </div>
                   <ChevronRight size={20} className="text-gray-400" />
                 </div>
@@ -408,35 +527,33 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
               transition={{ duration: 0.2 }}
             >
               <button
-                className="mb-4 text-blue-400 hover:text-blue-300 transition-colors duration-200"
+                className="mb-4 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200"
                 onClick={() => setSelectedConversation(null)}
               >
                 ← Back to conversations
               </button>
-              <h4 className="font-medium mb-2">Conversation with User {selectedConversation.senderId === automationId ? selectedConversation.reciever : selectedConversation.senderId}</h4>
+              <h4 className="font-medium mb-2">Conversation with User {selectedConversation.userId}</h4>
               <ScrollArea className="h-64 md:h-96">
                 {selectedConversation.messages.map((message, index) => (
                   <div
                     key={index}
                     className={`flex items-start mb-4 ${
-                      message.role === 'assistant' ? 'justify-start' : 'justify-end'
+                      message.role === "assistant" ? "justify-start" : "justify-end"
                     }`}
                   >
-                    {message.role === 'assistant' && (
-                      <MessageCircle size={24} className="mr-2 text-blue-400 flex-shrink-0" />
+                    {message.role === "assistant" && (
+                      <MessageCircle size={24} className="mr-2 text-blue-500 flex-shrink-0" />
                     )}
                     <div
                       className={`max-w-[80%] p-3 rounded-lg ${
-                        message.role === 'assistant'
-                          ? 'bg-blue-500/20 text-white'
-                          : 'bg-gray-700 text-white'
+                        message.role === "assistant"
+                          ? "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100"
+                          : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100"
                       }`}
                     >
                       {message.content}
                     </div>
-                    {message.role === 'user' && (
-                      <User size={24} className="ml-2 text-gray-400 flex-shrink-0" />
-                    )}
+                    {message.role === "user" && <User size={24} className="ml-2 text-gray-500 flex-shrink-0" />}
                   </div>
                 ))}
               </ScrollArea>
@@ -445,7 +562,8 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
         </AnimatePresence>
       </ScrollArea>
     </div>
-  );
-};
+  )
+}
 
-export default AutomationChats;
+export default AutomationChats
+
