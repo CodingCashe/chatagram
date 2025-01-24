@@ -192,7 +192,8 @@ export const getChatHistori = async (
 
   const chatSession: Message[] = history.map((chat) => {
     return {
-      role: chat.senderId === "17841444435951291" ? "assistant" : "user",
+      role: chat.reciever ? 'assistant' : 'user',
+      // role: chat.senderId === "17841444435951291" ? "assistant" : "user",
       content: chat.message ?? "",
       senderId: chat.senderId ?? "",
       receiverId: chat.reciever ?? "",
