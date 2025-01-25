@@ -86,6 +86,17 @@ model Automation {
   keywords  Keyword[]
 }
 
+model Message {
+  id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pageId       String
+  senderId     String
+  message      String
+  isFromBot    Boolean
+  createdAt    DateTime    @default(now())
+  Automation   Automation? @relation(fields: [automationId], references: [id])
+  automationId String?      @db.Uuid
+}
+
 model Dms {
   id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   Automation   Automation? @relation(fields: [automationId], references: [id])
@@ -113,39 +124,6 @@ model ConversationState {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-
-// Existing models...
-
-model Message {
-  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId       String
-  pageId       String
-  senderId     String
-  message      String
-  isFromBot    Boolean
-  timestamp    DateTime   @default(now())
-  Automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
-  automationId String     @db.Uuid
-
-  @@index([userId, pageId])
-}
-
-
-model ChatMessage {
-  id        String   @id @default(cuid())
-  userId    String
-  pageId    String
-  senderId  String
-  message   String
-  isFromBot Boolean
-  timestamp DateTime @default(now())
-
-  @@index([userId, pageId])
-}
-
-
-
 
 model Listener {
   id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
