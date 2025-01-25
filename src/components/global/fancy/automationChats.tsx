@@ -1123,25 +1123,170 @@
 
 // export default AutomationChats
 
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect } from "react"
+// import { motion, AnimatePresence } from "framer-motion"
+// import { ChevronRight, MessageCircle, User } from "lucide-react"
+// import { ScrollArea } from "@/components/ui/scroll-area"
+// import { getConversationHistory } from "@/actions/chats/queries"
+// import { type Conversation, Message } from "@/types/chat"
+
+// interface AutomationChatsProps {
+//   automationId: string
+// }
+
+// const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
+//   const [conversations, setConversations] = useState<Conversation[]>([])
+//   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
+//   const [isLoading, setIsLoading] = useState(true)
+//   const [error, setError] = useState<string | null>(null)
+
+//   useEffect(() => {
+//     const fetchChats = async () => {
+//       setIsLoading(true)
+//       setError(null)
+//       try {
+//         console.log(`Fetching chat history for automation ID: ${automationId}`)
+//         const result = await getConversationHistory(automationId)
+//         console.log("Chat history result:", result)
+
+//         setConversations(result)
+//         console.log(`Successfully fetched ${result.length} conversations`)
+//       } catch (error) {
+//         console.error("Error in fetchChats:", error)
+//         setError(`Failed to fetch chats: ${error instanceof Error ? error.message : String(error)}`)
+//       } finally {
+//         setIsLoading(false)
+//       }
+//     }
+
+//     fetchChats()
+//   }, [automationId])
+
+//   if (isLoading) {
+//     return <div>Loading chats...</div>
+//   }
+
+//   if (error) {
+//     return <div className="text-red-500">Error: {error}</div>
+//   }
+
+//   return (
+//     <div className="h-full flex flex-col">
+//       <h3 className="text-lg font-semibold mb-4">Recent Dms</h3>
+//       {conversations.length === 0 ? (
+//         <div>No conversations found.</div>
+//       ) : (
+//         <ScrollArea className="flex-grow">
+//           <AnimatePresence mode="wait">
+//             {!selectedConversation ? (
+//               <motion.div
+//                 initial={{ opacity: 0 }}
+//                 animate={{ opacity: 1 }}
+//                 exit={{ opacity: 0 }}
+//                 transition={{ duration: 0.2 }}
+//               >
+//                 {conversations.map((conversation) => (
+//                   <div
+//                     key={conversation.chatId}
+//                     className="flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg cursor-pointer transition-colors duration-200"
+//                     onClick={() => {
+//                       console.log("Selected conversation:", conversation)
+//                       setSelectedConversation(conversation)
+//                     }}
+//                   >
+//                     <div>
+//                       <p className="font-medium">Chat ID: {conversation.chatId}</p>
+//                       <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+//                         {conversation.messages[conversation.messages.length - 1]?.content ?? "No messages"}
+//                       </p>
+//                     </div>
+//                     <ChevronRight size={20} className="text-gray-400" />
+//                   </div>
+//                 ))}
+//               </motion.div>
+//             ) : (
+//               <motion.div
+//                 initial={{ opacity: 0 }}
+//                 animate={{ opacity: 1 }}
+//                 exit={{ opacity: 0 }}
+//                 transition={{ duration: 0.2 }}
+//               >
+//                 <button
+//                   className="mb-4 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200"
+//                   onClick={() => {
+//                     console.log("Returning to conversation list")
+//                     setSelectedConversation(null)
+//                   }}
+//                 >
+//                   ← Back to conversations
+//                 </button>
+//                 <h4 className="font-medium mb-2">Conversation: {selectedConversation.chatId}</h4>
+//                 <ScrollArea className="h-64 md:h-96">
+//                   {selectedConversation.messages.map((message, index) => (
+//                     <div
+//                       key={message.id}
+//                       className={`flex items-start mb-4 ${
+//                         message.role === "assistant" ? "justify-start" : "justify-end"
+//                       }`}
+//                     >
+//                       {message.role === "assistant" && (
+//                         <MessageCircle size={24} className="mr-2 text-blue-500 flex-shrink-0" />
+//                       )}
+//                       <div
+//                         className={`max-w-[80%] p-3 rounded-lg ${
+//                           message.role === "assistant"
+//                             ? "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100"
+//                             : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100"
+//                         }`}
+//                       >
+//                         <p>{message.content}</p>
+//                         <p className="text-xs text-gray-500 mt-1">{new Date(message.timestamp).toLocaleString()}</p>
+//                       </div>
+//                       {message.role === "user" && <User size={24} className="ml-2 text-gray-500 flex-shrink-0" />}
+//                     </div>
+//                   ))}
+//                 </ScrollArea>
+//               </motion.div>
+//             )}
+//           </AnimatePresence>
+//         </ScrollArea>
+//       )}
+//     </div>
+//   )
+// }
+
+// export default AutomationChats
+
 "use client"
 
 import type React from "react"
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ChevronRight, MessageCircle, User } from "lucide-react"
+import { ChevronRight, MessageCircle, User, Send } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 import { getConversationHistory } from "@/actions/chats/queries"
-import { type Conversation, Message } from "@/types/chat"
+import type { Conversation, Message } from "@/types/chat"
 
 interface AutomationChatsProps {
   automationId: string
 }
+
+const BOT_NAME = "AiAssist"
+const BOT_AVATAR = "https://api.dicebear.com/6.x/bottts/svg?seed=AiAssist"
+const BOT_ID = "17841444435951291" // You may want to replace this with an actual bot ID
 
 const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [newMessage, setNewMessage] = useState("")
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -1165,6 +1310,40 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     fetchChats()
   }, [automationId])
 
+  const handleSendMessage = async () => {
+    if (!newMessage.trim() || !selectedConversation) return
+
+    const tempMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: newMessage,
+      senderId: selectedConversation.userId,
+      receiverId: BOT_ID,
+      timestamp: new Date(),
+    }
+
+    setSelectedConversation((prev) => (prev ? { ...prev, messages: [...prev.messages, tempMessage] } : null))
+    setNewMessage("")
+
+    // Here you would typically call your API to send the message and get a response
+    // For now, we'll just simulate a response after a short delay
+    setTimeout(() => {
+      const botResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: `This is a simulated response to: "${newMessage}"`,
+        senderId: BOT_ID,
+        receiverId: selectedConversation.userId,
+        timestamp: new Date(),
+      }
+      setSelectedConversation((prev) => (prev ? { ...prev, messages: [...prev.messages, botResponse] } : null))
+    }, 1000)
+  }
+
+  const getFancyName = (userId: string) => {
+    return `Client ${userId.slice(-4)}`
+  }
+
   if (isLoading) {
     return <div>Loading chats...</div>
   }
@@ -1174,14 +1353,14 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   }
 
   return (
-    <div className="h-full flex flex-col">
-      <h3 className="text-lg font-semibold mb-4">Recent Conversations for Automation {automationId}</h3>
+    <div className="h-full flex flex-col bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
+      <h3 className="text-lg font-semibold p-4 bg-white dark:bg-gray-900">Recent Conversations</h3>
       {conversations.length === 0 ? (
-        <div>No conversations found.</div>
+        <div className="p-4">No conversations found.</div>
       ) : (
-        <ScrollArea className="flex-grow">
-          <AnimatePresence mode="wait">
-            {!selectedConversation ? (
+        <div className="flex-grow flex overflow-hidden">
+          <ScrollArea className="w-1/3 border-r border-gray-200 dark:border-gray-700">
+            <AnimatePresence mode="wait">
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -1191,14 +1370,15 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                 {conversations.map((conversation) => (
                   <div
                     key={conversation.chatId}
-                    className="flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg cursor-pointer transition-colors duration-200"
-                    onClick={() => {
-                      console.log("Selected conversation:", conversation)
-                      setSelectedConversation(conversation)
-                    }}
+                    className="flex items-center p-4 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-200"
+                    onClick={() => setSelectedConversation(conversation)}
                   >
-                    <div>
-                      <p className="font-medium">Chat ID: {conversation.chatId}</p>
+                    <Avatar className="w-10 h-10">
+                      <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.userId}`} />
+                      <AvatarFallback>{getFancyName(conversation.userId).slice(0, 2)}</AvatarFallback>
+                    </Avatar>
+                    <div className="ml-3 flex-grow">
+                      <p className="font-medium">{getFancyName(conversation.userId)}</p>
                       <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
                         {conversation.messages[conversation.messages.length - 1]?.content ?? "No messages"}
                       </p>
@@ -1207,52 +1387,78 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                   </div>
                 ))}
               </motion.div>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <button
-                  className="mb-4 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200"
-                  onClick={() => {
-                    console.log("Returning to conversation list")
-                    setSelectedConversation(null)
-                  }}
-                >
-                  ← Back to conversations
-                </button>
-                <h4 className="font-medium mb-2">Conversation: {selectedConversation.chatId}</h4>
-                <ScrollArea className="h-64 md:h-96">
-                  {selectedConversation.messages.map((message, index) => (
-                    <div
-                      key={message.id}
-                      className={`flex items-start mb-4 ${
-                        message.role === "assistant" ? "justify-start" : "justify-end"
-                      }`}
-                    >
-                      {message.role === "assistant" && (
-                        <MessageCircle size={24} className="mr-2 text-blue-500 flex-shrink-0" />
-                      )}
-                      <div
-                        className={`max-w-[80%] p-3 rounded-lg ${
-                          message.role === "assistant"
-                            ? "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100"
-                            : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100"
+            </AnimatePresence>
+          </ScrollArea>
+          <div className="flex-grow flex flex-col">
+            {selectedConversation ? (
+              <>
+                <div className="p-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+                  <h4 className="font-medium">Chat with {getFancyName(selectedConversation.userId)}</h4>
+                </div>
+                <ScrollArea className="flex-grow p-4">
+                  <AnimatePresence>
+                    {selectedConversation.messages.map((message) => (
+                      <motion.div
+                        key={message.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.2 }}
+                        className={`flex items-start mb-4 ${
+                          message.role === "assistant" ? "justify-start" : "justify-end"
                         }`}
                       >
-                        <p>{message.content}</p>
-                        <p className="text-xs text-gray-500 mt-1">{new Date(message.timestamp).toLocaleString()}</p>
-                      </div>
-                      {message.role === "user" && <User size={24} className="ml-2 text-gray-500 flex-shrink-0" />}
-                    </div>
-                  ))}
+                        {message.role === "assistant" && (
+                          <Avatar className="w-8 h-8 mr-2">
+                            <AvatarImage src={BOT_AVATAR} />
+                            <AvatarFallback>{BOT_NAME.slice(0, 2)}</AvatarFallback>
+                          </Avatar>
+                        )}
+                        <div
+                          className={`max-w-[70%] p-3 rounded-lg ${
+                            message.role === "assistant"
+                              ? "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100"
+                              : "bg-green-100 text-green-900 dark:bg-green-900 dark:text-green-100"
+                          }`}
+                        >
+                          <p>{message.content}</p>
+                          <p className="text-xs text-gray-500 mt-1">{new Date(message.timestamp).toLocaleString()}</p>
+                        </div>
+                        {message.role === "user" && (
+                          <Avatar className="w-8 h-8 ml-2">
+                            <AvatarImage
+                              src={`https://api.dicebear.com/6.x/initials/svg?seed=${selectedConversation.userId}`}
+                            />
+                            <AvatarFallback>{getFancyName(selectedConversation.userId).slice(0, 2)}</AvatarFallback>
+                          </Avatar>
+                        )}
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
                 </ScrollArea>
-              </motion.div>
+                <div className="p-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center">
+                    <Input
+                      type="text"
+                      placeholder="Type a message..."
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                      className="flex-grow mr-2"
+                    />
+                    <Button onClick={handleSendMessage}>
+                      <Send size={18} />
+                    </Button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="flex-grow flex items-center justify-center text-gray-500">
+                Select a conversation to view messages
+              </div>
             )}
-          </AnimatePresence>
-        </ScrollArea>
+          </div>
+        </div>
       )}
     </div>
   )
