@@ -10,3 +10,15 @@ export interface Message {
     messages: Message[]
   }
   
+
+  // export interface Message {
+  //   role: "assistant" | "user"
+  //   content: string
+  // }
+  
+  // export interface Conversation {
+  //   userId: string
+  //   messages: Message[]
+  // }
+  
+  
