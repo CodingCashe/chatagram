@@ -3393,9 +3393,191 @@
 //   }
 // }
 
+// import { type NextRequest, NextResponse } from "next/server"
+// import { findAutomation } from "@/actions/automations/queries"
+// import { getChatHistory, getKeywordAutomation, matchKeyword, trackResponses } from "@/actions/webhook/queries"
+// import { sendDM, sendPrivateMessage } from "@/lib/fetch"
+// import { client } from "@/lib/prisma"
+// import { getVoiceflowResponse, processVoiceflowResponse, createVoiceflowUser } from "@/lib/voiceflow"
+// import { storeChatMessages } from "@/actions/chats/chatAction"
+
+// export async function GET(req: NextRequest) {
+//   const hub = req.nextUrl.searchParams.get("hub.challenge")
+//   return new NextResponse(hub)
+// }
+
+// export async function POST(req: NextRequest) {
+//   const webhook_payload = await req.json()
+//   let matcher
+
+//   try {
+//     console.log("Received webhook payload:", JSON.stringify(webhook_payload, null, 2))
+
+//     let userId, userMessage, pageId, senderId, recipientId
+
+//     if (webhook_payload.entry[0].messaging) {
+//       pageId = webhook_payload.entry[0].id
+//       senderId = webhook_payload.entry[0].messaging[0].sender.id
+//       recipientId = webhook_payload.entry[0].messaging[0].recipient.id
+//       userMessage = webhook_payload.entry[0].messaging[0].message.text
+//       userId = `${pageId}_${senderId}`
+//     } else if (webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === "comments") {
+//       pageId = webhook_payload.entry[0].id
+//       senderId = webhook_payload.entry[0].changes[0].value.from.id
+//       userMessage = webhook_payload.entry[0].changes[0].value.text
+//       userId = `${pageId}_${senderId}`
+//     } else {
+//       return NextResponse.json({ message: "Unsupported webhook payload" }, { status: 400 })
+//     }
+
+//     // Check if the conversation is already active
+//     const conversationState = await client.conversationState.findUnique({
+//       where: { userId },
+//     })
+
+//     let isConversationActive = conversationState?.isActive || false
+
+//     if (!isConversationActive) {
+//       // If the conversation is not active, check for keyword match
+//       matcher = await matchKeyword(userMessage)
+
+//       if (!matcher || !matcher.automationId) {
+//         // No keyword match and conversation not active, don't respond
+//         return NextResponse.json({ message: "No keyword match" }, { status: 200 })
+//       }
+
+//       // Keyword matched, set the conversation as active
+//       await client.conversationState.upsert({
+//         where: { userId },
+//         update: { isActive: true, updatedAt: new Date() },
+//         create: { userId, isActive: true },
+//       })
+//       isConversationActive = true
+//     }
+
+//     console.log("Attempting to create Voiceflow user:", userId)
+//     const userCreated = await createVoiceflowUser(userId)
+//     if (!userCreated) {
+//       console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
+//     }
+
+//     let automation
+//     if (matcher && matcher.automationId) {
+//       automation = await getKeywordAutomation(matcher.automationId, webhook_payload.entry[0].messaging ? true : false)
+//     } else {
+//       const customer_history = await getChatHistory(pageId, senderId)
+//       if (customer_history.history.length > 0) {
+//         automation = await findAutomation(customer_history.automationId!)
+//       }
+//     }
+
+//     let businessVariables = {}
+//     if (automation?.userId) {
+//       // Fetch the business associated with the user of this automation
+//       const business = await client.business.findFirst({
+//         where: { userId: automation.userId },
+//       })
+
+//       if (business) {
+//         businessVariables = {
+//           business_name: business.businessName,
+//           welcome_message: business.welcomeMessage,
+//           business_industry: business.industry,
+//         }
+//       }
+//     }
+
+//     let voiceflowResponse =
+//       "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists."
+
+//     try {
+//       // Use the businessVariables in the Voiceflow response
+//       const response = await getVoiceflowResponse(userMessage, userId, businessVariables)
+//       voiceflowResponse = processVoiceflowResponse(response)
+//     } catch (error) {
+//       console.error("Error getting or processing Voiceflow response:", error)
+//     }
+
+//     console.log("Processed Voiceflow response:", voiceflowResponse)
+
+//     // Store the chat messages using the new server action
+//     const storedMessages = await storeChatMessages({
+//       userId,
+//       pageId,
+//       senderId,
+//       userMessage,
+//       botResponse: voiceflowResponse,
+//       automationId: automation?.id || "default",
+//     })
+
+//     if (!storedMessages.success) {
+//       console.error("Error storing chat messages:", storedMessages.error)
+//     }
+
+//     if (webhook_payload.entry[0].messaging) {
+//       const direct_message = await sendDM(
+//         pageId,
+//         senderId,
+//         voiceflowResponse,
+//         automation?.User?.integrations[0].token || process.env.DEFAULT_PAGE_TOKEN!,
+//       )
+
+//       if (direct_message.status === 200) {
+//         if (automation) {
+//           await trackResponses(automation.id, "DM")
+//         }
+//         return NextResponse.json({ message: "Message sent", storedMessages }, { status: 200 })
+//       }
+//     } else if (webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === "comments") {
+//       if (automation && automation.listener) {
+//         if (
+//           automation.listener.listener === "MESSAGE" ||
+//           (automation.listener.listener === "SMARTAI" && automation.User?.subscription?.plan === "PRO")
+//         ) {
+//           const direct_message = await sendPrivateMessage(
+//             pageId,
+//             webhook_payload.entry[0].changes[0].value.id,
+//             voiceflowResponse,
+//             automation.User?.integrations[0].token!,
+//           )
+
+//           console.log("Private message sent:", direct_message.data)
+//           if (direct_message.status === 200) {
+//             await trackResponses(automation.id, "COMMENT")
+//             return NextResponse.json({ message: "Message sent", storedMessages }, { status: 200 })
+//           }
+//         }
+//       } else {
+//         // No automation or listener, use default token
+//         const direct_message = await sendPrivateMessage(
+//           pageId,
+//           webhook_payload.entry[0].changes[0].value.id,
+//           voiceflowResponse,
+//           process.env.DEFAULT_PAGE_TOKEN!,
+//         )
+
+//         if (direct_message.status === 200) {
+//           return NextResponse.json({ message: "Message sent", storedMessages }, { status: 200 })
+//         }
+//       }
+//     }
+
+//     return NextResponse.json({ message: "Request processed", storedMessages }, { status: 200 })
+//   } catch (error) {
+//     console.error("Unhandled error in POST function:", error)
+//     return NextResponse.json(
+//       {
+//         message: "Error processing request",
+//         error: error instanceof Error ? error.message : String(error),
+//       },
+//       { status: 500 },
+//     )
+//   }
+// }
+
 import { type NextRequest, NextResponse } from "next/server"
 import { findAutomation } from "@/actions/automations/queries"
-import { getChatHistory, getKeywordAutomation, matchKeyword, trackResponses } from "@/actions/webhook/queries"
+import { getKeywordAutomation, matchKeyword, trackResponses } from "@/actions/webhook/queries"
 import { sendDM, sendPrivateMessage } from "@/lib/fetch"
 import { client } from "@/lib/prisma"
 import { getVoiceflowResponse, processVoiceflowResponse, createVoiceflowUser } from "@/lib/voiceflow"
@@ -3403,165 +3585,239 @@ import { storeChatMessages } from "@/actions/chats/chatAction"
 
 export async function GET(req: NextRequest) {
   const hub = req.nextUrl.searchParams.get("hub.challenge")
+  console.log("GET request received. Hub challenge:", hub)
   return new NextResponse(hub)
 }
 
 export async function POST(req: NextRequest) {
-  const webhook_payload = await req.json()
-  let matcher
+  console.log("POST request received")
+  let webhook_payload, matcher, userId, userMessage, pageId, senderId, recipientId
 
   try {
+    webhook_payload = await req.json()
     console.log("Received webhook payload:", JSON.stringify(webhook_payload, null, 2))
 
-    let userId, userMessage, pageId, senderId, recipientId
-
     if (webhook_payload.entry[0].messaging) {
+      console.log("Processing messaging event")
       pageId = webhook_payload.entry[0].id
       senderId = webhook_payload.entry[0].messaging[0].sender.id
       recipientId = webhook_payload.entry[0].messaging[0].recipient.id
       userMessage = webhook_payload.entry[0].messaging[0].message.text
       userId = `${pageId}_${senderId}`
     } else if (webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === "comments") {
+      console.log("Processing comment event")
       pageId = webhook_payload.entry[0].id
       senderId = webhook_payload.entry[0].changes[0].value.from.id
       userMessage = webhook_payload.entry[0].changes[0].value.text
       userId = `${pageId}_${senderId}`
     } else {
+      console.log("Unsupported webhook payload:", JSON.stringify(webhook_payload, null, 2))
       return NextResponse.json({ message: "Unsupported webhook payload" }, { status: 400 })
     }
 
+    console.log("Extracted data:", { userId, userMessage, pageId, senderId, recipientId })
+
     // Check if the conversation is already active
-    const conversationState = await client.conversationState.findUnique({
-      where: { userId },
-    })
+    console.log("Checking conversation state for userId:", userId)
+    let conversationState
+    try {
+      conversationState = await client.conversationState.findUnique({
+        where: { userId },
+      })
+      console.log("Conversation state:", conversationState)
+    } catch (error) {
+      console.error("Error fetching conversation state:", error)
+    }
 
     let isConversationActive = conversationState?.isActive || false
+    console.log("Is conversation active:", isConversationActive)
 
     if (!isConversationActive) {
-      // If the conversation is not active, check for keyword match
-      matcher = await matchKeyword(userMessage)
+      console.log("Conversation not active, checking for keyword match")
+      try {
+        matcher = await matchKeyword(userMessage)
+        console.log("Keyword matcher result:", matcher)
+      } catch (error) {
+        console.error("Error matching keyword:", error)
+      }
 
       if (!matcher || !matcher.automationId) {
-        // No keyword match and conversation not active, don't respond
+        console.log("No keyword match and conversation not active, not responding")
         return NextResponse.json({ message: "No keyword match" }, { status: 200 })
       }
 
-      // Keyword matched, set the conversation as active
-      await client.conversationState.upsert({
-        where: { userId },
-        update: { isActive: true, updatedAt: new Date() },
-        create: { userId, isActive: true },
-      })
-      isConversationActive = true
+      console.log("Keyword matched, setting conversation as active")
+      try {
+        await client.conversationState.upsert({
+          where: { userId },
+          update: { isActive: true, updatedAt: new Date() },
+          create: { userId, isActive: true },
+        })
+        isConversationActive = true
+        console.log("Conversation set to active")
+      } catch (error) {
+        console.error("Error updating conversation state:", error)
+      }
     }
 
     console.log("Attempting to create Voiceflow user:", userId)
-    const userCreated = await createVoiceflowUser(userId)
+    let userCreated
+    try {
+      userCreated = await createVoiceflowUser(userId)
+      console.log("Voiceflow user creation result:", userCreated)
+    } catch (error) {
+      console.error("Error creating Voiceflow user:", error)
+    }
+
     if (!userCreated) {
       console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
     }
 
     let automation
-    if (matcher && matcher.automationId) {
-      automation = await getKeywordAutomation(matcher.automationId, webhook_payload.entry[0].messaging ? true : false)
-    } else {
-      const customer_history = await getChatHistory(pageId, senderId)
-      if (customer_history.history.length > 0) {
-        automation = await findAutomation(customer_history.automationId!)
+    console.log("Fetching automation")
+    try {
+      if (matcher && matcher.automationId) {
+        console.log("Fetching automation by keyword match")
+        automation = await getKeywordAutomation(matcher.automationId, webhook_payload.entry[0].messaging ? true : false)
+      } else {
+        console.log("No keyword match, using default automation")
+        automation = null
       }
+      console.log("Fetched automation:", automation)
+    } catch (error) {
+      console.error("Error fetching automation:", error)
     }
 
     let businessVariables = {}
     if (automation?.userId) {
-      // Fetch the business associated with the user of this automation
-      const business = await client.business.findFirst({
-        where: { userId: automation.userId },
-      })
+      console.log("Fetching business for automation userId:", automation.userId)
+      try {
+        const business = await client.business.findFirst({
+          where: { userId: automation.userId },
+        })
+        console.log("Fetched business:", business)
 
-      if (business) {
-        businessVariables = {
-          business_name: business.businessName,
-          welcome_message: business.welcomeMessage,
-          business_industry: business.industry,
+        if (business) {
+          businessVariables = {
+            business_name: business.businessName,
+            welcome_message: business.welcomeMessage,
+            business_industry: business.industry,
+          }
+          console.log("Set business variables:", businessVariables)
         }
+      } catch (error) {
+        console.error("Error fetching business:", error)
       }
     }
 
     let voiceflowResponse =
       "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists."
 
+    console.log("Getting Voiceflow response")
     try {
-      // Use the businessVariables in the Voiceflow response
       const response = await getVoiceflowResponse(userMessage, userId, businessVariables)
+      console.log("Raw Voiceflow response:", response)
       voiceflowResponse = processVoiceflowResponse(response)
+      console.log("Processed Voiceflow response:", voiceflowResponse)
     } catch (error) {
       console.error("Error getting or processing Voiceflow response:", error)
     }
 
-    console.log("Processed Voiceflow response:", voiceflowResponse)
+    console.log("Storing chat messages")
+    let storedMessages
+    try {
+      storedMessages = await storeChatMessages({
+        userId,
+        pageId,
+        senderId,
+        userMessage,
+        botResponse: voiceflowResponse,
+        automationId: automation?.id || "default",
+      })
+      console.log("Stored messages result:", storedMessages)
+    } catch (error) {
+      console.error("Error storing chat messages:", error)
+    }
 
-    // Store the chat messages using the new server action
-    const storedMessages = await storeChatMessages({
-      userId,
-      pageId,
-      senderId,
-      userMessage,
-      botResponse: voiceflowResponse,
-      automationId: automation?.id || "default",
-    })
-
-    if (!storedMessages.success) {
-      console.error("Error storing chat messages:", storedMessages.error)
+    if (!storedMessages || !storedMessages.success) {
+      console.error("Error storing chat messages:", storedMessages?.error || "Unknown error")
     }
 
     if (webhook_payload.entry[0].messaging) {
-      const direct_message = await sendDM(
-        pageId,
-        senderId,
-        voiceflowResponse,
-        automation?.User?.integrations[0].token || process.env.DEFAULT_PAGE_TOKEN!,
-      )
+      console.log("Sending direct message")
+      try {
+        const direct_message = await sendDM(
+          pageId,
+          senderId,
+          voiceflowResponse,
+          automation?.User?.integrations[0].token || process.env.DEFAULT_PAGE_TOKEN!,
+        )
+        console.log("Direct message result:", direct_message)
 
-      if (direct_message.status === 200) {
-        if (automation) {
-          await trackResponses(automation.id, "DM")
+        if (direct_message.status === 200) {
+          if (automation) {
+            console.log("Tracking DM response")
+            await trackResponses(automation.id, "DM")
+          }
+          return NextResponse.json({ message: "Message sent", storedMessages }, { status: 200 })
+        } else {
+          console.error("Failed to send direct message:", direct_message)
         }
-        return NextResponse.json({ message: "Message sent", storedMessages }, { status: 200 })
+      } catch (error) {
+        console.error("Error sending direct message:", error)
       }
     } else if (webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === "comments") {
+      console.log("Processing comment")
       if (automation && automation.listener) {
+        console.log("Automation listener:", automation.listener)
         if (
           automation.listener.listener === "MESSAGE" ||
           (automation.listener.listener === "SMARTAI" && automation.User?.subscription?.plan === "PRO")
         ) {
+          console.log("Sending private message")
+          try {
+            const direct_message = await sendPrivateMessage(
+              pageId,
+              webhook_payload.entry[0].changes[0].value.id,
+              voiceflowResponse,
+              automation.User?.integrations[0].token!,
+            )
+            console.log("Private message result:", direct_message)
+
+            if (direct_message.status === 200) {
+              console.log("Tracking comment response")
+              await trackResponses(automation.id, "COMMENT")
+              return NextResponse.json({ message: "Message sent", storedMessages }, { status: 200 })
+            } else {
+              console.error("Failed to send private message:", direct_message)
+            }
+          } catch (error) {
+            console.error("Error sending private message:", error)
+          }
+        }
+      } else {
+        console.log("No automation or listener, using default token")
+        try {
           const direct_message = await sendPrivateMessage(
             pageId,
             webhook_payload.entry[0].changes[0].value.id,
             voiceflowResponse,
-            automation.User?.integrations[0].token!,
+            process.env.DEFAULT_PAGE_TOKEN!,
           )
+          console.log("Default private message result:", direct_message)
 
-          console.log("Private message sent:", direct_message.data)
           if (direct_message.status === 200) {
-            await trackResponses(automation.id, "COMMENT")
             return NextResponse.json({ message: "Message sent", storedMessages }, { status: 200 })
+          } else {
+            console.error("Failed to send default private message:", direct_message)
           }
-        }
-      } else {
-        // No automation or listener, use default token
-        const direct_message = await sendPrivateMessage(
-          pageId,
-          webhook_payload.entry[0].changes[0].value.id,
-          voiceflowResponse,
-          process.env.DEFAULT_PAGE_TOKEN!,
-        )
-
-        if (direct_message.status === 200) {
-          return NextResponse.json({ message: "Message sent", storedMessages }, { status: 200 })
+        } catch (error) {
+          console.error("Error sending default private message:", error)
         }
       }
     }
 
+    console.log("Request processed without sending a message")
     return NextResponse.json({ message: "Request processed", storedMessages }, { status: 200 })
   } catch (error) {
     console.error("Unhandled error in POST function:", error)
@@ -3569,6 +3825,7 @@ export async function POST(req: NextRequest) {
       {
         message: "Error processing request",
         error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
       },
       { status: 500 },
     )
