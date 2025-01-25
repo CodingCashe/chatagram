@@ -322,6 +322,107 @@
 //   })
 // }
 
+// "use server"
+// import { client } from "@/lib/prisma"
+// import type { Message, Conversation } from "@/types/chat"
+
+// export const createMessage = async (
+//   pageId: string,
+//   senderId: string,
+//   message: string,
+//   isFromBot: boolean,
+//   automationId: string | null,
+// ) => {
+//   return await client.message.create({
+//     data: {
+//       pageId,
+//       senderId,
+//       message,
+//       isFromBot,
+//       ...(automationId && { Automation: { connect: { id: automationId } } }),
+//     },
+//   })
+// }
+
+// export const getMessages = async (pageId: string, senderId: string) => {
+//   return await client.message.findMany({
+//     where: {
+//       pageId,
+//       OR: [{ senderId }, { senderId: pageId }],
+//     },
+//     orderBy: { createdAt: "asc" },
+//   })
+// }
+
+// export const storeConversation = async (
+//   pageId: string,
+//   senderId: string,
+//   userMessage: string,
+//   botResponse: string,
+//   automationId: string | null,
+// ) => {
+//   return await client.$transaction([
+//     client.message.create({
+//       data: {
+//         pageId,
+//         senderId,
+//         message: userMessage,
+//         isFromBot: false,
+//         ...(automationId && { Automation: { connect: { id: automationId } } }),
+//       },
+//     }),
+//     client.message.create({
+//       data: {
+//         pageId,
+//         senderId: pageId,
+//         message: botResponse,
+//         isFromBot: true,
+//         ...(automationId && { Automation: { connect: { id: automationId } } }),
+//       },
+//     }),
+//   ])
+// }
+
+// export const getConversationHistory = async (automationId: string): Promise<Conversation[]> => {
+//   const messages = await client.message.findMany({
+//     where: { automationId },
+//     orderBy: { createdAt: "asc" },
+//   })
+
+//   const chatSession: Message[] = messages.map((message) => ({
+//     role: message.isFromBot ? "assistant" : "user",
+//     content: message.message,
+//     senderId: message.senderId,
+//     receiverId: message.pageId,
+//   }))
+
+//   const groupedChats = chatSession.reduce(
+//     (acc, message) => {
+//       const key = message.role === "assistant" ? message.receiverId : message.senderId
+//       if (!acc[key]) {
+//         acc[key] = []
+//       }
+//       acc[key].push(message)
+//       return acc
+//     },
+//     {} as Record<string, Message[]>,
+//   )
+
+//   return Object.entries(groupedChats).map(([userId, messages]) => ({
+//     userId,
+//     messages,
+//   }))
+// }
+
+// export const deleteConversation = async (pageId: string, senderId: string) => {
+//   return await client.message.deleteMany({
+//     where: {
+//       pageId,
+//       OR: [{ senderId }, { senderId: pageId }],
+//     },
+//   })
+// }
+
 "use server"
 import { client } from "@/lib/prisma"
 import type { Message, Conversation } from "@/types/chat"
@@ -390,26 +491,32 @@ export const getConversationHistory = async (automationId: string): Promise<Conv
   })
 
   const chatSession: Message[] = messages.map((message) => ({
+    id: message.id, // Add this line to include the message ID
     role: message.isFromBot ? "assistant" : "user",
     content: message.message,
     senderId: message.senderId,
     receiverId: message.pageId,
+    timestamp: message.createdAt, // Add this line to include the timestamp
   }))
 
   const groupedChats = chatSession.reduce(
     (acc, message) => {
       const key = message.role === "assistant" ? message.receiverId : message.senderId
       if (!acc[key]) {
-        acc[key] = []
+        acc[key] = {
+          chatId: key, // Use the key (senderId or receiverId) as the chatId
+          messages: [],
+        }
       }
-      acc[key].push(message)
+      acc[key].messages.push(message)
       return acc
     },
-    {} as Record<string, Message[]>,
+    {} as Record<string, { chatId: string; messages: Message[] }>,
   )
 
-  return Object.entries(groupedChats).map(([userId, messages]) => ({
+  return Object.entries(groupedChats).map(([userId, { chatId, messages }]) => ({
     userId,
+    chatId,
     messages,
   }))
 }
