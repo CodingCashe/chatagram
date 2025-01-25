@@ -4013,7 +4013,7 @@ export async function POST(req: NextRequest) {
           }
           console.log("Storing chat history")
           try {
-            await client.$transaction([
+             client.$transaction([
               createChatHistory(automation?.id || "default", pageId, senderId, userMessage),
               createChatHistory(automation?.id || "default", pageId, senderId, voiceflowResponse),
             ])
@@ -4051,7 +4051,7 @@ export async function POST(req: NextRequest) {
               await trackResponses(automation.id, "COMMENT")
               console.log("Storing chat history")
               try {
-                await client.$transaction([
+                client.$transaction([
                   createChatHistory(automation.id, pageId, senderId, userMessage),
                   createChatHistory(automation.id, pageId, senderId, voiceflowResponse),
                 ])
@@ -4081,7 +4081,7 @@ export async function POST(req: NextRequest) {
           if (direct_message.status === 200) {
             console.log("Storing chat history")
             try {
-              await client.$transaction([
+              client.$transaction([
                 createChatHistory("default", pageId, senderId, userMessage),
                 createChatHistory("default", pageId, senderId, voiceflowResponse),
               ])
