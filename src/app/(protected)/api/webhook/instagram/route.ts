@@ -3332,7 +3332,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Unsupported webhook payload" }, { status: 400 })
     }
 
-    // Check if the conversation is already active
+    // Check if the conversation is already active nn
     const conversationState = await client.conversationState.findUnique({
       where: { userId },
     })
