@@ -3962,27 +3962,27 @@
 //       console.error("Error fetching automation:", error)
 //     }
 
-//     let businessVariables = {}
-//     if (automation?.userId) {
-//       console.log("Fetching business for automation userId:", automation.userId)
-//       try {
-//         const business = await client.business.findFirst({
-//           where: { userId: automation.userId },
-//         })
-//         console.log("Fetched business:", business)
+    // let businessVariables = {}
+    // if (automation?.userId) {
+    //   console.log("Fetching business for automation userId:", automation.userId)
+    //   try {
+    //     const business = await client.business.findFirst({
+    //       where: { userId: automation.userId },
+    //     })
+    //     console.log("Fetched business:", business)
 
-//         if (business) {
-//           businessVariables = {
-//             business_name: business.businessName,
-//             welcome_message: business.welcomeMessage,
-//             business_industry: business.industry,
-//           }
-//           console.log("Set business variables:", businessVariables)
-//         }
-//       } catch (error) {
-//         console.error("Error fetching business:", error)
-//       }
-//     }
+    //     if (business) {
+    //       businessVariables = {
+    //         business_name: business.businessName,
+    //         welcome_message: business.welcomeMessage,
+    //         business_industry: business.industry,
+    //       }
+    //       console.log("Set business variables:", businessVariables)
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching business:", error)
+    //   }
+    // }
 
 //     let voiceflowResponse =
 //       "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists."
@@ -4321,9 +4321,30 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // let businessVariables = {}
+    // if (automation?.userId) {
+    //   businessVariables = await fetchBusinessVariables(automation.id)
+    // }
     let businessVariables = {}
     if (automation?.userId) {
-      businessVariables = await fetchBusinessVariables(automation.id)
+      console.log("Fetching business for automation userId:", automation.userId)
+      try {
+        const business = await client.business.findFirst({
+          where: { userId: automation.userId },
+        })
+        console.log("Fetched business:", business)
+
+        if (business) {
+          businessVariables = {
+            business_name: business.businessName,
+            welcome_message: business.welcomeMessage,
+            business_industry: business.industry,
+          }
+          console.log("Set business variables:", businessVariables)
+        }
+      } catch (error) {
+        console.error("Error fetching business:", error)
+      }
     }
 
     let voiceflowResponse =
