@@ -1466,10 +1466,194 @@
 
 // export default AutomationChats
 
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect } from "react"
+// import { motion, AnimatePresence } from "framer-motion"
+// import { MessageCircle, User, Send, ArrowLeft } from "lucide-react"
+// import { ScrollArea } from "@/components/ui/scroll-area"
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+// import { Input } from "@/components/ui/input"
+// import { Button } from "@/components/ui/button"
+// import { getConversationHistory } from "@/actions/chats/queries"
+// import type { Conversation, Message } from "@/types/chat"
+
+// interface AutomationChatsProps {
+//   automationId: string
+// }
+
+// const BOT_NAME = "AiAssist"
+// const BOT_AVATAR = "https://api.dicebear.com/6.x/bottts/svg?seed=AiAssist"
+// const BOT_ID = "17841444435951291" // Replace with actual bot ID
+
+// const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
+//   const [conversations, setConversations] = useState<Conversation[]>([])
+//   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
+//   const [isLoading, setIsLoading] = useState(true)
+//   const [error, setError] = useState<string | null>(null)
+//   const [newMessage, setNewMessage] = useState("")
+
+//   useEffect(() => {
+//     const fetchChats = async () => {
+//       setIsLoading(true)
+//       setError(null)
+//       try {
+//         const result = await getConversationHistory(automationId)
+//         setConversations(result)
+//       } catch (error) {
+//         console.error("Error in fetchChats:", error)
+//         setError(`Failed to fetch chats: ${error instanceof Error ? error.message : String(error)}`)
+//       } finally {
+//         setIsLoading(false)
+//       }
+//     }
+
+//     fetchChats()
+//   }, [automationId])
+
+//   const handleSendMessage = async () => {
+//     if (!newMessage.trim() || !selectedConversation) return
+
+//     const tempMessage: Message = {
+//       id: Date.now().toString(),
+//       role: "user",
+//       content: newMessage,
+//       senderId: selectedConversation.userId,
+//       receiverId: BOT_ID,
+//       timestamp: new Date(),
+//     }
+
+//     setSelectedConversation((prev) => (prev ? { ...prev, messages: [...prev.messages, tempMessage] } : null))
+//     setNewMessage("")
+
+//     // Simulate bot response (replace with actual API call in production)
+//     setTimeout(() => {
+//       const botResponse: Message = {
+//         id: (Date.now() + 1).toString(),
+//         role: "assistant",
+//         content: `This is a simulated response to: "${newMessage}"`,
+//         senderId: BOT_ID,
+//         receiverId: selectedConversation.userId,
+//         timestamp: new Date(),
+//       }
+//       setSelectedConversation((prev) => (prev ? { ...prev, messages: [...prev.messages, botResponse] } : null))
+//     }, 1000)
+//   }
+
+//   const getFancyName = (userId: string) => {
+//     return `Client ${userId.slice(-4)}`
+//   }
+
+//   if (isLoading) return <div className="p-4">Loading chats...</div>
+//   if (error) return <div className="p-4 text-red-500">Error: {error}</div>
+
+//   return (
+//     <div className="h-full flex flex-col bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
+//       {selectedConversation ? (
+//         <>
+//           <div className="p-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 flex items-center">
+//             <Button variant="ghost" className="mr-2" onClick={() => setSelectedConversation(null)}>
+//               <ArrowLeft size={18} />
+//             </Button>
+//             <Avatar className="w-8 h-8">
+//               <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${selectedConversation.userId}`} />
+//               <AvatarFallback>{getFancyName(selectedConversation.userId).slice(0, 2)}</AvatarFallback>
+//             </Avatar>
+//             <div className="ml-2 flex-grow">
+//               <h4 className="font-medium text-sm">{getFancyName(selectedConversation.userId)}</h4>
+//               <div className="text-xs text-green-500 flex items-center">
+//                 <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+//                 Online
+//               </div>
+//             </div>
+//           </div>
+//           <ScrollArea className="flex-grow p-2">
+//             <AnimatePresence>
+//               {selectedConversation.messages.map((message) => (
+//                 <motion.div
+//                   key={message.id}
+//                   initial={{ opacity: 0, y: 10 }}
+//                   animate={{ opacity: 1, y: 0 }}
+//                   exit={{ opacity: 0, y: -10 }}
+//                   transition={{ duration: 0.2 }}
+//                   className={`flex items-start mb-2 ${message.role === "assistant" ? "justify-start" : "justify-end"}`}
+//                 >
+//                   {message.role === "assistant" && (
+//                     <Avatar className="w-6 h-6 mr-2">
+//                       <AvatarImage src={BOT_AVATAR} />
+//                       <AvatarFallback>{BOT_NAME.slice(0, 2)}</AvatarFallback>
+//                     </Avatar>
+//                   )}
+//                   <div
+//                     className={`max-w-[80%] p-2 rounded-lg text-sm ${
+//                       message.role === "assistant"
+//                         ? "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100"
+//                         : "bg-green-100 text-green-900 dark:bg-green-900 dark:text-green-100"
+//                     }`}
+//                   >
+//                     <p>{message.content}</p>
+//                     <p className="text-xs text-gray-500 mt-1">{new Date(message.timestamp).toLocaleString()}</p>
+//                   </div>
+//                 </motion.div>
+//               ))}
+//             </AnimatePresence>
+//           </ScrollArea>
+//           <div className="p-2 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+//             <div className="flex items-center">
+//               <Input
+//                 type="text"
+//                 placeholder="Type a message..."
+//                 value={newMessage}
+//                 onChange={(e) => setNewMessage(e.target.value)}
+//                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+//                 className="flex-grow mr-2 text-sm"
+//               />
+//               <Button size="sm" onClick={handleSendMessage}>
+//                 <Send size={16} />
+//               </Button>
+//             </div>
+//           </div>
+//         </>
+//       ) : (
+//         <>
+//           <h3 className="text-sm font-semibold p-2 bg-white dark:bg-gray-900">Recent Chats</h3>
+//           <ScrollArea className="flex-grow">
+//             {conversations.length === 0 ? (
+//               <div className="p-2 text-sm">No conversations found.</div>
+//             ) : (
+//               conversations.map((conversation) => (
+//                 <div
+//                   key={conversation.chatId}
+//                   className="flex items-center p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-200"
+//                   onClick={() => setSelectedConversation(conversation)}
+//                 >
+//                   <Avatar className="w-8 h-8">
+//                     <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.userId}`} />
+//                     <AvatarFallback>{getFancyName(conversation.userId).slice(0, 2)}</AvatarFallback>
+//                   </Avatar>
+//                   <div className="ml-2 flex-grow overflow-hidden">
+//                     <p className="font-medium text-sm">{getFancyName(conversation.userId)}</p>
+//                     <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+//                       {conversation.messages[conversation.messages.length - 1]?.content ?? "No messages"}
+//                     </p>
+//                   </div>
+//                 </div>
+//               ))
+//             )}
+//           </ScrollArea>
+//         </>
+//       )}
+//     </div>
+//   )
+// }
+
+// export default AutomationChats
+
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { MessageCircle, User, Send, ArrowLeft } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -1485,7 +1669,7 @@ interface AutomationChatsProps {
 
 const BOT_NAME = "AiAssist"
 const BOT_AVATAR = "https://api.dicebear.com/6.x/bottts/svg?seed=AiAssist"
-const BOT_ID = "17841444435951291" // Replace with actual bot ID
+const BOT_ID = "17841444435951291" // This should be the actual ID of your bot
 
 const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const [conversations, setConversations] = useState<Conversation[]>([])
@@ -1493,6 +1677,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [newMessage, setNewMessage] = useState("")
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -1511,6 +1696,12 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 
     fetchChats()
   }, [automationId])
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
+  }, []) // Removed unnecessary dependency: selectedConversation
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation) return
@@ -1542,7 +1733,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   }
 
   const getFancyName = (userId: string) => {
-    return `Client ${userId.slice(-4)}`
+    return userId === BOT_ID ? BOT_NAME : `Client ${userId.slice(-4)}`
   }
 
   if (isLoading) return <div className="p-4">Loading chats...</div>
@@ -1553,22 +1744,22 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
       {selectedConversation ? (
         <>
           <div className="p-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 flex items-center">
-            <Button variant="ghost" className="mr-2" onClick={() => setSelectedConversation(null)}>
-              <ArrowLeft size={18} />
+            <Button variant="ghost" className="mr-2 p-1" onClick={() => setSelectedConversation(null)}>
+              <ArrowLeft size={16} />
             </Button>
-            <Avatar className="w-8 h-8">
+            <Avatar className="w-6 h-6">
               <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${selectedConversation.userId}`} />
               <AvatarFallback>{getFancyName(selectedConversation.userId).slice(0, 2)}</AvatarFallback>
             </Avatar>
             <div className="ml-2 flex-grow">
               <h4 className="font-medium text-sm">{getFancyName(selectedConversation.userId)}</h4>
               <div className="text-xs text-green-500 flex items-center">
-                <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+                <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-1"></span>
                 Online
               </div>
             </div>
           </div>
-          <ScrollArea className="flex-grow p-2">
+          <ScrollArea className="flex-grow p-2" ref={scrollRef}>
             <AnimatePresence>
               {selectedConversation.messages.map((message) => (
                 <motion.div
@@ -1577,17 +1768,17 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className={`flex items-start mb-2 ${message.role === "assistant" ? "justify-start" : "justify-end"}`}
+                  className={`flex items-end mb-2 ${message.senderId === BOT_ID ? "justify-start" : "justify-end"}`}
                 >
-                  {message.role === "assistant" && (
+                  {message.senderId === BOT_ID && (
                     <Avatar className="w-6 h-6 mr-2">
                       <AvatarImage src={BOT_AVATAR} />
                       <AvatarFallback>{BOT_NAME.slice(0, 2)}</AvatarFallback>
                     </Avatar>
                   )}
                   <div
-                    className={`max-w-[80%] p-2 rounded-lg text-sm ${
-                      message.role === "assistant"
+                    className={`max-w-[75%] p-2 rounded-lg text-sm ${
+                      message.senderId === BOT_ID
                         ? "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100"
                         : "bg-green-100 text-green-900 dark:bg-green-900 dark:text-green-100"
                     }`}
@@ -1595,6 +1786,12 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                     <p>{message.content}</p>
                     <p className="text-xs text-gray-500 mt-1">{new Date(message.timestamp).toLocaleString()}</p>
                   </div>
+                  {message.senderId !== BOT_ID && (
+                    <Avatar className="w-6 h-6 ml-2">
+                      <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${message.senderId}`} />
+                      <AvatarFallback>{getFancyName(message.senderId).slice(0, 2)}</AvatarFallback>
+                    </Avatar>
+                  )}
                 </motion.div>
               ))}
             </AnimatePresence>
