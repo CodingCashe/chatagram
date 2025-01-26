@@ -109,9 +109,10 @@ const AutomationStatus = ({ count }: { count: number }) => {
   }
 }
 
-const Page = ({pageId}:Props) => {
+const Page = ({ params }: { params: { slug: string } }) => {
   const { data } = useQueryAutomations()
   const automations = data?.data || []
+  const pageId = params.slug
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-6 gap-5">
