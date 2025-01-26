@@ -3096,7 +3096,7 @@ interface AutomationChatsProps {
 
 const BOT_NAME = "AiAssist"
 const BOT_AVATAR = "https://api.dicebear.com/6.x/bottts/svg?seed=AiAssist"
-const BOT_ID = "17841444435951291"
+const BOT_ID = "17841444435951291" // This should be the actual ID of your bot
 
 const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const [conversations, setConversations] = useState<Conversation[]>([])
@@ -3104,6 +3104,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [newMessage, setNewMessage] = useState("")
+  const [isRecording, setIsRecording] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -3129,48 +3130,56 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [selectedConversation]) // Updated dependency to re-scroll on message updates
+  }, [scrollRef]) //Corrected dependency
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation) return
 
-    const userMessage: Message = {
+    const botMessage: Message = {
       id: Date.now().toString(),
-      role: "user",
+      role: "assistant",
       content: newMessage,
-      senderId: selectedConversation.userId,
-      receiverId: BOT_ID,
+      senderId: BOT_ID,
+      receiverId: selectedConversation.userId,
       timestamp: new Date(),
     }
 
-    // Add user message to conversation
-    setSelectedConversation((prev) =>
-      prev ? { ...prev, messages: [...prev.messages, userMessage] } : null
-    )
+    setSelectedConversation((prev) => (prev ? { ...prev, messages: [...prev.messages, botMessage] } : null))
     setNewMessage("")
+
+    // Simulate bot typing
     setIsTyping(true)
 
-    // Simulate bot response
+    // Simulate client response (replace with actual API call in production)
     setTimeout(() => {
-      const botResponse: Message = {
+      setIsTyping(false)
+      const clientResponse: Message = {
         id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: `This is a simulated response to: "${newMessage}"`,
-        senderId: BOT_ID,
-        receiverId: selectedConversation.userId,
+        role: "user",
+        content: `This is a simulated response from the client to: "${newMessage}"`,
+        senderId: selectedConversation.userId,
+        receiverId: BOT_ID,
         timestamp: new Date(),
       }
-
-      // Add bot response to the same conversation
-      setSelectedConversation((prev) =>
-        prev ? { ...prev, messages: [...prev.messages, botResponse] } : null
-      )
-      setIsTyping(false)
+      setSelectedConversation((prev) => (prev ? { ...prev, messages: [...prev.messages, clientResponse] } : null))
     }, 2000)
   }
 
   const handleEmojiSelect = (emoji: any) => {
     setNewMessage((prev) => prev + emoji.native)
+  }
+
+  const handleVoiceMessage = () => {
+    setIsRecording(!isRecording)
+    // Implement actual voice recording logic here
+  }
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      // Implement file upload logic here
+      console.log("File selected:", file.name)
+    }
   }
 
   const getFancyName = (userId: string) => {
@@ -3217,6 +3226,17 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
       </ScrollArea>
       {selectedConversation && (
         <>
+          <div className="p-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center">
+              <Avatar className="w-6 h-6">
+                <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${selectedConversation.userId}`} />
+                <AvatarFallback>{getFancyName(selectedConversation.userId).slice(0, 2)}</AvatarFallback>
+              </Avatar>
+              <div className="ml-2">
+                <h4 className="font-medium text-sm">{getFancyName(selectedConversation.userId)}</h4>
+              </div>
+            </div>
+          </div>
           <ScrollArea className="flex-grow p-2" ref={scrollRef}>
             <AnimatePresence>
               {selectedConversation.messages.map((message) => (
@@ -3273,6 +3293,22 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                   <Picker data={data} onEmojiSelect={handleEmojiSelect} />
                 </PopoverContent>
               </Popover>
+              <Input type="file" id="file-upload" className="hidden" onChange={handleFileUpload} />
+              <label htmlFor="file-upload">
+                <span className="inline-block">
+                  <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
+                    <Paperclip className="h-4 w-4" />
+                  </Button>
+                </span>
+              </label>
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`h-8 w-8 rounded-full ${isRecording ? "text-red-500" : ""}`}
+                onClick={handleVoiceMessage}
+              >
+                <Mic className="h-4 w-4" />
+              </Button>
               <Input
                 type="text"
                 placeholder="Type a message..."
@@ -3293,3 +3329,4 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 }
 
 export default AutomationChats
+
