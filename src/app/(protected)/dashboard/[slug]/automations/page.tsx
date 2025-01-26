@@ -81,9 +81,6 @@ import { useQueryAutomations } from '@/hooks/user-queries'
 import { Check, Zap, Sparkles, Rocket } from 'lucide-react'
 import React from 'react'
 
-type Props = {
-  pageId:string;
-};
 const AutomationStatus = ({ count }: { count: number }) => {
   if (count === 0) {
     return (
@@ -109,17 +106,15 @@ const AutomationStatus = ({ count }: { count: number }) => {
   }
 }
 
-const Page = ({ params }: { params: { slug: string } }) => {
+const Page = () => {
   const { data } = useQueryAutomations()
   const automations = data?.data || []
-  const pageId = params.slug
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-6 gap-5">
       <div className="lg:col-span-4 overflow-y-auto max-h-[calc(100vh-4rem)]">
         <AutomationList 
           id={automations.length > 0 ? automations[0].id : ''}
-          pageId={pageId}
         />
       </div>
       <div className="lg:col-span-2 lg:sticky lg:top-16">
