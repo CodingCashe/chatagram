@@ -530,6 +530,84 @@
 //   })
 // }
 
+// "use server"
+// import { client } from "@/lib/prisma"
+// import type { Message } from "@/types/chat"
+
+// const BOT_ID = "0417"
+
+// export const getConversationHistory = async (automationId: string, pageId: string): Promise<Message[]> => {
+//   const messages = await client.message.findMany({
+//     where: {
+//       automationId,
+//       pageId,
+//     },
+//     orderBy: { createdAt: "asc" },
+//   })
+
+//   return messages.map((message) => ({
+//     id: message.id,
+//     role: message.senderId === BOT_ID ? "assistant" : "user",
+//     content: message.message,
+//     senderId: message.senderId,
+//     receiverId: message.pageId,
+//     timestamp: message.createdAt,
+//   }))
+// }
+
+// export const storeConversation = async (
+//   pageId: string,
+//   userMessage: string,
+//   botResponse: string,
+//   automationId: string | null,
+// ) => {
+//   return await client.$transaction([
+//     client.message.create({
+//       data: {
+//         pageId,
+//         senderId: pageId,
+//         message: userMessage,
+//         isFromBot: false,
+//         ...(automationId && { Automation: { connect: { id: automationId } } }),
+//       },
+//     }),
+//     client.message.create({
+//       data: {
+//         pageId,
+//         senderId: BOT_ID,
+//         message: botResponse,
+//         isFromBot: true,
+//         ...(automationId && { Automation: { connect: { id: automationId } } }),
+//       },
+//     }),
+//   ])
+// }
+
+// export const createMessage = async (
+//   pageId: string,
+//   content: string,
+//   isFromBot: boolean,
+//   automationId: string | null,
+// ) => {
+//   return await client.message.create({
+//     data: {
+//       pageId,
+//       senderId: isFromBot ? BOT_ID : pageId,
+//       message: content,
+//       isFromBot,
+//       ...(automationId && { Automation: { connect: { id: automationId } } }),
+//     },
+//   })
+// }
+
+// export const deleteConversation = async (pageId: string) => {
+//   return await client.message.deleteMany({
+//     where: {
+//       pageId,
+//     },
+//   })
+// }
+
 "use server"
 import { client } from "@/lib/prisma"
 import type { Message } from "@/types/chat"
@@ -557,6 +635,7 @@ export const getConversationHistory = async (automationId: string, pageId: strin
 
 export const storeConversation = async (
   pageId: string,
+  senderId: string,
   userMessage: string,
   botResponse: string,
   automationId: string | null,
@@ -565,7 +644,7 @@ export const storeConversation = async (
     client.message.create({
       data: {
         pageId,
-        senderId: pageId,
+        senderId,
         message: userMessage,
         isFromBot: false,
         ...(automationId && { Automation: { connect: { id: automationId } } }),
@@ -585,6 +664,7 @@ export const storeConversation = async (
 
 export const createMessage = async (
   pageId: string,
+  senderId: string,
   content: string,
   isFromBot: boolean,
   automationId: string | null,
@@ -592,7 +672,7 @@ export const createMessage = async (
   return await client.message.create({
     data: {
       pageId,
-      senderId: isFromBot ? BOT_ID : pageId,
+      senderId,
       message: content,
       isFromBot,
       ...(automationId && { Automation: { connect: { id: automationId } } }),
@@ -600,10 +680,11 @@ export const createMessage = async (
   })
 }
 
-export const deleteConversation = async (pageId: string) => {
+export const deleteConversation = async (pageId: string, senderId: string) => {
   return await client.message.deleteMany({
     where: {
       pageId,
+      OR: [{ senderId }, { senderId: pageId }],
     },
   })
 }
