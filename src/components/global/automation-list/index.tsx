@@ -35,9 +35,10 @@ type Automation = {
 
 type Props = {
   id: string;
+  pageId:string;
 };
 
-const AutomationList = ({ id }: Props) => {
+const AutomationList = ({ pageId,id }: Props) => {
   const { data, refetch } = useQueryAutomations();
   const { deleteMutation } = useAutomationPosts(id);
   const { latestVariable } = useMutationDataState(['create-automation']);
@@ -98,6 +99,7 @@ const AutomationList = ({ id }: Props) => {
             {activeAutomations.map((automation) => (
               <FancyAutomationBox
                 key={automation.id}
+                pageId={pageId}
                 automation={automation}
                 onDelete={() => {
                   setSelectedAutomationId(automation.id);
@@ -119,6 +121,7 @@ const AutomationList = ({ id }: Props) => {
             {inactiveAutomations.map((automation) => (
               <FancyAutomationBox
                 key={automation.id}
+                pageId={pageId}
                 automation={automation}
                 onDelete={() => {
                   setSelectedAutomationId(automation.id);

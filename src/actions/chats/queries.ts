@@ -612,7 +612,7 @@
 import { client } from "@/lib/prisma"
 import type { Message } from "@/types/chat"
 
-const BOT_ID = "0417"
+const BOT_ID = "17841444435951291"
 
 export const getConversationHistory = async (automationId: string, pageId: string): Promise<Message[]> => {
   const messages = await client.message.findMany({

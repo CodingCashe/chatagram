@@ -2577,6 +2577,226 @@
 
 // export default AutomationChats
 
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect, useRef } from "react"
+// import { motion, AnimatePresence } from "framer-motion"
+// import { Send, ArrowLeft, Smile, Paperclip, Mic } from "lucide-react"
+// import { ScrollArea } from "@/components/ui/scroll-area"
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+// import { Input } from "@/components/ui/input"
+// import { Button } from "@/components/ui/button"
+// import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+// import { getConversationHistory } from "@/actions/chats/queries"
+// import type { Message } from "@/types/chat"
+// import data from "@emoji-mart/data"
+// import Picker from "@emoji-mart/react"
+
+// interface AutomationChatsProps {
+//   automationId: string
+//   clientId: string
+// }
+
+// const BOT_NAME = "AiAssist"
+// const BOT_AVATAR = "https://api.dicebear.com/6.x/bottts/svg?seed=AiAssist"
+// const BOT_ID = "17841444435951291" // This should be the actual ID of your bot
+
+// const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId, clientId }) => {
+//   const [messages, setMessages] = useState<Message[]>([])
+//   const [isLoading, setIsLoading] = useState(true)
+//   const [error, setError] = useState<string | null>(null)
+//   const [newMessage, setNewMessage] = useState("")
+//   const [isRecording, setIsRecording] = useState(false)
+//   const [isTyping, setIsTyping] = useState(false)
+//   const scrollRef = useRef<HTMLDivElement>(null)
+
+//   useEffect(() => {
+//     const fetchChat = async () => {
+//       setIsLoading(true)
+//       setError(null)
+//       try {
+//         const result = await getConversationHistory(automationId, clientId)
+//         setMessages(result)
+//       } catch (error) {
+//         console.error("Error in fetchChat:", error)
+//         setError(`Failed to fetch chat: ${error instanceof Error ? error.message : String(error)}`)
+//       } finally {
+//         setIsLoading(false)
+//       }
+//     }
+
+//     fetchChat()
+//   }, [automationId, clientId])
+
+//   useEffect(() => {
+//     if (scrollRef.current) {
+//       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+//     }
+//   }, [scrollRef]) //Corrected dependency
+
+//   const handleSendMessage = async () => {
+//     if (!newMessage.trim()) return
+
+//     const tempMessage: Message = {
+//       id: Date.now().toString(),
+//       role: "user",
+//       content: newMessage,
+//       senderId: clientId,
+//       receiverId: BOT_ID,
+//       timestamp: new Date(),
+//     }
+
+//     setMessages((prev) => [...prev, tempMessage])
+//     setNewMessage("")
+
+//     // Simulate bot typing
+//     setIsTyping(true)
+
+//     // Simulate bot response (replace with actual API call in production)
+//     setTimeout(() => {
+//       setIsTyping(false)
+//       const botResponse: Message = {
+//         id: (Date.now() + 1).toString(),
+//         role: "assistant",
+//         content: `This is a simulated response to: "${newMessage}"`,
+//         senderId: BOT_ID,
+//         receiverId: clientId,
+//         timestamp: new Date(),
+//       }
+//       setMessages((prev) => [...prev, botResponse])
+//     }, 2000)
+//   }
+
+//   const handleEmojiSelect = (emoji: any) => {
+//     setNewMessage((prev) => prev + emoji.native)
+//   }
+
+//   const handleVoiceMessage = () => {
+//     setIsRecording(!isRecording)
+//     // Implement actual voice recording logic here
+//   }
+
+//   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+//     const file = event.target.files?.[0]
+//     if (file) {
+//       // Implement file upload logic here
+//       console.log("File selected:", file.name)
+//     }
+//   }
+
+//   if (isLoading) return <div className="p-4">Loading chat...</div>
+//   if (error) return <div className="p-4 text-red-500">Error: {error}</div>
+
+//   return (
+//     <div className="h-full flex flex-col bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
+//       <div className="p-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 flex items-center">
+//         <Button variant="ghost" className="mr-2 p-1">
+//           <ArrowLeft size={16} />
+//         </Button>
+//         <Avatar className="w-6 h-6">
+//           <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${clientId}`} />
+//           <AvatarFallback>{`Client ${clientId.slice(-4)}`}</AvatarFallback>
+//         </Avatar>
+//         <div className="ml-2 flex-grow">
+//           <h4 className="font-medium text-sm">{`Client ${clientId.slice(-4)}`}</h4>
+//           <div className="text-xs text-green-500 flex items-center">
+//             <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-1"></span>
+//             Online
+//           </div>
+//         </div>
+//       </div>
+//       <ScrollArea className="flex-grow p-2" ref={scrollRef}>
+//         <AnimatePresence>
+//           {messages.map((message) => (
+//             <motion.div
+//               key={message.id}
+//               initial={{ opacity: 0, y: 10 }}
+//               animate={{ opacity: 1, y: 0 }}
+//               exit={{ opacity: 0, y: -10 }}
+//               transition={{ duration: 0.2 }}
+//               className={`flex items-end mb-2 ${message.senderId === BOT_ID ? "justify-end" : "justify-start"}`}
+//             >
+//               {message.senderId !== BOT_ID && (
+//                 <Avatar className="w-6 h-6 mr-2">
+//                   <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${clientId}`} />
+//                   <AvatarFallback>{`C${clientId.slice(-4)}`}</AvatarFallback>
+//                 </Avatar>
+//               )}
+//               <div
+//                 className={`max-w-[75%] p-2 rounded-lg text-sm ${
+//                   message.senderId === BOT_ID
+//                     ? "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100 rounded-br-none"
+//                     : "bg-green-100 text-green-900 dark:bg-green-900 dark:text-green-100 rounded-bl-none"
+//                 }`}
+//               >
+//                 <p>{message.content}</p>
+//                 <p className="text-xs text-gray-500 mt-1">{new Date(message.timestamp).toLocaleString()}</p>
+//               </div>
+//               {message.senderId === BOT_ID && (
+//                 <Avatar className="w-6 h-6 ml-2">
+//                   <AvatarImage src={BOT_AVATAR} />
+//                   <AvatarFallback>{BOT_NAME.slice(0, 2)}</AvatarFallback>
+//                 </Avatar>
+//               )}
+//             </motion.div>
+//           ))}
+//         </AnimatePresence>
+//         {isTyping && (
+//           <div className="flex items-center justify-end text-gray-500 dark:text-gray-400">
+//             <span className="animate-pulse mr-2">●</span>
+//             <span className="animate-pulse mr-2">●</span>
+//             <span className="animate-pulse">●</span>
+//           </div>
+//         )}
+//       </ScrollArea>
+//       <div className="p-2 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+//         <div className="flex items-center">
+//           <Popover>
+//             <PopoverTrigger asChild>
+//               <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
+//                 <Smile className="h-4 w-4" />
+//               </Button>
+//             </PopoverTrigger>
+//             <PopoverContent className="w-80 p-0">
+//               <Picker data={data} onEmojiSelect={handleEmojiSelect} />
+//             </PopoverContent>
+//           </Popover>
+//           <Input type="file" id="file-upload" className="hidden" onChange={handleFileUpload} />
+//           <label htmlFor="file-upload">
+//             <span className="inline-block">
+//               <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
+//                 <Paperclip className="h-4 w-4" />
+//               </Button>
+//             </span>
+//           </label>
+//           <Button
+//             variant="ghost"
+//             size="icon"
+//             className={`h-8 w-8 rounded-full ${isRecording ? "text-red-500" : ""}`}
+//             onClick={handleVoiceMessage}
+//           >
+//             <Mic className="h-4 w-4" />
+//           </Button>
+//           <Input
+//             type="text"
+//             placeholder="Type a message..."
+//             value={newMessage}
+//             onChange={(e) => setNewMessage(e.target.value)}
+//             onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+//             className="flex-grow mx-2 text-sm"
+//           />
+//           <Button size="sm" onClick={handleSendMessage}>
+//             <Send size={16} />
+//           </Button>
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default AutomationChats
+
 "use client"
 
 import type React from "react"
@@ -2595,14 +2815,14 @@ import Picker from "@emoji-mart/react"
 
 interface AutomationChatsProps {
   automationId: string
-  clientId: string
+  pageId: string
 }
 
 const BOT_NAME = "AiAssist"
 const BOT_AVATAR = "https://api.dicebear.com/6.x/bottts/svg?seed=AiAssist"
 const BOT_ID = "17841444435951291" // This should be the actual ID of your bot
 
-const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId, clientId }) => {
+const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId, pageId }) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -2616,7 +2836,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId, clientI
       setIsLoading(true)
       setError(null)
       try {
-        const result = await getConversationHistory(automationId, clientId)
+        const result = await getConversationHistory(automationId, pageId)
         setMessages(result)
       } catch (error) {
         console.error("Error in fetchChat:", error)
@@ -2627,13 +2847,13 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId, clientI
     }
 
     fetchChat()
-  }, [automationId, clientId])
+  }, [automationId, pageId])
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [scrollRef]) //Corrected dependency
+  }, [scrollRef])
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return
@@ -2642,7 +2862,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId, clientI
       id: Date.now().toString(),
       role: "user",
       content: newMessage,
-      senderId: clientId,
+      senderId: pageId,
       receiverId: BOT_ID,
       timestamp: new Date(),
     }
@@ -2661,11 +2881,11 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId, clientI
         role: "assistant",
         content: `This is a simulated response to: "${newMessage}"`,
         senderId: BOT_ID,
-        receiverId: clientId,
+        receiverId: pageId,
         timestamp: new Date(),
       }
       setMessages((prev) => [...prev, botResponse])
-    }, 2000)
+    }, 5000)
   }
 
   const handleEmojiSelect = (emoji: any) => {
@@ -2695,11 +2915,11 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId, clientI
           <ArrowLeft size={16} />
         </Button>
         <Avatar className="w-6 h-6">
-          <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${clientId}`} />
-          <AvatarFallback>{`Client ${clientId.slice(-4)}`}</AvatarFallback>
+          <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${pageId}`} />
+          <AvatarFallback>{`Client ${pageId.slice(-4)}`}</AvatarFallback>
         </Avatar>
         <div className="ml-2 flex-grow">
-          <h4 className="font-medium text-sm">{`Client ${clientId.slice(-4)}`}</h4>
+          <h4 className="font-medium text-sm">{`Client ${pageId.slice(-4)}`}</h4>
           <div className="text-xs text-green-500 flex items-center">
             <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-1"></span>
             Online
@@ -2719,8 +2939,8 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId, clientI
             >
               {message.senderId !== BOT_ID && (
                 <Avatar className="w-6 h-6 mr-2">
-                  <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${clientId}`} />
-                  <AvatarFallback>{`C${clientId.slice(-4)}`}</AvatarFallback>
+                  <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${pageId}`} />
+                  <AvatarFallback>{`C${pageId.slice(-4)}`}</AvatarFallback>
                 </Avatar>
               )}
               <div
