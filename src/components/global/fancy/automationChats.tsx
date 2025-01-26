@@ -3071,6 +3071,9 @@
 
 // export default AutomationChats
 
+
+//const BOT_ID = "17841444435951291" // This should be the actual ID of your bot
+
 "use client"
 
 import type React from "react"
@@ -3187,7 +3190,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   return (
     <div className="h-full flex flex-col bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
       <div className="p-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-        <h3 className="text-sm font-semibold">Chats</h3>
+        <h3 className="text-sm font-semibold">Client Conversations</h3>
       </div>
       <ScrollArea className="flex-grow">
         {conversations.length === 0 ? (
@@ -3241,9 +3244,9 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className={`flex items-end mb-2 ${message.senderId === BOT_ID ? "justify-end" : "justify-start"}`}
+                  className={`flex items-end mb-2 ${message.role === "assistant" ? "justify-end" : "justify-start"}`}
                 >
-                  {message.senderId !== BOT_ID && (
+                  {message.role === "user" && (
                     <Avatar className="w-6 h-6 mr-2">
                       <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${message.senderId}`} />
                       <AvatarFallback>{getFancyName(message.senderId).slice(0, 2)}</AvatarFallback>
@@ -3251,7 +3254,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                   )}
                   <div
                     className={`max-w-[75%] p-2 rounded-lg text-sm ${
-                      message.senderId === BOT_ID
+                      message.role === "assistant"
                         ? "bg-blue-500 text-white rounded-br-none"
                         : "bg-gray-300 text-gray-900 dark:bg-gray-700 dark:text-gray-100 rounded-bl-none"
                     }`}
@@ -3259,7 +3262,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                     <p>{message.content}</p>
                     <p className="text-xs opacity-70 mt-1">{new Date(message.timestamp).toLocaleString()}</p>
                   </div>
-                  {message.senderId === BOT_ID && (
+                  {message.role === "assistant" && (
                     <Avatar className="w-6 h-6 ml-2">
                       <AvatarImage src={BOT_AVATAR} />
                       <AvatarFallback>{BOT_NAME.slice(0, 2)}</AvatarFallback>
