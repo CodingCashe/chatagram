@@ -642,11 +642,12 @@ interface Automation {
 
 interface FancyAutomationBoxProps {
   automation: Automation;
+  pageId: string;
   onDelete: () => void;
   pathname: string;
 }
 
-export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automation, onDelete, pathname }) => {
+export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ pageId,automation, onDelete, pathname }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -759,7 +760,8 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
           </div>
         </div>
         <div className="w-full md:w-1/2 md:pl-4 md:border-l border-[#545454]">
-          <AutomationChats automationId={automation.id} />
+        <AutomationChats automationId={automation.id} pageId={pageId} />
+          {/* <AutomationChats automationId={automation.id} /> */}
         </div>
       </div>
     </div>
