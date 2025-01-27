@@ -297,7 +297,7 @@ import { client } from "@/lib/prisma"
 import { getVoiceflowResponse, processVoiceflowResponse, createVoiceflowUser } from "@/lib/voiceflow"
 import { matchKeyword, getKeywordAutomation, trackResponses, createChatHistory } from "@/actions/webhook/queries"
 import { storeConversation, getConversationHistory } from "@/actions/chats/queries"
-import { sendPrivateMessage } from "@/lib/fetch"
+import { sendDM } from "@/lib/fetch"
 import { getInstagramToken } from "@/actions/token/getToken"
 import { findAutomation } from "@/actions/automations/queries"
 
@@ -421,7 +421,7 @@ export async function sendMessage(
     console.log("Conversation stored successfully")
 
     // Send the message
-    const messageSent = await sendPrivateMessage(pageId, userId, voiceflowResponse, token)
+    const messageSent = await sendDM(pageId, userId, newMessage, token)
 
     if (messageSent.status === 200) {
       if (automation) {
