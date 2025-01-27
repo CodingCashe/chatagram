@@ -4586,6 +4586,422 @@
 
 // export default AutomationChats
 
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect, useRef, useCallback } from "react"
+// import { motion } from "framer-motion"
+// import { MessageCircle, Send, ArrowLeft, Smile, Paperclip, Mic } from "lucide-react"
+// import { ScrollArea } from "@/components/ui/scroll-area"
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+// import { Input } from "@/components/ui/input"
+// import { Button } from "@/components/ui/button"
+// import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+// import { getConversationHistory, storeConversation, deleteConversation } from "@/actions/chats/queries"
+// import { matchKeyword, getKeywordAutomation, trackResponses, createChatHistory } from "@/actions/webhook/queries"
+// import { sendPrivateMessage } from "@/lib/fetch"
+// import { getVoiceflowResponse, processVoiceflowResponse, createVoiceflowUser } from "@/lib/voiceflow"
+// import { getInstagramToken } from "@/actions/token/getToken"
+// import { findAutomation } from "@/actions/automations/queries"
+// import type { Conversation, Message } from "@/types/chat"
+// import data from "@emoji-mart/data"
+// import Picker from "@emoji-mart/react"
+// import ExampleConversations from "./exampleConvo"
+// import { client } from "@/lib/prisma"
+
+// const BOT_NAME = "AiAssist"
+// const BOT_AVATAR = "https://api.dicebear.com/6.x/bottts/svg?seed=AiAssist"
+// const BOT_ID = "17841444435951291"
+// const EXCLUDED_CHAT_ID = "your-excluded-chat-id-here" // Replace with your constant value
+
+// interface AutomationChatsProps {
+//   automationId: string
+// }
+
+// interface BusinessVariables {
+//   [key: string]: string
+//   business_name: string
+//   welcome_message: string
+//   business_industry: string
+// }
+
+// const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
+//   const [conversations, setConversations] = useState<Conversation[]>([])
+//   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
+//   const [newMessage, setNewMessage] = useState("")
+//   const [isTyping, setIsTyping] = useState(false)
+//   const [isLoading, setIsLoading] = useState(false)
+//   const [error, setError] = useState<string | null>(null)
+//   const [isRecording, setIsRecording] = useState(false)
+//   const [unreadChats, setUnreadChats] = useState<Set<string>>(new Set())
+//   const [isConversationActive, setIsConversationActive] = useState(false)
+//   const [token, setToken] = useState<string | null>(null)
+//   const [pageId, setPageId] = useState<string | null>(null)
+//   const [businessVariables, setBusinessVariables] = useState<BusinessVariables>({
+//     business_name: "",
+//     welcome_message: "",
+//     business_industry: "",
+//   })
+//   const scrollRef = useRef<HTMLDivElement>(null)
+
+//   const fetchChats = useCallback(async () => {
+//     setIsLoading(true)
+//     setError(null)
+//     try {
+//       const result = await getConversationHistory(automationId)
+//       const filteredConversations = result.filter((conv) => conv.chatId !== EXCLUDED_CHAT_ID)
+//       setConversations(filteredConversations)
+//       setUnreadChats(new Set(filteredConversations.map((conv) => conv.chatId)))
+
+//       // Set pageId from the first conversation if available
+//       if (filteredConversations.length > 0 && filteredConversations[0].messages.length > 0) {
+//         setPageId(filteredConversations[0].messages[0].receiverId)
+//       }
+
+//       // Fetch the Instagram token
+//       const fetchedToken = await getInstagramToken(automationId)
+//       setToken(fetchedToken)
+
+//       // Fetch business variables
+//       const automation = await findAutomation(automationId)
+
+//       if (automation?.userId) {
+//         console.log("Fetching business for automation userId:", automation.userId)
+//         try {
+//           const business = await client.business.findFirst({
+//             where: { userId: automation.userId },
+//           })
+//           console.log("Fetched business:", business)
+
+//           if (business) {
+//             const newBusinessVariables: BusinessVariables = {
+//               business_name: business.businessName || "",
+//               welcome_message: business.welcomeMessage || "",
+//               business_industry: business.industry || "",
+//             }
+//             setBusinessVariables(newBusinessVariables)
+//             console.log("Set business variables:", newBusinessVariables)
+//           }
+//         } catch (error) {
+//           console.error("Error fetching business:", error)
+//         }
+//       }
+//     } catch (error) {
+//       console.error("Error in fetchChats:", error)
+//       setError(`Failed to fetch chats: ${error instanceof Error ? error.message : String(error)}`)
+//     } finally {
+//       setIsLoading(false)
+//     }
+//   }, [automationId])
+
+//   useEffect(() => {
+//     fetchChats()
+//   }, [fetchChats])
+
+//   useEffect(() => {
+//     if (scrollRef.current) {
+//       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+//     }
+//   })
+
+//   const handleSendMessage = async () => {
+//     if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
+
+//     setIsTyping(true)
+
+//     try {
+//       const userId = `${pageId}_${selectedConversation.userId}`
+
+//       // Check if the conversation is already active
+//       const conversationState = await client.conversationState.findUnique({
+//         where: { userId },
+//       })
+
+//       let isConversationActive = conversationState?.isActive || false
+
+//       if (!isConversationActive) {
+//         // If the conversation is not active, check for keyword match
+//         const matcher = await matchKeyword(newMessage)
+
+//         if (!matcher || !matcher.automationId) {
+//           // No keyword match and conversation not active, don't respond
+//           setIsTyping(false)
+//           return
+//         }
+
+//         // Keyword matched, set the conversation as active
+//         await client.conversationState.upsert({
+//           where: { userId },
+//           update: { isActive: true, updatedAt: new Date() },
+//           create: { userId, isActive: true },
+//         })
+//         isConversationActive = true
+//       }
+
+//       console.log("Attempting to create Voiceflow user:", userId)
+//       const userCreated = await createVoiceflowUser(userId)
+//       if (!userCreated) {
+//         console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
+//       }
+
+//       let automation
+//       const matcher = await matchKeyword(newMessage)
+//       if (matcher && matcher.automationId) {
+//         automation = await getKeywordAutomation(matcher.automationId, true)
+//       } else {
+//         const customer_history = await getConversationHistory(automationId)
+//         if (customer_history.length > 0) {
+//           automation = await findAutomation(automationId)
+//         }
+//       }
+
+//       let voiceflowResponse =
+//         "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists."
+
+//       try {
+//         const response = await getVoiceflowResponse(newMessage, userId, businessVariables as Record<string, string>)
+//         voiceflowResponse = processVoiceflowResponse(response)
+//       } catch (error) {
+//         console.error("Error getting or processing Voiceflow response:", error)
+//       }
+
+//       console.log("Processed Voiceflow response:", voiceflowResponse)
+
+//       // Store the conversation
+//       await storeConversation(pageId, selectedConversation.userId, newMessage, voiceflowResponse, automationId)
+//       console.log("Conversation stored successfully")
+
+//       // Send the message
+//       const messageSent = await sendPrivateMessage(pageId, selectedConversation.userId, voiceflowResponse, token)
+
+//       if (messageSent.status === 200) {
+//         if (automation) {
+//           await trackResponses(automationId, "DM")
+//         }
+//         await createChatHistory(automationId, pageId, selectedConversation.userId, newMessage)
+//         await createChatHistory(automationId, pageId, selectedConversation.userId, voiceflowResponse)
+//       }
+
+//       // Update UI
+//       const userMessage: Message = {
+//         id: Date.now().toString(),
+//         role: "user",
+//         content: newMessage,
+//         senderId: selectedConversation.userId,
+//         receiverId: pageId,
+//         timestamp: new Date(),
+//       }
+
+//       const botMessage: Message = {
+//         id: (Date.now() + 1).toString(),
+//         role: "assistant",
+//         content: voiceflowResponse,
+//         senderId: BOT_ID,
+//         receiverId: selectedConversation.userId,
+//         timestamp: new Date(),
+//       }
+
+//       setSelectedConversation((prev) =>
+//         prev ? { ...prev, messages: [...prev.messages, userMessage, botMessage] } : null,
+//       )
+
+//       setNewMessage("")
+//     } catch (error) {
+//       console.error("Error sending message:", error)
+//       setError(`Failed to send message: ${error instanceof Error ? error.message : String(error)}`)
+//     } finally {
+//       setIsTyping(false)
+//     }
+//   }
+
+//   const handleEmojiSelect = (emoji: any) => {
+//     setNewMessage((prev) => prev + emoji.native)
+//   }
+
+//   const handleVoiceMessage = () => {
+//     setIsRecording(!isRecording)
+//   }
+
+//   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+//     const file = event.target.files?.[0]
+//     if (file) {
+//       console.log("File selected:", file.name)
+//     }
+//   }
+
+//   const getFancyName = (userId: string) => {
+//     return userId === BOT_ID ? BOT_NAME : `Client ${userId.slice(-4)}`
+//   }
+
+//   const handleSelectConversation = (conversation: Conversation) => {
+//     setSelectedConversation(conversation)
+//     setUnreadChats((prev) => {
+//       const newUnreadChats = new Set(prev)
+//       newUnreadChats.delete(conversation.chatId)
+//       return newUnreadChats
+//     })
+//   }
+
+//   const handleDeleteConversation = async (conversation: Conversation) => {
+//     if (!pageId) return
+
+//     try {
+//       await deleteConversation(pageId, conversation.userId)
+//       setConversations((prev) => prev.filter((conv) => conv.chatId !== conversation.chatId))
+//       if (selectedConversation?.chatId === conversation.chatId) {
+//         setSelectedConversation(null)
+//       }
+//     } catch (error) {
+//       console.error("Error deleting conversation:", error)
+//       setError(`Failed to delete conversation: ${error instanceof Error ? error.message : String(error)}`)
+//     }
+//   }
+
+//   return (
+//     <div className="h-full flex flex-col bg-gray-100 dark:bg-gray-900 rounded-lg overflow-hidden text-gray-900 dark:text-gray-100">
+//       {isLoading ? (
+//         <div className="p-4 text-gray-300">Loading chats...</div>
+//       ) : error ? (
+//         <div className="p-4 text-red-500">Error: {error}</div>
+//       ) : !token ? (
+//         <div className="p-4 text-red-500">Error: Unable to fetch Instagram token</div>
+//       ) : selectedConversation ? (
+//         <>
+//           <div className="p-2 bg-gray-800 border-b border-gray-700 flex items-center">
+//             <Button variant="ghost" className="mr-2 p-1" onClick={() => setSelectedConversation(null)}>
+//               <ArrowLeft size={16} />
+//             </Button>
+//             <Avatar className="w-6 h-6">
+//               <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${selectedConversation.userId}`} />
+//               <AvatarFallback>{getFancyName(selectedConversation.userId).slice(0, 2)}</AvatarFallback>
+//             </Avatar>
+//             <div className="ml-2 flex-grow">
+//               <h4 className="font-medium text-sm">{getFancyName(selectedConversation.userId)}</h4>
+//             </div>
+//           </div>
+//           <ScrollArea className="flex-grow p-2 bg-gray-900" ref={scrollRef}>
+//             {selectedConversation.messages.map((message) => (
+//               <motion.div
+//                 key={message.id}
+//                 initial={{ opacity: 0, y: 10 }}
+//                 animate={{ opacity: 1, y: 0 }}
+//                 exit={{ opacity: 0, y: -10 }}
+//                 transition={{ duration: 0.2 }}
+//                 className={`flex items-end mb-2 ${message.senderId === BOT_ID ? "justify-start" : "justify-end"}`}
+//               >
+//                 <div
+//                   className={`max-w-[75%] p-2 rounded-lg text-sm ${
+//                     message.senderId === BOT_ID
+//                       ? "bg-blue-100 text-blue-900 dark:bg-blue-800 dark:text-blue-100 rounded-bl-none"
+//                       : "bg-green-100 text-green-900 dark:bg-green-800 dark:text-green-100 rounded-br-none"
+//                   }`}
+//                 >
+//                   <p>{message.content}</p>
+//                   <p className="text-xs text-gray-400 mt-1">{new Date(message.timestamp).toLocaleString()}</p>
+//                 </div>
+//                 {message.senderId !== BOT_ID && (
+//                   <Avatar className="w-6 h-6 ml-2">
+//                     <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${message.senderId}`} />
+//                     <AvatarFallback>{getFancyName(message.senderId).slice(0, 2)}</AvatarFallback>
+//                   </Avatar>
+//                 )}
+//               </motion.div>
+//             ))}
+//             {isTyping && (
+//               <div className="flex items-center text-gray-400">
+//                 <span className="animate-pulse mr-2">●</span>
+//                 <span className="animate-pulse mr-2">●</span>
+//                 <span className="animate-pulse">●</span>
+//               </div>
+//             )}
+//           </ScrollArea>
+//           <div className="p-2 bg-gray-800 border-t border-gray-700">
+//             <div className="flex items-center">
+//               <Popover>
+//                 <PopoverTrigger asChild>
+//                   <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
+//                     <Smile className="h-4 w-4" />
+//                   </Button>
+//                 </PopoverTrigger>
+//                 <PopoverContent className="w-80 p-0 bg-gray-800 border-gray-700">
+//                   <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="dark" />
+//                 </PopoverContent>
+//               </Popover>
+//               <Input
+//                 type="text"
+//                 placeholder="Type a message..."
+//                 value={newMessage}
+//                 onChange={(e) => setNewMessage(e.target.value)}
+//                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+//                 className="flex-grow mx-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+//               />
+//               <Button size="sm" onClick={handleSendMessage} className="bg-blue-600 hover:bg-blue-700 text-white">
+//                 <Send size={16} />
+//               </Button>
+//               <Button
+//                 variant="ghost"
+//                 size="icon"
+//                 className={`h-8 w-8 rounded-full ml-2 ${isRecording ? "text-red-500" : ""}`}
+//                 onClick={handleVoiceMessage}
+//               >
+//                 <Mic className="h-4 w-4" />
+//               </Button>
+//               <input type="file" onChange={handleFileUpload} style={{ display: "none" }} id="file-upload" />
+//               <label htmlFor="file-upload">
+//                 <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full ml-2">
+//                   <Paperclip className="h-4 w-4" />
+//                 </Button>
+//               </label>
+//             </div>
+//           </div>
+//         </>
+//       ) : (
+//         <>
+//           <h3 className="text-sm font-semibold p-2 bg-gray-800">Recent Chats</h3>
+//           <ScrollArea className="flex-grow">
+//             {conversations.length === 0 ? (
+//               <ExampleConversations onSelectConversation={setSelectedConversation} />
+//             ) : (
+//               conversations.map((conversation) => (
+//                 <div
+//                   key={conversation.chatId}
+//                   className="flex items-center p-2 hover:bg-gray-800 cursor-pointer transition-colors duration-200"
+//                 >
+//                   <div className="flex-grow" onClick={() => handleSelectConversation(conversation)}>
+//                     <Avatar className="w-8 h-8 relative">
+//                       <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.userId}`} />
+//                       <AvatarFallback>{getFancyName(conversation.userId).slice(0, 2)}</AvatarFallback>
+//                       {unreadChats.has(conversation.chatId) && (
+//                         <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 transform translate-x-1/2 -translate-y-1/2"></span>
+//                       )}
+//                     </Avatar>
+//                     <div className="ml-2 flex-grow overflow-hidden">
+//                       <p className="font-medium text-sm text-gray-200">{getFancyName(conversation.userId)}</p>
+//                       <p className="text-xs text-gray-400 truncate">
+//                         {conversation.messages[conversation.messages.length - 1]?.content ?? "No messages"}
+//                       </p>
+//                     </div>
+//                   </div>
+//                   <Button
+//                     variant="ghost"
+//                     size="sm"
+//                     onClick={() => handleDeleteConversation(conversation)}
+//                     className="text-red-500 hover:text-red-700"
+//                   >
+//                     Delete
+//                   </Button>
+//                 </div>
+//               ))
+//             )}
+//           </ScrollArea>
+//         </>
+//       )}
+//     </div>
+//   )
+// }
+
+// export default AutomationChats
+
 "use client"
 
 import type React from "react"
@@ -4607,12 +5023,12 @@ import type { Conversation, Message } from "@/types/chat"
 import data from "@emoji-mart/data"
 import Picker from "@emoji-mart/react"
 import ExampleConversations from "./exampleConvo"
-import { client } from "@/lib/prisma"
+import { sendMessage, fetchBusinessData } from "@/actions/messageAction/messageAction"
 
 const BOT_NAME = "AiAssist"
 const BOT_AVATAR = "https://api.dicebear.com/6.x/bottts/svg?seed=AiAssist"
 const BOT_ID = "17841444435951291"
-const EXCLUDED_CHAT_ID = "your-excluded-chat-id-here" // Replace with your constant value
+const EXCLUDED_CHAT_ID = "17841444435951291" // Replace with your constant value
 
 interface AutomationChatsProps {
   automationId: string
@@ -4667,23 +5083,10 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 
       if (automation?.userId) {
         console.log("Fetching business for automation userId:", automation.userId)
-        try {
-          const business = await client.business.findFirst({
-            where: { userId: automation.userId },
-          })
-          console.log("Fetched business:", business)
-
-          if (business) {
-            const newBusinessVariables: BusinessVariables = {
-              business_name: business.businessName || "",
-              welcome_message: business.welcomeMessage || "",
-              business_industry: business.industry || "",
-            }
-            setBusinessVariables(newBusinessVariables)
-            console.log("Set business variables:", newBusinessVariables)
-          }
-        } catch (error) {
-          console.error("Error fetching business:", error)
+        const businessData = await fetchBusinessData(automation.userId)
+        if (businessData) {
+          setBusinessVariables(businessData)
+          console.log("Set business variables:", businessData)
         }
       }
     } catch (error) {
@@ -4711,101 +5114,35 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 
     try {
       const userId = `${pageId}_${selectedConversation.userId}`
+      const result = await sendMessage(newMessage, userId, pageId, automationId, token, businessVariables)
 
-      // Check if the conversation is already active
-      const conversationState = await client.conversationState.findUnique({
-        where: { userId },
-      })
-
-      let isConversationActive = conversationState?.isActive || false
-
-      if (!isConversationActive) {
-        // If the conversation is not active, check for keyword match
-        const matcher = await matchKeyword(newMessage)
-
-        if (!matcher || !matcher.automationId) {
-          // No keyword match and conversation not active, don't respond
-          setIsTyping(false)
-          return
+      if (result.success && result.userMessage && result.botMessage) {
+        const userMessage: Message = {
+          id: Date.now().toString(),
+          role: "user",
+          content: result.userMessage.content,
+          senderId: selectedConversation.userId,
+          receiverId: pageId,
+          timestamp: result.userMessage.timestamp,
         }
 
-        // Keyword matched, set the conversation as active
-        await client.conversationState.upsert({
-          where: { userId },
-          update: { isActive: true, updatedAt: new Date() },
-          create: { userId, isActive: true },
-        })
-        isConversationActive = true
-      }
+        const botMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: "assistant",
+          content: result.botMessage.content,
+          senderId: BOT_ID,
+          receiverId: selectedConversation.userId,
+          timestamp: result.botMessage.timestamp,
+        }
 
-      console.log("Attempting to create Voiceflow user:", userId)
-      const userCreated = await createVoiceflowUser(userId)
-      if (!userCreated) {
-        console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
-      }
+        setSelectedConversation((prev) =>
+          prev ? { ...prev, messages: [...prev.messages, userMessage, botMessage] } : null,
+        )
 
-      let automation
-      const matcher = await matchKeyword(newMessage)
-      if (matcher && matcher.automationId) {
-        automation = await getKeywordAutomation(matcher.automationId, true)
+        setNewMessage("")
       } else {
-        const customer_history = await getConversationHistory(automationId)
-        if (customer_history.length > 0) {
-          automation = await findAutomation(automationId)
-        }
+        setError(`Failed to send message: ${result.message || "Unknown error"}`)
       }
-
-      let voiceflowResponse =
-        "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists."
-
-      try {
-        const response = await getVoiceflowResponse(newMessage, userId, businessVariables as Record<string, string>)
-        voiceflowResponse = processVoiceflowResponse(response)
-      } catch (error) {
-        console.error("Error getting or processing Voiceflow response:", error)
-      }
-
-      console.log("Processed Voiceflow response:", voiceflowResponse)
-
-      // Store the conversation
-      await storeConversation(pageId, selectedConversation.userId, newMessage, voiceflowResponse, automationId)
-      console.log("Conversation stored successfully")
-
-      // Send the message
-      const messageSent = await sendPrivateMessage(pageId, selectedConversation.userId, voiceflowResponse, token)
-
-      if (messageSent.status === 200) {
-        if (automation) {
-          await trackResponses(automationId, "DM")
-        }
-        await createChatHistory(automationId, pageId, selectedConversation.userId, newMessage)
-        await createChatHistory(automationId, pageId, selectedConversation.userId, voiceflowResponse)
-      }
-
-      // Update UI
-      const userMessage: Message = {
-        id: Date.now().toString(),
-        role: "user",
-        content: newMessage,
-        senderId: selectedConversation.userId,
-        receiverId: pageId,
-        timestamp: new Date(),
-      }
-
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: voiceflowResponse,
-        senderId: BOT_ID,
-        receiverId: selectedConversation.userId,
-        timestamp: new Date(),
-      }
-
-      setSelectedConversation((prev) =>
-        prev ? { ...prev, messages: [...prev.messages, userMessage, botMessage] } : null,
-      )
-
-      setNewMessage("")
     } catch (error) {
       console.error("Error sending message:", error)
       setError(`Failed to send message: ${error instanceof Error ? error.message : String(error)}`)
@@ -4830,7 +5167,8 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   }
 
   const getFancyName = (userId: string) => {
-    return userId === BOT_ID ? BOT_NAME : `Client ${userId.slice(-4)}`
+    // return userId === BOT_ID ? BOT_NAME : `Client ${userId.slice(-4)}`
+    return '@Cashe'
   }
 
   const handleSelectConversation = (conversation: Conversation) => {
