@@ -443,12 +443,57 @@
 // }
 
 "use server"
-
 import { client } from "@/lib/prisma"
 import { getVoiceflowResponse, processVoiceflowResponse, createVoiceflowUser } from "@/lib/voiceflow"
 import { matchKeyword, getKeywordAutomation, trackResponses, createChatHistory } from "@/actions/webhook/queries"
-import { storeConversation } from "@/actions/chats/queries"
+import { storeConversation, getConversationHistory } from "@/actions/chats/queries"
 import { sendPrivateMessage } from "@/lib/instagram"
+import { getInstagramToken } from "@/actions/token/getToken"
+import { findAutomation } from "@/actions/automations/queries"
+
+export async function fetchBusinessData(userId: string) {
+  try {
+    const business = await client.business.findFirst({
+      where: { userId },
+    })
+
+    return business
+      ? {
+          business_name: business.businessName || "",
+          welcome_message: business.welcomeMessage || "",
+          business_industry: business.industry || "",
+        }
+      : null
+  } catch (error) {
+    console.error("Error fetching business:", error)
+    return null
+  }
+}
+
+export async function fetchChatsAndBusinessVariables(automationId: string) {
+  try {
+    const result = await getConversationHistory(automationId)
+    const token = await getInstagramToken(automationId)
+
+    // Fetch business variables
+    const automation = await findAutomation(automationId)
+    let businessVariables = await fetchBusinessData(automation?.userId || "")
+
+    if (!businessVariables) {
+      businessVariables = {
+        business_name: "",
+        welcome_message: "",
+        business_industry: "",
+      }
+    }
+
+    return { conversations: result, token, businessVariables }
+  } catch (error) {
+    console.error("Error in fetchChatsAndBusinessVariables:", error)
+    throw error
+  }
+}
+
 
 export async function sendMessage(
   newMessage: string,
