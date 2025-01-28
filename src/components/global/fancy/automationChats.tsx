@@ -5253,7 +5253,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
               </div>
             )}
           </ScrollArea>
-          <div className="p-2 bg-gray-800 border-t border-gray-700">
+          <div className="p-2 bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] border-t border-gray-700">
             <div className="flex items-center">
               <Popover>
                 <PopoverTrigger asChild>
@@ -5261,7 +5261,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                     <Smile className="h-4 w-4" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-80 p-0 bg-gray-800 border-gray-700">
+                <PopoverContent className="w-80 p-0 bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] border-gray-700">
                   <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="dark" />
                 </PopoverContent>
               </Popover>
@@ -5271,7 +5271,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                className="flex-grow mx-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                className="flex-grow mx-2 text-sm bg-white dark:bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] text-gray-900 dark:text-gray-100"
               />
               <Button size="sm" onClick={handleSendMessage} className="bg-blue-600 hover:bg-blue-700 text-white">
                 <Send size={16} />
@@ -5295,7 +5295,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
         </>
       ) : (
         <>
-          <h3 className="text-sm font-semibold p-2 bg-gray-800">Recent Chats</h3>
+          <h3 className="text-sm font-semibold p-2 bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D]">Recent Chats</h3>
           <ScrollArea className="flex-grow">
             {conversations.length === 0 ? (
               <ExampleConversations onSelectConversation={setSelectedConversation} />
@@ -5303,7 +5303,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
               conversations.map((conversation) => (
                 <div
                   key={conversation.chatId}
-                  className="flex items-center p-2 hover:bg-gray-800 cursor-pointer transition-colors duration-200"
+                  className="flex items-center p-2 hover:bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] cursor-pointer transition-colors duration-200"
                 >
                   <div className="flex-grow" onClick={() => handleSelectConversation(conversation)}>
                     <Avatar className="w-8 h-8 relative">

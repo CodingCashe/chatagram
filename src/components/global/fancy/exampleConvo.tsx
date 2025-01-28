@@ -57,8 +57,8 @@ const exampleConversations: Conversation[] = [
 const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation }) => {
   return (
     <div className="p-4">
-      <h4 className="text-lg font-semibold mb-4">Example Conversations</h4>
-      <p className="text-sm mb-4">Here are some example conversations to get you started:</p>
+      <h4 className="text-lg font-semibold mb-4">Sample Chat</h4>
+      <p className="text-sm mb-4">By King Cashe</p>
       {exampleConversations.map((conversation) => (
         <div
           key={conversation.chatId}
