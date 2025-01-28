@@ -160,7 +160,7 @@ export function AutomationList({ automations }: { automations: Automation[] }) {
                         <Power className={`w-6 h-6 ${automation.active ? "text-primary" : "text-muted-foreground"}`} />
                         <span
                           className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${
-                            automation.active ? "bg-primary" : "bg-muted-foreground"
+                            automation.active ? "bg-green-400" : "bg-red-400"
                           } animate-ping`}
                         ></span>
                       </div>
