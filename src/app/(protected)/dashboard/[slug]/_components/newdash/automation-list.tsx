@@ -35,6 +35,83 @@
 //   )
 // }
 
+// "use client"
+
+// import React from "react"
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+// import { ScrollArea } from "@/components/ui/scroll-area"
+// import { motion, AnimatePresence } from "framer-motion"
+// import { Activity, Power } from "lucide-react"
+
+// interface Automation {
+//   id: string
+//   name: string
+//   active: boolean
+//   createdAt: Date
+// }
+
+// export function AutomationList({ automations }: { automations: Automation[] }) {
+//   return (
+//     <Card className="w-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100 border-gray-700 shadow-xl overflow-hidden">
+//       <CardHeader className="relative">
+//         <CardTitle className="flex items-center space-x-2 z-10">
+//           <Activity className="w-6 h-6 text-purple-400" />
+//           <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
+//             My Automations
+//           </span>
+//         </CardTitle>
+//         <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
+//       </CardHeader>
+//       <CardContent>
+//         <ScrollArea className="h-[300px] pr-4">
+//           <AnimatePresence>
+//             {automations.map((automation, index) => (
+//               <motion.div
+//                 key={automation.id}
+//                 initial={{ opacity: 0, y: 20 }}
+//                 animate={{ opacity: 1, y: 0 }}
+//                 exit={{ opacity: 0, y: -20 }}
+//                 transition={{ duration: 0.3, delay: index * 0.1 }}
+//               >
+//                 <Card className="mb-4 bg-gray-800 bg-opacity-50 border-gray-700 hover:bg-opacity-70 transition-all duration-300 backdrop-filter backdrop-blur-sm">
+//                   <CardContent className="p-4">
+//                     <div className="flex items-center justify-between">
+//                       <div>
+//                         <h3 className="font-semibold text-lg text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">
+//                           {automation.name}
+//                         </h3>
+//                         <p className="text-sm text-gray-400">
+//                           Created: {new Date(automation.createdAt).toLocaleDateString()}
+//                         </p>
+//                       </div>
+//                       <div className="relative">
+//                         <Power className={`w-6 h-6 ${automation.active ? "text-green-400" : "text-red-400"}`} />
+//                         <span
+//                           className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${
+//                             automation.active ? "bg-green-400" : "bg-red-400"
+//                           } animate-ping`}
+//                         ></span>
+//                       </div>
+//                     </div>
+//                     <div className="mt-2 w-full bg-gray-700 h-1 rounded-full overflow-hidden">
+//                       <motion.div
+//                         className="h-full bg-gradient-to-r from-purple-400 to-pink-500"
+//                         initial={{ width: 0 }}
+//                         animate={{ width: "100%" }}
+//                         transition={{ duration: 1, delay: index * 0.2 }}
+//                       />
+//                     </div>
+//                   </CardContent>
+//                 </Card>
+//               </motion.div>
+//             ))}
+//           </AnimatePresence>
+//         </ScrollArea>
+//       </CardContent>
+//     </Card>
+//   )
+// }
+
 "use client"
 
 import React from "react"
@@ -52,15 +129,12 @@ interface Automation {
 
 export function AutomationList({ automations }: { automations: Automation[] }) {
   return (
-    <Card className="w-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100 border-gray-700 shadow-xl overflow-hidden">
+    <Card className="w-full bg-gradient-to-br from-[#333333] via-[#2E2E2E] to-[#292929] text-white border border-[#3352CC] shadow-2xl overflow-hidden">
       <CardHeader className="relative">
         <CardTitle className="flex items-center space-x-2 z-10">
-          <Activity className="w-6 h-6 text-purple-400" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
-            My Automations
-          </span>
+          <Activity className="w-6 h-6 text-[#3352CC]" />
+          <span className="text-white">My Automations</span>
         </CardTitle>
-        <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
       </CardHeader>
       <CardContent>
         <ScrollArea className="h-[300px] pr-4">
@@ -73,29 +147,27 @@ export function AutomationList({ automations }: { automations: Automation[] }) {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
               >
-                <Card className="mb-4 bg-gray-800 bg-opacity-50 border-gray-700 hover:bg-opacity-70 transition-all duration-300 backdrop-filter backdrop-blur-sm">
+                <Card className="mb-4 bg-[#333333] border border-[#3352CC] hover:bg-[#2E2E2E] transition-all duration-300">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="font-semibold text-lg text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">
-                          {automation.name}
-                        </h3>
+                        <h3 className="font-semibold text-lg text-white">{automation.name}</h3>
                         <p className="text-sm text-gray-400">
                           Created: {new Date(automation.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                       <div className="relative">
-                        <Power className={`w-6 h-6 ${automation.active ? "text-green-400" : "text-red-400"}`} />
+                        <Power className={`w-6 h-6 ${automation.active ? "text-[#3352CC]" : "text-gray-600"}`} />
                         <span
                           className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${
-                            automation.active ? "bg-green-400" : "bg-red-400"
+                            automation.active ? "bg-[#3352CC]" : "bg-gray-600"
                           } animate-ping`}
                         ></span>
                       </div>
                     </div>
-                    <div className="mt-2 w-full bg-gray-700 h-1 rounded-full overflow-hidden">
+                    <div className="mt-2 w-full bg-[#292929] h-1 rounded-full overflow-hidden">
                       <motion.div
-                        className="h-full bg-gradient-to-r from-purple-400 to-pink-500"
+                        className="h-full bg-[#3352CC]"
                         initial={{ width: 0 }}
                         animate={{ width: "100%" }}
                         transition={{ duration: 1, delay: index * 0.2 }}
