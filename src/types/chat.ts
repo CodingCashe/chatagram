@@ -24,7 +24,9 @@
     userId: string
     chatId: string
     messages: Message[]
+    unreadCount?: number
   }
+    
   // export interface Message {
   //   role: "assistant" | "user"
   //   content: string
