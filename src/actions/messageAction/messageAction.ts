@@ -580,18 +580,18 @@ export async function sendMessage(
     let voiceflowResponse =
       "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists."
 
-    try {
-      console.log("Message Action - Getting Voiceflow response")
-      const response = await getVoiceflowResponse(newMessage, userId, businessVariables)
-      voiceflowResponse = processVoiceflowResponse(response)
-      console.log("Message Action - Processed Voiceflow response length:", voiceflowResponse.length)
-    } catch (error) {
-      console.error("Message Action - Error getting Voiceflow response:", error)
-    }
+    // try {
+    //   console.log("Message Action - Getting Voiceflow response")
+    //   const response = await getVoiceflowResponse(newMessage, userId, businessVariables)
+    //   voiceflowResponse = processVoiceflowResponse(response)
+    //   console.log("Message Action - Processed Voiceflow response length:", voiceflowResponse.length)
+    // } catch (error) {
+    //   console.error("Message Action - Error getting Voiceflow response:", error)
+    // }
 
     // Store the conversation
     console.log("Message Action - Storing conversation")
-    await storeConversation(pageId, userId, newMessage, voiceflowResponse, automationId)
+    await storeConversation(pageId, userId, newMessage, "Sent from dashboard", automationId)
 
     // Send the message
     console.log("Message Action - Sending message via Instagram API")
@@ -603,12 +603,10 @@ export async function sendMessage(
         await trackResponses(automationId, "DM")
       }
       await createChatHistory(automationId, pageId, userId, newMessage)
-      await createChatHistory(automationId, pageId, userId, voiceflowResponse)
 
       return {
         success: true,
         userMessage: { content: newMessage, timestamp: new Date() },
-        botMessage: { content: voiceflowResponse, timestamp: new Date() },
       }
     } else {
       console.error("Message Action - Failed to send message:", messageSent.error)
