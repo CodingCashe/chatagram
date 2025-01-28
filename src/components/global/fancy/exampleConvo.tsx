@@ -292,6 +292,90 @@
 
 // export default ExampleConversations
 
+// import type React from "react"
+// import type { Conversation } from "@/types/chat"
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+// interface ExampleConversationsProps {
+//   onSelectConversation: (conversation: Conversation) => void
+//   className?: string
+// }
+
+// const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation, className }) => {
+//   const conversations: Conversation[] = [
+//     {
+//       userId: "user1",
+//       chatId: "chat1",
+//       messages: [
+//         {
+//           id: "1",
+//           role: "user",
+//           content: "Hello, how are you today?",
+//           senderId: "user1",
+//           receiverId: "bot",
+//           timestamp: new Date(),
+//           status: "sent",
+//         },
+//       ],
+//     },
+//     {
+//       userId: "user2",
+//       chatId: "chat2",
+//       messages: [
+//         {
+//           id: "2",
+//           role: "user",
+//           content: "I am doing well, thank you!",
+//           senderId: "user2",
+//           receiverId: "bot",
+//           timestamp: new Date(),
+//           status: "sent",
+//         },
+//       ],
+//     },
+//     {
+//       userId: "user3",
+//       chatId: "chat3",
+//       messages: [
+//         {
+//           id: "3",
+//           role: "user",
+//           content: "Great to hear!",
+//           senderId: "user3",
+//           receiverId: "bot",
+//           timestamp: new Date(),
+//           status: "sent",
+//         },
+//       ],
+//     },
+//   ]
+
+//   return (
+//     <div className={`space-y-4 ${className}`}>
+//       {conversations.map((conversation) => (
+//         <div
+//           key={conversation.chatId}
+//           onClick={() => onSelectConversation(conversation)}
+//           className="flex items-center p-3 rounded-lg border border-gray-200 hover:border-gray-400 cursor-pointer"
+//         >
+//           <Avatar className="w-10 h-10 mr-3">
+//             <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.userId}`} />
+//             <AvatarFallback>{conversation.userId.slice(0, 2).toUpperCase()}</AvatarFallback>
+//           </Avatar>
+//           <div className="flex-grow min-w-0">
+//             <p className="font-medium text-sm text-foreground truncate">{conversation.userId}</p>
+//             <p className="text-xs text-muted-foreground truncate">
+//               {conversation.messages[0].content.split(" ").slice(0, 2).join(" ")}...
+//             </p>
+//           </div>
+//         </div>
+//       ))}
+//     </div>
+//   )
+// }
+
+// export default ExampleConversations
+
 import type React from "react"
 import type { Conversation } from "@/types/chat"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -358,7 +442,7 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
           onClick={() => onSelectConversation(conversation)}
           className="flex items-center p-3 rounded-lg border border-gray-200 hover:border-gray-400 cursor-pointer"
         >
-          <Avatar className="w-10 h-10 mr-3">
+          <Avatar className="w-10 h-10 mr-3 border-2 border-primary">
             <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.userId}`} />
             <AvatarFallback>{conversation.userId.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
