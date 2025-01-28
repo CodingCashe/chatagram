@@ -38,7 +38,7 @@
     senderId: string
     receiverId: string
     timestamp: Date
-    status: "sent" | "delivered" | "read"
+    status?: "sent" | "delivered" | "read"
   }
   
   export interface Conversation {
