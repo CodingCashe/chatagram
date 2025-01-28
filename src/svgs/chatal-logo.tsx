@@ -50,7 +50,7 @@ interface ChatalLogoProps {
 const ChatalLogo: React.FC<ChatalLogoProps> = ({
   width = 100,
   height = 100,
-  color = "#0066cc",
+  color = "#3352CC",
 }) => {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -78,7 +78,7 @@ const ChatalLogo: React.FC<ChatalLogoProps> = ({
             fontFamily: "Arial, sans-serif",
             fontSize: "28px",
             fontWeight: "bold",
-            color: "#0066cc",
+            color: "#3352CC",
             margin: 0,
           }}
         >
@@ -87,8 +87,8 @@ const ChatalLogo: React.FC<ChatalLogoProps> = ({
         <p
           style={{
             fontFamily: "Arial, sans-serif",
-            fontSize: "12px",
-            color: "#0066cc",
+            fontSize: "14px",
+            color: "#3352CC",
             margin: 0,
           }}
         >
