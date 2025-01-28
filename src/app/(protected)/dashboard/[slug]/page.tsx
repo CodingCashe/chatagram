@@ -1205,7 +1205,7 @@ export default async function DashboardPage() {
         <ContentSuggestions />
         <AIPerformance />
       </div>
-            <EngagementInsights />
+        <EngagementInsights />
     </div>
   )
 }

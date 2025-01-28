@@ -542,13 +542,13 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ActivitySquare, PieChart, LineChart, BarChart } from "lucide-react"
+import { ActivitySquare, BarChart2, LineChart, TrendingUp } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { getAutomationsForUser, getEngagementDataForAutomation } from "@/actions/dashboard"
 import DMTimeline from "./DMTimeline"
 import DMDistribution from "./DMDistribution"
 import DMInsights from "./DMInsights"
-import DMCategoryBreakdown from "./DmCategory"
+import TopDMDays from "./TopDMDays"
 import type { AutomationOption, EngagementData, Automation } from "@/types/dashboard"
 
 const EngagementInsights: React.FC = () => {
@@ -640,14 +640,14 @@ const EngagementInsights: React.FC = () => {
                 <span className="sm:hidden">Time</span>
               </TabsTrigger>
               <TabsTrigger value="distribution" className="text-xs sm:text-sm data-[state=active]:bg-gray-800">
-                <BarChart className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                <BarChart2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                 <span className="hidden sm:inline">Distribution</span>
                 <span className="sm:hidden">Dist</span>
               </TabsTrigger>
-              <TabsTrigger value="category" className="text-xs sm:text-sm data-[state=active]:bg-gray-800">
-                <PieChart className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                <span className="hidden sm:inline">Categories</span>
-                <span className="sm:hidden">Cat</span>
+              <TabsTrigger value="topdays" className="text-xs sm:text-sm data-[state=active]:bg-gray-800">
+                <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Top Days</span>
+                <span className="sm:hidden">Top</span>
               </TabsTrigger>
               <TabsTrigger value="insights" className="text-xs sm:text-sm data-[state=active]:bg-gray-800">
                 <ActivitySquare className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
@@ -662,8 +662,8 @@ const EngagementInsights: React.FC = () => {
               <TabsContent value="distribution">
                 <DMDistribution data={data} />
               </TabsContent>
-              <TabsContent value="category">
-                <DMCategoryBreakdown data={data} />
+              <TabsContent value="topdays">
+                <TopDMDays data={data} />
               </TabsContent>
               <TabsContent value="insights">
                 <DMInsights data={data} />

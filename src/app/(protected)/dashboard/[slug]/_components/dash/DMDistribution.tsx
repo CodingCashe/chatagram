@@ -3,7 +3,7 @@
 import type React from "react"
 import { useMemo } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts"
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts"
 import type { EngagementData } from "@/types/dashboard"
 
 interface DMDistributionProps {
@@ -28,37 +28,24 @@ const DMDistribution: React.FC<DMDistributionProps> = ({ data }) => {
       else counts["41+"]++
     })
 
-    return Object.entries(counts).map(([range, value]) => ({ range, value }))
+    return Object.entries(counts).map(([range, count]) => ({ range, count }))
   }, [data])
-
-  const COLORS = ["#8884d8", "#83a6ed", "#8dd1e1", "#82ca9d", "#a4de6c"]
 
   return (
     <Card className="bg-gray-900 border-gray-800">
       <CardContent className="p-6">
         <h3 className="text-lg font-semibold mb-4 text-gray-200">DM Distribution</h3>
         <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={distributionData}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              outerRadius={80}
-              fill="#8884d8"
-              dataKey="value"
-              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-            >
-              {distributionData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
+          <BarChart data={distributionData}>
+            <XAxis dataKey="range" stroke="#6b7280" tick={{ fill: "#9ca3af" }} />
+            <YAxis stroke="#6b7280" tick={{ fill: "#9ca3af" }} />
             <Tooltip
               contentStyle={{ backgroundColor: "#1f2937", border: "none", borderRadius: "8px" }}
-              itemStyle={{ color: "#e5e7eb" }}
+              labelStyle={{ color: "#e5e7eb" }}
+              itemStyle={{ color: "#8884d8" }}
             />
-            <Legend layout="vertical" verticalAlign="middle" align="right" wrapperStyle={{ color: "#9ca3af" }} />
-          </PieChart>
+            <Bar dataKey="count" fill="#8884d8" />
+          </BarChart>
         </ResponsiveContainer>
       </CardContent>
     </Card>
