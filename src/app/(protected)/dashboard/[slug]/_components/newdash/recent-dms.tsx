@@ -524,6 +524,183 @@
 //   )
 // }
 
+// "use client"
+
+// import React, { useState, useRef, useEffect } from "react"
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+// import { ScrollArea } from "@/components/ui/scroll-area"
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+// import { motion, AnimatePresence } from "framer-motion"
+// import { format } from "date-fns"
+// import { MessageSquare } from "lucide-react"
+// import PlaceholderChat from "./placeHolder"
+
+// interface Dm {
+//   id: string
+//   senderId: string | null
+//   reciever: string | null
+//   message: string | null
+//   createdAt: Date
+//   Automation: { id: string; name: string } | null
+// }
+
+// interface Automation {
+//   id: string
+//   name: string
+// }
+
+// const BOT_ID = "17841444435951291"
+
+// export function RecentDms({
+//   dms,
+//   automations,
+// }: {
+//   dms: Dm[]
+//   automations: Automation[]
+// }) {
+//   const [selectedAutomation, setSelectedAutomation] = useState<string | null>(null)
+//   const [floatingDate, setFloatingDate] = useState<string | null>(null)
+//   const scrollAreaRef = useRef<HTMLDivElement>(null)
+
+//   const filteredDms = selectedAutomation ? dms.filter((dm) => dm.Automation?.id === selectedAutomation) : []
+//   const sortedDms = [...filteredDms].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+
+//   const groupedDms = sortedDms.reduce(
+//     (groups, dm) => {
+//       const date = format(new Date(dm.createdAt), "yyyy-MM-dd")
+//       if (!groups[date]) {
+//         groups[date] = []
+//       }
+//       groups[date].push(dm)
+//       return groups
+//     },
+//     {} as Record<string, Dm[]>,
+//   )
+
+//   useEffect(() => {
+//     const scrollArea = scrollAreaRef.current
+//     if (scrollArea) {
+//       const handleScroll = () => {
+//         const scrollPosition = scrollArea.scrollTop
+//         const scrollHeight = scrollArea.scrollHeight
+//         const clientHeight = scrollArea.clientHeight
+
+//         let currentDate = null
+//         for (const [date, messages] of Object.entries(groupedDms)) {
+//           const firstMessageElement = document.getElementById(`date-${date}`)
+//           if (firstMessageElement && firstMessageElement.offsetTop <= scrollPosition) {
+//             currentDate = date
+//           } else {
+//             break
+//           }
+//         }
+
+//         setFloatingDate(currentDate ? format(new Date(currentDate), "EEEE, MMMM d") : null)
+//       }
+
+//       scrollArea.addEventListener("scroll", handleScroll)
+//       return () => scrollArea.removeEventListener("scroll", handleScroll)
+//     }
+//   }, [groupedDms])
+
+//   return (
+//     <Card className="w-full overflow-hidden bg-gradient-to-br from-primary/5 to-secondary/5 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+//       <CardHeader className="relative">
+//         <CardTitle className="flex items-center justify-between space-y-0 pb-2 z-10">
+//           <span className="text-foreground flex items-center">
+//             <MessageSquare className="mr-2 h-5 w-5 text-primary" />
+//             Recent DMs
+//           </span>
+//           <Select onValueChange={(value) => setSelectedAutomation(value)}>
+//             <SelectTrigger className="w-[180px] bg-background/50 border-primary/20 text-foreground">
+//               <SelectValue placeholder="Select Automation" />
+//             </SelectTrigger>
+//             <SelectContent className="bg-background/50 border-primary/20 text-foreground">
+//               {automations.map((automation) => (
+//                 <SelectItem key={automation.id} value={automation.id}>
+//                   {automation.name}
+//                 </SelectItem>
+//               ))}
+//             </SelectContent>
+//           </Select>
+//         </CardTitle>
+//       </CardHeader>
+//       <CardContent>
+//         <ScrollArea className="h-[400px] pr-4" ref={scrollAreaRef}>
+//           {selectedAutomation ? (
+//             <AnimatePresence>
+//               {Object.entries(groupedDms).map(([date, messages]) => (
+//                 <motion.div
+//                   key={date}
+//                   id={`date-${date}`}
+//                   initial={{ opacity: 0, y: 20 }}
+//                   animate={{ opacity: 1, y: 0 }}
+//                   exit={{ opacity: 0, y: -20 }}
+//                   transition={{ duration: 0.5 }}
+//                 >
+//                   <div className="text-center text-sm text-muted-foreground my-2">
+//                     {format(new Date(date), "EEEE, MMMM d")}
+//                   </div>
+//                   <div className="space-y-4">
+//                     {messages.map((dm) => {
+//                       const isClient = dm.senderId === BOT_ID
+//                       const formattedTime = format(new Date(dm.createdAt), "HH:mm")
+
+//                       return (
+//                         <motion.div
+//                           key={dm.id}
+//                           initial={{ opacity: 0, y: 20 }}
+//                           animate={{ opacity: 1, y: 0 }}
+//                           exit={{ opacity: 0, y: -20 }}
+//                           transition={{ duration: 0.3 }}
+//                           className={`flex ${isClient ? "justify-end" : "justify-start"}`}
+//                         >
+//                           <div className={`flex items-end space-x-2 ${isClient ? "flex-row-reverse" : "flex-row"}`}>
+//                             <Avatar className="w-8 h-8">
+//                               <AvatarImage src={isClient ? "/placeholder-user.jpg" : "/placeholder-bot.jpg"} />
+//                               <AvatarFallback>{isClient ? "C" : "M"}</AvatarFallback>
+//                             </Avatar>
+//                             <motion.div
+//                               whileHover={{ scale: 1.02 }}
+//                               className={`max-w-xs px-4 py-2 rounded-2xl shadow-lg ${
+//                                 isClient
+//                                   ? "bg-primary text-primary-foreground"
+//                                   : "bg-background/50 text-foreground border border-primary/20"
+//                               }`}
+//                             >
+//                               <p className="text-sm">{dm.message}</p>
+//                               <p className="text-xs text-muted-foreground mt-1">{formattedTime}</p>
+//                             </motion.div>
+//                           </div>
+//                         </motion.div>
+//                       )
+//                     })}
+//                   </div>
+//                 </motion.div>
+//               ))}
+//             </AnimatePresence>
+//           ) : (
+//             <PlaceholderChat />
+//           )}
+//         </ScrollArea>
+//       </CardContent>
+//       <AnimatePresence>
+//         {floatingDate && (
+//           <motion.div
+//             initial={{ opacity: 0, y: -20 }}
+//             animate={{ opacity: 1, y: 0 }}
+//             exit={{ opacity: 0, y: -20 }}
+//             className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-background/50 text-foreground px-4 py-2 rounded-full shadow-lg z-10 border border-primary/20"
+//           >
+//             {floatingDate}
+//           </motion.div>
+//         )}
+//       </AnimatePresence>
+//     </Card>
+//   )
+// }
+
 "use client"
 
 import React, { useState, useRef, useEffect } from "react"
@@ -605,7 +782,7 @@ export function RecentDms({
   }, [groupedDms])
 
   return (
-    <Card className="w-full overflow-hidden bg-gradient-to-br from-primary/5 to-secondary/5 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+    <Card className="w-full overflow-hidden bg-gradient-to-br from-primary/5 to-secondary/5 shadow-lg hover:shadow-xl transition-shadow duration-300 relative border-primary/10">
       <CardHeader className="relative">
         <CardTitle className="flex items-center justify-between space-y-0 pb-2 z-10">
           <span className="text-foreground flex items-center">
@@ -665,8 +842,8 @@ export function RecentDms({
                               whileHover={{ scale: 1.02 }}
                               className={`max-w-xs px-4 py-2 rounded-2xl shadow-lg ${
                                 isClient
-                                  ? "bg-primary text-primary-foreground"
-                                  : "bg-background/50 text-foreground border border-primary/20"
+                                  ? "bg-primary text-primary-foreground chat-bubble-client"
+                                  : "bg-background/50 text-foreground border border-primary/20 chat-bubble-bot"
                               }`}
                             >
                               <p className="text-sm">{dm.message}</p>
@@ -697,6 +874,16 @@ export function RecentDms({
           </motion.div>
         )}
       </AnimatePresence>
+      <style jsx global>{`
+        .chat-bubble-client {
+          clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 95% 75%, 95% 100%, 85% 75%, 0% 75%);
+          padding-bottom: 15px;
+        }
+        .chat-bubble-bot {
+          clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 15% 75%, 5% 100%, 5% 75%, 0% 75%);
+          padding-bottom: 15px;
+        }
+      `}</style>
     </Card>
   )
 }

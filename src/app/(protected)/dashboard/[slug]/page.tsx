@@ -1137,6 +1137,8 @@ import { BarDuoToneBlue } from "@/icons"
 import DoubleGradientCard from "@/components/global/double-gradient-card"
 import { DASHBOARD_CARDS } from "@/constants/dashboard"
 import EnhancedMetricsCard from "./_components/dash/EnhancedMetricsCard"
+import SentimentAnalysis from './_components/dash/SentimentAnalysis'
+import EngagementPredictor from './_components/dash/EngagementPredictor'
 import AIPerformance from "./_components/dash/AIPerformance"
 import EngagementInsights from "./_components/dash/EngagementInsights"
 import HashtagCloud from "./_components/dash/HashtagCloud"
@@ -1157,19 +1159,20 @@ export default async function DashboardPage() {
       <div className="border-[1px] relative border-in-active/50 p-5 rounded-xl">
         <span className="flex gap-x-1 z-50 items-center mb-5">
           <BarDuoToneBlue />
-          <div className="z-50">
+          <div className="z-0">
             <h2 className="text-2xl font-medium text-white">Engagement Analytics</h2>
             <p className="text-text-secondary text-sm">Monitor Your Engagement in Real Time</p>
           </div>
         </span>
         <div className="w-full flex lg:flex-row flex-col gap-5">
           <div className="lg:w-6/12">
-            <EngagementInsights />
+          <SentimentAnalysis />
           </div>
           <div className="lg:w-6/12">
             <EnhancedMetricsCard />
           </div>
         </div>
+        <EngagementPredictor />
       </div>
 
       <div className="container mx-auto p-6 space-y-6">
