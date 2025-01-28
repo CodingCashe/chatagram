@@ -1172,7 +1172,9 @@ export default async function DashboardPage() {
             <EnhancedMetricsCard />
           </div>
         </div>
+        <div className="w-full flex lg:flex-row flex-col gap-5">
         <EngagementPredictor />
+        </div>
       </div>
 
       <div className="container mx-auto p-6 space-y-6">
@@ -1208,7 +1210,9 @@ export default async function DashboardPage() {
         <ContentSuggestions />
         <AIPerformance />
       </div>
+      <div className="w-full flex lg:flex-row flex-col gap-5"> 
         <EngagementInsights />
+      </div>
     </div>
   )
 }
