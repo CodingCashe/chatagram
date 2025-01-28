@@ -6185,12 +6185,447 @@
 
 // export default AutomationChats
 
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect, useRef, useCallback } from "react"
+// import { motion, AnimatePresence } from "framer-motion"
+// import { MessageCircle, Send, ArrowLeft, Smile, Paperclip, Mic, Trash2 } from "lucide-react"
+// import { ScrollArea } from "@/components/ui/scroll-area"
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+// import { Input } from "@/components/ui/input"
+// import { Button } from "@/components/ui/button"
+// import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+// import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+// import { getConversationHistory, storeConversation, deleteConversation } from "@/actions/chats/queries"
+// import { sendMessage, fetchBusinessData } from "@/actions/messageAction/messageAction"
+// import { getInstagramToken } from "@/actions/token/getToken"
+// import { findAutomation } from "@/actions/automations/queries"
+// import type { Conversation, Message } from "@/types/chat"
+// import data from "@emoji-mart/data"
+// import Picker from "@emoji-mart/react"
+// import ExampleConversations from "./exampleConvo"
+
+// const BOT_NAME = "AiAssist"
+// const BOT_AVATAR = "https://api.dicebear.com/6.x/bottts/svg?seed=AiAssist"
+// const BOT_ID = "17841444435951291"
+// const EXCLUDED_CHAT_ID = "17841444435951291"
+
+// interface AutomationChatsProps {
+//   automationId: string
+// }
+
+// interface BusinessVariables {
+//   [key: string]: string
+//   business_name: string
+//   welcome_message: string
+//   business_industry: string
+// }
+
+// const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
+//   const [conversations, setConversations] = useState<Conversation[]>([])
+//   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
+//   const [newMessage, setNewMessage] = useState("")
+//   const [isTyping, setIsTyping] = useState(false)
+//   const [isLoading, setIsLoading] = useState(false)
+//   const [error, setError] = useState<string | null>(null)
+//   const [isRecording, setIsRecording] = useState(false)
+//   const [unreadChats, setUnreadChats] = useState<Set<string>>(new Set())
+//   const [token, setToken] = useState<string | null>(null)
+//   const [pageId, setPageId] = useState<string | null>(null)
+//   const [businessVariables, setBusinessVariables] = useState<BusinessVariables>({
+//     business_name: "",
+//     welcome_message: "",
+//     business_industry: "",
+//   })
+//   const [displayedMessages, setDisplayedMessages] = useState(6)
+//   const [totalUnreadMessages, setTotalUnreadMessages] = useState(0)
+//   const scrollRef = useRef<HTMLDivElement>(null)
+
+//   const fetchChats = useCallback(async () => {
+//     setIsLoading(true)
+//     setError(null)
+//     try {
+//       const result = await getConversationHistory(automationId)
+//       const filteredConversations = result.filter((conv) => conv.chatId !== EXCLUDED_CHAT_ID)
+//       setConversations(filteredConversations)
+//       setUnreadChats(new Set(filteredConversations.map((conv) => conv.chatId)))
+//       setTotalUnreadMessages(filteredConversations.reduce((total, conv) => total + (conv.unreadCount || 0), 0))
+
+//       if (filteredConversations.length > 0 && filteredConversations[0].messages.length > 0) {
+//         setPageId(filteredConversations[0].messages[0].receiverId)
+//       }
+
+//       const fetchedToken = await getInstagramToken(automationId)
+//       setToken(fetchedToken)
+
+//       const automation = await findAutomation(automationId)
+//       if (automation?.userId) {
+//         const businessData = await fetchBusinessData(automation.userId)
+//         if (businessData) {
+//           setBusinessVariables(businessData)
+//         }
+//       }
+//     } catch (error) {
+//       console.error("Error in fetchChats:", error)
+//       setError(`Failed to fetch chats: ${error instanceof Error ? error.message : String(error)}`)
+//     } finally {
+//       setIsLoading(false)
+//     }
+//   }, [automationId])
+
+//   useEffect(() => {
+//     fetchChats()
+//   }, [fetchChats])
+
+//   useEffect(() => {
+//     if (scrollRef.current) {
+//       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+//     }
+//   })
+
+//   const handleSendMessage = async () => {
+//     if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
+
+//     setIsTyping(true)
+
+//     try {
+//       const userId = `${pageId}_${selectedConversation.userId}`
+//       const result = await sendMessage(newMessage, userId, pageId, automationId, token, businessVariables)
+
+//       if (result.success && result.userMessage && result.botMessage) {
+//         const userMessage: Message = {
+//           id: Date.now().toString(),
+//           role: "user",
+//           content: result.userMessage.content,
+//           senderId: selectedConversation.userId,
+//           receiverId: pageId,
+//           timestamp: result.userMessage.timestamp,
+//         }
+
+//         const botMessage: Message = {
+//           id: (Date.now() + 1).toString(),
+//           role: "assistant",
+//           content: result.botMessage.content,
+//           senderId: BOT_ID,
+//           receiverId: selectedConversation.userId,
+//           timestamp: result.botMessage.timestamp,
+//         }
+
+//         setSelectedConversation((prev) =>
+//           prev ? { ...prev, messages: [...prev.messages, userMessage, botMessage] } : null,
+//         )
+
+//         setNewMessage("")
+//       } else {
+//         setError(`Failed to send message: ${result.message || "Unknown error"}`)
+//       }
+//     } catch (error) {
+//       console.error("Error sending message:", error)
+//       setError(`Failed to send message: ${error instanceof Error ? error.message : String(error)}`)
+//     } finally {
+//       setIsTyping(false)
+//     }
+//   }
+
+//   const handleEmojiSelect = (emoji: any) => {
+//     setNewMessage((prev) => prev + emoji.native)
+//   }
+
+//   const handleVoiceMessage = () => {
+//     setIsRecording(!isRecording)
+//   }
+
+//   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+//     const file = event.target.files?.[0]
+//     if (file) {
+//       console.log("File selected:", file.name)
+//     }
+//   }
+
+//   const getFancyName = (userId: string) => {
+//     return "@Cashe"
+//   }
+
+//   const loadMoreMessages = () => {
+//     setDisplayedMessages((prev) => prev + 6)
+//   }
+
+//   const handleSelectConversation = (conversation: Conversation) => {
+//     setSelectedConversation(conversation)
+//     setDisplayedMessages(6)
+//     setUnreadChats((prev) => {
+//       const newUnreadChats = new Set(prev)
+//       newUnreadChats.delete(conversation.chatId)
+//       return newUnreadChats
+//     })
+//     setTotalUnreadMessages((prev) => Math.max(0, prev - (conversation.unreadCount || 0)))
+//     // Reset the unread count for the selected conversation
+//     setConversations((prevConversations) =>
+//       prevConversations.map((conv) => (conv.chatId === conversation.chatId ? { ...conv, unreadCount: 0 } : conv)),
+//     )
+//   }
+
+//   const handleDeleteConversation = async (conversation: Conversation) => {
+//     if (!pageId) return
+
+//     try {
+//       await deleteConversation(pageId, conversation.userId)
+//       setConversations((prev) => prev.filter((conv) => conv.chatId !== conversation.chatId))
+//       if (selectedConversation?.chatId === conversation.chatId) {
+//         setSelectedConversation(null)
+//       }
+//     } catch (error) {
+//       console.error("Error deleting conversation:", error)
+//       setError(`Failed to delete conversation: ${error instanceof Error ? error.message : String(error)}`)
+//     }
+//   }
+
+//   const getActivityStatus = (lastActive: Date) => {
+//     const now = new Date()
+//     const diffInMinutes = Math.floor((now.getTime() - lastActive.getTime()) / 60000)
+
+//     if (diffInMinutes < 1) return "Active now"
+//     if (diffInMinutes < 60) return `Active ${diffInMinutes} minute${diffInMinutes > 1 ? "s" : ""} ago`
+
+//     const diffInHours = Math.floor(diffInMinutes / 60)
+//     if (diffInHours < 24) return `Active ${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`
+
+//     const diffInDays = Math.floor(diffInHours / 24)
+//     return `Active ${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`
+//   }
+
+//   return (
+//     <div className="h-full flex flex-col bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-lg overflow-hidden text-gray-100 border border-[1px] border-gradient-to-br from-green-500 via-red-500 to-orange-500">
+//       {isLoading ? (
+//         <div className="p-4 text-gray-300">Loading chats...</div>
+//       ) : error ? (
+//         <div className="p-4 text-white-500">Try connecting your Instagram on the integrations tab first.</div>
+//       ) : !token ? (
+//         <div className="p-4 text-white-500">
+//           Instagram not connected yet. Please connect your Instagram account first.
+//         </div>
+//       ) : selectedConversation ? (
+//         <>
+//           <div className="p-4 bg-gradient-to-r from-[#2A2A2A] to-[#252525] border-b border-gray-600 flex items-center">
+//             <Button variant="ghost" className="mr-4 p-2" onClick={() => setSelectedConversation(null)}>
+//               <ArrowLeft size={20} />
+//             </Button>
+//             <Avatar className="w-10 h-10">
+//               <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${selectedConversation.userId}`} />
+//               <AvatarFallback>{getFancyName(selectedConversation.userId).slice(0, 2)}</AvatarFallback>
+//             </Avatar>
+//             <div className="ml-3 flex-grow">
+//               <h4 className="font-medium text-lg">{getFancyName(selectedConversation.userId)}</h4>
+//               <p className="text-sm text-gray-400">
+//                 {getActivityStatus(
+//                   new Date(selectedConversation.messages[selectedConversation.messages.length - 1].timestamp),
+//                 )}
+//               </p>
+//             </div>
+//           </div>
+//           <ScrollArea
+//             className="flex-grow p-4 bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D]"
+//             ref={scrollRef}
+//           >
+//             {selectedConversation.messages.length > displayedMessages && (
+//               <Button
+//                 variant="ghost"
+//                 className="w-full text-sm text-gray-400 hover:text-gray-200 mb-4"
+//                 onClick={loadMoreMessages}
+//               >
+//                 Load more messages
+//               </Button>
+//             )}
+//             <AnimatePresence>
+//               {selectedConversation.messages.slice(-displayedMessages).map((message) => (
+//                 <motion.div
+//                   key={message.id}
+//                   initial={{ opacity: 0, y: 10 }}
+//                   animate={{ opacity: 1, y: 0 }}
+//                   exit={{ opacity: 0, y: -10 }}
+//                   transition={{ duration: 0.2 }}
+//                   className={`flex items-end mb-4 ${message.senderId === BOT_ID ? "justify-start" : "justify-end"}`}
+//                 >
+//                   {message.senderId === BOT_ID && (
+//                     <Avatar className="w-8 h-8 mr-2">
+//                       <AvatarImage src={BOT_AVATAR} />
+//                       <AvatarFallback>{BOT_NAME.slice(0, 2)}</AvatarFallback>
+//                     </Avatar>
+//                   )}
+//                   <div
+//                     className={`max-w-[75%] p-3 rounded-lg text-sm ${
+//                       message.senderId === BOT_ID ? "bg-blue-600 text-white" : "bg-gray-700 text-white"
+//                     }`}
+//                   >
+//                     <p className="break-words">{message.content}</p>
+//                     <p className="text-xs text-gray-300 mt-1">{new Date(message.timestamp).toLocaleString()}</p>
+//                   </div>
+//                   {message.senderId !== BOT_ID && (
+//                     <Avatar className="w-8 h-8 ml-2">
+//                       <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${message.senderId}`} />
+//                       <AvatarFallback>{getFancyName(message.senderId).slice(0, 2)}</AvatarFallback>
+//                     </Avatar>
+//                   )}
+//                 </motion.div>
+//               ))}
+//             </AnimatePresence>
+//             {isTyping && (
+//               <div className="flex items-center text-gray-400">
+//                 <span className="animate-pulse mr-2">●</span>
+//                 <span className="animate-pulse mr-2">●</span>
+//                 <span className="animate-pulse">●</span>
+//               </div>
+//             )}
+//           </ScrollArea>
+//           <div className="p-4 bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] border-t border-gray-600">
+//             <div className="flex items-center">
+//               <Popover>
+//                 <PopoverTrigger asChild>
+//                   <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full">
+//                     <Smile className="h-5 w-5" />
+//                   </Button>
+//                 </PopoverTrigger>
+//                 <PopoverContent className="w-80 p-0 bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] border-gray-600">
+//                   <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="dark" />
+//                 </PopoverContent>
+//               </Popover>
+//               <Input
+//                 type="text"
+//                 placeholder="Type a message..."
+//                 value={newMessage}
+//                 onChange={(e) => setNewMessage(e.target.value)}
+//                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+//                 className="flex-grow mx-2 text-sm bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+//               />
+//               <TooltipProvider>
+//                 <Tooltip>
+//                   <TooltipTrigger asChild>
+//                     <Button
+//                       size="icon"
+//                       onClick={handleSendMessage}
+//                       className="bg-blue-600 hover:bg-blue-700 text-white"
+//                     >
+//                       <Send size={18} />
+//                     </Button>
+//                   </TooltipTrigger>
+//                   <TooltipContent>
+//                     <p>Send message</p>
+//                   </TooltipContent>
+//                 </Tooltip>
+//               </TooltipProvider>
+//               <TooltipProvider>
+//                 <Tooltip>
+//                   <TooltipTrigger asChild>
+//                     <Button
+//                       variant="ghost"
+//                       size="icon"
+//                       className={`h-10 w-10 rounded-full ml-2 ${isRecording ? "text-red-500" : ""}`}
+//                       onClick={handleVoiceMessage}
+//                     >
+//                       <Mic className="h-5 w-5" />
+//                     </Button>
+//                   </TooltipTrigger>
+//                   <TooltipContent>
+//                     <p>Record voice message</p>
+//                   </TooltipContent>
+//                 </Tooltip>
+//               </TooltipProvider>
+//               <input type="file" onChange={handleFileUpload} style={{ display: "none" }} id="file-upload" />
+//               <TooltipProvider>
+//                 <Tooltip>
+//                   <TooltipTrigger asChild>
+//                     <label htmlFor="file-upload">
+//                       <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full ml-2">
+//                         <Paperclip className="h-5 w-5" />
+//                       </Button>
+//                     </label>
+//                   </TooltipTrigger>
+//                   <TooltipContent>
+//                     <p>Attach file</p>
+//                   </TooltipContent>
+//                 </Tooltip>
+//               </TooltipProvider>
+//             </div>
+//           </div>
+//         </>
+//       ) : (
+//         <>
+//           <h3 className="text-lg font-semibold p-4 bg-gradient-to-r from-[#2A2A2A] to-[#252525] flex justify-between items-center">
+//             <span>Recent Chats</span>
+//             {totalUnreadMessages > 0 && (
+//               <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+//                 {totalUnreadMessages}
+//               </span>
+//             )}
+//           </h3>
+//           <ScrollArea className="flex-grow">
+//             {conversations.length === 0 ? (
+//               <ExampleConversations onSelectConversation={handleSelectConversation} />
+//             ) : (
+//               conversations.map((conversation) => (
+//                 <motion.div
+//                   key={conversation.chatId}
+//                   initial={{ opacity: 0, y: 10 }}
+//                   animate={{ opacity: 1, y: 0 }}
+//                   transition={{ duration: 0.2 }}
+//                   className="flex items-center p-4 hover:bg-gray-800 cursor-pointer transition-colors duration-200"
+//                 >
+//                   <div className="flex-grow" onClick={() => handleSelectConversation(conversation)}>
+//                     <Avatar className="w-10 h-10 relative">
+//                       <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.userId}`} />
+//                       <AvatarFallback>{getFancyName(conversation.userId).slice(0, 2)}</AvatarFallback>
+//                       {unreadChats.has(conversation.chatId) && (
+//                         <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-blue-500 transform translate-x-1/2 -translate-y-1/2"></span>
+//                       )}
+//                     </Avatar>
+//                     <div className="ml-3 flex-grow overflow-hidden">
+//                       <p className="font-medium text-sm text-gray-200">{getFancyName(conversation.userId)}</p>
+//                       <p className="text-xs text-gray-400 truncate">
+//                         {conversation.messages[conversation.messages.length - 1]?.content ?? "No messages"}
+//                       </p>
+//                     </div>
+//                   </div>
+//                   <div className="flex flex-col items-end ml-2">
+//                     <p className="text-xs text-gray-400">
+//                       {getActivityStatus(new Date(conversation.messages[conversation.messages.length - 1].timestamp))}
+//                     </p>
+//                     <TooltipProvider>
+//                       <Tooltip>
+//                         <TooltipTrigger asChild>
+//                           <Button
+//                             variant="ghost"
+//                             size="sm"
+//                             onClick={() => handleDeleteConversation(conversation)}
+//                             className="text-gray-400 hover:text-red-500 mt-1"
+//                           >
+//                             <Trash2 size={18} />
+//                           </Button>
+//                         </TooltipTrigger>
+//                         <TooltipContent>
+//                           <p>Delete conversation</p>
+//                         </TooltipContent>
+//                       </Tooltip>
+//                     </TooltipProvider>
+//                   </div>
+//                 </motion.div>
+//               ))
+//             )}
+//           </ScrollArea>
+//         </>
+//       )}
+//     </div>
+//   )
+// }
+
+// export default AutomationChats
+
 "use client"
 
 import type React from "react"
 import { useState, useEffect, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { MessageCircle, Send, ArrowLeft, Smile, Paperclip, Mic, Trash2 } from "lucide-react"
+import { MessageCircle, Send, ArrowLeft, Smile, Paperclip, Mic, Trash2, Check } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
@@ -6238,7 +6673,6 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     welcome_message: "",
     business_industry: "",
   })
-  const [displayedMessages, setDisplayedMessages] = useState(6)
   const [totalUnreadMessages, setTotalUnreadMessages] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -6301,6 +6735,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
           senderId: selectedConversation.userId,
           receiverId: pageId,
           timestamp: result.userMessage.timestamp,
+          status: "sent",
         }
 
         const botMessage: Message = {
@@ -6347,13 +6782,8 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     return "@Cashe"
   }
 
-  const loadMoreMessages = () => {
-    setDisplayedMessages((prev) => prev + 6)
-  }
-
   const handleSelectConversation = (conversation: Conversation) => {
     setSelectedConversation(conversation)
-    setDisplayedMessages(6)
     setUnreadChats((prev) => {
       const newUnreadChats = new Set(prev)
       newUnreadChats.delete(conversation.chatId)
@@ -6396,18 +6826,18 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   }
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-lg overflow-hidden text-gray-100 border border-[1px] border-gradient-to-br from-green-500 via-red-500 to-orange-500">
+    <div className="h-full flex flex-col bg-background text-foreground border border-primary/10 rounded-lg overflow-hidden">
       {isLoading ? (
-        <div className="p-4 text-gray-300">Loading chats...</div>
+        <div className="p-4 text-muted-foreground">Loading chats...</div>
       ) : error ? (
-        <div className="p-4 text-white-500">Try connecting your Instagram on the integrations tab first.</div>
+        <div className="p-4 text-red-500">Try connecting your Instagram on the integrations tab first.</div>
       ) : !token ? (
-        <div className="p-4 text-white-500">
+        <div className="p-4 text-muted-foreground">
           Instagram not connected yet. Please connect your Instagram account first.
         </div>
       ) : selectedConversation ? (
         <>
-          <div className="p-4 bg-gradient-to-r from-[#2A2A2A] to-[#252525] border-b border-gray-600 flex items-center">
+          <div className="p-4 bg-background border-b border-primary/10 flex items-center">
             <Button variant="ghost" className="mr-4 p-2" onClick={() => setSelectedConversation(null)}>
               <ArrowLeft size={20} />
             </Button>
@@ -6417,28 +6847,16 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
             </Avatar>
             <div className="ml-3 flex-grow">
               <h4 className="font-medium text-lg">{getFancyName(selectedConversation.userId)}</h4>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 {getActivityStatus(
                   new Date(selectedConversation.messages[selectedConversation.messages.length - 1].timestamp),
                 )}
               </p>
             </div>
           </div>
-          <ScrollArea
-            className="flex-grow p-4 bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D]"
-            ref={scrollRef}
-          >
-            {selectedConversation.messages.length > displayedMessages && (
-              <Button
-                variant="ghost"
-                className="w-full text-sm text-gray-400 hover:text-gray-200 mb-4"
-                onClick={loadMoreMessages}
-              >
-                Load more messages
-              </Button>
-            )}
+          <ScrollArea className="flex-grow p-4 bg-background" ref={scrollRef}>
             <AnimatePresence>
-              {selectedConversation.messages.slice(-displayedMessages).map((message) => (
+              {selectedConversation.messages.slice(-4).map((message) => (
                 <motion.div
                   key={message.id}
                   initial={{ opacity: 0, y: 10 }}
@@ -6455,11 +6873,19 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                   )}
                   <div
                     className={`max-w-[75%] p-3 rounded-lg text-sm ${
-                      message.senderId === BOT_ID ? "bg-blue-600 text-white" : "bg-gray-700 text-white"
+                      message.senderId === BOT_ID ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
                     }`}
                   >
                     <p className="break-words">{message.content}</p>
-                    <p className="text-xs text-gray-300 mt-1">{new Date(message.timestamp).toLocaleString()}</p>
+                    <div className="flex justify-between items-center mt-1">
+                      <p className="text-xs text-muted-foreground">{new Date(message.timestamp).toLocaleString()}</p>
+                      {message.senderId !== BOT_ID && message.status === "sent" && (
+                        <div className="flex items-center text-green-500">
+                          <Check size={12} className="mr-1" />
+                          <span className="text-xs">Sent</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   {message.senderId !== BOT_ID && (
                     <Avatar className="w-8 h-8 ml-2">
@@ -6471,14 +6897,14 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
               ))}
             </AnimatePresence>
             {isTyping && (
-              <div className="flex items-center text-gray-400">
+              <div className="flex items-center text-muted-foreground">
                 <span className="animate-pulse mr-2">●</span>
                 <span className="animate-pulse mr-2">●</span>
                 <span className="animate-pulse">●</span>
               </div>
             )}
           </ScrollArea>
-          <div className="p-4 bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] border-t border-gray-600">
+          <div className="p-4 bg-background border-t border-primary/10">
             <div className="flex items-center">
               <Popover>
                 <PopoverTrigger asChild>
@@ -6486,7 +6912,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                     <Smile className="h-5 w-5" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-80 p-0 bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] border-gray-600">
+                <PopoverContent className="w-80 p-0">
                   <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="dark" />
                 </PopoverContent>
               </Popover>
@@ -6496,7 +6922,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                className="flex-grow mx-2 text-sm bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                className="flex-grow mx-2 text-sm bg-muted border-primary/20 text-foreground placeholder-muted-foreground"
               />
               <TooltipProvider>
                 <Tooltip>
@@ -6504,7 +6930,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                     <Button
                       size="icon"
                       onClick={handleSendMessage}
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground"
                     >
                       <Send size={18} />
                     </Button>
@@ -6551,10 +6977,10 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
         </>
       ) : (
         <>
-          <h3 className="text-lg font-semibold p-4 bg-gradient-to-r from-[#2A2A2A] to-[#252525] flex justify-between items-center">
+          <h3 className="text-lg font-semibold p-4 bg-background flex justify-between items-center">
             <span>Recent Chats</span>
             {totalUnreadMessages > 0 && (
-              <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+              <span className="bg-red-500 text-primary-foreground text-xs font-bold px-2 py-1 rounded-full">
                 {totalUnreadMessages}
               </span>
             )}
@@ -6569,25 +6995,25 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="flex items-center p-4 hover:bg-gray-800 cursor-pointer transition-colors duration-200"
+                  className="flex items-center p-4 hover:bg-muted cursor-pointer transition-colors duration-200"
                 >
                   <div className="flex-grow" onClick={() => handleSelectConversation(conversation)}>
                     <Avatar className="w-10 h-10 relative">
                       <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.userId}`} />
                       <AvatarFallback>{getFancyName(conversation.userId).slice(0, 2)}</AvatarFallback>
                       {unreadChats.has(conversation.chatId) && (
-                        <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-blue-500 transform translate-x-1/2 -translate-y-1/2"></span>
+                        <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-primary transform translate-x-1/2 -translate-y-1/2"></span>
                       )}
                     </Avatar>
                     <div className="ml-3 flex-grow overflow-hidden">
-                      <p className="font-medium text-sm text-gray-200">{getFancyName(conversation.userId)}</p>
-                      <p className="text-xs text-gray-400 truncate">
+                      <p className="font-medium text-sm text-foreground">{getFancyName(conversation.userId)}</p>
+                      <p className="text-xs text-muted-foreground truncate">
                         {conversation.messages[conversation.messages.length - 1]?.content ?? "No messages"}
                       </p>
                     </div>
                   </div>
                   <div className="flex flex-col items-end ml-2">
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-muted-foreground">
                       {getActivityStatus(new Date(conversation.messages[conversation.messages.length - 1].timestamp))}
                     </p>
                     <TooltipProvider>
@@ -6597,7 +7023,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleDeleteConversation(conversation)}
-                            className="text-gray-400 hover:text-red-500 mt-1"
+                            className="text-muted-foreground hover:text-red-500 mt-1"
                           >
                             <Trash2 size={18} />
                           </Button>

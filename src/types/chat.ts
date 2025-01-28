@@ -1,23 +1,27 @@
-// export interface Message {
-//     role: 'assistant' | 'user'
-//     content: string
-//     senderId: string
-//     receiverId: string
-//   }
+  // export interface Message {
+  //   id: string
+  //   role: 'assistant' | 'user'
+  //   content: string
+  //   senderId: string
+  //   receiverId: string
+  //   timestamp: Date
+  // }
   
-//   export interface Conversation {
-//     userId: string
-//     messages: Message[]
-//   }
-  
- 
+  // export interface Conversation {
+  //   userId: string
+  //   chatId: string
+  //   messages: Message[]
+  //   unreadCount?: number
+  // }
+
   export interface Message {
     id: string
-    role: 'assistant' | 'user'
+    role: "assistant" | "user"
     content: string
     senderId: string
     receiverId: string
     timestamp: Date
+    status?: "sent" | "delivered" | "read" // Add the status property
   }
   
   export interface Conversation {
@@ -26,15 +30,5 @@
     messages: Message[]
     unreadCount?: number
   }
-    
-  // export interface Message {
-  //   role: "assistant" | "user"
-  //   content: string
-  // }
-  
-  // export interface Conversation {
-  //   userId: string
-  //   messages: Message[]
-  // }
   
   
