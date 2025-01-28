@@ -6,41 +6,34 @@ import { Card, CardContent } from "@/components/ui/card"
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts"
 import type { EngagementData } from "@/types/dashboard"
 
-interface DMDistributionProps {
+interface DMCategoryBreakdownProps {
   data: EngagementData[]
 }
 
-const DMDistribution: React.FC<DMDistributionProps> = ({ data }) => {
-  const distributionData = useMemo(() => {
-    const counts: { [key: string]: number } = {
-      "0-10": 0,
-      "11-20": 0,
-      "21-30": 0,
-      "31-40": 0,
-      "41+": 0,
-    }
+const DMCategoryBreakdown: React.FC<DMCategoryBreakdownProps> = ({ data }) => {
+  const categoryData = useMemo(() => {
+    // Simulating category data
+    const categories = ["General", "Support", "Sales", "Feedback", "Other"]
+    const totalDMs = data.reduce((sum, day) => sum + day.dms, 0)
 
-    data.forEach((day) => {
-      if (day.dms <= 10) counts["0-10"]++
-      else if (day.dms <= 20) counts["11-20"]++
-      else if (day.dms <= 30) counts["21-30"]++
-      else if (day.dms <= 40) counts["31-40"]++
-      else counts["41+"]++
-    })
-
-    return Object.entries(counts).map(([range, value]) => ({ range, value }))
+    return categories
+      .map((category) => ({
+        name: category,
+        value: Math.floor(Math.random() * totalDMs * 0.5), // Random distribution
+      }))
+      .sort((a, b) => b.value - a.value) // Sort by value descending
   }, [data])
 
-  const COLORS = ["#8884d8", "#83a6ed", "#8dd1e1", "#82ca9d", "#a4de6c"]
+  const COLORS = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"]
 
   return (
     <Card className="bg-gray-900 border-gray-800">
       <CardContent className="p-6">
-        <h3 className="text-lg font-semibold mb-4 text-gray-200">DM Distribution</h3>
+        <h3 className="text-lg font-semibold mb-4 text-gray-200">DM Category Breakdown</h3>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
-              data={distributionData}
+              data={categoryData}
               cx="50%"
               cy="50%"
               labelLine={false}
@@ -49,7 +42,7 @@ const DMDistribution: React.FC<DMDistributionProps> = ({ data }) => {
               dataKey="value"
               label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
             >
-              {distributionData.map((entry, index) => (
+              {categoryData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
@@ -65,5 +58,5 @@ const DMDistribution: React.FC<DMDistributionProps> = ({ data }) => {
   )
 }
 
-export default DMDistribution
+export default DMCategoryBreakdown
 
