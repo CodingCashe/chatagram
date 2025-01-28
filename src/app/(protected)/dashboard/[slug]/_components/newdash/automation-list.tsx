@@ -129,11 +129,11 @@ interface Automation {
 
 export function AutomationList({ automations }: { automations: Automation[] }) {
   return (
-    <Card className="w-full bg-gradient-to-br from-[#333333] via-[#2E2E2E] to-[#292929] text-white border border-[#3352CC] shadow-2xl overflow-hidden">
+    <Card className="w-full overflow-hidden bg-gradient-to-br from-primary/5 to-secondary/5 shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader className="relative">
         <CardTitle className="flex items-center space-x-2 z-10">
-          <Activity className="w-6 h-6 text-[#3352CC]" />
-          <span className="text-white">My Automations</span>
+          <Activity className="w-6 h-6 text-primary" />
+          <span className="text-foreground">My Automations</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -147,27 +147,27 @@ export function AutomationList({ automations }: { automations: Automation[] }) {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
               >
-                <Card className="mb-4 bg-[#333333] border border-[#3352CC] hover:bg-[#2E2E2E] transition-all duration-300">
+                <Card className="mb-4 bg-background/50 border border-primary/20 hover:bg-background/70 transition-all duration-300">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="font-semibold text-lg text-white">{automation.name}</h3>
-                        <p className="text-sm text-gray-400">
+                        <h3 className="font-semibold text-lg text-foreground">{automation.name}</h3>
+                        <p className="text-sm text-muted-foreground">
                           Created: {new Date(automation.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                       <div className="relative">
-                        <Power className={`w-6 h-6 ${automation.active ? "text-[#3352CC]" : "text-gray-600"}`} />
+                        <Power className={`w-6 h-6 ${automation.active ? "text-primary" : "text-muted-foreground"}`} />
                         <span
                           className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${
-                            automation.active ? "bg-[#3352CC]" : "bg-gray-600"
+                            automation.active ? "bg-primary" : "bg-muted-foreground"
                           } animate-ping`}
                         ></span>
                       </div>
                     </div>
-                    <div className="mt-2 w-full bg-[#292929] h-1 rounded-full overflow-hidden">
+                    <div className="mt-2 w-full bg-muted h-1 rounded-full overflow-hidden">
                       <motion.div
-                        className="h-full bg-[#3352CC]"
+                        className="h-full bg-primary"
                         initial={{ width: 0 }}
                         animate={{ width: "100%" }}
                         transition={{ duration: 1, delay: index * 0.2 }}

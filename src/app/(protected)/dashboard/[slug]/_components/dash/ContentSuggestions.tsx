@@ -208,15 +208,18 @@ const ContentSuggestions = () => {
   }, [])
 
   return (
-    <Card className="w-full bg-gradient-to-br from-[#333333] via-[#2E2E2E] to-[#292929] text-white border border-[#3352CC] shadow-2xl overflow-hidden">
+    <Card className="w-full overflow-hidden bg-gradient-to-br from-primary/5 to-secondary/5 shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader className="relative">
         <CardTitle className="flex justify-between items-center z-10">
-          <span className="text-white font-bold">AI Content Suggestions</span>
+          <span className="text-foreground font-bold flex items-center">
+            <Sparkles className="w-5 h-5 text-primary mr-2" />
+            AI Content Suggestions
+          </span>
           <Button
             size="sm"
             onClick={generateSuggestions}
             disabled={loading}
-            className="bg-[#3352CC] text-white hover:bg-[#2A41A3] border-none"
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
             Generate
@@ -238,22 +241,22 @@ const ContentSuggestions = () => {
               {suggestions.map((suggestion, index) => (
                 <motion.li
                   key={index}
-                  className="suggestion-item bg-[#333333] p-3 rounded-md border border-[#3352CC] shadow-lg backdrop-filter backdrop-blur-sm transition-all duration-300 ease-in-out hover:bg-[#2E2E2E]"
+                  className="suggestion-item bg-background/50 p-3 rounded-md border border-primary/20 shadow-lg backdrop-filter backdrop-blur-sm transition-all duration-300 ease-in-out hover:bg-background/70"
                   variants={{
                     hidden: { opacity: 0, y: 20 },
                     visible: { opacity: 1, y: 0 },
                   }}
                 >
                   <div className="flex items-start">
-                    <Sparkles className="w-5 h-5 text-[#3352CC] mr-2 mt-1 flex-shrink-0" />
-                    <span>{suggestion}</span>
+                    <Sparkles className="w-5 h-5 text-primary mr-2 mt-1 flex-shrink-0" />
+                    <span className="text-foreground">{suggestion}</span>
                   </div>
                 </motion.li>
               ))}
             </motion.ul>
           ) : (
             <motion.p
-              className="text-center text-gray-400 py-8"
+              className="text-center text-muted-foreground py-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -265,9 +268,9 @@ const ContentSuggestions = () => {
       </CardContent>
       <style jsx>{`
         @keyframes pulse {
-          0% { box-shadow: 0 0 0 0 rgba(51, 82, 204, 0.7); }
-          70% { box-shadow: 0 0 0 10px rgba(51, 82, 204, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(51, 82, 204, 0); }
+          0% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.7); }
+          70% { box-shadow: 0 0 0 10px hsl(var(--primary) / 0); }
+          100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0); }
         }
         .suggestion-item.pulse {
           animation: pulse 1s;
