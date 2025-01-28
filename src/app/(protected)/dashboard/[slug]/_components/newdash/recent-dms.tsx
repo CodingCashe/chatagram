@@ -605,18 +605,18 @@ export function RecentDms({
   }, [groupedDms])
 
   return (
-    <Card className="w-full bg-gradient-to-br from-[#333333] via-[#2E2E2E] to-[#292929] text-white border border-[#3352CC] shadow-2xl relative overflow-hidden">
+    <Card className="w-full overflow-hidden bg-gradient-to-br from-primary/5 to-secondary/5 shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
       <CardHeader className="relative">
         <CardTitle className="flex items-center justify-between space-y-0 pb-2 z-10">
-          <span className="text-white flex items-center">
-            <MessageSquare className="mr-2 h-5 w-5 text-[#3352CC]" />
+          <span className="text-foreground flex items-center">
+            <MessageSquare className="mr-2 h-5 w-5 text-primary" />
             Recent DMs
           </span>
           <Select onValueChange={(value) => setSelectedAutomation(value)}>
-            <SelectTrigger className="w-[180px] bg-[#333333] border-[#3352CC] text-white">
+            <SelectTrigger className="w-[180px] bg-background/50 border-primary/20 text-foreground">
               <SelectValue placeholder="Select Automation" />
             </SelectTrigger>
-            <SelectContent className="bg-[#333333] border-[#3352CC] text-white">
+            <SelectContent className="bg-background/50 border-primary/20 text-foreground">
               {automations.map((automation) => (
                 <SelectItem key={automation.id} value={automation.id}>
                   {automation.name}
@@ -639,7 +639,9 @@ export function RecentDms({
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <div className="text-center text-sm text-gray-400 my-2">{format(new Date(date), "EEEE, MMMM d")}</div>
+                  <div className="text-center text-sm text-muted-foreground my-2">
+                    {format(new Date(date), "EEEE, MMMM d")}
+                  </div>
                   <div className="space-y-4">
                     {messages.map((dm) => {
                       const isClient = dm.senderId === BOT_ID
@@ -662,11 +664,13 @@ export function RecentDms({
                             <motion.div
                               whileHover={{ scale: 1.02 }}
                               className={`max-w-xs px-4 py-2 rounded-2xl shadow-lg ${
-                                isClient ? "bg-[#3352CC] text-white" : "bg-[#333333] text-white border border-[#3352CC]"
+                                isClient
+                                  ? "bg-primary text-primary-foreground"
+                                  : "bg-background/50 text-foreground border border-primary/20"
                               }`}
                             >
                               <p className="text-sm">{dm.message}</p>
-                              <p className="text-xs text-gray-300 mt-1">{formattedTime}</p>
+                              <p className="text-xs text-muted-foreground mt-1">{formattedTime}</p>
                             </motion.div>
                           </div>
                         </motion.div>
@@ -687,7 +691,7 @@ export function RecentDms({
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-[#333333] text-white px-4 py-2 rounded-full shadow-lg z-10 border border-[#3352CC]"
+            className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-background/50 text-foreground px-4 py-2 rounded-full shadow-lg z-10 border border-primary/20"
           >
             {floatingDate}
           </motion.div>

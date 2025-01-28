@@ -121,7 +121,7 @@ type Props = {
 const DoubleGradientCard = ({ description, label, subLabel }: Props) => {
   return (
     <motion.div
-      className="relative border-[1px] border-[#3352CC] p-5 rounded-xl flex flex-col gap-y-20 overflow-hidden bg-gradient-to-br from-[#333333] via-[#2E2E2E] to-[#292929]"
+      className="relative border border-primary/20 p-5 rounded-xl flex flex-col gap-y-20 overflow-hidden bg-gradient-to-br from-primary/5 to-secondary/5 shadow-lg hover:shadow-xl transition-shadow duration-300"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -129,7 +129,7 @@ const DoubleGradientCard = ({ description, label, subLabel }: Props) => {
     >
       <div className="flex flex-col z-40">
         <motion.h2
-          className="text-2xl font-medium text-white"
+          className="text-2xl font-medium text-foreground"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -137,17 +137,15 @@ const DoubleGradientCard = ({ description, label, subLabel }: Props) => {
           {label}
         </motion.h2>
         <motion.p
-          className="text-gray-400 text-sm"
+          className="text-muted-foreground text-sm"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-        >
-          {subLabel}
-        </motion.p>
+        />
       </div>
       <div className="flex justify-between items-center z-40 gap-x-10">
         <motion.p
-          className="text-gray-300 text-sm"
+          className="text-muted-foreground text-sm"
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
@@ -159,8 +157,8 @@ const DoubleGradientCard = ({ description, label, subLabel }: Props) => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.5 }}
         >
-          <Button className="rounded-full bg-[#3352CC] text-white hover:bg-[#2A41A3] w-10 h-10">
-            <ArrowRight color="white" />
+          <Button className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 w-10 h-10">
+            <ArrowRight />
           </Button>
         </motion.div>
       </div>
@@ -168,10 +166,10 @@ const DoubleGradientCard = ({ description, label, subLabel }: Props) => {
       <div className="w-6/12 h-full absolute radial-gradient-bottom top-0 left-1/2 right-0 z-0" />
       <style jsx>{`
         .radial-gradient-top {
-          background: radial-gradient(circle at top left, rgba(51, 82, 204, 0.1), transparent 70%);
+          background: radial-gradient(circle at top left, hsl(var(--primary) / 0.1), transparent 70%);
         }
         .radial-gradient-bottom {
-          background: radial-gradient(circle at bottom right, rgba(51, 82, 204, 0.1), transparent 70%);
+          background: radial-gradient(circle at bottom right, hsl(var(--secondary) / 0.1), transparent 70%);
         }
       `}</style>
     </motion.div>
