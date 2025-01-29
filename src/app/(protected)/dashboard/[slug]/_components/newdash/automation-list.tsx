@@ -137,7 +137,7 @@ export function AutomationList({ automations }: { automations: Automation[] }) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[300px] pr-4">
+        <ScrollArea className="h-[400px] pr-4">
           <AnimatePresence>
             {automations.map((automation, index) => (
               <motion.div
