@@ -12140,7 +12140,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 
   return (
     <div
-      className={`flex flex-col bg-background text-foreground border border-primary/10 rounded-lg overflow-hidden ${selectedConversation ? "h-[calc(100vh-8rem)]" : ""}`}
+      className={`flex flex-col bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] text-foreground border border-primary/10 rounded-lg overflow-hidden ${selectedConversation ? "h-[calc(100vh-8rem)]" : ""}`}
     >
       {isLoading ? (
         <div className="p-4 text-muted-foreground">Loading chats...</div>
