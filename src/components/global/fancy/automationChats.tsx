@@ -11913,7 +11913,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import type { Conversation, Message } from "@/types/chat"
 import data from "@emoji-mart/data"
 import Picker from "@emoji-mart/react"
@@ -12234,49 +12233,16 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
-                      className="flex-grow text-sm bg-muted border-primary/20 text-foreground placeholder-muted-foreground min-h-[48px] max-h-[96px] py-3 px-4 rounded-lg resize-none overflow-hidden"
-                      style={{ height: "48px", transition: "height 0.1s ease" }}
+                      className="flex-grow text-sm bg-muted border-primary/20 text-foreground placeholder-muted-foreground min-h-[24px] max-h-[96px] py-2 px-2 rounded-lg resize-none overflow-hidden"
+                      style={{ height: "24px", transition: "height 0.1s ease" }}
                       onInput={(e) => {
                         const target = e.target as HTMLTextAreaElement
-                        target.style.height = "48px"
+                        target.style.height = "24px"
                         target.style.height = `${target.scrollHeight}px`
                       }}
                     />
                   </div>
                   <div className="flex space-x-1">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className={`h-10 w-10 rounded-full ${isRecording ? "text-red-500" : ""}`}
-                            onClick={handleVoiceMessage}
-                          >
-                            <Mic className="h-5 w-5" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Record voice message</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <label htmlFor="file-upload">
-                            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full">
-                              <Paperclip className="h-5 w-5" />
-                            </Button>
-                          </label>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Attach file</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                  <input type="file" id="file-upload" onChange={handleFileUpload} style={{ display: "none" }} />
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -12293,6 +12259,39 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className={`h-6 w-6 rounded-full ${isRecording ? "text-red-500" : ""}`}
+                            onClick={handleVoiceMessage}
+                          >
+                            <Mic className="h-5 w-5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Record voice message</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <label htmlFor="file-upload">
+                            <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full">
+                              <Paperclip className="h-5 w-5" />
+                            </Button>
+                          </label>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Attach file</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                  <input type="file" id="file-upload" onChange={handleFileUpload} style={{ display: "none" }} />
                 </div>
               </div>
             </>
