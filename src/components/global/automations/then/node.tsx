@@ -21,7 +21,7 @@ const ThenNode = ({ id }: Props) => {
         <span className="h-[9px] w-[9px] bg-connector/10 rounded-full" />
         <Separator
           orientation="vertical"
-          className="bottom-full flex-1 border-[1px] border-connector/10"
+          className="bottom-full flex-1 border-[1px] border-pink-500"
         />
         <span className="h-[9px] w-[9px] bg-connector/10 rounded-full" />
       </div>

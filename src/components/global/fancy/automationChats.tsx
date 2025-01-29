@@ -12192,7 +12192,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                         </Avatar>
                       )}
                       <div
-                        className={`max-w-[75%] p-3 rounded-lg text-sm ${
+                        className={`max-w-[75%] p-3 rounded-lg text-sm border-2 border-primary ${
                           message.senderId === BOT_ID
                             ? "bg-primary text-primary-foreground"
                             : "bg-muted text-foreground"
