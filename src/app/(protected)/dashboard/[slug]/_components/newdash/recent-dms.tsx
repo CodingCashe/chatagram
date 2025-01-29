@@ -1363,20 +1363,41 @@ export function RecentConversations({
 
   console.log("Sorted Conversations:", sortedConversations)
 
+  // const groupedMessages = sortedConversations
+  //   .flatMap((conv) => conv.messages)
+  //   .reduce((groups, message) => {
+  //     try {
+  //       const date = format(new Date(message.createdAt), "yyyy-MM-dd")
+  //       if (!groups[date]) {
+  //         groups[date] = []
+  //       }
+  //       groups[date].push(message)
+  //     } catch (error) {
+  //       console.error("Error grouping messages:", message, error)
+  //     }
+  //     return groups
+  //   }, {} as Record<string, Message[]>)
   const groupedMessages = sortedConversations
-    .flatMap((conv) => conv.messages)
-    .reduce((groups, message) => {
-      try {
-        const date = format(new Date(message.createdAt), "yyyy-MM-dd")
-        if (!groups[date]) {
-          groups[date] = []
-        }
-        groups[date].push(message)
-      } catch (error) {
-        console.error("Error grouping messages:", message, error)
-      }
-      return groups
-    }, {} as Record<string, Message[]>)
+  .flatMap((conv) => conv.messages)
+  .reduce((groups, message) => {
+    console.log("Raw createdAt:", message.createdAt); // ✅ Log the raw date
+    const parsedDate = new Date(message.createdAt);
+
+    if (isNaN(parsedDate.getTime())) {
+      console.error("Invalid date detected:", message.createdAt); // ❌ Log invalid cases
+      return groups;
+    }
+
+    const date = format(parsedDate, "yyyy-MM-dd");
+
+    if (!groups[date]) {
+      groups[date] = [];
+    }
+    groups[date].push(message);
+
+    return groups;
+  }, {} as Record<string, Message[]>);
+
 
   console.log("Grouped Messages:", groupedMessages)
 
