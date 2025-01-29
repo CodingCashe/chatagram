@@ -1123,11 +1123,23 @@ export function RecentConversations({
     ? conversations.filter((conv) => conv.Automation?.id === selectedAutomation)
     : []
 
-  const sortedConversations = [...filteredConversations].sort(
+  // const sortedConversations = [...filteredConversations].sort(
+  //   (a, b) =>
+  //     new Date(b.messages[b.messages.length - 1].createdAt).getTime() -
+  //     new Date(a.messages[a.messages.length - 1].createdAt).getTime(),
+  // )
+  const sortedConversations = [...filteredConversations].map(conv => ({
+    ...conv,
+    messages: conv.messages.map(msg => ({
+      ...msg,
+      createdAt: new Date(msg.createdAt) // Convert timestamp to Date object
+    }))
+  })).sort(
     (a, b) =>
       new Date(b.messages[b.messages.length - 1].createdAt).getTime() -
-      new Date(a.messages[a.messages.length - 1].createdAt).getTime(),
-  )
+      new Date(a.messages[a.messages.length - 1].createdAt).getTime()
+  );
+  
 
   const groupedMessages = sortedConversations
     .flatMap((conv) => conv.messages)
