@@ -11500,7 +11500,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [scrollRef]) // Removed unnecessary dependency: selectedConversation
+  }, [selectedConversation?.messages])
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
@@ -11632,7 +11632,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   )
 
   return (
-    <div className="h-full flex flex-col bg-background text-foreground border border-primary/10 rounded-lg overflow-hidden">
+    <div className="h-[calc(100vh-4rem)] flex flex-col bg-background text-foreground border border-primary/10 rounded-lg overflow-hidden">
       {isLoading ? (
         <div className="p-4 text-muted-foreground">Loading chats...</div>
       ) : error ? (
@@ -11661,7 +11661,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                   </p>
                 </div>
               </div>
-              <div className="flex-grow overflow-y-auto">
+              <div className="flex-grow overflow-y-auto" ref={scrollRef}>
                 <div className="p-4 space-y-4">
                   {selectedConversation.messages.map((message) => (
                     <motion.div
@@ -11710,11 +11710,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                 <div className="flex items-center space-x-2 relative">
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-10 w-10 rounded-full flex-shrink-0 absolute left-2 top-1/2 transform -translate-y-1/2"
-                      >
+                      <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full flex-shrink-0">
                         <Smile className="h-5 w-5" />
                       </Button>
                     </PopoverTrigger>
@@ -11728,7 +11724,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
-                      className="flex-grow text-sm bg-muted border-primary/20 text-foreground placeholder-muted-foreground min-h-[48px] max-h-[96px] py-3 px-12 rounded-lg resize-none overflow-hidden"
+                      className="flex-grow text-sm bg-muted border-primary/20 text-foreground placeholder-muted-foreground min-h-[48px] max-h-[96px] py-3 px-4 rounded-lg resize-none overflow-hidden"
                       style={{ height: "48px", transition: "height 0.1s ease" }}
                       onInput={(e) => {
                         const target = e.target as HTMLTextAreaElement
@@ -11737,28 +11733,54 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                       }}
                     />
                   </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full">
-                        <MoreVertical className="h-5 w-5" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onSelect={handleVoiceMessage}>
-                        <Mic className="mr-2 h-4 w-4" />
-                        <span>Voice message</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onSelect={() => document.getElementById("file-upload")?.click()}>
-                        <Paperclip className="mr-2 h-4 w-4" />
-                        <span>Attach file</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onSelect={handleSendMessage}>
-                        <Send className="mr-2 h-4 w-4" />
-                        <span>Send message</span>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className={`h-10 w-10 rounded-full ${isRecording ? "text-red-500" : ""}`}
+                          onClick={handleVoiceMessage}
+                        >
+                          <Mic className="h-5 w-5" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Record voice message</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <label htmlFor="file-upload">
+                          <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full">
+                            <Paperclip className="h-5 w-5" />
+                          </Button>
+                        </label>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Attach file</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                   <input type="file" id="file-upload" onChange={handleFileUpload} style={{ display: "none" }} />
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          size="icon"
+                          onClick={handleSendMessage}
+                          className="bg-primary hover:bg-primary/90 text-primary-foreground h-10 w-10 rounded-full flex-shrink-0"
+                        >
+                          <Send className="h-5 w-5" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Send message</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
               </div>
             </>
