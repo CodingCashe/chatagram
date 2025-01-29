@@ -1075,217 +1075,6 @@
 //   )
 // }
 
-// "use client"
-
-// import React, { useState, useRef, useEffect } from "react"
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-// import { ScrollArea } from "@/components/ui/scroll-area"
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-// import { motion, AnimatePresence } from "framer-motion"
-// import { format } from "date-fns"
-// import { MessageSquare } from "lucide-react"
-// import PlaceholderChat from "./placeHolder"
-
-// interface Message {
-//   id: string
-//   senderId: string
-//   content: string
-//   createdAt: Date
-// }
-
-// interface Conversation {
-//   id: string
-//   pageId: string
-//   messages: Message[]
-//   Automation: { id: string; name: string } | null
-// }
-
-// interface Automation {
-//   id: string
-//   name: string
-// }
-
-// const BOT_ID = "bot"
-
-// export function RecentConversations({
-//   conversations,
-//   automations,
-// }: {
-//   conversations: Conversation[]
-//   automations: Automation[]
-// }) {
-//   const [selectedAutomation, setSelectedAutomation] = useState<string | null>(null)
-//   const [floatingDate, setFloatingDate] = useState<string | null>(null)
-//   const scrollAreaRef = useRef<HTMLDivElement>(null)
-
-//   const filteredConversations = selectedAutomation
-//     ? conversations.filter((conv) => conv.Automation?.id === selectedAutomation)
-//     : []
-
-//   // const sortedConversations = [...filteredConversations].sort(
-//   //   (a, b) =>
-//   //     new Date(b.messages[b.messages.length - 1].createdAt).getTime() -
-//   //     new Date(a.messages[a.messages.length - 1].createdAt).getTime(),
-//   // )
-//   const sortedConversations = [...filteredConversations].map(conv => ({
-//     ...conv,
-//     messages: conv.messages.map(msg => ({
-//       ...msg,
-//       createdAt: new Date(msg.createdAt) // Convert timestamp to Date object
-//     }))
-//   })).sort(
-//     (a, b) =>
-//       new Date(b.messages[b.messages.length - 1].createdAt).getTime() -
-//       new Date(a.messages[a.messages.length - 1].createdAt).getTime()
-//   );
-  
-
-//   const groupedMessages = sortedConversations
-//     .flatMap((conv) => conv.messages)
-//     .reduce(
-//       (groups, message) => {
-//         const date = format(new Date(message.createdAt), "yyyy-MM-dd")
-//         if (!groups[date]) {
-//           groups[date] = []
-//         }
-//         groups[date].push(message)
-//         return groups
-//       },
-//       {} as Record<string, Message[]>,
-//     )
-
-//   useEffect(() => {
-//     const scrollArea = scrollAreaRef.current
-//     if (scrollArea) {
-//       const handleScroll = () => {
-//         const scrollPosition = scrollArea.scrollTop
-//         const scrollHeight = scrollArea.scrollHeight
-//         const clientHeight = scrollArea.clientHeight
-
-//         let currentDate = null
-//         for (const [date, messages] of Object.entries(groupedMessages)) {
-//           const firstMessageElement = document.getElementById(`date-${date}`)
-//           if (firstMessageElement && firstMessageElement.offsetTop <= scrollPosition) {
-//             currentDate = date
-//           } else {
-//             break
-//           }
-//         }
-
-//         setFloatingDate(currentDate ? format(new Date(currentDate), "EEEE, MMMM d") : null)
-//       }
-
-//       scrollArea.addEventListener("scroll", handleScroll)
-//       return () => scrollArea.removeEventListener("scroll", handleScroll)
-//     }
-//   }, [groupedMessages])
-
-//   return (
-//     <Card className="w-full overflow-hidden bg-gray-900 shadow-lg hover:shadow-xl transition-shadow duration-300 relative border-gray-700">
-//       <CardHeader className="relative">
-//         <CardTitle className="flex items-center justify-between space-y-0 pb-2 z-10">
-//           <span className="text-gray-200 flex items-center">
-//             <MessageSquare className="mr-2 h-5 w-5 text-blue-400" />
-//             Recent Conversations
-//           </span>
-//           <Select onValueChange={(value) => setSelectedAutomation(value)}>
-//             <SelectTrigger className="w-[180px] bg-gray-800 border-gray-700 text-gray-200">
-//               <SelectValue placeholder="Select Automation" />
-//             </SelectTrigger>
-//             <SelectContent className="bg-gray-800 border-gray-700 text-gray-200">
-//               {automations.map((automation) => (
-//                 <SelectItem key={automation.id} value={automation.id}>
-//                   {automation.name}
-//                 </SelectItem>
-//               ))}
-//             </SelectContent>
-//           </Select>
-//         </CardTitle>
-//       </CardHeader>
-//       <CardContent>
-//         <ScrollArea className="h-[400px] pr-4" ref={scrollAreaRef}>
-//           {selectedAutomation ? (
-//             <AnimatePresence>
-//               {Object.entries(groupedMessages).map(([date, messages]) => (
-//                 <motion.div
-//                   key={date}
-//                   id={`date-${date}`}
-//                   initial={{ opacity: 0, y: 20 }}
-//                   animate={{ opacity: 1, y: 0 }}
-//                   exit={{ opacity: 0, y: -20 }}
-//                   transition={{ duration: 0.5 }}
-//                 >
-//                   <div className="text-center text-sm text-gray-400 my-2">{format(new Date(date), "EEEE, MMMM d")}</div>
-//                   <div className="space-y-4">
-//                     {messages.map((message) => {
-//                       const isClient = message.senderId !== BOT_ID
-//                       const formattedTime = format(new Date(message.createdAt), "HH:mm")
-
-//                       return (
-//                         <motion.div
-//                           key={message.id}
-//                           initial={{ opacity: 0, y: 20 }}
-//                           animate={{ opacity: 1, y: 0 }}
-//                           exit={{ opacity: 0, y: -20 }}
-//                           transition={{ duration: 0.3 }}
-//                           className={`flex ${isClient ? "justify-end" : "justify-start"}`}
-//                         >
-//                           <div className={`flex items-end space-x-2 ${isClient ? "flex-row-reverse" : "flex-row"}`}>
-//                             <Avatar className="w-8 h-8">
-//                               <AvatarImage src={isClient ? "/placeholder-user.jpg" : "/placeholder-bot.jpg"} />
-//                               <AvatarFallback>{isClient ? "C" : "B"}</AvatarFallback>
-//                             </Avatar>
-//                             <motion.div
-//                               whileHover={{ scale: 1.02 }}
-//                               className={`max-w-xs px-4 py-2 rounded-2xl shadow-lg ${
-//                                 isClient
-//                                   ? "bg-blue-600 text-white chat-bubble-client"
-//                                   : "bg-gray-700 text-gray-200 border border-gray-600 chat-bubble-bot"
-//                               }`}
-//                             >
-//                               <p className="text-sm">{message.content}</p>
-//                               <p className="text-xs text-gray-400 mt-1">{formattedTime}</p>
-//                             </motion.div>
-//                           </div>
-//                         </motion.div>
-//                       )
-//                     })}
-//                   </div>
-//                 </motion.div>
-//               ))}
-//             </AnimatePresence>
-//           ) : (
-//             <PlaceholderChat />
-//           )}
-//         </ScrollArea>
-//       </CardContent>
-//       <AnimatePresence>
-//         {floatingDate && (
-//           <motion.div
-//             initial={{ opacity: 0, y: -20 }}
-//             animate={{ opacity: 1, y: 0 }}
-//             exit={{ opacity: 0, y: -20 }}
-//             className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-gray-800 text-gray-200 px-4 py-2 rounded-full shadow-lg z-10 border border-gray-700"
-//           >
-//             {floatingDate}
-//           </motion.div>
-//         )}
-//       </AnimatePresence>
-//       <style jsx global>{`
-//         .chat-bubble-client {
-//           clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 95% 75%, 95% 100%, 85% 75%, 0% 75%);
-//           padding-bottom: 15px;
-//         }
-//         .chat-bubble-bot {
-//           clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 15% 75%, 5% 100%, 5% 75%, 0% 75%);
-//           padding-bottom: 15px;
-//         }
-//       `}</style>
-//     </Card>
-//   )
-// }
-
 "use client"
 
 import React, { useState, useRef, useEffect } from "react"
@@ -1330,115 +1119,71 @@ export function RecentConversations({
   const [floatingDate, setFloatingDate] = useState<string | null>(null)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
 
-  console.log("Initial Conversations:", conversations)
-  console.log("Available Automations:", automations)
-
   const filteredConversations = selectedAutomation
     ? conversations.filter((conv) => conv.Automation?.id === selectedAutomation)
     : []
-  console.log("Filtered Conversations:", filteredConversations)
 
-  const sortedConversations = [...filteredConversations].map(conv => ({
-    ...conv,
-    messages: conv.messages.map(msg => {
-      try {
-        return {
-          ...msg,
-          createdAt: new Date(msg.createdAt)
-        }
-      } catch (error) {
-        console.error("Error parsing message date:", msg, error)
-        return msg
-      }
-    })
-  })).sort((a, b) => {
-    try {
-      return new Date(b.messages[b.messages.length - 1].createdAt).getTime() -
-        new Date(a.messages[a.messages.length - 1].createdAt).getTime()
-    } catch (error) {
-      console.error("Error sorting conversations:", error)
-      return 0
-    }
-  })
+  const sortedConversations = [...filteredConversations].sort(
+    (a, b) =>
+      new Date(b.messages[b.messages.length - 1].createdAt).getTime() -
+      new Date(a.messages[a.messages.length - 1].createdAt).getTime(),
+  )
 
-  console.log("Sorted Conversations:", sortedConversations)
+  
 
-  // const groupedMessages = sortedConversations
-  //   .flatMap((conv) => conv.messages)
-  //   .reduce((groups, message) => {
-  //     try {
-  //       const date = format(new Date(message.createdAt), "yyyy-MM-dd")
-  //       if (!groups[date]) {
-  //         groups[date] = []
-  //       }
-  //       groups[date].push(message)
-  //     } catch (error) {
-  //       console.error("Error grouping messages:", message, error)
-  //     }
-  //     return groups
-  //   }, {} as Record<string, Message[]>)
   const groupedMessages = sortedConversations
-  .flatMap((conv) => conv.messages)
-  .reduce((groups, message) => {
-    console.log("Raw createdAt:", message.createdAt); // ✅ Log the raw date
-    const parsedDate = new Date(message.createdAt);
-
-    if (isNaN(parsedDate.getTime())) {
-      console.error("Invalid date detected:", message.createdAt); // ❌ Log invalid cases
-      return groups;
-    }
-
-    const date = format(parsedDate, "yyyy-MM-dd");
-
-    if (!groups[date]) {
-      groups[date] = [];
-    }
-    groups[date].push(message);
-
-    return groups;
-  }, {} as Record<string, Message[]>);
-
-
-  console.log("Grouped Messages:", groupedMessages)
+    .flatMap((conv) => conv.messages)
+    .reduce(
+      (groups, message) => {
+        const date = format(new Date(message.createdAt), "yyyy-MM-dd")
+        if (!groups[date]) {
+          groups[date] = []
+        }
+        groups[date].push(message)
+        return groups
+      },
+      {} as Record<string, Message[]>,
+    )
 
   useEffect(() => {
     const scrollArea = scrollAreaRef.current
     if (scrollArea) {
       const handleScroll = () => {
-        try {
-          const scrollPosition = scrollArea.scrollTop
-          let currentDate = null
-          for (const [date] of Object.entries(groupedMessages)) {
-            const firstMessageElement = document.getElementById(`date-${date}`)
-            if (firstMessageElement && firstMessageElement.offsetTop <= scrollPosition) {
-              currentDate = date
-            } else {
-              break
-            }
+        const scrollPosition = scrollArea.scrollTop
+        const scrollHeight = scrollArea.scrollHeight
+        const clientHeight = scrollArea.clientHeight
+
+        let currentDate = null
+        for (const [date, messages] of Object.entries(groupedMessages)) {
+          const firstMessageElement = document.getElementById(`date-${date}`)
+          if (firstMessageElement && firstMessageElement.offsetTop <= scrollPosition) {
+            currentDate = date
+          } else {
+            break
           }
-          setFloatingDate(currentDate ? format(new Date(currentDate), "EEEE, MMMM d") : null)
-        } catch (error) {
-          console.error("Error handling scroll:", error)
         }
+
+        setFloatingDate(currentDate ? format(new Date(currentDate), "EEEE, MMMM d") : null)
       }
+
       scrollArea.addEventListener("scroll", handleScroll)
       return () => scrollArea.removeEventListener("scroll", handleScroll)
     }
   }, [groupedMessages])
 
   return (
-    <Card className="w-full overflow-hidden bg-gray-900 shadow-lg hover:shadow-xl relative border-gray-700">
-      <CardHeader>
-        <CardTitle>
+    <Card className="w-full overflow-hidden bg-gray-900 shadow-lg hover:shadow-xl transition-shadow duration-300 relative border-gray-700">
+      <CardHeader className="relative">
+        <CardTitle className="flex items-center justify-between space-y-0 pb-2 z-10">
           <span className="text-gray-200 flex items-center">
             <MessageSquare className="mr-2 h-5 w-5 text-blue-400" />
             Recent Conversations
           </span>
           <Select onValueChange={(value) => setSelectedAutomation(value)}>
-            <SelectTrigger>
+            <SelectTrigger className="w-[180px] bg-gray-800 border-gray-700 text-gray-200">
               <SelectValue placeholder="Select Automation" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-gray-800 border-gray-700 text-gray-200">
               {automations.map((automation) => (
                 <SelectItem key={automation.id} value={automation.id}>
                   {automation.name}
@@ -1450,9 +1195,254 @@ export function RecentConversations({
       </CardHeader>
       <CardContent>
         <ScrollArea className="h-[400px] pr-4" ref={scrollAreaRef}>
-          {selectedAutomation ? <PlaceholderChat /> : <p className="text-gray-400">Select an automation.</p>}
+          {selectedAutomation ? (
+            <AnimatePresence>
+              {Object.entries(groupedMessages).map(([date, messages]) => (
+                <motion.div
+                  key={date}
+                  id={`date-${date}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <div className="text-center text-sm text-gray-400 my-2">{format(new Date(date), "EEEE, MMMM d")}</div>
+                  <div className="space-y-4">
+                    {messages.map((message) => {
+                      const isClient = message.senderId !== BOT_ID
+                      const formattedTime = format(new Date(message.createdAt), "HH:mm")
+
+                      return (
+                        <motion.div
+                          key={message.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -20 }}
+                          transition={{ duration: 0.3 }}
+                          className={`flex ${isClient ? "justify-end" : "justify-start"}`}
+                        >
+                          <div className={`flex items-end space-x-2 ${isClient ? "flex-row-reverse" : "flex-row"}`}>
+                            <Avatar className="w-8 h-8">
+                              <AvatarImage src={isClient ? "/placeholder-user.jpg" : "/placeholder-bot.jpg"} />
+                              <AvatarFallback>{isClient ? "C" : "B"}</AvatarFallback>
+                            </Avatar>
+                            <motion.div
+                              whileHover={{ scale: 1.02 }}
+                              className={`max-w-xs px-4 py-2 rounded-2xl shadow-lg ${
+                                isClient
+                                  ? "bg-blue-600 text-white chat-bubble-client"
+                                  : "bg-gray-700 text-gray-200 border border-gray-600 chat-bubble-bot"
+                              }`}
+                            >
+                              <p className="text-sm">{message.content}</p>
+                              <p className="text-xs text-gray-400 mt-1">{formattedTime}</p>
+                            </motion.div>
+                          </div>
+                        </motion.div>
+                      )
+                    })}
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          ) : (
+            <PlaceholderChat />
+          )}
         </ScrollArea>
       </CardContent>
+      <AnimatePresence>
+        {floatingDate && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-gray-800 text-gray-200 px-4 py-2 rounded-full shadow-lg z-10 border border-gray-700"
+          >
+            {floatingDate}
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <style jsx global>{`
+        .chat-bubble-client {
+          clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 95% 75%, 95% 100%, 85% 75%, 0% 75%);
+          padding-bottom: 15px;
+        }
+        .chat-bubble-bot {
+          clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 15% 75%, 5% 100%, 5% 75%, 0% 75%);
+          padding-bottom: 15px;
+        }
+      `}</style>
     </Card>
   )
 }
+
+// "use client"
+
+// import React, { useState, useRef, useEffect } from "react"
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+// import { ScrollArea } from "@/components/ui/scroll-area"
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+// import { motion, AnimatePresence } from "framer-motion"
+// import { format } from "date-fns"
+// import { MessageSquare } from "lucide-react"
+// import PlaceholderChat from "./placeHolder"
+
+// interface Message {
+//   id: string
+//   senderId: string
+//   content: string
+//   createdAt: Date
+// }
+
+// interface Conversation {
+//   id: string
+//   pageId: string
+//   messages: Message[]
+//   Automation: { id: string; name: string } | null
+// }
+
+// interface Automation {
+//   id: string
+//   name: string
+// }
+
+// const BOT_ID = "bot"
+
+// export function RecentConversations({
+//   conversations,
+//   automations,
+// }: {
+//   conversations: Conversation[]
+//   automations: Automation[]
+// }) {
+//   const [selectedAutomation, setSelectedAutomation] = useState<string | null>(null)
+//   const [floatingDate, setFloatingDate] = useState<string | null>(null)
+//   const scrollAreaRef = useRef<HTMLDivElement>(null)
+
+//   console.log("Initial Conversations:", conversations)
+//   console.log("Available Automations:", automations)
+
+//   const filteredConversations = selectedAutomation
+//     ? conversations.filter((conv) => conv.Automation?.id === selectedAutomation)
+//     : []
+//   console.log("Filtered Conversations:", filteredConversations)
+
+//   const sortedConversations = [...filteredConversations].map(conv => ({
+//     ...conv,
+//     messages: conv.messages.map(msg => {
+//       try {
+//         return {
+//           ...msg,
+//           createdAt: new Date(msg.createdAt)
+//         }
+//       } catch (error) {
+//         console.error("Error parsing message date:", msg, error)
+//         return msg
+//       }
+//     })
+//   })).sort((a, b) => {
+//     try {
+//       return new Date(b.messages[b.messages.length - 1].createdAt).getTime() -
+//         new Date(a.messages[a.messages.length - 1].createdAt).getTime()
+//     } catch (error) {
+//       console.error("Error sorting conversations:", error)
+//       return 0
+//     }
+//   })
+
+//   console.log("Sorted Conversations:", sortedConversations)
+
+//   // const groupedMessages = sortedConversations
+//   //   .flatMap((conv) => conv.messages)
+//   //   .reduce((groups, message) => {
+//   //     try {
+//   //       const date = format(new Date(message.createdAt), "yyyy-MM-dd")
+//   //       if (!groups[date]) {
+//   //         groups[date] = []
+//   //       }
+//   //       groups[date].push(message)
+//   //     } catch (error) {
+//   //       console.error("Error grouping messages:", message, error)
+//   //     }
+//   //     return groups
+//   //   }, {} as Record<string, Message[]>)
+//   const groupedMessages = sortedConversations
+//   .flatMap((conv) => conv.messages)
+//   .reduce((groups, message) => {
+//     console.log("Raw createdAt:", message.createdAt); // ✅ Log the raw date
+//     const parsedDate = new Date(message.createdAt);
+
+//     if (isNaN(parsedDate.getTime())) {
+//       console.error("Invalid date detected:", message.createdAt); // ❌ Log invalid cases
+//       return groups;
+//     }
+
+//     const date = format(parsedDate, "yyyy-MM-dd");
+
+//     if (!groups[date]) {
+//       groups[date] = [];
+//     }
+//     groups[date].push(message);
+
+//     return groups;
+//   }, {} as Record<string, Message[]>);
+
+
+//   console.log("Grouped Messages:", groupedMessages)
+
+//   useEffect(() => {
+//     const scrollArea = scrollAreaRef.current
+//     if (scrollArea) {
+//       const handleScroll = () => {
+//         try {
+//           const scrollPosition = scrollArea.scrollTop
+//           let currentDate = null
+//           for (const [date] of Object.entries(groupedMessages)) {
+//             const firstMessageElement = document.getElementById(`date-${date}`)
+//             if (firstMessageElement && firstMessageElement.offsetTop <= scrollPosition) {
+//               currentDate = date
+//             } else {
+//               break
+//             }
+//           }
+//           setFloatingDate(currentDate ? format(new Date(currentDate), "EEEE, MMMM d") : null)
+//         } catch (error) {
+//           console.error("Error handling scroll:", error)
+//         }
+//       }
+//       scrollArea.addEventListener("scroll", handleScroll)
+//       return () => scrollArea.removeEventListener("scroll", handleScroll)
+//     }
+//   }, [groupedMessages])
+
+//   return (
+//     <Card className="w-full overflow-hidden bg-gray-900 shadow-lg hover:shadow-xl relative border-gray-700">
+//       <CardHeader>
+//         <CardTitle>
+//           <span className="text-gray-200 flex items-center">
+//             <MessageSquare className="mr-2 h-5 w-5 text-blue-400" />
+//             Recent Conversations
+//           </span>
+//           <Select onValueChange={(value) => setSelectedAutomation(value)}>
+//             <SelectTrigger>
+//               <SelectValue placeholder="Select Automation" />
+//             </SelectTrigger>
+//             <SelectContent>
+//               {automations.map((automation) => (
+//                 <SelectItem key={automation.id} value={automation.id}>
+//                   {automation.name}
+//                 </SelectItem>
+//               ))}
+//             </SelectContent>
+//           </Select>
+//         </CardTitle>
+//       </CardHeader>
+//       <CardContent>
+//         <ScrollArea className="h-[400px] pr-4" ref={scrollAreaRef}>
+//           {selectedAutomation ? <PlaceholderChat /> : <p className="text-gray-400">Select an automation.</p>}
+//         </ScrollArea>
+//       </CardContent>
+//     </Card>
+//   )
+// }
