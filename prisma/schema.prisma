@@ -81,6 +81,7 @@ model Automation {
   posts     Post[]
   dms       Dms[]
   messages  Message[]
+  conversations Conversation[]
   User      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String?   @db.Uuid
   keywords  Keyword[]
@@ -96,6 +97,23 @@ model Message {
   Automation   Automation? @relation(fields: [automationId], references: [id])
   automationId String?      @db.Uuid
 }
+
+
+
+// Add this new model to your existing schema
+model Conversation {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pageId       String    @unique
+  messages     Json[]    // This will store an array of message objects
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  Automation   Automation? @relation(fields: [automationId], references: [id])
+  automationId String?    @db.Uuid
+}
+
+// Keep your existing Message model as it is
+
+
 
 model Dms {
   id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid

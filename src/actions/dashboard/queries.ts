@@ -389,7 +389,7 @@
 "use server"
 
 import { client } from "@/lib/prisma"
-import type { Automation } from "@/types/dashboard"
+import type { Automation ,Conversation} from "@/types/dashboard"
 
 export async function getDashboardDataQuery(userId: string) {
   const user = await client.user.findUnique({
@@ -425,27 +425,6 @@ export async function getDashboardDataQuery(userId: string) {
     activeConversations,
   }
 }
-
-// export async function getEngagementDataForAutomationQuery(automationId: string) {
-//   const sixMonthsAgo = new Date()
-//   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
-
-//   return await client.dms.groupBy({
-//     by: ["createdAt"],
-//     where: {
-//       automationId: automationId,
-//       createdAt: {
-//         gte: sixMonthsAgo,
-//       },
-//     },
-//     _count: {
-//       id: true,
-//     },
-//     orderBy: {
-//       createdAt: "asc",
-//     },
-//   })
-// }
 
 export async function getCommentDataForAutomationQuery(automationId: string) {
   const sixMonthsAgo = new Date()
@@ -519,28 +498,6 @@ export async function getAutomationsForUserQuery(userId: string): Promise<Automa
 }
 
 
-
-// export async function getEngagementDataForAutomationQuery(automationId: string) {
-//   const sixMonthsAgo = new Date()
-//   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
-
-//   return await client.dms.groupBy({
-//     by: ["createdAt"],
-//     where: {
-//       automationId: automationId,
-//       createdAt: {
-//         gte: sixMonthsAgo,
-//       },
-//     },
-//     _count: {
-//       id: true,
-//     },
-//     orderBy: {
-//       createdAt: "asc",
-//     },
-//   })
-// }
-
 export async function getEngagementDataForAutomationQuery(automationId: string) {
   const sixMonthsAgo = new Date()
   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
@@ -561,4 +518,30 @@ export async function getEngagementDataForAutomationQuery(automationId: string) 
     },
   })
 }
+
+
+export async function getConversationsForUserQuery(userId: string): Promise<Conversation[]> {
+  const conversations = await client.conversation.findMany({
+    where: { Automation: { User: { clerkId: userId } } },
+    include: {
+      Automation: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  })
+
+  return conversations.map((conversation) => ({
+    id: conversation.id,
+    pageId: conversation.pageId,
+    messages: conversation.messages as any[], // Type assertion needed due to JsonValue[]
+    createdAt: conversation.createdAt,
+    updatedAt: conversation.updatedAt,
+    Automation: conversation.Automation,
+  }))
+}
+
+
 
