@@ -12140,7 +12140,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 
   return (
     <div
-      className={`flex flex-col bg-background text-foreground border border-primary/10 rounded-lg overflow-hidden ${selectedConversation ? "h-[calc(100vh-4rem)]" : ""}`}
+      className={`flex flex-col bg-background text-foreground border border-primary/10 rounded-lg overflow-hidden ${selectedConversation ? "h-[calc(100vh-6rem)]" : ""}`}
     >
       {isLoading ? (
         <div className="p-4 text-muted-foreground">Loading chats...</div>
@@ -12219,11 +12219,11 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                 <div className="flex items-center space-x-2 relative">
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full flex-shrink-0">
+                      <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full flex-shrink-0">
                         <Smile className="h-5 w-5" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-80 p-0">
+                    <PopoverContent className="w-60 p-0">
                       <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="dark" />
                     </PopoverContent>
                   </Popover>
@@ -12233,11 +12233,11 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
-                      className="flex-grow text-sm bg-muted border-primary/20 text-foreground placeholder-muted-foreground min-h-[24px] max-h-[96px] py-2 px-2 rounded-lg resize-none overflow-hidden"
-                      style={{ height: "24px", transition: "height 0.1s ease" }}
+                      className="flex-grow text-sm bg-muted border-primary/20 text-foreground placeholder-muted-foreground min-h-[36px] max-h-[96px] py-2 px-2 rounded-lg resize-none overflow-hidden"
+                      style={{ height: "36px", transition: "height 0.1s ease" }}
                       onInput={(e) => {
                         const target = e.target as HTMLTextAreaElement
-                        target.style.height = "24px"
+                        target.style.height = "36px"
                         target.style.height = `${target.scrollHeight}px`
                       }}
                     />
