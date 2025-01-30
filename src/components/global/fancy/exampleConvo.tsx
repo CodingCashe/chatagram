@@ -376,9 +376,9 @@
 
 // export default ExampleConversations
 
-import type React from "react"
-import type { Conversation } from "@/types/chat"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+// File: src/components/exampleConvo.tsx
+import React from 'react'
+import { Conversation } from '@/types/chat'
 
 interface ExampleConversationsProps {
   onSelectConversation: (conversation: Conversation) => void
@@ -386,72 +386,42 @@ interface ExampleConversationsProps {
 }
 
 const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation, className }) => {
-  const conversations: Conversation[] = [
+  const exampleConversations: Conversation[] = [
     {
-      userId: "user1",
-      chatId: "chat1",
+      id: '1',
+      pageId: 'example1',
       messages: [
         {
-          id: "1",
-          role: "user",
-          content: "Hello, how are you today?",
-          senderId: "user1",
-          receiverId: "bot",
-          timestamp: new Date(),
-          status: "sent",
+          role: 'user',
+          content: 'Hello, I have a question about your product.',
+          senderId: 'user1',
+          createdAt: new Date()
         },
-      ],
-    },
-    {
-      userId: "user2",
-      chatId: "chat2",
-      messages: [
         {
-          id: "2",
-          role: "user",
-          content: "I am doing well, thank you!",
-          senderId: "user2",
-          receiverId: "bot",
-          timestamp: new Date(),
-          status: "sent",
-        },
+          role: 'assistant',
+          content: 'Of course! Id be happy to help. What would you like to know?',
+          senderId: 'assistant',
+          createdAt: new Date()
+        }
       ],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      unreadCount: 0,
+      Automation: null
     },
-    {
-      userId: "user3",
-      chatId: "chat3",
-      messages: [
-        {
-          id: "3",
-          role: "user",
-          content: "Great to hear!",
-          senderId: "user3",
-          receiverId: "bot",
-          timestamp: new Date(),
-          status: "sent",
-        },
-      ],
-    },
+    // Add more example conversations as needed
   ]
 
   return (
-    <div className={`space-y-4 ${className}`}>
-      {conversations.map((conversation) => (
+    <div className={className}>
+      {exampleConversations.map((conversation) => (
         <div
-          key={conversation.chatId}
+          key={conversation.id}
           onClick={() => onSelectConversation(conversation)}
-          className="flex items-center p-3 rounded-lg border border-gray-200 hover:border-gray-400 cursor-pointer"
+          className="cursor-pointer p-2 hover:bg-gray-100"
         >
-          <Avatar className="w-10 h-10 mr-3 border-2 border-primary">
-            <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.userId}`} />
-            <AvatarFallback>{conversation.userId.slice(0, 2).toUpperCase()}</AvatarFallback>
-          </Avatar>
-          <div className="flex-grow min-w-0">
-            <p className="font-medium text-sm text-foreground truncate">{conversation.userId}</p>
-            <p className="text-xs text-muted-foreground truncate">
-              {conversation.messages[0].content.split(" ").slice(0, 2).join(" ")}...
-            </p>
-          </div>
+          <h3>Conversation {conversation.id}</h3>
+          <p>{conversation.messages[conversation.messages.length - 1].content}</p>
         </div>
       ))}
     </div>
@@ -459,4 +429,3 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
 }
 
 export default ExampleConversations
-

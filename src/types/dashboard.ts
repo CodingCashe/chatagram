@@ -1,7 +1,15 @@
+// export interface Message {
+//   role: "user" | "assistant"
+//   content: string
+//   senderId: string
+//   createdAt: Date
+// }
+
+
 export interface Message {
-  id: string
-  senderId: string
+  role: "user" | "assistant"
   content: string
+  senderId: string
   createdAt: Date
 }
 
@@ -17,6 +25,20 @@ export interface Conversation {
     name: string
   } | null
 }
+
+
+// export interface Conversation {
+//   id: string
+//   pageId: string
+//   messages: Message[]
+//   createdAt: Date
+//   updatedAt: Date
+//   unreadCount?: number
+//   Automation: {
+//     id: string
+//     name: string
+//   } | null
+// }
 
 export interface Automation {
   id: string

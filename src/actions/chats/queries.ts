@@ -691,113 +691,177 @@
 
 //WWOORKIIING
 
+// "use server"
+// import { client } from "@/lib/prisma"
+// import type { Message, Conversation } from "@/types/chat"
+
+// export const createMessage = async (
+//   pageId: string,
+//   senderId: string,
+//   message: string,
+//   isFromBot: boolean,
+//   automationId: string | null,
+// ) => {
+//   return await client.message.create({
+//     data: {
+//       pageId,
+//       senderId,
+//       message,
+//       isFromBot,
+//       ...(automationId && { Automation: { connect: { id: automationId } } }),
+//     },
+//   })
+// }
+
+// export const getMessages = async (pageId: string, senderId: string) => {
+//   return await client.message.findMany({
+//     where: {
+//       pageId,
+//       OR: [{ senderId }, { senderId: pageId }],
+//     },
+//     orderBy: { createdAt: "asc" },
+//   })
+// }
+
+// export const storeConversation = async (
+//   pageId: string,
+//   senderId: string,
+//   userMessage: string,
+//   botResponse: string,
+//   automationId: string | null,
+// ) => {
+//   return await client.$transaction([
+//     client.message.create({
+//       data: {
+//         pageId,
+//         senderId,
+//         message: userMessage,
+//         isFromBot: false,
+//         ...(automationId && { Automation: { connect: { id: automationId } } }),
+//       },
+//     }),
+//     client.message.create({
+//       data: {
+//         pageId,
+//         senderId: pageId,
+//         message: botResponse,
+//         isFromBot: true,
+//         ...(automationId && { Automation: { connect: { id: automationId } } }),
+//       },
+//     }),
+//   ])
+// }
+
+// export const getConversationHistory = async (automationId: string): Promise<Conversation[]> => {
+//   const messages = await client.message.findMany({
+//     where: { automationId },
+//     orderBy: { createdAt: "asc" },
+//   })
+
+//   const chatSession: Message[] = messages.map((message) => ({
+//     id: message.id, // Add this line to include the message ID
+//     role: message.isFromBot ? "assistant" : "user",
+//     content: message.message,
+//     senderId: message.senderId,
+//     receiverId: message.pageId,
+//     timestamp: message.createdAt, // Add this line to include the timestamp
+//   }))
+
+//   const groupedChats = chatSession.reduce(
+//     (acc, message) => {
+//       const key = message.role === "assistant" ? message.receiverId : message.senderId
+//       if (!acc[key]) {
+//         acc[key] = {
+//           chatId: key, // Use the key (senderId or receiverId) as the chatId
+//           messages: [],
+//         }
+//       }
+//       acc[key].messages.push(message)
+//       return acc
+//     },
+//     {} as Record<string, { chatId: string; messages: Message[] }>,
+//   )
+
+//   return Object.entries(groupedChats).map(([userId, { chatId, messages }]) => ({
+//     userId,
+//     chatId,
+//     messages,
+//   }))
+// }
+
+// export const deleteConversation = async (pageId: string, senderId: string) => {
+//   return await client.message.deleteMany({
+//     where: {
+//       pageId,
+//       OR: [{ senderId }, { senderId: pageId }],
+//     },
+//   })
+// }
+
+
+// export const storeConversationMessage = async (
+//   pageId: string,
+//   senderId: string,
+//   message: string,
+//   isFromBot: boolean,
+//   automationId: string | null,
+// ) => {
+//   const conversation = await client.conversation.upsert({
+//     where: { pageId },
+//     update: {
+//       messages: {
+//         push: {
+//           role: isFromBot ? "assistant" : "user",
+//           content: message,
+//           senderId,
+//           createdAt: new Date(),
+//         },
+//       },
+//       updatedAt: new Date(),
+//     },
+//     create: {
+//       pageId,
+//       messages: [
+//         {
+//           role: isFromBot ? "assistant" : "user",
+//           content: message,
+//           senderId,
+//           createdAt: new Date(),
+//         },
+//       ],
+//       ...(automationId && { Automation: { connect: { id: automationId } } }),
+//     },
+//   })
+
+//   return conversation
+// }
+
+// export const getConversation = async (pageId: string) => {
+//   return await client.conversation.findUnique({
+//     where: { pageId },
+//   })
+// }
+
+// export const getConversationHistori = async (automationId: string) => {
+//   const conversations = await client.conversation.findMany({
+//     where: { automationId },
+//   })
+
+//   return conversations.map((conversation) => ({
+//     pageId: conversation.pageId,
+//     chatId: conversation.id,
+//     messages: conversation.messages,
+//   }))
+// }
+
+// export const deleteConversatione = async (pageId: string) => {
+//   return await client.conversation.delete({
+//     where: { pageId },
+//   })
+// }
+
 "use server"
 import { client } from "@/lib/prisma"
-import type { Message, Conversation } from "@/types/chat"
-
-export const createMessage = async (
-  pageId: string,
-  senderId: string,
-  message: string,
-  isFromBot: boolean,
-  automationId: string | null,
-) => {
-  return await client.message.create({
-    data: {
-      pageId,
-      senderId,
-      message,
-      isFromBot,
-      ...(automationId && { Automation: { connect: { id: automationId } } }),
-    },
-  })
-}
-
-export const getMessages = async (pageId: string, senderId: string) => {
-  return await client.message.findMany({
-    where: {
-      pageId,
-      OR: [{ senderId }, { senderId: pageId }],
-    },
-    orderBy: { createdAt: "asc" },
-  })
-}
-
-export const storeConversation = async (
-  pageId: string,
-  senderId: string,
-  userMessage: string,
-  botResponse: string,
-  automationId: string | null,
-) => {
-  return await client.$transaction([
-    client.message.create({
-      data: {
-        pageId,
-        senderId,
-        message: userMessage,
-        isFromBot: false,
-        ...(automationId && { Automation: { connect: { id: automationId } } }),
-      },
-    }),
-    client.message.create({
-      data: {
-        pageId,
-        senderId: pageId,
-        message: botResponse,
-        isFromBot: true,
-        ...(automationId && { Automation: { connect: { id: automationId } } }),
-      },
-    }),
-  ])
-}
-
-export const getConversationHistory = async (automationId: string): Promise<Conversation[]> => {
-  const messages = await client.message.findMany({
-    where: { automationId },
-    orderBy: { createdAt: "asc" },
-  })
-
-  const chatSession: Message[] = messages.map((message) => ({
-    id: message.id, // Add this line to include the message ID
-    role: message.isFromBot ? "assistant" : "user",
-    content: message.message,
-    senderId: message.senderId,
-    receiverId: message.pageId,
-    timestamp: message.createdAt, // Add this line to include the timestamp
-  }))
-
-  const groupedChats = chatSession.reduce(
-    (acc, message) => {
-      const key = message.role === "assistant" ? message.receiverId : message.senderId
-      if (!acc[key]) {
-        acc[key] = {
-          chatId: key, // Use the key (senderId or receiverId) as the chatId
-          messages: [],
-        }
-      }
-      acc[key].messages.push(message)
-      return acc
-    },
-    {} as Record<string, { chatId: string; messages: Message[] }>,
-  )
-
-  return Object.entries(groupedChats).map(([userId, { chatId, messages }]) => ({
-    userId,
-    chatId,
-    messages,
-  }))
-}
-
-export const deleteConversation = async (pageId: string, senderId: string) => {
-  return await client.message.deleteMany({
-    where: {
-      pageId,
-      OR: [{ senderId }, { senderId: pageId }],
-    },
-  })
-}
-
 
 export const storeConversationMessage = async (
   pageId: string,
@@ -842,7 +906,7 @@ export const getConversation = async (pageId: string) => {
   })
 }
 
-export const getConversationHistori = async (automationId: string) => {
+export const getConversationHistory = async (automationId: string) => {
   const conversations = await client.conversation.findMany({
     where: { automationId },
   })
@@ -854,7 +918,7 @@ export const getConversationHistori = async (automationId: string) => {
   }))
 }
 
-export const deleteConversatione = async (pageId: string) => {
+export const deleteConversation = async (pageId: string) => {
   return await client.conversation.delete({
     where: { pageId },
   })

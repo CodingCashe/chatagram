@@ -1283,7 +1283,7 @@ export default async function DashboardPage() {
               </Card>
             )}
           </Suspense>
-          <Suspense fallback={<Card className="w-full h-[300px] animate-pulse" />}>
+          {/* <Suspense fallback={<Card className="w-full h-[300px] animate-pulse" />}>
             {dashboardData.data ? (
               <RecentConversations
                 conversations={dashboardData.data.conversations as Conversation[]}
@@ -1296,7 +1296,7 @@ export default async function DashboardPage() {
                 </CardContent>
               </Card>
             )}
-          </Suspense>
+          </Suspense> */}
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
