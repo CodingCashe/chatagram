@@ -629,9 +629,10 @@
 "use server"
 
 import { client } from "@/lib/prisma"
-import { getVoiceflowResponse, processVoiceflowResponse, createVoiceflowUser } from "@/lib/voiceflow"
+import { createVoiceflowUser } from "@/lib/voiceflow"
 import { matchKeyword, getKeywordAutomation, trackResponses, createChatHistory } from "@/actions/webhook/queries"
-import { storeConversation, getConversationHistory } from "@/actions/chats/queries"
+import { storeConversationMessage, getConversationHistory } from "@/actions/chats/queries"
+// import { storeConversationMessage, getConversationHistory } from "@/actions/conversations/queries"
 import { sendPrivateMessage } from "@/lib/instagram"
 import { getInstagramToken } from "@/actions/token/getToken"
 import { findAutomation } from "@/actions/automations/queries"
@@ -766,7 +767,7 @@ export async function sendMessage(
 
     // Store the conversation
     console.log("Message Action - Storing conversation")
-    await storeConversation(pageId, userId, newMessage, "Sent from dashboard", automationId)
+    await storeConversationMessage(pageId, userId, newMessage, true, automationId)
 
     // Send the message
     console.log("Message Action - Sending message via Instagram API")
