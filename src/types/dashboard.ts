@@ -11,6 +11,7 @@ export interface Message {
   content: string
   senderId: string
   createdAt: Date
+  status?: string
 }
 
 export interface Conversation {
