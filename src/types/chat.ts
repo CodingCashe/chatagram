@@ -61,16 +61,6 @@ export interface Message {
   status?: string
 }
 
-// export interface Conversation {
-//   userId: string
-//   id: string
-//   pageId: string
-//   messages: Message[]
-//   createdAt: Date
-//   updatedAt: Date
-//   unreadCount?: number
-//   Automation: Automation | null
-// }
 
 export interface Conversation {
   chatId?:string
@@ -86,3 +76,4 @@ export interface Conversation {
     name: string
   } | null
 }
+
