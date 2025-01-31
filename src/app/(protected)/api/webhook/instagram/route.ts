@@ -4451,7 +4451,7 @@ import {
   createVoiceflowUser,
   fetchBusinessVariables,
 } from "@/lib/voiceflow"
-import { storeConversationMessage } from "@/actions/conversations/queries"
+import { storeConversationMessage } from "@/actions/chats/queries"
 
 export async function POST(req: NextRequest) {
   console.log("POST request received")
