@@ -3792,6 +3792,10 @@ interface BusinessVariables {
 
 const gradientBorder = "bg-gradient-to-r from-primary to-secondary p-[2px] rounded-lg"
 
+const chatBubbleStyles: React.CSSProperties = {
+  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+}
+
 const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
@@ -4020,13 +4024,9 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     </span>
   )
 
-  const chatBubbleStyles = {
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-  }
-
   return (
     <div
-      css={chatBubbleStyles}
+      style={chatBubbleStyles}
       className={`flex flex-col bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] text-foreground border border-primary/10 rounded-lg overflow-hidden ${selectedConversation ? "h-[calc(100vh-8rem)]" : ""}`}
     >
       {isLoading ? (
