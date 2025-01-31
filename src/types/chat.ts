@@ -52,19 +52,37 @@
 import { Automation } from './dashboard'  // Assuming Automation is defined in dashboard.ts
 
 export interface Message {
+  id: string
   role: "user" | "assistant"
   content: string
-  senderId: string
+  senderId?: string
+  receiverId?:string
   createdAt: Date
   status?: string
 }
 
+// export interface Conversation {
+//   userId: string
+//   id: string
+//   pageId: string
+//   messages: Message[]
+//   createdAt: Date
+//   updatedAt: Date
+//   unreadCount?: number
+//   Automation: Automation | null
+// }
+
 export interface Conversation {
-  id: string
+  chatId?:string
+  id:string
+  userId?: string
   pageId: string
   messages: Message[]
   createdAt: Date
   updatedAt: Date
   unreadCount?: number
-  Automation: Automation | null
+  Automation: {
+    id: string
+    name: string
+  } | null
 }

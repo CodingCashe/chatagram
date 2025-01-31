@@ -2649,9 +2649,11 @@ import { fetchChatsAndBusinessVariables, sendMessage } from "@/actions/messageAc
 import { cn } from "@/lib/utils"
 
 interface RawConversation {
+
   chatId: string
   pageId: string
   messages: Array<{
+    id:string
     role: "user" | "assistant"
     content: string
     senderId: string
@@ -2720,6 +2722,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
             pageId: conv.pageId,
             messages: conv.messages.map(
               (msg): Message => ({
+                id:msg.id,
                 role: msg.role,
                 content: msg.content,
                 senderId: msg.senderId,
@@ -2774,6 +2777,66 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     }
   }, [selectedConversation?.messages])
 
+  // const handleSendMessage = async () => {
+  //   if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
+
+  //   setIsTyping(true)
+  //   setError(null)
+
+  //   try {
+  //     const result = await sendMessage(
+  //       newMessage,
+  //       selectedConversation.id,
+  //       pageId,
+  //       automationId,
+  //       token,
+  //       businessVariables,
+  //     )
+
+  //     if (result.userMessage) {
+  //       const userMessage: Message = {
+  //         role: "user",
+  //         content: result.userMessage.content,
+  //         senderId: selectedConversation.id,
+  //         createdAt: result.userMessage.timestamp,
+  //         status: "sent",
+  //       }
+
+  //       setSelectedConversation((prev) => {
+  //         if (!prev) return null
+  //         const updatedMessages = [...prev.messages, userMessage]
+  //         return { ...prev, messages: updatedMessages, updatedAt: new Date() }
+  //       })
+
+  //       setConversations((prevConversations) => {
+  //         const updatedConversations = prevConversations.map((conv) =>
+  //           conv.id === selectedConversation.id
+  //             ? {
+  //                 ...conv,
+  //                 messages: [...conv.messages, userMessage],
+  //                 updatedAt: new Date(),
+  //                 Automation: conv.Automation,
+  //               }
+  //             : conv,
+  //         )
+
+  //         return updatedConversations.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+  //       })
+
+  //       setNewMessage("")
+  //     }
+
+  //     if (!result.success) {
+  //       console.error("Failed to send message:", result.message)
+  //     }
+  //   } catch (error) {
+  //     console.error("Error sending message:", error)
+  //   } finally {
+  //     setIsTyping(false)
+  //   }
+  // }
+
+  //----------------------------------------
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
 
@@ -2781,20 +2844,16 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     setError(null)
 
     try {
-      const result = await sendMessage(
-        newMessage,
-        selectedConversation.id,
-        pageId,
-        automationId,
-        token,
-        businessVariables,
-      )
+      const userId = `${pageId}_${selectedConversation.userId}`
+      const result = await sendMessage(newMessage, userId, pageId, automationId, token, businessVariables)
 
-      if (result.userMessage) {
+      if (result.success && result.userMessage) {
         const userMessage: Message = {
+          id: Date.now().toString(),
           role: "user",
           content: result.userMessage.content,
-          senderId: selectedConversation.id,
+          senderId: selectedConversation.userId,
+          receiverId: pageId,
           createdAt: result.userMessage.timestamp,
           status: "sent",
         }
@@ -2802,28 +2861,24 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
         setSelectedConversation((prev) => {
           if (!prev) return null
           const updatedMessages = [...prev.messages, userMessage]
-          return { ...prev, messages: updatedMessages, updatedAt: new Date() }
+          return { ...prev, messages: updatedMessages }
         })
 
         setConversations((prevConversations) => {
           const updatedConversations = prevConversations.map((conv) =>
-            conv.id === selectedConversation.id
-              ? {
-                  ...conv,
-                  messages: [...conv.messages, userMessage],
-                  updatedAt: new Date(),
-                  Automation: conv.Automation,
-                }
-              : conv,
+            conv.chatId === selectedConversation.chatId ? { ...conv, messages: [...conv.messages, userMessage] } : conv,
           )
 
-          return updatedConversations.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+          // Sort conversations to ensure the most recent one is at the top
+          return updatedConversations.sort((a, b) => {
+            const lastMessageA = a.messages[a.messages.length - 1]
+            const lastMessageB = b.messages[b.messages.length - 1]
+            return new Date(lastMessageB.createdAt).getTime() - new Date(lastMessageA.createdAt).getTime()
+          })
         })
 
         setNewMessage("")
-      }
-
-      if (!result.success) {
+      } else {
         console.error("Failed to send message:", result.message)
       }
     } catch (error) {
@@ -2832,6 +2887,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
       setIsTyping(false)
     }
   }
+  //----------------------------------------
 
   const handleEmojiSelect = (emoji: any) => {
     setNewMessage((prev) => prev + emoji.native)
@@ -2961,7 +3017,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                       ) : (
                         <Avatar className="w-8 h-8 ml-2 order-last border-2 border-primary">
                           <AvatarImage src={`https://i.pravatar.cc/150?u=${message.senderId}`} />
-                          <AvatarFallback>{getFancyName(message.senderId).slice(0, 2)}</AvatarFallback>
+                          <AvatarFallback>{getFancyName("123456789").slice(0, 2)}</AvatarFallback>
                         </Avatar>
                       )}
                       <div
@@ -3186,4 +3242,3 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 }
 
 export default AutomationChats
-

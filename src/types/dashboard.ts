@@ -7,15 +7,19 @@
 
 
 export interface Message {
+  id: string
   role: "user" | "assistant"
   content: string
-  senderId: string
+  senderId?: string
+  receiverId?:string
   createdAt: Date
   status?: string
 }
 
 export interface Conversation {
-  id: string
+  chatId?:string
+  id:string
+  userId?: string
   pageId: string
   messages: Message[]
   createdAt: Date
