@@ -2777,66 +2777,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     }
   }, [selectedConversation?.messages])
 
-  // const handleSendMessage = async () => {
-  //   if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
-
-  //   setIsTyping(true)
-  //   setError(null)
-
-  //   try {
-  //     const result = await sendMessage(
-  //       newMessage,
-  //       selectedConversation.id,
-  //       pageId,
-  //       automationId,
-  //       token,
-  //       businessVariables,
-  //     )
-
-  //     if (result.userMessage) {
-  //       const userMessage: Message = {
-  //         role: "user",
-  //         content: result.userMessage.content,
-  //         senderId: selectedConversation.id,
-  //         createdAt: result.userMessage.timestamp,
-  //         status: "sent",
-  //       }
-
-  //       setSelectedConversation((prev) => {
-  //         if (!prev) return null
-  //         const updatedMessages = [...prev.messages, userMessage]
-  //         return { ...prev, messages: updatedMessages, updatedAt: new Date() }
-  //       })
-
-  //       setConversations((prevConversations) => {
-  //         const updatedConversations = prevConversations.map((conv) =>
-  //           conv.id === selectedConversation.id
-  //             ? {
-  //                 ...conv,
-  //                 messages: [...conv.messages, userMessage],
-  //                 updatedAt: new Date(),
-  //                 Automation: conv.Automation,
-  //               }
-  //             : conv,
-  //         )
-
-  //         return updatedConversations.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
-  //       })
-
-  //       setNewMessage("")
-  //     }
-
-  //     if (!result.success) {
-  //       console.error("Failed to send message:", result.message)
-  //     }
-  //   } catch (error) {
-  //     console.error("Error sending message:", error)
-  //   } finally {
-  //     setIsTyping(false)
-  //   }
-  // }
-
-  //----------------------------------------
+  
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
 
