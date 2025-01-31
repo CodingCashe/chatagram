@@ -392,12 +392,14 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
       pageId: 'example1',
       messages: [
         {
+          id:"23",
           role: 'user',
           content: 'Hello, I have a question about your product.',
           senderId: 'user1',
           createdAt: new Date()
         },
         {
+          id:"23",
           role: 'assistant',
           content: 'Of course! Id be happy to help. What would you like to know?',
           senderId: 'assistant',
