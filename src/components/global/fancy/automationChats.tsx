@@ -4307,8 +4307,8 @@
 
 import type React from "react"
 import { useState, useEffect, useRef, useCallback } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Send, ArrowLeft, Smile, Paperclip, Mic, Trash2 } from "lucide-react"
+import { motion } from "framer-motion"
+import { Send, ArrowLeft, Smile, Paperclip, Mic, Trash2, Check } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Textarea } from "@/components/ui/textarea"
@@ -4321,7 +4321,7 @@ import Picker from "@emoji-mart/react"
 import ExampleConversations from "./exampleConvo"
 import DeleteConfirmationModal from "./confirmDelete"
 import { fetchChatsAndBusinessVariables, sendMessage } from "@/actions/messageAction/messageAction"
-import ChatBubble from "./chat-bubble"
+import { cn } from "@/lib/utils"
 
 interface RawConversation {
   chatId: string
@@ -4352,10 +4352,6 @@ interface BusinessVariables {
 }
 
 const gradientBorder = "bg-gradient-to-r from-primary to-secondary p-[2px] rounded-lg"
-
-const chatBubbleStyles: React.CSSProperties = {
-  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-}
 
 const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const [conversations, setConversations] = useState<Conversation[]>([])
@@ -4453,7 +4449,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [selectedConversation]) //Corrected dependency
+  }, [selectedConversation?.messages])
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
@@ -4461,65 +4457,46 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     setIsTyping(true)
     setError(null)
 
-    const tempId = Date.now().toString()
-    const tempMessage: Message = {
-      id: tempId,
-      role: "user",
-      content: newMessage,
-      senderId: selectedConversation.userId,
-      receiverId: pageId,
-      createdAt: new Date(),
-      status: "sending",
-    }
-
-    setSelectedConversation((prev) => {
-      if (!prev) return null
-      return { ...prev, messages: [...prev.messages, tempMessage] }
-    })
-
-    setNewMessage("")
-
     try {
       const userId = `${pageId}_${selectedConversation.userId}`
       const result = await sendMessage(newMessage, userId, pageId, automationId, token, businessVariables)
 
       if (result.success && result.userMessage) {
         const userMessage: Message = {
-          ...tempMessage,
-          id: result.userMessage.id || tempId,
+          id: Date.now().toString(),
+          role: "user",
+          content: result.userMessage.content,
+          senderId: selectedConversation.userId,
+          receiverId: pageId,
           createdAt: result.userMessage.timestamp,
           status: "sent",
         }
 
         setSelectedConversation((prev) => {
           if (!prev) return null
-          const updatedMessages = prev.messages.map((msg) => (msg.id === tempId ? userMessage : msg))
+          const updatedMessages = [...prev.messages, userMessage]
           return { ...prev, messages: updatedMessages }
         })
 
         setConversations((prevConversations) => {
           const updatedConversations = prevConversations.map((conv) =>
-            conv.chatId === selectedConversation.chatId
-              ? { ...conv, messages: conv.messages.map((msg) => (msg.id === tempId ? userMessage : msg)) }
-              : conv,
+            conv.chatId === selectedConversation.chatId ? { ...conv, messages: [...conv.messages, userMessage] } : conv,
           )
 
+          // Sort conversations to ensure the most recent one is at the top
           return updatedConversations.sort((a, b) => {
             const lastMessageA = a.messages[a.messages.length - 1]
             const lastMessageB = b.messages[b.messages.length - 1]
             return new Date(lastMessageB.createdAt).getTime() - new Date(lastMessageA.createdAt).getTime()
           })
         })
+
+        setNewMessage("")
       } else {
-        throw new Error(result.message || "Failed to send message")
+        console.error("Failed to send message:", result.message)
       }
     } catch (error) {
       console.error("Error sending message:", error)
-      setSelectedConversation((prev) => {
-        if (!prev) return null
-        const updatedMessages = prev.messages.map((msg) => (msg.id === tempId ? { ...msg, status: "error" } : msg))
-        return { ...prev, messages: updatedMessages }
-      })
     } finally {
       setIsTyping(false)
     }
@@ -4605,7 +4582,9 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   )
 
   return (
-    <div className="flex flex-col bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] text-foreground border border-primary/10 rounded-lg overflow-hidden h-[calc(100vh-8rem)]">
+    <div
+      className={`flex flex-col bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] text-foreground border border-primary/10 rounded-lg overflow-hidden ${selectedConversation ? "h-[calc(100vh-8rem)]" : ""}`}
+    >
       {isLoading ? (
         <div className="p-4 text-muted-foreground">Loading chats...</div>
       ) : error ? (
@@ -4634,39 +4613,72 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                   </p>
                 </div>
               </div>
-              <ScrollArea className="flex-grow">
-                <AnimatePresence initial={false}>
+              <div className="flex-grow overflow-y-auto" ref={scrollRef}>
+                <div className="p-4 space-y-4">
                   {selectedConversation.messages.map((message, index) => (
                     <motion.div
-                      key={message.id}
-                      initial={{ opacity: 0, y: 20 }}
+                      key={index}
+                      initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.3 }}
+                      transition={{ duration: 0.2 }}
                       className={`flex items-end mb-4 ${message.role === "assistant" ? "justify-start" : "justify-end"}`}
                     >
-                      {message.role === "assistant" && (
-                        <Avatar className="w-8 h-8 mr-2">
+                      {message.role === "assistant" ? (
+                        <Avatar className="w-8 h-8 mr-2 border-2 border-primary">
                           <AvatarImage src={BOT_AVATAR} />
                           <AvatarFallback>{BOT_NAME.slice(0, 2)}</AvatarFallback>
                         </Avatar>
-                      )}
-                      <ChatBubble
-                        role={message.role}
-                        content={message.content}
-                        timestamp={new Date(message.createdAt)}
-                        status={message.status}
-                      />
-                      {message.role === "user" && (
-                        <Avatar className="w-8 h-8 ml-2">
+                      ) : (
+                        <Avatar className="w-8 h-8 ml-2 order-last border-2 border-primary">
                           <AvatarImage src={`https://i.pravatar.cc/150?u=${message.senderId}`} />
-                          <AvatarFallback>{getFancyName(message.senderId).slice(0, 2)}</AvatarFallback>
+                          <AvatarFallback>{getFancyName("123456789").slice(0, 2)}</AvatarFallback>
                         </Avatar>
                       )}
+                      <div
+                        className={cn(
+                          "max-w-[75%] p-3 rounded-3xl text-sm relative",
+                          message.role === "assistant"
+                            ? "bg-gradient-to-br from-blue-400/30 to-blue-600/30 border-2 border-blue-500/50 text-white"
+                            : "bg-gradient-to-br from-purple-400/30 to-purple-600/30 border-2 border-purple-500/50 text-white",
+                        )}
+                        style={{
+                          backdropFilter: "blur(10px)",
+                          WebkitBackdropFilter: "blur(10px)",
+                        }}
+                      >
+                        <p className="break-words relative z-10">{message.content}</p>
+                        <div className="flex justify-between items-center mt-1 text-xs text-gray-300">
+                          <p>{new Date(message.createdAt).toLocaleString()}</p>
+                          {message.role === "user" && (
+                            <div
+                              className={`flex items-center ${
+                                message.status === "sent" ? "text-green-400" : "text-red-400"
+                              }`}
+                            >
+                              {message.status === "sent" ? (
+                                <>
+                                  <Check size={12} className="mr-1" />
+                                  <span>Sent</span>
+                                </>
+                              ) : (
+                                <span>Not sent</span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <div
+                          className={cn(
+                            "absolute inset-0 rounded-3xl opacity-20",
+                            message.role === "assistant"
+                              ? "bg-gradient-to-br from-blue-400 to-blue-600"
+                              : "bg-gradient-to-br from-purple-400 to-purple-600",
+                          )}
+                        ></div>
+                      </div>
                     </motion.div>
                   ))}
-                </AnimatePresence>
-              </ScrollArea>
+                </div>
+              </div>
               <div className="p-4 bg-background border-t border-primary/10">
                 <div className="flex items-center space-x-2 relative">
                   <Popover>

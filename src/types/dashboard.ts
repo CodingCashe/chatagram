@@ -6,7 +6,7 @@ export interface Message {
   senderId?: string
   receiverId?:string
   createdAt: Date
-  status?: string
+  status?: "sending" | "sent" | "error"
 }
 
 export interface Conversation {

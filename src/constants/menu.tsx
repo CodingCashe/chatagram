@@ -251,6 +251,11 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
         label: 'Automations',
         icon: <AutomationDuoToneWhite />,
       },
+      {
+        id: uuid(),
+        label: 'Audience',
+        icon: <AutomationDuoToneWhite />,
+      },
     ]
   },
   {

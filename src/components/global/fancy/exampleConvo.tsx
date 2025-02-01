@@ -168,56 +168,39 @@
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 // import type { Conversation } from "@/types/chat"
 
+// // interface ExampleConversationsProps {
+// //   onSelectConversation: (conversation: Conversation) => void
+// // }
 // interface ExampleConversationsProps {
 //   onSelectConversation: (conversation: Conversation) => void
+//   className?: string
 // }
 
 // const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation }) => {
 //   const exampleConversations: Conversation[] = [
 //     {
-//       chatId: "1",
-//       userId: "user1",
+//       id: '1',
+//       pageId: 'example1',
 //       messages: [
 //         {
-//           id: "1",
-//           role: "user",
-//           content: "Hi! I'm interested in your products. Can you tell me more?",
-//           senderId: "user1",
-//           receiverId: "bot",
-//           timestamp: new Date(),
-//           status: "sent",
+//           id:"23",
+//           role: 'user',
+//           content: 'Hello, I have a question about your product.',
+//           senderId: 'user1',
+//           createdAt: new Date()
 //         },
-//       ],
-//     },
-//     {
-//       chatId: "2",
-//       userId: "user2",
-//       messages: [
 //         {
-//           id: "2",
-//           role: "user",
-//           content: "What are your business hours?",
-//           senderId: "user2",
-//           receiverId: "bot",
-//           timestamp: new Date(),
-//           status: "sent",
-//         },
+//           id:"23",
+//           role: 'assistant',
+//           content: 'Of course! Id be happy to help. What would you like to know?',
+//           senderId: 'assistant',
+//           createdAt: new Date()
+//         }
 //       ],
-//     },
-//     {
-//       chatId: "3",
-//       userId: "user3",
-//       messages: [
-//         {
-//           id: "3",
-//           role: "user",
-//           content: "Do you offer international shipping?",
-//           senderId: "user3",
-//           receiverId: "bot",
-//           timestamp: new Date(),
-//           status: "sent",
-//         },
-//       ],
+//       createdAt: new Date(),
+//       updatedAt: new Date(),
+//       unreadCount: 0,
+//       Automation: null
 //     },
 //   ]
 
@@ -232,7 +215,7 @@
 //         >
 //           <Avatar className="w-10 h-10 mr-3">
 //             <AvatarImage src={`https://i.pravatar.cc/150?u=${conversation.userId}`} />
-//             <AvatarFallback>{conversation.userId.slice(0, 2).toUpperCase()}</AvatarFallback>
+//             <AvatarFallback>{conversation?.userId.slice(0, 2).toUpperCase()}</AvatarFallback>
 //           </Avatar>
 //           <div className="flex-grow min-w-0">
 //             <p className="font-medium text-sm text-foreground truncate">
@@ -376,7 +359,7 @@
 
 // export default ExampleConversations
 
-// File: src/components/exampleConvo.tsx
+//File: src/components/exampleConvo.tsx
 import React from 'react'
 import { Conversation } from '@/types/chat'
 
@@ -431,3 +414,4 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
 }
 
 export default ExampleConversations
+
