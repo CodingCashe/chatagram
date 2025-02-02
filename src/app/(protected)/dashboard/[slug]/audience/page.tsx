@@ -80,6 +80,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import Header from "@/components/global/audience/Header"
 import ClientList from "@/components/global/audience/ClientList"
 import PromoComposer from "@/components/global/audience/PromoComposer"
 import AnalyticsSection from "@/components/global/audience/AnalyticsSection"
@@ -90,15 +91,15 @@ import InteractiveContentCreator from "@/components/global/audience/InteractiveC
 import HashtagGenerator from "@/components/global/audience/HashtagGenerator"
 import EngagementMetrics from "@/components/global/audience/EngagementMetrics"
 import ContentCalendar from "@/components/global/audience/ContentCalendar"
-import Header from "@/components/global/audience/Header"
 
-const EnhancedMarketingDashboard = () => {
+export default function EnhancedMarketingDashboard() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950 text-white p-8 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-950 text-white p-4 md:p-8 overflow-hidden">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         <Header />
       </motion.div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8 mt-4 md:mt-8">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -115,15 +116,17 @@ const EnhancedMarketingDashboard = () => {
           <PromoComposer />
         </motion.div>
       </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
-        className="mt-8"
+        className="mt-4 md:mt-8"
       >
         <AnalyticsSection />
       </motion.div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8 mt-4 md:mt-8">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -146,7 +149,8 @@ const EnhancedMarketingDashboard = () => {
           <AIInsights />
         </motion.div>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 mt-4 md:mt-8">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -155,31 +159,32 @@ const EnhancedMarketingDashboard = () => {
           <InteractiveContentCreator />
         </motion.div>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 1.6 }}
         >
           <HashtagGenerator />
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 1.8 }}
-        >
-          <EngagementMetrics />
-        </motion.div>
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 1.8 }}
+        className="mt-4 md:mt-8"
+      >
+        <EngagementMetrics />
+      </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 2 }}
-        className="mt-8"
+        className="mt-4 md:mt-8"
       >
         <ContentCalendar />
       </motion.div>
     </div>
   )
 }
-
-export default EnhancedMarketingDashboard
 
