@@ -77,6 +77,8 @@
 //   )
 // }
 
+"use client"
+
 import { motion } from "framer-motion"
 import ClientList from "@/components/global/audience/ClientList"
 import PromoComposer from "@/components/global/audience/PromoComposer"
