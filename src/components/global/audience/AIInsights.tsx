@@ -27,9 +27,9 @@ const insights = [
 
 export default function AIInsights() {
   return (
-    <div className="mt-8 bg-black bg-opacity-50 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">AI-Powered Insights</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg rounded-xl p-4 md:p-6 shadow-lg">
+      <h2 className="text-xl md:text-2xl font-bold mb-4">AI-Powered Insights</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {insights.map((insight, index) => (
           <motion.div
             key={index}
@@ -37,9 +37,9 @@ export default function AIInsights() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
           >
-            <Card className="bg-white bg-opacity-10 border-none">
+            <Card className="bg-gray-700 bg-opacity-50 border-none h-full">
               <CardHeader className="flex flex-row items-center space-x-2">
-                <insight.icon className="w-6 h-6 text-purple-400" />
+                <insight.icon className="w-6 h-6 text-[#3352CC]" />
                 <CardTitle>{insight.title}</CardTitle>
               </CardHeader>
               <CardContent>

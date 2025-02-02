@@ -4,44 +4,37 @@ import { Badge } from "@/components/ui/badge"
 
 const influencers = [
   {
-    name: "Sophia Lee",
-    handle: "@sophia_beauty",
+    name: "Jane Doe",
+    handle: "@janedoe",
+    avatar: "https://via.placeholder.com/50",
     niche: "Beauty",
-    followers: "500K",
-    avatar: "/placeholder.svg?height=40&width=40",
+    followers: 10000,
   },
   {
-    name: "Alex Chen",
-    handle: "@alex_tech",
-    niche: "Technology",
-    followers: "750K",
-    avatar: "/placeholder.svg?height=40&width=40",
+    name: "John Smith",
+    handle: "@johnsmith",
+    avatar: "https://via.placeholder.com/50",
+    niche: "Tech",
+    followers: 50000,
   },
   {
-    name: "Maya Patel",
-    handle: "@maya_fitness",
-    niche: "Fitness",
-    followers: "1M",
-    avatar: "/placeholder.svg?height=40&width=40",
-  },
-  {
-    name: "Carlos Rodriguez",
-    handle: "@carlos_travel",
+    name: "Alice Johnson",
+    handle: "@alicejohnson",
+    avatar: "https://via.placeholder.com/50",
     niche: "Travel",
-    followers: "350K",
-    avatar: "/placeholder.svg?height=40&width=40",
+    followers: 25000,
   },
 ]
 
 export default function InfluencerNetwork() {
   return (
-    <div className="bg-black bg-opacity-50 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Influencer Network</h2>
-      <div className="space-y-4">
+    <div className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg rounded-xl p-4 md:p-6 shadow-lg">
+      <h2 className="text-xl md:text-2xl font-bold mb-4">Influencer Network</h2>
+      <div className="space-y-2 md:space-y-4">
         {influencers.map((influencer, index) => (
           <motion.div
             key={influencer.handle}
-            className="flex items-center space-x-4 bg-white bg-opacity-5 rounded-lg p-4"
+            className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 bg-gray-700 bg-opacity-50 rounded-lg p-2 md:p-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -57,10 +50,12 @@ export default function InfluencerNetwork() {
             </Avatar>
             <div className="flex-grow">
               <p className="font-semibold">{influencer.name}</p>
-              <p className="text-sm text-gray-400">{influencer.handle}</p>
+              <p className="text-xs md:text-sm text-gray-400">{influencer.handle}</p>
             </div>
-            <Badge variant="secondary">{influencer.niche}</Badge>
-            <span className="text-sm font-medium">{influencer.followers} followers</span>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+              <Badge variant="secondary">{influencer.niche}</Badge>
+              <span className="text-xs md:text-sm font-medium">{influencer.followers} followers</span>
+            </div>
           </motion.div>
         ))}
       </div>
