@@ -140,3 +140,26 @@ export const updateIntegrationData = async (
     },
   })
 }
+
+export const getIntegrationWithFollowerHistory = async (clerkId: string) => {
+  return await client.user.findUnique({
+    where: {
+      clerkId,
+    },
+    select: {
+      integrations: {
+        where: {
+          name: "INSTAGRAM",
+        },
+        include: {
+          followerHistory: {
+            orderBy: {
+              date: "asc",
+            },
+            take: 30, // Get the last 30 data points
+          },
+        },
+      },
+    },
+  })
+}

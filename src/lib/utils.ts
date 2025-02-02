@@ -74,3 +74,23 @@ export function getRelativeTime(date: Date): string {
 
 
 
+export function generateFollowerGrowthData(
+  currentFollowers: number | null,
+  historyData: Array<{ date: Date; followerCount: number }>,
+) {
+  if (historyData.length === 0) {
+    return []
+  }
+
+  // Sort the history data by date
+  const sortedHistory = [...historyData].sort((a, b) => a.date.getTime() - b.date.getTime())
+
+  // Use the most recent follower count if currentFollowers is null
+  const latestFollowerCount = currentFollowers ?? sortedHistory[sortedHistory.length - 1].followerCount
+
+  return sortedHistory.map((item) => ({
+    date: item.date.toISOString(),
+    followers: item.followerCount,
+  }))
+}
+
