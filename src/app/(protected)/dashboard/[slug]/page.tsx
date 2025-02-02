@@ -1219,6 +1219,7 @@
 // }
 
 import { Suspense } from "react"
+import  InstagramDashboard  from "./_components/insta/page"
 import { getDashboardData } from "@/actions/dashboard"
 import { getDashboardDati } from "@/actions/dashboard/dashboard"
 import { onCurrentUser } from "@/actions/user"
@@ -1305,6 +1306,7 @@ export default async function DashboardPage() {
       </div>
       <div className="w-full flex lg:flex-row flex-col gap-5">
         <EngagementInsights />
+        <InstagramDashboard />
       </div>
     </div>
   )

@@ -76,15 +76,6 @@ model Integrations {
   followingCount Int?
   postsCount     Int?
   lastUpdated    DateTime @default(now())
-  followerHistory FollowerHistory[]
-}
-
-model FollowerHistory {
-  id            String   @id @default(cuid())
-  date          DateTime
-  followerCount Int
-  integration   Integrations @relation(fields: [integrationId], references: [id])
-  integrationId String
 }
 
 

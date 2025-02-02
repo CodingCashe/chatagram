@@ -47,28 +47,18 @@
 // }
 
 import { InstagramProfileCard } from "@/components/global/profile/InstagramProfileCard"
-import { FollowerGrowthChart } from "@/components/global/profile/FollowerGrowthChart"
 import { getIntegration } from "@/actions/integrations/queries"
 import { onCurrentUser } from "@/actions/user"
-import { getIntegrationWithFollowerHistory } from "@/actions/integrations/queries"
-import { generateFollowerGrowthData } from "@/lib/utils"
-
-// import { InstagramProfileCard } from "@/components/InstagramProfileCard"
-// import { FollowerGrowthChart } from "@/components/FollowerGrowthChart"
-// import { getIntegrationWithFollowerHistory } from "@/actions/integration/queries"
-// import { onCurrentUser } from "@/actions/user"
-// import { generateFollowerGrowthData } from "@/utils/generateFollowerGrowthData"
 
 export default async function InstagramDashboard() {
   const user = await onCurrentUser()
-  const integrationData = await getIntegrationWithFollowerHistory(user.id)
+  const integrationData = await getIntegration(user.id)
 
   if (!integrationData || integrationData.integrations.length === 0) {
     return <div>No Instagram integration found</div>
   }
 
   const instagramData = integrationData.integrations[0]
-  const followerGrowthData = generateFollowerGrowthData(instagramData.followersCount, instagramData.followerHistory)
 
   return (
     <div className="container mx-auto p-4 space-y-8">
@@ -81,7 +71,6 @@ export default async function InstagramDashboard() {
         followingCount={instagramData.followingCount}
         postsCount={instagramData.postsCount}
       />
-      <FollowerGrowthChart data={followerGrowthData} />
     </div>
   )
 }
