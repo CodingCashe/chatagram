@@ -554,8 +554,8 @@ const DoubleGradientCard = ({ label, subLabel, description }: Props) => {
               {getIcon(label)}
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white mb-2 text-shadow">{label}</h2>
-              <p className="text-indigo-200 text-shadow-sm text-sm">{subLabel}</p>
+              <h3 className="text-2xl font-bold text-white mb-2 text-shadow">{label}</h3>
+              <h5 className="text-indigo-200 text-shadow-sm text-sm">{subLabel}</h5>
             </div>
           </motion.div>
           <motion.div
@@ -565,7 +565,7 @@ const DoubleGradientCard = ({ label, subLabel, description }: Props) => {
               transition: "transform 0.3s ease-out",
             }}
           >
-            <p className="text-white/80 text-sm max-w-[70%]">{description}</p>
+            <h6 className="text-white/80 text-sm max-w-[70%]">{description}</h6>
             <Button className="rounded-full bg-white/10 text-white hover:bg-white/20 w-12 h-12 backdrop-blur-sm shadow-neon group-hover:shadow-neon-intense transition-all duration-300 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
               <ArrowRight className="w-6 h-6 relative z-10" />
@@ -598,7 +598,7 @@ const DoubleGradientCard = ({ label, subLabel, description }: Props) => {
           animation: borderFlow 8s linear infinite;
         }
         .animate-shimmer {
-          animation: shimmer 2s linear infinite;
+          animation: shimmer 4s linear infinite;
         }
         @keyframes borderFlow {
           0% {

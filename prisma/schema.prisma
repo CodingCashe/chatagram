@@ -61,14 +61,32 @@ model Subscription {
 }
 
 model Integrations {
-  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name        INTEGRATIONS @default(INSTAGRAM)
-  createdAt   DateTime     @default(now())
-  User        User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String?      @db.Uuid
-  token       String       @unique
-  expiresAt   DateTime?
-  instagramId String?      @unique
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           INTEGRATIONS @default(INSTAGRAM)
+  createdAt      DateTime     @default(now())
+  User           User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String?      @db.Uuid
+  token          String       @unique
+  expiresAt      DateTime?
+  instagramId    String?      @unique
+  username       String?
+  fullName       String?
+  profilePicture String?
+  followersCount Int?
+  followingCount Int?
+  postsCount     Int?
+  lastUpdated    DateTime @default(now())
+}
+
+// Existing model definitions...
+
+model Integrations {
+  
+  
+  
+  
+  
+  
 }
 
 model Automation {
