@@ -203,7 +203,7 @@ import InteractiveContentCreator from "@/components/global/audience/InteractiveC
 import HashtagGenerator from "@/components/global/audience/HashtagGenerator"
 import EngagementMetrics from "@/components/global/audience/EngagementMetrics"
 import ContentCalendar from "@/components/global/audience/ContentCalendar"
-import Slider from "@/components/ui/slider"
+import Slider from "@/components/ui/sliderx"
 
 export default function EnhancedMarketingDashboard() {
   const [isMobile, setIsMobile] = useState(false)
