@@ -164,7 +164,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Search, ChevronDown, ChevronUp } from "lucide-react"
-import Slider from "@/components/ui/slider"
+import Slider from "@/components/ui/sliderx"
 
 type Client = {
   name: string
