@@ -254,7 +254,7 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
       {
         id: uuid(),
         label: 'Audience',
-        icon: <AutomationDuoToneWhite />,
+        icon: <Users />,
       },
     ]
   },
