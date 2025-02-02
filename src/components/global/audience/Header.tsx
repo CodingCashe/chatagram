@@ -48,20 +48,20 @@ import { Instagram, Mail, Phone, TrendingUp, Users, DollarSign } from "lucide-re
 export default function Header() {
   return (
     <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-4 md:p-6 shadow-lg">
-      <motion.h1
+      <motion.h3
         className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 text-white"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        Instagram Marketing Hub
-      </motion.h1>
+        Interact with your audience
+      </motion.h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
         {[
           { icon: Instagram, label: "Followers", value: "1.2M" },
-          { icon: Mail, label: "Emails Collected", value: "45.3K" },
-          { icon: Phone, label: "Phone Numbers", value: "32.1K" },
-          { icon: TrendingUp, label: "Engagement Rate", value: "4.7%" },
+          { icon: Mail, label: "Emails", value: "45.3K" },
+          { icon: Phone, label: "Phone", value: "32.1K" },
+          { icon: TrendingUp, label: "Engagement", value: "4.7%" },
           { icon: Users, label: "New Followers", value: "+2.3K" },
           { icon: DollarSign, label: "Revenue", value: "$18.6K" },
         ].map((item, index) => (
