@@ -62,7 +62,7 @@ export default async function InstagramDashboard() {
 
   return (
     <div className="container mx-auto p-4 space-y-8">
-      <h1 className="text-3xl font-bold">Instagram Dashboard</h1>
+      <h1 className="text-3xl font-bold">My Account</h1>
       <InstagramProfileCard
         username={instagramData.username}
         fullName={instagramData.fullName}
