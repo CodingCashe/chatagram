@@ -288,7 +288,7 @@
 
 import { motion } from "framer-motion"
 import Header from "@/components/global/audience/Header"
-import  InstagramDashboard  from "../_components/insta/page"
+import  InstagramDashboard  from "../_components/insta/profile"
 import ClientList from "@/components/global/audience/ClientList"
 import PromoComposer from "@/components/global/audience/PromoComposer"
 import AnalyticsSection from "@/components/global/audience/AnalyticsSection"
@@ -303,10 +303,7 @@ import ContentCalendar from "@/components/global/audience/ContentCalendar"
 export default function EnhancedMarketingDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-950 text-white p-4 md:p-8 overflow-hidden">
-      <div className="mt-4 md:mt-8">
         <InstagramDashboard />
-      </div>
-
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         <Header />
       </motion.div>

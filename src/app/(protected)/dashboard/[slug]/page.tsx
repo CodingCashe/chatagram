@@ -1219,7 +1219,7 @@
 // }
 
 import { Suspense } from "react"
-import  InstagramDashboard  from "./_components/insta/page"
+import  InstagramDashboard  from "./_components/insta/profile"
 import { getDashboardData } from "@/actions/dashboard"
 import { getDashboardDati } from "@/actions/dashboard/dashboard"
 import { onCurrentUser } from "@/actions/user"
@@ -1244,6 +1244,9 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-y-10">
+      <div>
+      <InstagramDashboard />
+      </div>
       <div className="flex gap-5 lg:flex-row flex-col">
         {DASHBOARD_CARDS.map((card) => (
           <DoubleGradientCard key={card.id} {...card} />
@@ -1306,7 +1309,6 @@ export default async function DashboardPage() {
       </div>
       <div className="w-full flex lg:flex-row flex-col gap-5">
         <EngagementInsights />
-        <InstagramDashboard />
       </div>
     </div>
   )
