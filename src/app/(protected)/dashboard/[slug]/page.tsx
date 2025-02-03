@@ -1244,9 +1244,6 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-y-10">
-      <div>
-      <InstagramDashboard />
-      </div>
       <div className="flex gap-5 lg:flex-row flex-col">
         {DASHBOARD_CARDS.map((card) => (
           <DoubleGradientCard key={card.id} {...card} />
@@ -1263,14 +1260,11 @@ export default async function DashboardPage() {
         </span>
         <div className="w-full flex lg:flex-row flex-col gap-5">
           <div className="lg:w-6/12">
-            <SentimentAnalysis />
+            <InstagramDashboard />
           </div>
           <div className="lg:w-6/12">
             <EnhancedMetricsCard />
           </div>
-        </div>
-        <div className="w-full flex lg:flex-row flex-col gap-5">
-          <EngagementPredictor />
         </div>
       </div>
 
@@ -1287,20 +1281,7 @@ export default async function DashboardPage() {
               </Card>
             )}
           </Suspense>
-          {/* <Suspense fallback={<Card className="w-full h-[300px] animate-pulse" />}>
-            {dashboardData.data ? (
-              <RecentConversations
-                conversations={dashboardData.data.conversations as Conversation[]}
-                automations={dashboardData.data.automations as Automation[]}
-              />
-            ) : (
-              <Card className="w-full h-[300px]">
-                <CardContent className="flex items-center justify-center h-full">
-                  <p>Failed to load recent conversations</p>
-                </CardContent>
-              </Card>
-            )}
-          </Suspense> */}
+          <EngagementPredictor />
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -1309,6 +1290,10 @@ export default async function DashboardPage() {
       </div>
       <div className="w-full flex lg:flex-row flex-col gap-5">
         <EngagementInsights />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <SentimentAnalysis />
+        <HashtagCloud />
       </div>
     </div>
   )
