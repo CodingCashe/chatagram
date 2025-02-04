@@ -4519,7 +4519,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   }
 
   const getFancyName = (userId: string) => {
-    const names = ["Sarah Johnson", "Mike Chen", "Emma Davis", "Alex Rodriguez", "Olivia Taylor"]
+    const names = ["Client","Client","Client"]
     return names[Math.floor(Math.random() * names.length)]
   }
 
@@ -4649,7 +4649,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                         <p className="break-words relative z-10">{message.content}</p>
                         <div className="flex justify-between items-center mt-1 text-xs text-gray-300">
                           <p>{new Date(message.createdAt).toLocaleString()}</p>
-                          {message.role === "user" && (
+                          {message.role === "assistant" && (
                             <div
                               className={`flex items-center ${
                                 message.status === "sent" ? "text-green-400" : "text-red-400"
@@ -4661,7 +4661,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                                   <span>Sent</span>
                                 </>
                               ) : (
-                                <span>Not sent</span>
+                                <span>Failed</span>
                               )}
                             </div>
                           )}

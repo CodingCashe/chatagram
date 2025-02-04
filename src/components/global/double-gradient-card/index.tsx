@@ -506,7 +506,7 @@ const DoubleGradientCard = ({ label, subLabel, description }: Props) => {
         return <MessageSquareAuto className="w-10 h-10 text-indigo-300" />
       case "Answer Questions with AI":
         return <BrainCircuit className="w-10 h-10 text-purple-300" />
-      case "Give quality replies that increase engagements":
+      case "Give quality replies":
         return <Sparkles className="w-10 h-10 text-pink-300" />
       default:
         return null

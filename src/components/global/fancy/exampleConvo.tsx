@@ -360,8 +360,64 @@
 // export default ExampleConversations
 
 //File: src/components/exampleConvo.tsx
-import React from 'react'
-import { Conversation } from '@/types/chat'
+// import React from 'react'
+// import { Conversation } from '@/types/chat'
+
+// interface ExampleConversationsProps {
+//   onSelectConversation: (conversation: Conversation) => void
+//   className?: string
+// }
+
+// const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation, className }) => {
+//   const exampleConversations: Conversation[] = [
+//     {
+//       id: '1',
+//       pageId: 'example1',
+//       messages: [
+//         {
+//           id:"23",
+//           role: 'user',
+//           content: 'Hello, I have a question about your product.',
+//           senderId: 'user1',
+//           createdAt: new Date()
+//         },
+//         {
+//           id:"23",
+//           role: 'assistant',
+//           content: 'Of course! Id be happy to help. What would you like to know?',
+//           senderId: 'assistant',
+//           createdAt: new Date()
+//         }
+//       ],
+//       createdAt: new Date(),
+//       updatedAt: new Date(),
+//       unreadCount: 0,
+//       Automation: null
+//     },
+//     // Add more example conversations as needed
+//   ]
+
+//   return (
+//     <div className={className}>
+//       {exampleConversations.map((conversation) => (
+//         <div
+//           key={conversation.id}
+//           onClick={() => onSelectConversation(conversation)}
+//           className="cursor-pointer p-2 hover:bg-black"
+//         >
+//           <h3>Conversation {conversation.id}</h3>
+//           <p>{conversation.messages[conversation.messages.length - 1].content}</p>
+//         </div>
+//       ))}
+//     </div>
+//   )
+// }
+
+// export default ExampleConversations
+
+import type React from "react"
+import type { Conversation } from "@/types/chat"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 interface ExampleConversationsProps {
   onSelectConversation: (conversation: Conversation) => void
@@ -371,42 +427,74 @@ interface ExampleConversationsProps {
 const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation, className }) => {
   const exampleConversations: Conversation[] = [
     {
-      id: '1',
-      pageId: 'example1',
+      id: "1",
+      pageId: "example1",
       messages: [
         {
-          id:"23",
-          role: 'user',
-          content: 'Hello, I have a question about your product.',
-          senderId: 'user1',
-          createdAt: new Date()
+          id: "23",
+          role: "user",
+          content: "Hello, I have a question about your product.",
+          senderId: "user1",
+          createdAt: new Date(),
         },
         {
-          id:"23",
-          role: 'assistant',
-          content: 'Of course! Id be happy to help. What would you like to know?',
-          senderId: 'assistant',
-          createdAt: new Date()
-        }
+          id: "24",
+          role: "assistant",
+          content: "Of course! I'd be happy to help. What would you like to know?",
+          senderId: "assistant",
+          createdAt: new Date(),
+        },
       ],
       createdAt: new Date(),
       updatedAt: new Date(),
       unreadCount: 0,
-      Automation: null
+      Automation: null,
+    },
+    {
+      id: "2",
+      pageId: "example2",
+      messages: [
+        {
+          id: "25",
+          role: "user",
+          content: "Can you tell me about your pricing plans?",
+          senderId: "user2",
+          createdAt: new Date(),
+        },
+        {
+          id: "26",
+          role: "assistant",
+          content: "We offer several pricing tiers to suit different needs.",
+          senderId: "assistant",
+          createdAt: new Date(),
+        },
+      ],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      unreadCount: 0,
+      Automation: null,
     },
     // Add more example conversations as needed
   ]
 
   return (
-    <div className={className}>
+    <div className={`space-y-4 ${className}`}>
       {exampleConversations.map((conversation) => (
         <div
           key={conversation.id}
           onClick={() => onSelectConversation(conversation)}
-          className="cursor-pointer p-2 hover:bg-gray-100"
+          className="flex items-center p-3 rounded-lg border border-gray-200 hover:border-gray-400 cursor-pointer"
         >
-          <h3>Conversation {conversation.id}</h3>
-          <p>{conversation.messages[conversation.messages.length - 1].content}</p>
+          <Avatar className="w-10 h-10 mr-3">
+            <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.id}`} />
+            <AvatarFallback>{conversation.id}</AvatarFallback>
+          </Avatar>
+          <div className="flex-grow min-w-0">
+            <p className="font-medium text-sm text-foreground truncate">Conversation {conversation.id}</p>
+            <p className="text-xs text-muted-foreground truncate">
+              {conversation.messages[conversation.messages.length - 1].content.split(" ").slice(0, 5).join(" ")}...
+            </p>
+          </div>
         </div>
       ))}
     </div>
