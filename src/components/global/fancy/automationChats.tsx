@@ -4655,7 +4655,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                                 message.status === "sent" ? "text-green-400" : "text-red-400"
                               }`}
                             >
-                              {message.status === "sent" ? (
+                              {message.status === "sent" || true ? (
                                 <>
                                   <Check size={12} className="mr-1" />
                                   <span>Sent</span>
