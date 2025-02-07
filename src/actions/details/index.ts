@@ -14,14 +14,25 @@ export const createMarketingInfoAction = async (data: { email?: string; phone?: 
   }
 }
 
-export const getMarketingInfoAction = async () => {
+// export const getMarketingInfoAction = async () => {
+//   const user = await onCurrentUser()
+//   try {
+//     const marketingInfo = await getMarketingInfo(user.id)
+//     if (marketingInfo) return { status: 200, data: marketingInfo }
+//     return { status: 404, data: [] }
+//   } catch (error) {
+//     return { status: 500, data: [] }
+//   }
+// }
+
+export async function getMarketingInfoAction() {
   const user = await onCurrentUser()
   try {
     const marketingInfo = await getMarketingInfo(user.id)
-    if (marketingInfo) return { status: 200, data: marketingInfo }
-    return { status: 404, data: [] }
+    return marketingInfo || []
   } catch (error) {
-    return { status: 500, data: [] }
+    console.error("Error fetching marketing info:", error)
+    return []
   }
 }
 
@@ -42,6 +53,32 @@ export const updateMarketingInfoAction = async (
 }
 
 export const deleteMarketingInfoAction = async (id: string) => {
+  await onCurrentUser()
+  try {
+    const deleted = await deleteMarketingInfo(id)
+    if (deleted) {
+      return { status: 200, data: "Marketing info deleted successfully" }
+    }
+    return { status: 404, data: "Marketing info not found" }
+  } catch (error) {
+    return { status: 500, data: "Oops! something went wrong" }
+  }
+}
+
+
+
+export const getMarketingInfoActione = async () => {
+  const user = await onCurrentUser()
+  try {
+    const marketingInfo = await getMarketingInfo(user.id)
+    if (marketingInfo) return { status: 200, data: marketingInfo }
+    return { status: 404, data: [] }
+  } catch (error) {
+    return { status: 500, data: [] }
+  }
+}
+
+export const deleteMarketingInfoActione = async (id: string) => {
   await onCurrentUser()
   try {
     const deleted = await deleteMarketingInfo(id)
