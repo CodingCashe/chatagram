@@ -82,7 +82,7 @@ const ChatalLogo: React.FC<ChatalLogoProps> = ({
             margin: 0,
           }}
         >
-          Chatal
+          Yazi
         </p>
         <p
           style={{

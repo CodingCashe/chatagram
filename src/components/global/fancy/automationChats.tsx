@@ -4336,7 +4336,9 @@ interface RawConversation {
 }
 
 const BOT_NAME = "AiAssist"
-const BOT_AVATAR = "https://api.dicebear.com/6.x/bottts/svg?seed=AiAssist"
+// const BOT_AVATAR = "https://api.dicebear.com/6.x/bottts/svg?seed=AiAssist"
+const BOT_AVATAR = "/fancy-profile-pic.svg"
+
 const BOT_ID = "17841444435951291"
 const EXCLUDED_CHAT_ID = "17841444435951291"
 
@@ -4621,7 +4623,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.2 }}
-                      className={`flex items-end mb-4 ${message.role === "assistant" ? "justify-start" : "justify-end"}`}
+                      className={`flex items-end mb-4 ${message.role === "assistant" ? "justify-end" : "justify-start"}`}
                     >
                       {message.role === "assistant" ? (
                         <Avatar className="w-8 h-8 mr-2 border-2 border-primary">

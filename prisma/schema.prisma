@@ -30,6 +30,18 @@ model User {
   integrations Integrations[]
   automations  Automation[]
   businesses   Business[]
+  marketingInfo MarketingInfo[]
+}
+
+model MarketingInfo {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email     String?
+  phone     String?
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @db.Uuid
 }
 
 model Business {
