@@ -44,6 +44,8 @@ model MarketingInfo {
   userId    String   @db.Uuid
 }
 
+
+
 model Business {
   id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   businessName        String
