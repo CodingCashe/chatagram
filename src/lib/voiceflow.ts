@@ -2176,6 +2176,7 @@
 
 import axios, { AxiosError } from 'axios';
 import { getBusinessForWebhook } from '@/actions/businfo';
+import type { VoiceflowVariables, VoiceflowResult } from "@/types/voiceflow"
 
 const API_KEY = process.env.VOICEFLOW_API_KEY;
 const PROJECT_ID = process.env.VOICEFLOW_PROJECT_ID;
@@ -2185,6 +2186,8 @@ interface VoiceflowResponse {
   type: string;
   payload: any;
 }
+
+
 
 interface BusinessData {
   id: string;
@@ -2260,7 +2263,7 @@ export async function getVoiceflowResponse(
   userInput: string,
   userId: string,
   businessVariables: Record<string, string>,
-): Promise<{ response: VoiceflowResponse[]; variables: Record<string, any> }> {
+): Promise<VoiceflowResult> {
   console.log("Entering getVoiceflowResponse function")
   console.log("User input:", userInput)
   console.log("User ID:", userId)
@@ -2268,7 +2271,7 @@ export async function getVoiceflowResponse(
 
   try {
     console.log("Sending request to Voiceflow API")
-    const response = await axios.post(
+    const response = await axios.post<VoiceflowResponse[]>(
       `https://general-runtime.voiceflow.com/state/user/${userId}/interact`,
       {
         request: { type: "text", payload: userInput },
@@ -2297,83 +2300,29 @@ export async function getVoiceflowResponse(
   }
 }
 
-
-// export async function getVoiceflowResponse(
-//   userInput: string, 
-//   userId: string, 
-//   businessVariables: Record<string, string>
-// ): Promise<VoiceflowResponse[]> {
-//   console.log('Entering getVoiceflowResponse function');
-//   console.log('User input:', userInput);
-//   console.log('User ID:', userId);
-//   console.log('Business variables:', JSON.stringify(businessVariables, null, 2));
-
-//   try {
-//     console.log('Sending request to Voiceflow API');
-//     const response = await axios.post(
-//       `https://general-runtime.voiceflow.com/state/user/${userId}/interact`,
-//       {
-//         request: { type: 'text', payload: userInput },
-//         state: { variables: businessVariables },
-//       },
-//       {
-//         headers: {
-//           Authorization: API_KEY,
-//           versionID: VERSION_ID,
-//           accept: 'application/json',
-//           'content-type': 'application/json',
-//         }
-//       }
-//     );
-
-//     console.log('Voiceflow API response status:', response.status);
-//     console.log('Voiceflow API response data:', JSON.stringify(response.data, null, 2));
-
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error interacting with Voiceflow:', error);
-//     throw error;
-//   }
-// }
-
-
-async function fetchVoiceflowVariables(userId: string): Promise<Record<string, any>> {
+async function fetchVoiceflowVariables(userId: string): Promise<VoiceflowVariables> {
   console.log("Entering fetchVoiceflowVariables function")
   console.log("User ID:", userId)
 
   try {
     console.log("Sending request to fetch Voiceflow variables")
-    const response = await axios.get(`https://general-runtime.voiceflow.com/state/user/${userId}`, {
-      headers: {
-        Authorization: API_KEY,
-        versionID: VERSION_ID,
-        accept: "application/json",
+    const response = await axios.get<{ variables: VoiceflowVariables }>(
+      `https://general-runtime.voiceflow.com/state/user/${userId}`,
+      {
+        headers: {
+          Authorization: API_KEY,
+          versionID: VERSION_ID,
+          accept: "application/json",
+        },
       },
-    })
+    )
     console.log("Voiceflow variables fetch response status:", response.status)
     console.log("Voiceflow variables fetch response data:", JSON.stringify(response.data, null, 2))
 
     return response.data.variables || {}
   } catch (error) {
-    console.error("Error fetching Voiceflow variables:")
-    if (error instanceof Error) {
-      console.error("Error name:", error.name)
-      console.error("Error message:", error.message)
-      console.error("Error stack:", error.stack)
-    }
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError
-      console.error("Axios error details:")
-      console.error("Request URL:", axiosError.config?.url)
-      console.error("Request method:", axiosError.config?.method)
-      console.error("Request headers:", JSON.stringify(axiosError.config?.headers, null, 2))
-      console.error("Response status:", axiosError.response?.status)
-      console.error("Response data:", JSON.stringify(axiosError.response?.data, null, 2))
-    }
-    console.error("Full error object:", JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+    console.error("Error fetching Voiceflow variables:", error)
     throw error
-  } finally {
-    console.log("Exiting fetchVoiceflowVariables function")
   }
 }
 
