@@ -895,6 +895,191 @@
 
 // export default Sidebar
 
+// "use client"
+
+// import { useState } from "react"
+// import ChatalLogo from "@/svgs/chatal-logo"
+// import { Separator } from "@/components/ui/separator"
+// import UpgradeCard from "./upgrade"
+// import UpgradedCard from "./upgraded"
+// import { SubscriptionPlan } from "../subscription-plan"
+// import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+// import { SIDEBAR_MENU, type SideBarItemProps, type SideBarGroupProps } from "@/constants/menu"
+// import Link from "next/link"
+// import { usePathname } from "next/navigation"
+// import { cn } from "@/lib/utils"
+// import { ChevronDown } from "lucide-react"
+// import { useClerk } from "@clerk/nextjs"
+// import UserProfile from "./userProfile"
+
+// type Props = {
+//   slug: string
+// }
+
+// const Sidebar = ({ slug }: Props) => {
+//   const pathname = usePathname()
+//   const [expandedItem, setExpandedItem] = useState<string | null>(null)
+//   const [expandedGroup, setExpandedGroup] = useState<string | null>(null)
+//   const [showSubscriptionPlan, setShowSubscriptionPlan] = useState(false)
+//   const { signOut } = useClerk()
+
+//   const toggleSubscriptionPlan = () => setShowSubscriptionPlan(!showSubscriptionPlan)
+
+//   const renderMenuItem = (item: SideBarItemProps, isSubItem = false) => {
+//     const isActive = pathname === `/dashboard/${slug}/${item.label.toLocaleLowerCase() === "home" ? "/" : item.label}`
+//     const hasSubItems = item.subItems && item.subItems.length > 0
+//     return (
+//       <TooltipProvider key={item.id}>
+//         <Tooltip>
+//           <TooltipTrigger asChild>
+//             <Link
+//               href={`/dashboard/${slug}/${item.label.toLowerCase() === "home" ? "/" : item.label.toLowerCase()}`}
+//               className={cn(
+//                 "flex items-center gap-x-2 rounded-lg p-2 transition-colors duration-200",
+//                 isActive ? "bg-[#0f0f0f] text-white" : "text-[#9B9CA0] hover:bg-[#0f0f0f] hover:text-white",
+//                 isSubItem && "pl-8",
+//               )}
+//               onClick={(e) => {
+//                 if (hasSubItems) {
+//                   e.preventDefault()
+//                   setExpandedItem(expandedItem === item.id ? null : item.id)
+//                 }
+//               }}
+//             >
+//               {item.icon}
+//               <span className="flex-1">{item.label}</span>
+//               {hasSubItems && (
+//                 <ChevronDown
+//                   className={cn("transition-transform duration-200", expandedItem === item.id && "rotate-180")}
+//                 />
+//               )}
+//             </Link>
+//           </TooltipTrigger>
+//           <TooltipContent side="right">
+//             <p>{item.label}</p>
+//           </TooltipContent>
+//         </Tooltip>
+//         {hasSubItems && expandedItem === item.id && (
+//           <div className="pl-4">{item.subItems!.map((subItem) => renderMenuItem(subItem, true))}</div>
+//         )}
+//       </TooltipProvider>
+//     )
+//   }
+
+//   const renderGroup = (group: SideBarGroupProps) => (
+//     <div key={group.id} className="mb-4">
+//       <div
+//         onClick={() => setExpandedGroup(expandedGroup === group.id ? null : group.id)}
+//         className="flex items-center cursor-pointer mb-2 text-[#9B9CA0] hover:text-white"
+//       >
+//         <ChevronDown
+//           className={cn("mr-2 transition-transform duration-200", expandedGroup === group.id && "rotate-180")}
+//         />
+//         <span className="text-xs uppercase font-semibold">{group.label}</span>
+//       </div>
+//       {(expandedGroup === group.id || expandedGroup === null) && (
+//         <div>{group.items.map((item) => renderMenuItem(item))}</div>
+//       )}
+//     </div>
+//   )
+
+//   return (
+//     <div
+//       className="
+//         w-[250px]
+//         border-[2px]
+//         fixed
+//         left-0
+//         lg:inline-block
+//         border-[#545454]
+//         bg-gradient-to-b from-[#768BDD]
+//         via-[#171717]
+//         to-[#768BDD]
+//         hidden
+//         bottom-2
+//         top-2
+//         m-3
+//         rounded-3xl
+//         overflow-hidden
+//       "
+//     >
+//       <div
+//         className="
+//           flex
+//           flex-col
+//           gap-y-5
+//           w-full
+//           h-full
+//           p-3
+//           bg-[#0e0e0e]
+//           bg-opacity-90
+//           backdrop-filter
+//           backdrop-blur-3xl
+//           overflow-hidden
+//         "
+//       >
+//         <div className="flex items-center justify-center p-2">
+//           <ChatalLogo width={60} height={60} color="#0066cc" />
+//         </div>
+
+//         <div className="flex-1 overflow-y-auto py-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
+//           {SIDEBAR_MENU.map((group) => renderGroup(group))}
+//         </div>
+
+//         <div className="px-16">
+//           <Separator orientation="horizontal" className="bg-[#333336]" />
+//         </div>
+
+//         <div className="mt-4">
+//           <button
+//             onClick={toggleSubscriptionPlan}
+//             className="w-full text-left px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white rounded-md"
+//           >
+//             {showSubscriptionPlan ? "Hide" : "Show"} Subscription Plan
+//           </button>
+//           {showSubscriptionPlan && (
+//             <>
+//               <SubscriptionPlan type="PRO">
+//                 <div className="flex-1 flex flex-col justify-end">
+//                   <UpgradedCard userName="Member" />
+//                 </div>
+//               </SubscriptionPlan>
+//               <SubscriptionPlan type="FREE">
+//                 <div className="flex-1 flex flex-col justify-end">
+//                   <UpgradeCard />
+//                 </div>
+//               </SubscriptionPlan>
+//             </>
+//           )}
+//         </div>
+
+//         <div className="px-16">
+//           <Separator orientation="horizontal" className="bg-[#333336]" />
+//         </div>
+
+//         <div className="w-full">
+//           <UserProfile onSignOut={signOut} />
+//         </div>
+
+//         {/* <TooltipProvider>
+//           <Tooltip>
+//             <TooltipTrigger asChild>
+//               <Button variant="ghost" size="icon" className="absolute bottom-4 right-4">
+//                 <HelpCircle className="h-5 w-5 text-[#9B9CA0]" />
+//               </Button>
+//             </TooltipTrigger>
+//             <TooltipContent>
+//               <p>Help</p>
+//             </TooltipContent>
+//           </Tooltip>
+//         </TooltipProvider> */}
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default Sidebar
+
 "use client"
 
 import { useState } from "react"
@@ -908,9 +1093,10 @@ import { SIDEBAR_MENU, type SideBarItemProps, type SideBarGroupProps } from "@/c
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { ChevronDown } from "lucide-react"
+import { ChevronDown, ChevronUp } from "lucide-react"
 import { useClerk } from "@clerk/nextjs"
 import UserProfile from "./userProfile"
+import { motion, AnimatePresence } from "framer-motion"
 
 type Props = {
   slug: string
@@ -921,7 +1107,7 @@ const Sidebar = ({ slug }: Props) => {
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null)
   const [showSubscriptionPlan, setShowSubscriptionPlan] = useState(false)
-  const { signOut } = useClerk()
+  const { signOut, user } = useClerk()
 
   const toggleSubscriptionPlan = () => setShowSubscriptionPlan(!showSubscriptionPlan)
 
@@ -932,55 +1118,84 @@ const Sidebar = ({ slug }: Props) => {
       <TooltipProvider key={item.id}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Link
-              href={`/dashboard/${slug}/${item.label.toLowerCase() === "home" ? "/" : item.label.toLowerCase()}`}
-              className={cn(
-                "flex items-center gap-x-2 rounded-lg p-2 transition-colors duration-200",
-                isActive ? "bg-[#0f0f0f] text-white" : "text-[#9B9CA0] hover:bg-[#0f0f0f] hover:text-white",
-                isSubItem && "pl-8",
-              )}
-              onClick={(e) => {
-                if (hasSubItems) {
-                  e.preventDefault()
-                  setExpandedItem(expandedItem === item.id ? null : item.id)
-                }
-              }}
-            >
-              {item.icon}
-              <span className="flex-1">{item.label}</span>
-              {hasSubItems && (
-                <ChevronDown
-                  className={cn("transition-transform duration-200", expandedItem === item.id && "rotate-180")}
-                />
-              )}
-            </Link>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                href={`/dashboard/${slug}/${item.label.toLowerCase() === "home" ? "/" : item.label.toLowerCase()}`}
+                className={cn(
+                  "flex items-center gap-x-2 rounded-lg p-2 transition-colors duration-200",
+                  isActive ? "bg-[#0f0f0f] text-white" : "text-[#9B9CA0] hover:bg-[#0f0f0f] hover:text-white",
+                  isSubItem && "pl-8",
+                )}
+                onClick={(e) => {
+                  if (hasSubItems) {
+                    e.preventDefault()
+                    setExpandedItem(expandedItem === item.id ? null : item.id)
+                  }
+                }}
+              >
+                {item.icon}
+                <span className="flex-1">{item.label}</span>
+                {hasSubItems && (
+                  <ChevronDown
+                    className={cn("transition-transform duration-200", expandedItem === item.id && "rotate-180")}
+                  />
+                )}
+              </Link>
+            </motion.div>
           </TooltipTrigger>
           <TooltipContent side="right">
             <p>{item.label}</p>
           </TooltipContent>
         </Tooltip>
-        {hasSubItems && expandedItem === item.id && (
-          <div className="pl-4">{item.subItems!.map((subItem) => renderMenuItem(subItem, true))}</div>
-        )}
+        <AnimatePresence>
+          {hasSubItems && expandedItem === item.id && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="pl-4"
+            >
+              {item.subItems!.map((subItem) => renderMenuItem(subItem, true))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </TooltipProvider>
     )
   }
 
   const renderGroup = (group: SideBarGroupProps) => (
-    <div key={group.id} className="mb-4">
-      <div
+    <motion.div
+      key={group.id}
+      className="mb-4"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+    >
+      <motion.div
         onClick={() => setExpandedGroup(expandedGroup === group.id ? null : group.id)}
         className="flex items-center cursor-pointer mb-2 text-[#9B9CA0] hover:text-white"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
         <ChevronDown
           className={cn("mr-2 transition-transform duration-200", expandedGroup === group.id && "rotate-180")}
         />
         <span className="text-xs uppercase font-semibold">{group.label}</span>
-      </div>
-      {(expandedGroup === group.id || expandedGroup === null) && (
-        <div>{group.items.map((item) => renderMenuItem(item))}</div>
-      )}
-    </div>
+      </motion.div>
+      <AnimatePresence>
+        {(expandedGroup === group.id || expandedGroup === null) && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {group.items.map((item) => renderMenuItem(item))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   )
 
   return (
@@ -1031,26 +1246,36 @@ const Sidebar = ({ slug }: Props) => {
         </div>
 
         <div className="mt-4">
-          <button
+          <motion.button
             onClick={toggleSubscriptionPlan}
-            className="w-full text-left px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white rounded-md"
+            className="w-full text-left px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white rounded-md flex items-center justify-between"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            {showSubscriptionPlan ? "Hide" : "Show"} Subscription Plan
-          </button>
-          {showSubscriptionPlan && (
-            <>
-              <SubscriptionPlan type="PRO">
-                <div className="flex-1 flex flex-col justify-end">
-                  <UpgradedCard userName="Member" />
-                </div>
-              </SubscriptionPlan>
-              <SubscriptionPlan type="FREE">
-                <div className="flex-1 flex flex-col justify-end">
-                  <UpgradeCard />
-                </div>
-              </SubscriptionPlan>
-            </>
-          )}
+            <span>{showSubscriptionPlan ? "Hide" : "Show"} Subscription Plan</span>
+            {showSubscriptionPlan ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </motion.button>
+          <AnimatePresence>
+            {showSubscriptionPlan && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                <SubscriptionPlan type="PRO">
+                  <div className="flex-1 flex flex-col justify-end">
+                    <UpgradedCard userName={user?.firstName || "Member"} />
+                  </div>
+                </SubscriptionPlan>
+                <SubscriptionPlan type="FREE">
+                  <div className="flex-1 flex flex-col justify-end">
+                    <UpgradeCard />
+                  </div>
+                </SubscriptionPlan>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         <div className="px-16">
@@ -1060,19 +1285,6 @@ const Sidebar = ({ slug }: Props) => {
         <div className="w-full">
           <UserProfile onSignOut={signOut} />
         </div>
-
-        {/* <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" className="absolute bottom-4 right-4">
-                <HelpCircle className="h-5 w-5 text-[#9B9CA0]" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Help</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider> */}
       </div>
     </div>
   )
