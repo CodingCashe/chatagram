@@ -319,7 +319,7 @@ export default function ChatalMindBlowingLoader({ state, className, color = "blu
 
     const interval = setInterval(() => {
       setLoadTime((prev) => prev + 1)
-    }, 1000)
+    }, 4000)
 
     return () => clearInterval(interval)
   }, [showText, state])
@@ -327,10 +327,10 @@ export default function ChatalMindBlowingLoader({ state, className, color = "blu
   useEffect(() => {
     if (!showText || !state) return
 
-    if (loadTime < 10) {
+    if (loadTime < 50) {
       setMessage(loadingMessages[loadTime % loadingMessages.length])
       setMessageType("loading")
-    } else if (loadTime < 20) {
+    } else if (loadTime < 100) {
       setMessage(encouragingMessages[(loadTime - 10) % encouragingMessages.length])
       setMessageType("encouraging")
     } else {
