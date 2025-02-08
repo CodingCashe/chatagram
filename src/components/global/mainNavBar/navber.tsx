@@ -4,6 +4,7 @@ import React from 'react'
 import Search from '../navbar/search'
 import CreateAutomation from '../create-automation'
 import SchedulePost from '../schedule-post'
+import IntegrateAccount from '../integrate'
 import { Notifications } from '../navbar/notifications/notifications'
 import { MenuButton } from '@/components/global/menuIcon/iconmenu'
 import MainBreadCrumb from '../bread-crumbs/main-bread-crumb'
@@ -19,7 +20,7 @@ const FixedNavbar: React.FC<FixedNavbarProps> = ({ slug, fullPageName, displayNa
   return (
     <div className="fixed mb-100 top-0 right-0 z-50">
       <div className="flex gap-x-2 lg:gap-x-5 items-center justify-between px-2 py-2">  
-        <SchedulePost />           
+        <IntegrateAccount />           
         <SchedulePost />           
         <Search />
         <CreateAutomation />
