@@ -28,7 +28,7 @@ const SchedulePost = (props: Props) => {
       }
     >
       <Loader state={isPending}>
-        <CalendarPlus className="mr-2 h-5 w-5" />
+        <CalendarPlus className="h-5 w-5" />
         <p className="lg:inline hidden">Schedule a Post</p>
       </Loader>
     </Button>
