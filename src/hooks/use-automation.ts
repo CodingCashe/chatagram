@@ -1,5 +1,5 @@
 import { useMutation, type UseMutationResult } from "@tanstack/react-query"
-import type { Automation } from "@/types/automation"
+import type { Automation } from "@/types/automations"
 
 interface CreateAutomationVariables {
   name: string
