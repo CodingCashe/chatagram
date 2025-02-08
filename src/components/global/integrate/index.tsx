@@ -41,13 +41,19 @@
 
 import { Button } from "@/components/ui/button"
 import { Instagram } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 
 const IntegrateAccount = () => {
   const router = useRouter()
+  const pathname = usePathname()
 
   const handleIntegrate = () => {
-    router.push("/integrations")
+    // Extract the slug from the pathname
+    const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+    const slug = slugMatch ? slugMatch[1] : ""
+
+    // Redirect to the integrations page with the correct slug
+    router.push(`/dashboard/${slug}/integrations`)
   }
 
   return (
