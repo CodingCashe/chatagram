@@ -193,7 +193,7 @@ const CreateAutomation = () => {
   return (
     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
       <Button
-        className="lg:px-10 py-6 bg-gradient-to-br hover:opacity-80 text-white rounded-full from-[#3352CC] font-medium to-[#1C2D70] shadow-lg transition-all duration-300 ease-in-out relative overflow-hidden"
+        className="lg:px-5 py-6 bg-gradient-to-br hover:opacity-80 text-white rounded-full from-[#3352CC] font-medium to-[#1C2D70] shadow-lg transition-all duration-300 ease-in-out relative overflow-hidden"
         onClick={handleCreateAutomation}
         disabled={isPending || showSuccess}
       >
