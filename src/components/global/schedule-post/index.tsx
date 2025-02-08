@@ -1,11 +1,11 @@
-'use client'
+"use client"
 
-import { Button } from '@/components/ui/button'
-import React, { useMemo } from 'react'
-import Loader from '../loader'
-import { AutomationDuoToneWhite } from '@/icons'
-import { useCreateAutomation } from '@/hooks/use-automations'
-import { v4 } from 'uuid'
+import { Button } from "@/components/ui/button"
+import { useMemo } from "react"
+import Loader from "../loader"
+import { CalendarPlus } from "lucide-react"
+import { useCreateAutomation } from "@/hooks/use-automations"
+import { v4 } from "uuid"
 
 type Props = {}
 
@@ -17,19 +17,18 @@ const SchedulePost = (props: Props) => {
 
   return (
     <Button
-      className="lg:px-10 py-6 bg-gradient-to-br hover:opacity-80 text-white rounded-full from-[#3352CC] font-medium to-[#1C2D70]"
+      className="lg:px-10 py-6 bg-gradient-to-br hover:bg-gradient-to-tl hover:shadow-lg text-white rounded-full from-[#1A1E2D] to-[#2C3E50] font-medium transition-all duration-300 ease-in-out"
       onClick={() =>
         mutate({
-          name: 'Untitled',
+          name: "Untitled",
           id: mutationId,
           createdAt: new Date(),
           keywords: [],
-          
         })
       }
     >
       <Loader state={isPending}>
-        <AutomationDuoToneWhite />
+        <CalendarPlus className="mr-2 h-5 w-5" />
         <p className="lg:inline hidden">Schedule a Post</p>
       </Loader>
     </Button>
@@ -37,3 +36,4 @@ const SchedulePost = (props: Props) => {
 }
 
 export default SchedulePost
+
