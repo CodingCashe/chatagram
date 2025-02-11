@@ -800,17 +800,17 @@ export async function getScheduledContent(clerkId: string) {
   }
 }
 
-export async function createScheduledContent(clerkId: string, contentData: any) {
-  console.log(`[createScheduledContent] Starting for clerkId: ${clerkId}`)
+export async function createScheduledContent(userId: string, contentData: any) {
+  console.log(`[createScheduledContent] Starting for clerkId: ${userId}`)
   console.log(`[createScheduledContent] Content data:`, contentData)
   try {
     const integration = await client.integrations.findFirst({
-      where: { userId: clerkId, name: "INSTAGRAM" },
+      where: { userId: userId, name: "INSTAGRAM" },
     })
     console.log(`[createScheduledContent] Integration found:`, integration)
 
     if (!integration || !integration.instagramId) {
-      console.error(`[createScheduledContent] No valid Instagram integration found for clerkId: ${clerkId}`)
+      console.error(`[createScheduledContent] No valid Instagram integration found for clerkId: ${userId}`)
       throw new Error("No valid Instagram integration found for this user")
     }
 
@@ -828,7 +828,7 @@ export async function createScheduledContent(clerkId: string, contentData: any) 
         thumbnailUrl: newContent.thumbnail_url,
         permalink: newContent.permalink,
         scheduledDate: new Date(newContent.timestamp),
-        userId: clerkId,
+        userId: userId,
         status: "scheduled",
       },
     })
