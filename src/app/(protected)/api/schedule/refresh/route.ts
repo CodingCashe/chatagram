@@ -1,22 +1,3 @@
-// import { NextResponse } from "next/server"
-// import { refreshInstagramData } from "@/lib/insta"
-// import { auth } from "@clerk/nextjs"
-
-// export async function POST() {
-//   try {
-//     const { userId } = auth()
-//     if (!userId) {
-//       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-//     }
-
-//     const result = await refreshInstagramData(userId)
-//     return NextResponse.json(result)
-//   } catch (error) {
-//     console.error("Error in POST /api/refresh-instagram:", error)
-//     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
-//   }
-// }
-
 import { NextResponse } from "next/server"
 import { refreshInstagramData } from "@/lib/insta"
 import { currentUser } from "@clerk/nextjs/server"
