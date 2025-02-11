@@ -329,7 +329,7 @@ export class InstagramAPI {
 
       return response.data
     } catch (error) {
-      console.error("Error creating scheduled content:", error)
+      console.error("Error creating scheduled contenttttttt:", error)
       throw this.handleError(error)
     }
   }
