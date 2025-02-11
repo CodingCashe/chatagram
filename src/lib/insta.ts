@@ -588,15 +588,15 @@ import { InstagramAPI } from "@/lib/instagram-api"
 import { client } from "@/lib/prisma"
 import { refreshToken } from "@/lib/fetch"
 
-export async function getScheduledContent(userId: string | null) {
-  if (!userId) {
+export async function getScheduledContent(clerkId: string | null) {
+  if (!clerkId) {
     console.error("Error in getScheduledContent: userId is null")
     return []
   }
 
   try {
     const integration = await client.integrations.findFirst({
-      where: { userId: userId, name: "INSTAGRAM" },
+      where: { userId: clerkId, name: "INSTAGRAM" },
     })
 
     if (!integration || !integration.instagramId) {
