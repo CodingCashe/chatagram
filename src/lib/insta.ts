@@ -622,14 +622,14 @@ export async function getScheduledContent(clerkId: string | null) {
   }
 }
 
-export async function createScheduledContent(userId: string | null, contentData: any) {
-  if (!userId) {
+export async function createScheduledContent(clerkId: string | null, contentData: any) {
+  if (!clerkId) {
     throw new Error("userId is null")
   }
 
   try {
     const integration = await client.integrations.findFirst({
-      where: { userId: userId, name: "INSTAGRAM" },
+      where: { userId: clerkId, name: "INSTAGRAM" },
     })
 
     if (!integration || !integration.instagramId) {
@@ -648,7 +648,7 @@ export async function createScheduledContent(userId: string | null, contentData:
         thumbnailUrl: newContent.thumbnail_url,
         permalink: newContent.permalink,
         scheduledDate: new Date(newContent.timestamp),
-        userId: userId,
+        userId: clerkId,
         status: "scheduled",
       },
     })
