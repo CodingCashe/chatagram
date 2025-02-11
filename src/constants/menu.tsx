@@ -277,6 +277,11 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
         label: 'Information',
         icon: <PencilDuoToneBlack />,
       },
+      {
+        id: uuid(),
+        label: 'Scheduler',
+        icon: <Calendar />,
+      },
     ]
   },
 ]
