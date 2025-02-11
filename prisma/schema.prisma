@@ -31,6 +31,24 @@ model User {
   automations  Automation[]
   businesses   Business[]
   marketingInfo MarketingInfo[]
+  scheduledContent ScheduledContent[]
+}
+
+model ScheduledContent {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  instagramPostId   String?  @unique
+  caption           String
+  mediaType         String
+  mediaUrl          String
+  thumbnailUrl      String?
+  permalink         String?
+  scheduledDate     DateTime
+  publishedDate     DateTime?
+  status            String   @default("scheduled")
+  user              User     @relation(fields: [userId], references: [id])
+  userId            String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model MarketingInfo {
@@ -122,8 +140,6 @@ model Message {
 }
 
 
-
-// Add this new model to your existing schema
 model Conversation {
   id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   pageId       String    @unique
@@ -133,8 +149,6 @@ model Conversation {
   Automation   Automation? @relation(fields: [automationId], references: [id])
   automationId String?    @db.Uuid
 }
-
-// Keep your existing Message model as it is
 
 
 
