@@ -45,8 +45,8 @@ model ScheduledContent {
   scheduledDate     DateTime
   publishedDate     DateTime?
   status            String   @default("scheduled")
-  user              User     @relation(fields: [userId], references: [id])
-  userId            String
+  User              User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String?  @db.Uuid
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
