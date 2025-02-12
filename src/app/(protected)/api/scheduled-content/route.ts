@@ -174,7 +174,8 @@ export async function POST(req: Request) {
 
     let mediaUrl = null
     if (file) {
-      mediaUrl = await uploadFileAndGetUrl(file)
+      mediaUrl = "https://media.com/image.jpg"
+      // mediaUrl = await uploadFileAndGetUrl(file)
     }
 
     const contentData = {
