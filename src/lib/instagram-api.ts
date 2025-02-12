@@ -756,8 +756,8 @@ export class InstagramAPI {
 
   constructor(accessToken: string, apiVersion = "v21.0") {
     this.accessToken = accessToken
-    this.apiVersion = apiVersion
-    this.baseUrl = `https://graph.instagram.com/${this.apiVersion}`
+    this.apiVersion = apiVersion 
+    this.baseUrl = `https://graph.facebook.com/v22.0`
   }
 
   async getScheduledContent(instagramBusinessAccountId: string): Promise<any[]> {
@@ -892,7 +892,7 @@ export class InstagramAPI {
     return {
       status: 500,
       error: {
-        message: error instanceof Error ? error.message : "Unknown error",
+        message: error instanceof Error ? error.message : "Unknown errorrrrrrapi",
         type: "INTERNAL_ERROR",
         code: 500,
         fbtrace_id: "",
