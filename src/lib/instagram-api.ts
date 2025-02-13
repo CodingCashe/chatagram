@@ -604,7 +604,7 @@
 //   private apiVersion: string
 //   private baseUrl: string
 
-//   constructor(accessToken: string, apiVersion = "v21.0") {
+//   constructor(accessToken: string, apiVersion = "v22.0") {
 //     this.accessToken = accessToken
 //     this.apiVersion = apiVersion
 //     this.baseUrl = `https://graph.instagram.com/${this.apiVersion}`
@@ -734,404 +734,6 @@
 //   }
 // }
 
-// import axios from "axios"
-// import FormData from "form-data"
-
-// interface InstagramAPIResponse {
-//   status: number
-//   data?: any
-//   error?: {
-//     message: string
-//     type: string
-//     code: number
-//     error_subcode?: number
-//     fbtrace_id: string
-//   }
-// }
-
-// export class InstagramAPI {
-//   private accessToken: string
-//   private apiVersion: string
-//   private baseUrl: string
-
-//   constructor(accessToken: string, apiVersion = "v21.0") {
-//     this.accessToken = accessToken
-//     this.apiVersion = apiVersion 
-//     this.baseUrl = `https://graph.facebook.com/v22.0`
-//   }
-
-//   async getScheduledContent(instagramBusinessAccountId: string): Promise<any[]> {
-//     console.log(`[InstagramAPI] Fetching scheduled content for account: ${instagramBusinessAccountId}`)
-//     try {
-//       const response = await axios.get(`${this.baseUrl}/${instagramBusinessAccountId}/media`, {
-//         params: {
-//           access_token: this.accessToken,
-//           fields: "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp,username",
-//           limit: 100,
-//         },
-//       })
-
-//       console.log(`[InstagramAPI] Fetched ${response.data.data.length} items`)
-//       const scheduledContent = response.data.data.filter((content: any) => new Date(content.timestamp) > new Date())
-//       console.log(`[InstagramAPI] ${scheduledContent.length} items are scheduled for future`)
-//       return scheduledContent
-//     } catch (error) {
-//       console.error("Error fetching scheduled content:", error)
-//       throw this.handleError(error)
-//     }
-//   }
-
-//   async createScheduledContent(instagramBusinessAccountId: string, contentData: any): Promise<any> {
-//     console.log(`[InstagramAPI] Creating scheduled content for account: ${instagramBusinessAccountId}`)
-//     console.log(`[InstagramAPI] Content data:`, JSON.stringify(contentData, null, 2))
-//     try {
-//       const formData = new FormData()
-//       formData.append("access_token", this.accessToken)
-//       formData.append("caption", contentData.content)
-//       formData.append("media_type", contentData.postType.toUpperCase())
-
-//       if (contentData.mediaUrl) {
-//         console.log(`[InstagramAPI] Using media URL: ${contentData.mediaUrl}`)
-//         formData.append("image_url", contentData.mediaUrl)
-//       } else {
-//         console.error("[InstagramAPI] MediaUrl not provided")
-//         throw new Error("MediaUrl must be provided")
-//       }
-
-//       if (contentData.scheduledDate) {
-//         const scheduledTime = Math.floor(new Date(contentData.scheduledDate).getTime() / 1000)
-//         console.log(`[InstagramAPI] Scheduling content for: ${new Date(scheduledTime * 1000).toISOString()}`)
-//         formData.append("published", "false")
-//         formData.append("scheduled_publish_time", scheduledTime.toString())
-//       }
-
-//       const response = await axios.post(`${this.baseUrl}/${instagramBusinessAccountId}/media`, formData, {
-//         headers: formData.getHeaders(),
-//       })
-
-//       console.log(`[InstagramAPI] Content created successfully. Response:`, JSON.stringify(response.data, null, 2))
-//       return response.data
-//     } catch (error) {
-//       console.error("Error creating scheduled content:", error)
-//       throw this.handleError(error)
-//     }
-//   }
-
-//   async deleteScheduledContent(mediaId: string): Promise<void> {
-//     console.log(`[InstagramAPI] Deleting scheduled content: ${mediaId}`)
-//     try {
-//       await axios.delete(`${this.baseUrl}/${mediaId}`, {
-//         params: {
-//           access_token: this.accessToken,
-//         },
-//       })
-//       console.log(`[InstagramAPI] Content deleted successfully`)
-//     } catch (error) {
-//       console.error("Error deleting scheduled content:", error)
-//       throw this.handleError(error)
-//     }
-//   }
-
-//   async updateScheduledContent(mediaId: string, updateData: any): Promise<any> {
-//     console.log(`[InstagramAPI] Updating scheduled content: ${mediaId}`)
-//     console.log(`[InstagramAPI] Update data:`, JSON.stringify(updateData, null, 2))
-//     try {
-//       const response = await axios.post(`${this.baseUrl}/${mediaId}`, {
-//         access_token: this.accessToken,
-//         ...updateData,
-//       })
-
-//       console.log(`[InstagramAPI] Content updated successfully. Response:`, JSON.stringify(response.data, null, 2))
-//       return response.data
-//     } catch (error) {
-//       console.error("Error updating scheduled content:", error)
-//       throw this.handleError(error)
-//     }
-//   }
-
-//   async getUserProfile(instagramUserId: string): Promise<any> {
-//     console.log(`[InstagramAPI] Fetching user profile for: ${instagramUserId}`)
-//     try {
-//       const fields = "id,username,name,profile_picture_url,followers_count,follows_count,media_count"
-//       const response = await axios.get(`${this.baseUrl}/${instagramUserId}`, {
-//         params: {
-//           fields: fields,
-//           access_token: this.accessToken,
-//         },
-//       })
-
-//       console.log(`[InstagramAPI] User profile fetched successfully`)
-//       return response.data
-//     } catch (error) {
-//       console.error("Error fetching user profile:", error)
-//       throw this.handleError(error)
-//     }
-//   }
-
-//   private handleError(error: any): InstagramAPIResponse {
-//     if (axios.isAxiosError(error)) {
-//       const errorResponse = error.response?.data?.error || {
-//         message: "Unknown Instagram API error",
-//         type: "API_ERROR",
-//         code: 500,
-//       }
-
-//       console.error("Instagram API - Formatted Error:", {
-//         message: errorResponse.message,
-//         type: errorResponse.type,
-//         code: errorResponse.code,
-//         subcode: errorResponse.error_subcode,
-//       })
-
-//       return {
-//         status: error.response?.status || 500,
-//         error: errorResponse,
-//       }
-//     }
-
-//     return {
-//       status: 500,
-//       error: {
-//         message: error instanceof Error ? error.message : "Unknown errorrrrrrapi",
-//         type: "INTERNAL_ERROR",
-//         code: 500,
-//         fbtrace_id: "",
-//       },
-//     }
-//   }
-// }
-
-// import axios from "axios"
-// import FormData from "form-data"
-
-// interface InstagramAPIResponse {
-//   status: number
-//   data?: any
-//   error?: {
-//     message: string
-//     type: string
-//     code: number
-//     error_subcode?: number
-//     fbtrace_id: string
-//   }
-// }
-
-// interface TokenExchangeResponse {
-//   access_token: string
-//   token_type: string
-//   expires_in: number
-// }
-
-// export class InstagramAPI {
-//   private accessToken: string
-//   private apiVersion: string
-//   private baseUrl: string
-//   private tokenExpirationTime: number | null
-
-//   constructor(accessToken: string, apiVersion = "v22.0") {
-//     this.accessToken = accessToken
-//     this.apiVersion = apiVersion
-//     this.baseUrl = `https://graph.facebook.com/${this.apiVersion}`
-//     this.tokenExpirationTime = null
-//   }
-
-//   async initialize(): Promise<void> {
-//     try {
-//       await this.exchangeToLongLivedToken()
-//     } catch (error) {
-//       console.error("Failed to exchange to long-lived token:", error)
-//       throw error
-//     }
-//   }
-
-//   private async exchangeToLongLivedToken(): Promise<void> {
-//     console.log("[InstagramAPI] Exchanging short-lived token for long-lived token")
-//     try {
-//       const response = await axios.get<TokenExchangeResponse>(`${this.baseUrl}/oauth/access_token`, {
-//         params: {
-//           grant_type: "fb_exchange_token",
-//           client_id: process.env.INSTAGRAM_CLIENT_ID,
-//           client_secret: process.env.INSTAGRAM_CLIENT_SECRET,
-//           fb_exchange_token: this.accessToken,
-//         },
-//       })
-
-//       this.accessToken = response.data.access_token
-//       this.tokenExpirationTime = Date.now() + response.data.expires_in * 1000
-//       console.log("[InstagramAPI] Successfully exchanged for long-lived token")
-//     } catch (error) {
-//       console.error("Error exchanging for long-lived token:", error)
-//       throw this.handleError(error)
-//     }
-//   }
-
-//   private async refreshAccessTokenIfNeeded(): Promise<void> {
-//     if (this.tokenExpirationTime && Date.now() > this.tokenExpirationTime - 24 * 60 * 60 * 1000) {
-//       console.log("[InstagramAPI] Refreshing access token")
-//       try {
-//         const response = await axios.get<TokenExchangeResponse>(`${this.baseUrl}/refresh_access_token`, {
-//           params: {
-//             grant_type: "ig_refresh_token",
-//             access_token: this.accessToken,
-//           },
-//         })
-
-//         this.accessToken = response.data.access_token
-//         this.tokenExpirationTime = Date.now() + response.data.expires_in * 1000
-//         console.log("[InstagramAPI] Successfully refreshed access token")
-//       } catch (error) {
-//         console.error("Error refreshing access token:", error)
-//         throw this.handleError(error)
-//       }
-//     }
-//   }
-
-//   async getScheduledContent(instagramBusinessAccountId: string): Promise<any[]> {
-//     await this.refreshAccessTokenIfNeeded()
-//     console.log(`[InstagramAPI] Fetching scheduled content for account: ${instagramBusinessAccountId}`)
-//     try {
-//       const response = await axios.get(`${this.baseUrl}/${instagramBusinessAccountId}/media`, {
-//         params: {
-//           access_token: this.accessToken,
-//           fields: "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp,username",
-//           limit: 100,
-//         },
-//       })
-
-//       console.log(`[InstagramAPI] Fetched ${response.data.data.length} items`)
-//       const scheduledContent = response.data.data.filter((content: any) => new Date(content.timestamp) > new Date())
-//       console.log(`[InstagramAPI] ${scheduledContent.length} items are scheduled for future`)
-//       return scheduledContent
-//     } catch (error) {
-//       console.error("Error fetching scheduled content:", error)
-//       throw this.handleError(error)
-//     }
-//   }
-
-//   async createScheduledContent(instagramBusinessAccountId: string, contentData: any): Promise<any> {
-//     await this.refreshAccessTokenIfNeeded()
-//     console.log(`[InstagramAPI] Creating scheduled content for account: ${instagramBusinessAccountId}`)
-//     console.log(`[InstagramAPI] Content data:`, JSON.stringify(contentData, null, 2))
-//     try {
-//       const formData = new FormData()
-//       formData.append("access_token", this.accessToken)
-//       formData.append("caption", contentData.content)
-//       formData.append("media_type", contentData.postType.toUpperCase())
-
-//       if (contentData.mediaUrl) {
-//         console.log(`[InstagramAPI] Using media URL: ${contentData.mediaUrl}`)
-//         formData.append("image_url", contentData.mediaUrl)
-//       } else {
-//         console.error("[InstagramAPI] MediaUrl not provided")
-//         throw new Error("MediaUrl must be provided")
-//       }
-
-//       if (contentData.scheduledDate) {
-//         const scheduledTime = Math.floor(new Date(contentData.scheduledDate).getTime() / 1000)
-//         console.log(`[InstagramAPI] Scheduling content for: ${new Date(scheduledTime * 1000).toISOString()}`)
-//         formData.append("published", "false")
-//         formData.append("scheduled_publish_time", scheduledTime.toString())
-//       }
-
-//       const response = await axios.post(`${this.baseUrl}/${instagramBusinessAccountId}/media`, formData, {
-//         headers: formData.getHeaders(),
-//       })
-
-//       console.log(`[InstagramAPI] Content created successfully. Response:`, JSON.stringify(response.data, null, 2))
-//       return response.data
-//     } catch (error) {
-//       console.error("Error creating scheduled content:", error)
-//       throw this.handleError(error)
-//     }
-//   }
-
-//   async deleteScheduledContent(mediaId: string): Promise<void> {
-//     await this.refreshAccessTokenIfNeeded()
-//     console.log(`[InstagramAPI] Deleting scheduled content: ${mediaId}`)
-//     try {
-//       await axios.delete(`${this.baseUrl}/${mediaId}`, {
-//         params: {
-//           access_token: this.accessToken,
-//         },
-//       })
-//       console.log(`[InstagramAPI] Content deleted successfully`)
-//     } catch (error) {
-//       console.error("Error deleting scheduled content:", error)
-//       throw this.handleError(error)
-//     }
-//   }
-
-//   async updateScheduledContent(mediaId: string, updateData: any): Promise<any> {
-//     await this.refreshAccessTokenIfNeeded()
-//     console.log(`[InstagramAPI] Updating scheduled content: ${mediaId}`)
-//     console.log(`[InstagramAPI] Update data:`, JSON.stringify(updateData, null, 2))
-//     try {
-//       const response = await axios.post(`${this.baseUrl}/${mediaId}`, {
-//         access_token: this.accessToken,
-//         ...updateData,
-//       })
-
-//       console.log(`[InstagramAPI] Content updated successfully. Response:`, JSON.stringify(response.data, null, 2))
-//       return response.data
-//     } catch (error) {
-//       console.error("Error updating scheduled content:", error)
-//       throw this.handleError(error)
-//     }
-//   }
-
-//   async getUserProfile(instagramUserId: string): Promise<any> {
-//     await this.refreshAccessTokenIfNeeded()
-//     console.log(`[InstagramAPI] Fetching user profile for: ${instagramUserId}`)
-//     try {
-//       const fields = "id,username,name,profile_picture_url,followers_count,follows_count,media_count"
-//       const response = await axios.get(`${this.baseUrl}/${instagramUserId}`, {
-//         params: {
-//           fields: fields,
-//           access_token: this.accessToken,
-//         },
-//       })
-
-//       console.log(`[InstagramAPI] User profile fetched successfully`)
-//       return response.data
-//     } catch (error) {
-//       console.error("Error fetching user profile:", error)
-//       throw this.handleError(error)
-//     }
-//   }
-
-//   private handleError(error: any): InstagramAPIResponse {
-//     if (axios.isAxiosError(error)) {
-//       const errorResponse = error.response?.data?.error || {
-//         message: "Unknown Instagram API error",
-//         type: "API_ERROR",
-//         code: 500,
-//       }
-
-//       console.error("Instagram API - Formatted Error:", {
-//         message: errorResponse.message,
-//         type: errorResponse.type,
-//         code: errorResponse.code,
-//         subcode: errorResponse.error_subcode,
-//       })
-
-//       return {
-//         status: error.response?.status || 500,
-//         error: errorResponse,
-//       }
-//     }
-
-//     return {
-//       status: 500,
-//       error: {
-//         message: error instanceof Error ? error.message : "Unknown error",
-//         type: "INTERNAL_ERROR",
-//         code: 500,
-//         fbtrace_id: "",
-//       },
-//     }
-//   }
-// }
-
 import axios from "axios"
 import FormData from "form-data"
 
@@ -1147,79 +749,21 @@ interface InstagramAPIResponse {
   }
 }
 
-interface TokenExchangeResponse {
-  access_token: string
-  token_type: string
-  expires_in: number
-}
-
 export class InstagramAPI {
   private accessToken: string
   private apiVersion: string
   private baseUrl: string
-  private tokenExpirationTime: number | null
 
   constructor(accessToken: string, apiVersion = "v22.0") {
     this.accessToken = accessToken
     this.apiVersion = apiVersion
     this.baseUrl = `https://graph.instagram.com/${this.apiVersion}`
-    this.tokenExpirationTime = null
-  }
-
-  async initialize(): Promise<void> {
-    try {
-      await this.exchangeToLongLivedToken()
-    } catch (error) {
-      console.error("Failed to exchange to long-lived token:", error)
-      throw error
-    }
-  }
-
-  private async exchangeToLongLivedToken(): Promise<void> {
-    console.log("[InstagramAPI] Exchanging short-lived token for long-lived token")
-    try {
-      const response = await axios.get<TokenExchangeResponse>(`${this.baseUrl}/oauth/access_token`, {
-        params: {
-          grant_type: "fb_exchange_token",
-          client_id: process.env.INSTAGRAM_APP_ID,
-          client_secret: process.env.INSTAGRAM_APP_SECRET,
-          fb_exchange_token: this.accessToken,
-        },
-      })
-
-      this.accessToken = response.data.access_token
-      this.tokenExpirationTime = Date.now() + response.data.expires_in * 1000
-      console.log("[InstagramAPI] Successfully exchanged for long-lived token")
-    } catch (error) {
-      console.error("Error exchanging for long-lived token:", error)
-      throw this.handleError(error)
-    }
-  }
-
-  private async refreshAccessTokenIfNeeded(): Promise<void> {
-    if (this.tokenExpirationTime && Date.now() > this.tokenExpirationTime - 24 * 60 * 60 * 1000) {
-      console.log("[InstagramAPI] Refreshing access token")
-      try {
-        const response = await axios.get<TokenExchangeResponse>(`${this.baseUrl}/refresh_access_token`, {
-          params: {
-            grant_type: "ig_refresh_token",
-            access_token: this.accessToken,
-          },
-        })
-
-        this.accessToken = response.data.access_token
-        this.tokenExpirationTime = Date.now() + response.data.expires_in * 1000
-        console.log("[InstagramAPI] Successfully refreshed access token")
-      } catch (error) {
-        console.error("Error refreshing access token:", error)
-        throw this.handleError(error)
-      }
-    }
   }
 
   async getScheduledContent(instagramBusinessAccountId: string): Promise<any[]> {
-    await this.refreshAccessTokenIfNeeded()
-    console.log(`[InstagramAPI] Fetching scheduled content for account: ${instagramBusinessAccountId}`)
+    console.log(
+      `[InstagramAPI.getScheduledContent] Fetching scheduled content for account: ${instagramBusinessAccountId}`,
+    )
     try {
       const response = await axios.get(`${this.baseUrl}/${instagramBusinessAccountId}/media`, {
         params: {
@@ -1229,20 +773,17 @@ export class InstagramAPI {
         },
       })
 
-      console.log(`[InstagramAPI] Fetched ${response.data.data.length} items`)
-      const scheduledContent = response.data.data.filter((content: any) => new Date(content.timestamp) > new Date())
-      console.log(`[InstagramAPI] ${scheduledContent.length} items are scheduled for future`)
-      return scheduledContent
+      console.log(`[InstagramAPI.getScheduledContent] Response:`, response.data)
+      return response.data.data.filter((content: any) => new Date(content.timestamp) > new Date())
     } catch (error) {
-      console.error("Error fetching scheduled content:", error)
+      console.error("[InstagramAPI.getScheduledContent] Error:", error)
       throw this.handleError(error)
     }
   }
 
   async createScheduledContent(instagramBusinessAccountId: string, contentData: any): Promise<any> {
-    await this.refreshAccessTokenIfNeeded()
-    console.log(`[InstagramAPI] Creating scheduled content for account: ${instagramBusinessAccountId}`)
-    console.log(`[InstagramAPI] Content data:`, JSON.stringify(contentData, null, 2))
+    console.log(`[InstagramAPI.createScheduledContent] Creating content for account: ${instagramBusinessAccountId}`)
+    console.log(`[InstagramAPI.createScheduledContent] Content data:`, contentData)
     try {
       const formData = new FormData()
       formData.append("access_token", this.accessToken)
@@ -1250,69 +791,62 @@ export class InstagramAPI {
       formData.append("media_type", contentData.postType.toUpperCase())
 
       if (contentData.mediaUrl) {
-        console.log(`[InstagramAPI] Using media URL: ${contentData.mediaUrl}`)
         formData.append("image_url", contentData.mediaUrl)
       } else {
-        console.error("[InstagramAPI] MediaUrl not provided")
         throw new Error("MediaUrl must be provided")
       }
 
       if (contentData.scheduledDate) {
-        const scheduledTime = Math.floor(new Date(contentData.scheduledDate).getTime() / 1000)
-        console.log(`[InstagramAPI] Scheduling content for: ${new Date(scheduledTime * 1000).toISOString()}`)
         formData.append("published", "false")
-        formData.append("scheduled_publish_time", scheduledTime.toString())
+        formData.append("scheduled_publish_time", Math.floor(new Date(contentData.scheduledDate).getTime() / 1000))
       }
 
       const response = await axios.post(`${this.baseUrl}/${instagramBusinessAccountId}/media`, formData, {
         headers: formData.getHeaders(),
       })
 
-      console.log(`[InstagramAPI] Content created successfully. Response:`, JSON.stringify(response.data, null, 2))
+      console.log(`[InstagramAPI.createScheduledContent] Response:`, response.data)
       return response.data
     } catch (error) {
-      console.error("Error creating scheduled content:", error)
+      console.error("[InstagramAPI.createScheduledContent] Error:", error)
       throw this.handleError(error)
     }
   }
 
   async deleteScheduledContent(mediaId: string): Promise<void> {
-    await this.refreshAccessTokenIfNeeded()
-    console.log(`[InstagramAPI] Deleting scheduled content: ${mediaId}`)
+    console.log(`[InstagramAPI.deleteScheduledContent] Deleting content: ${mediaId}`)
     try {
-      await axios.delete(`${this.baseUrl}/${mediaId}`, {
+      const response = await axios.delete(`${this.baseUrl}/${mediaId}`, {
         params: {
           access_token: this.accessToken,
         },
       })
-      console.log(`[InstagramAPI] Content deleted successfully`)
+      console.log(`[InstagramAPI.deleteScheduledContent] Response:`, response.data)
     } catch (error) {
-      console.error("Error deleting scheduled content:", error)
+      console.error("[InstagramAPI.deleteScheduledContent] Error:", error)
       throw this.handleError(error)
     }
   }
 
   async updateScheduledContent(mediaId: string, updateData: any): Promise<any> {
-    await this.refreshAccessTokenIfNeeded()
-    console.log(`[InstagramAPI] Updating scheduled content: ${mediaId}`)
-    console.log(`[InstagramAPI] Update data:`, JSON.stringify(updateData, null, 2))
+    console.log(`[InstagramAPI.updateScheduledContent] Updating content: ${mediaId}`)
+    console.log(`[InstagramAPI.updateScheduledContent] Update data:`, updateData)
     try {
       const response = await axios.post(`${this.baseUrl}/${mediaId}`, {
         access_token: this.accessToken,
         ...updateData,
       })
 
-      console.log(`[InstagramAPI] Content updated successfully. Response:`, JSON.stringify(response.data, null, 2))
+      console.log(`[InstagramAPI.updateScheduledContent] Response:`, response.data)
       return response.data
     } catch (error) {
-      console.error("Error updating scheduled content:", error)
+      console.error("[InstagramAPI.updateScheduledContent] Error:", error)
       throw this.handleError(error)
     }
   }
 
   async getUserProfile(instagramUserId: string): Promise<any> {
-    await this.refreshAccessTokenIfNeeded()
-    console.log(`[InstagramAPI] Fetching user profile for: ${instagramUserId}`)
+    console.log(`[InstagramAPI.getUserProfile] Fetching profile for user: ${instagramUserId}`)
     try {
       const fields = "id,username,name,profile_picture_url,followers_count,follows_count,media_count"
       const response = await axios.get(`${this.baseUrl}/${instagramUserId}`, {
@@ -1322,10 +856,10 @@ export class InstagramAPI {
         },
       })
 
-      console.log(`[InstagramAPI] User profile fetched successfully`)
+      console.log(`[InstagramAPI.getUserProfile] Response:`, response.data)
       return response.data
     } catch (error) {
-      console.error("Error fetching user profile:", error)
+      console.error("[InstagramAPI.getUserProfile] Error:", error)
       throw this.handleError(error)
     }
   }
@@ -1344,11 +878,6 @@ export class InstagramAPI {
         code: errorResponse.code,
         subcode: errorResponse.error_subcode,
       })
-
-      // Log the token if it's an "Invalid OAuth access token" error
-      if (errorResponse.code === 190 && errorResponse.message.includes("Invalid OAuth access token")) {
-        console.error("Current access token:", this.accessToken)
-      }
 
       return {
         status: error.response?.status || 500,
