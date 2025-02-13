@@ -415,488 +415,345 @@
 
 // export default ExampleConversations
 
-// import type React from "react"
-// import type { Conversation } from "@/types/chat"
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
-// interface ExampleConversationsProps {
-//   onSelectConversation: (conversation: Conversation) => void
-//   className?: string
-// }
-
-// const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation, className }) => {
-//   const exampleConversations: Conversation[] = [
-//     {
-//       id: "1",
-//       pageId: "example1",
-//       messages: [
-//         {
-//           id: "23",
-//           role: "user",
-//           content: "Hello, I have a question about your Service.",
-//           senderId: "user1",
-//           createdAt: new Date(),
-//         },
-//         {
-//           id: "24",
-//           role: "assistant",
-//           content: "Of course! I'd be happy to help. What would you like to know?",
-//           senderId: "assistant",
-//           createdAt: new Date(),
-//         },
-//         {
-//           id: "25",
-//           role: "user",
-//           content: "Do you have a free version?",
-//           senderId: "user1",
-//           createdAt: new Date(),
-//         },
-//         {
-//           id: "26",
-//           role: "assistant",
-//           content: "Yap, we actually have a free version. Feel free to check out the plans",
-//           senderId: "assistant",
-//           createdAt: new Date(),
-//         },
-//       ],
-//       createdAt: new Date(),
-//       updatedAt: new Date(),
-//       unreadCount: 0,
-//       Automation: null,
-//     },
-//     {
-//       id: "2",
-//       pageId: "example2",
-//       messages: [
-//         {
-//           id: "27",
-//           role: "user",
-//           content: "Can you tell me about your pricing plans?",
-//           senderId: "user2",
-//           createdAt: new Date(),
-//         },
-//         {
-//           id: "28",
-//           role: "assistant",
-//           content: "We offer two pricing tiers at the moment, a FREE and a PRO plan at just $89.",
-//           senderId: "assistant",
-//           createdAt: new Date(),
-//         },
-//         {
-//           id: "29",
-//           role: "user",
-//           content: "I would like to know more about the PRO plan. I think it has hidden gems behind its working?",
-//           senderId: "user2",
-//           createdAt: new Date(),
-//         },
-//         {
-//           id: "30",
-//           role: "assistant",
-//           content: "You are absolutely right, the free plan includes a lot of cool, really cool automation features.Might seem too good to be true but you only need to upgrade to use that.",
-//           senderId: "assistant",
-//           createdAt: new Date(),
-//         },
-//       ],
-//       createdAt: new Date(),
-//       updatedAt: new Date(),
-//       unreadCount: 0,
-//       Automation: null,
-//     },
-//     // Add more example conversations as needed
-//   ]
-
-//   return (
-//     <div className={`space-y-4 ${className}`}>
-//       {exampleConversations.map((conversation) => (
-//         <div
-//           key={conversation.id}
-//           onClick={() => onSelectConversation(conversation)}
-//           className="flex items-center p-3 rounded-lg border border-gray-200 hover:border-gray-400 cursor-pointer"
-//         >
-//           <Avatar className="w-10 h-10 mr-3">
-//             <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.id}`} />
-//             <AvatarFallback>{conversation.id}</AvatarFallback>
-//           </Avatar>
-//           <div className="flex-grow min-w-0">
-//             <p className="font-medium text-sm text-foreground truncate">Conversation {conversation.id}</p>
-//             <p className="text-xs text-muted-foreground truncate">
-//               {conversation.messages[conversation.messages.length - 1].content.split(" ").slice(0, 5).join(" ")}...
-//             </p>
-//           </div>
-//         </div>
-//       ))}
-//     </div>
-//   )
-// }
-
-// export default ExampleConversations
-
-// "use client"
-
-// import type React from "react"
-// import { useState, useEffect } from "react"
-// import { MessageSquare, Zap, Star, User, Bot } from "lucide-react"
-
-// interface Message {
-//   id: string
-//   role: "user" | "assistant"
-//   content: string
-// }
-
-// interface Conversation {
-//   id: string
-//   messages: Message[]
-// }
-
-// interface ExampleConversationsProps {
-//   onSelectConversation: (conversation: Conversation) => void
-//   className?: string
-// }
-
-// const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation, className }) => {
-//   const [selectedId, setSelectedId] = useState<string | null>(null)
-//   const [isSmallScreen, setIsSmallScreen] = useState(false)
-
-//   useEffect(() => {
-//     const checkScreenSize = () => {
-//       setIsSmallScreen(window.innerWidth < 640)
-//     }
-//     checkScreenSize()
-//     window.addEventListener("resize", checkScreenSize)
-//     return () => window.removeEventListener("resize", checkScreenSize)
-//   }, [])
-
-//   const exampleConversations: Conversation[] = [
-//     {
-//       id: "1",
-//       messages: [
-//         { id: "23", role: "user", content: "Hello, I have a question about your Service." },
-//         { id: "24", role: "assistant", content: "Of course! I'd be happy to help. What would you like to know?" },
-//         { id: "25", role: "user", content: "Do you have a free version?" },
-//         {
-//           id: "26",
-//           role: "assistant",
-//           content: "Yes, we actually have a free version. Feel free to check out the plans.",
-//         },
-//       ],
-//     },
-//     {
-//       id: "2",
-//       messages: [
-//         { id: "27", role: "user", content: "Can you tell me about your pricing plans?" },
-//         {
-//           id: "28",
-//           role: "assistant",
-//           content: "We offer two pricing tiers at the moment, a FREE and a PRO plan at just $89.",
-//         },
-//         {
-//           id: "29",
-//           role: "user",
-//           content: "I would like to know more about the PRO plan. I think it has hidden gems behind its working?",
-//         },
-//         {
-//           id: "30",
-//           role: "assistant",
-//           content:
-//             "You are absolutely right, the PRO plan includes a lot of cool, really cool automation features. It might seem too good to be true but you only need to upgrade to use that.",
-//         },
-//       ],
-//     },
-//   ]
-
-//   const getRandomEmoji = () => {
-//     const emojis = ["💡", "🚀", "💬", "🔮", "🎨", "🌟", "🔥", "✨"]
-//     return emojis[Math.floor(Math.random() * emojis.length)]
-//   }
-
-//   return (
-//     <div className={`space-y-6 ${className}`}>
-//       {exampleConversations.map((conversation) => (
-//         <div
-//           key={conversation.id}
-//           onClick={() => {
-//             setSelectedId(conversation.id)
-//             onSelectConversation(conversation)
-//           }}
-//           className={`
-//             p-4 rounded-lg border border-gray-700 
-//             bg-gradient-to-br from-gray-900 to-gray-800 
-//             hover:from-gray-800 hover:to-gray-700 
-//             cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300
-//             ${selectedId === conversation.id ? "ring-2 ring-purple-500" : ""}
-//           `}
-//         >
-//           <div className="flex items-center justify-between mb-3">
-//             <div className="flex items-center space-x-2">
-//               <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white text-xl font-bold">
-//                 {getRandomEmoji()}
-//               </div>
-//               <div>
-//                 <p className="font-bold text-sm text-purple-300">Conversation {conversation.id}</p>
-//                 <div className="flex items-center space-x-1">
-//                   <MessageSquare className="w-3 h-3 text-purple-400" />
-//                   <span className="text-xs text-purple-400">{conversation.messages.length}</span>
-//                 </div>
-//               </div>
-//             </div>
-//             {!isSmallScreen && (
-//               <div className="flex items-center space-x-2">
-//                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-900 text-purple-300">
-//                   <Zap className="w-3 h-3 mr-1" />
-//                   AI Powered
-//                 </span>
-//                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-900 text-yellow-300">
-//                   <Star className="w-3 h-3 mr-1" />
-//                   Featured
-//                 </span>
-//               </div>
-//             )}
-//           </div>
-//           <div className="space-y-2">
-//             {conversation.messages.slice(-2).map((message, index) => (
-//               <div
-//                 key={message.id}
-//                 className={`flex items-start space-x-2 ${message.role === "user" ? "justify-end" : ""}`}
-//               >
-//                 {message.role === "assistant" && <Bot className="w-4 h-4 mt-1 text-green-400" />}
-//                 <div
-//                   className={`p-2 rounded-lg ${message.role === "user" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-200"}`}
-//                 >
-//                   <p className="text-xs">{message.content}</p>
-//                 </div>
-//                 {message.role === "user" && <User className="w-4 h-4 mt-1 text-blue-400" />}
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       ))}
-//     </div>
-//   )
-// }
-
-// export default ExampleConversations
-
-"use client"
-
 import type React from "react"
-import { useState } from "react"
-import { motion } from "framer-motion"
+import type { Conversation } from "@/types/chat"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { Trash2, MessageSquare, Clock } from "lucide-react"
-import type { Message } from "@/types/dashboard"
-
-type ConversationWithExtra = {
-  id: string
-  chatId: string
-  pageId: string
-  userId: string
-  messages: Message[]
-  createdAt: Date
-  updatedAt: Date
-  unreadCount: number
-  Automation: null
-}
 
 interface ExampleConversationsProps {
-  onSelectConversation: (conversation: ConversationWithExtra) => void
+  onSelectConversation: (conversation: Conversation) => void
   className?: string
 }
 
 const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation, className }) => {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [expandedId, setExpandedId] = useState<string | null>(null)
-
-  const exampleConversations: ConversationWithExtra[] = [
+  const exampleConversations: Conversation[] = [
     {
       id: "1",
-      chatId: "chat1",
-      pageId: "page1",
-      userId: "user1",
+      pageId: "example1",
       messages: [
         {
           id: "23",
           role: "user",
-          content: "Hello, I have a question about your service.",
+          content: "Hello, I have a question about your Service.",
           senderId: "user1",
-          createdAt: new Date(Date.now() - 3600000),
+          createdAt: new Date(),
         },
         {
           id: "24",
           role: "assistant",
           content: "Of course! I'd be happy to help. What would you like to know?",
           senderId: "assistant",
-          createdAt: new Date(Date.now() - 3540000),
+          createdAt: new Date(),
         },
         {
           id: "25",
           role: "user",
           content: "Do you have a free version?",
           senderId: "user1",
-          createdAt: new Date(Date.now() - 3480000),
+          createdAt: new Date(),
         },
         {
           id: "26",
           role: "assistant",
-          content: "Yes, we do offer a free version. You can find more details about our plans on our pricing page.",
+          content: "Yap, we actually have a free version. Feel free to check out the plans",
           senderId: "assistant",
-          createdAt: new Date(Date.now() - 3420000),
+          createdAt: new Date(),
         },
       ],
-      createdAt: new Date(Date.now() - 3600000),
-      updatedAt: new Date(Date.now() - 3420000),
+      createdAt: new Date(),
+      updatedAt: new Date(),
       unreadCount: 0,
       Automation: null,
     },
     {
       id: "2",
-      chatId: "chat2",
-      pageId: "page1",
-      userId: "user2",
+      pageId: "example2",
       messages: [
         {
           id: "27",
           role: "user",
-          content: "I'm interested in your premium features. Can you tell me more?",
+          content: "Can you tell me about your pricing plans?",
           senderId: "user2",
-          createdAt: new Date(Date.now() - 7200000),
+          createdAt: new Date(),
         },
         {
           id: "28",
           role: "assistant",
-          content: "Our premium plan includes advanced analytics, priority support, and custom integrations.",
+          content: "We offer two pricing tiers at the moment, a FREE and a PRO plan at just $89.",
           senderId: "assistant",
-          createdAt: new Date(Date.now() - 7140000),
+          createdAt: new Date(),
+        },
+        {
+          id: "29",
+          role: "user",
+          content: "I would like to know more about the PRO plan. I think it has hidden gems behind its working?",
+          senderId: "user2",
+          createdAt: new Date(),
+        },
+        {
+          id: "30",
+          role: "assistant",
+          content: "You are absolutely right, the free plan includes a lot of cool, really cool automation features.Might seem too good to be true but you only need to upgrade to use that.",
+          senderId: "assistant",
+          createdAt: new Date(),
         },
       ],
-      createdAt: new Date(Date.now() - 7200000),
-      updatedAt: new Date(Date.now() - 7140000),
-      unreadCount: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      unreadCount: 0,
       Automation: null,
     },
+    // Add more example conversations as needed
   ]
 
-  const formatTimestamp = (timestamp: Date) => {
-    return timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-  }
-
-  const handleExpand = (id: string) => {
-    setExpandedId(expandedId === id ? null : id)
-  }
-
-  const getActivityStatus = (lastActive: Date) => {
-    const now = new Date()
-    const diffInMinutes = Math.floor((now.getTime() - lastActive.getTime()) / 60000)
-
-    if (diffInMinutes < 1) return "Just now"
-    if (diffInMinutes < 60) return `${diffInMinutes}m ago`
-
-    const diffInHours = Math.floor(diffInMinutes / 60)
-    if (diffInHours < 24) return `${diffInHours}h ago`
-
-    const diffInDays = Math.floor(diffInHours / 24)
-    return `${diffInDays}d ago`
-  }
-
-  const getAvatarUrl = (userId: string) => {
-    return `https://i.pravatar.cc/150?u=${userId}`
-  }
-
   return (
-    <div className={`space-y-2 ${className}`}>
+    <div className={`space-y-4 ${className}`}>
       {exampleConversations.map((conversation) => (
-        <motion.div
+        <div
           key={conversation.id}
-          onClick={() => {
-            setSelectedId(conversation.id)
-            onSelectConversation(conversation)
-          }}
-          className={`
-            p-2 rounded-lg border border-gray-200 dark:border-gray-700
-            bg-white dark:bg-gray-800 
-            hover:bg-gray-50 dark:hover:bg-gray-700
-            cursor-pointer shadow-sm hover:shadow transition-all duration-200
-            ${selectedId === conversation.id ? "ring-2 ring-primary" : ""}
-          `}
+          onClick={() => onSelectConversation(conversation)}
+          className="flex items-center p-3 rounded-lg border border-gray-200 hover:border-gray-400 cursor-pointer"
         >
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center space-x-2">
-              <Avatar className="w-8 h-8 relative">
-                <AvatarImage src={getAvatarUrl(conversation.userId)} />
-                <AvatarFallback>{conversation.userId.slice(0, 2).toUpperCase()}</AvatarFallback>
-                {conversation.unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold px-1 rounded-full">
-                    {conversation.unreadCount}
-                  </span>
-                )}
-              </Avatar>
-              <div>
-                <p className="font-medium text-sm">{`User ${conversation.id}`}</p>
-                <div className="flex items-center space-x-1 text-xs text-muted-foreground">
-                  <MessageSquare className="w-3 h-3" />
-                  <span>{conversation.messages.length}</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center space-x-1 text-xs text-muted-foreground">
-              <Clock className="w-3 h-3" />
-              <span>{getActivityStatus(conversation.updatedAt)}</span>
-            </div>
+          <Avatar className="w-10 h-10 mr-3">
+            <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.id}`} />
+            <AvatarFallback>{conversation.id}</AvatarFallback>
+          </Avatar>
+          <div className="flex-grow min-w-0">
+            <p className="font-medium text-sm text-foreground truncate">Conversation {conversation.id}</p>
+            <p className="text-xs text-muted-foreground truncate">
+              {conversation.messages[conversation.messages.length - 1].content.split(" ").slice(0, 5).join(" ")}...
+            </p>
           </div>
-          <div className="space-y-1">
-            {(expandedId === conversation.id ? conversation.messages : conversation.messages.slice(-1)).map(
-              (message) => (
-                <div
-                  key={message.id}
-                  className={`text-xs p-1 rounded ${
-                    message.role === "user" ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
-                  }`}
-                >
-                  <p className="line-clamp-2">{message.content}</p>
-                </div>
-              ),
-            )}
-          </div>
-          {conversation.messages.length > 1 && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                handleExpand(conversation.id)
-              }}
-              className="text-xs text-primary hover:underline mt-1"
-            >
-              {expandedId === conversation.id ? "Show Less" : "Show More"}
-            </button>
-          )}
-          <div className="mt-1 flex justify-between items-center text-xs text-muted-foreground">
-            <span>{formatTimestamp(conversation.updatedAt)}</span>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      console.log("Delete conversation:", conversation.id)
-                    }}
-                    className="text-muted-foreground hover:text-destructive p-0 h-auto"
-                  >
-                    <Trash2 size={12} />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Delete conversation</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        </motion.div>
+        </div>
       ))}
     </div>
   )
 }
 
 export default ExampleConversations
+
+
+
+// "use client"
+
+// import type React from "react"
+// import { useState } from "react"
+// import { motion } from "framer-motion"
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+// import { Button } from "@/components/ui/button"
+// import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+// import { Trash2, MessageSquare, Clock } from "lucide-react"
+// import type { Message } from "@/types/dashboard"
+
+// type ConversationWithExtra = {
+//   id: string
+//   chatId: string
+//   pageId: string
+//   userId: string
+//   messages: Message[]
+//   createdAt: Date
+//   updatedAt: Date
+//   unreadCount: number
+//   Automation: null
+// }
+
+// interface ExampleConversationsProps {
+//   onSelectConversation: (conversation: ConversationWithExtra) => void
+//   className?: string
+// }
+
+// const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation, className }) => {
+//   const [selectedId, setSelectedId] = useState<string | null>(null)
+//   const [expandedId, setExpandedId] = useState<string | null>(null)
+
+//   const exampleConversations: ConversationWithExtra[] = [
+//     {
+//       id: "1",
+//       chatId: "chat1",
+//       pageId: "page1",
+//       userId: "user1",
+//       messages: [
+//         {
+//           id: "23",
+//           role: "user",
+//           content: "Hello, I have a question about your service.",
+//           senderId: "user1",
+//           createdAt: new Date(Date.now() - 3600000),
+//         },
+//         {
+//           id: "24",
+//           role: "assistant",
+//           content: "Of course! I'd be happy to help. What would you like to know?",
+//           senderId: "assistant",
+//           createdAt: new Date(Date.now() - 3540000),
+//         },
+//         {
+//           id: "25",
+//           role: "user",
+//           content: "Do you have a free version?",
+//           senderId: "user1",
+//           createdAt: new Date(Date.now() - 3480000),
+//         },
+//         {
+//           id: "26",
+//           role: "assistant",
+//           content: "Yes, we do offer a free version. You can find more details about our plans on our pricing page.",
+//           senderId: "assistant",
+//           createdAt: new Date(Date.now() - 3420000),
+//         },
+//       ],
+//       createdAt: new Date(Date.now() - 3600000),
+//       updatedAt: new Date(Date.now() - 3420000),
+//       unreadCount: 0,
+//       Automation: null,
+//     },
+//     {
+//       id: "2",
+//       chatId: "chat2",
+//       pageId: "page1",
+//       userId: "user2",
+//       messages: [
+//         {
+//           id: "27",
+//           role: "user",
+//           content: "I'm interested in your premium features. Can you tell me more?",
+//           senderId: "user2",
+//           createdAt: new Date(Date.now() - 7200000),
+//         },
+//         {
+//           id: "28",
+//           role: "assistant",
+//           content: "Our premium plan includes advanced analytics, priority support, and custom integrations.",
+//           senderId: "assistant",
+//           createdAt: new Date(Date.now() - 7140000),
+//         },
+//       ],
+//       createdAt: new Date(Date.now() - 7200000),
+//       updatedAt: new Date(Date.now() - 7140000),
+//       unreadCount: 1,
+//       Automation: null,
+//     },
+//   ]
+
+//   const formatTimestamp = (timestamp: Date) => {
+//     return timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+//   }
+
+//   const handleExpand = (id: string) => {
+//     setExpandedId(expandedId === id ? null : id)
+//   }
+
+//   const getActivityStatus = (lastActive: Date) => {
+//     const now = new Date()
+//     const diffInMinutes = Math.floor((now.getTime() - lastActive.getTime()) / 60000)
+
+//     if (diffInMinutes < 1) return "Just now"
+//     if (diffInMinutes < 60) return `${diffInMinutes}m ago`
+
+//     const diffInHours = Math.floor(diffInMinutes / 60)
+//     if (diffInHours < 24) return `${diffInHours}h ago`
+
+//     const diffInDays = Math.floor(diffInHours / 24)
+//     return `${diffInDays}d ago`
+//   }
+
+//   const getAvatarUrl = (userId: string) => {
+//     return `https://i.pravatar.cc/150?u=${userId}`
+//   }
+
+//   return (
+//     <div className={`space-y-2 ${className}`}>
+//       {exampleConversations.map((conversation) => (
+//         <motion.div
+//           key={conversation.id}
+//           onClick={() => {
+//             setSelectedId(conversation.id)
+//             onSelectConversation(conversation)
+//           }}
+//           className={`
+//             p-2 rounded-lg border border-gray-200 dark:border-gray-700
+//             bg-white dark:bg-gray-800 
+//             hover:bg-gray-50 dark:hover:bg-gray-700
+//             cursor-pointer shadow-sm hover:shadow transition-all duration-200
+//             ${selectedId === conversation.id ? "ring-2 ring-primary" : ""}
+//           `}
+//         >
+//           <div className="flex items-center justify-between mb-1">
+//             <div className="flex items-center space-x-2">
+//               <Avatar className="w-8 h-8 relative">
+//                 <AvatarImage src={getAvatarUrl(conversation.userId)} />
+//                 <AvatarFallback>{conversation.userId.slice(0, 2).toUpperCase()}</AvatarFallback>
+//                 {conversation.unreadCount > 0 && (
+//                   <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold px-1 rounded-full">
+//                     {conversation.unreadCount}
+//                   </span>
+//                 )}
+//               </Avatar>
+//               <div>
+//                 <p className="font-medium text-sm">{`User ${conversation.id}`}</p>
+//                 <div className="flex items-center space-x-1 text-xs text-muted-foreground">
+//                   <MessageSquare className="w-3 h-3" />
+//                   <span>{conversation.messages.length}</span>
+//                 </div>
+//               </div>
+//             </div>
+//             <div className="flex items-center space-x-1 text-xs text-muted-foreground">
+//               <Clock className="w-3 h-3" />
+//               <span>{getActivityStatus(conversation.updatedAt)}</span>
+//             </div>
+//           </div>
+//           <div className="space-y-1">
+//             {(expandedId === conversation.id ? conversation.messages : conversation.messages.slice(-1)).map(
+//               (message) => (
+//                 <div
+//                   key={message.id}
+//                   className={`text-xs p-1 rounded ${
+//                     message.role === "user" ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
+//                   }`}
+//                 >
+//                   <p className="line-clamp-2">{message.content}</p>
+//                 </div>
+//               ),
+//             )}
+//           </div>
+//           {conversation.messages.length > 1 && (
+//             <button
+//               onClick={(e) => {
+//                 e.stopPropagation()
+//                 handleExpand(conversation.id)
+//               }}
+//               className="text-xs text-primary hover:underline mt-1"
+//             >
+//               {expandedId === conversation.id ? "Show Less" : "Show More"}
+//             </button>
+//           )}
+//           <div className="mt-1 flex justify-between items-center text-xs text-muted-foreground">
+//             <span>{formatTimestamp(conversation.updatedAt)}</span>
+//             <TooltipProvider>
+//               <Tooltip>
+//                 <TooltipTrigger asChild>
+//                   <Button
+//                     variant="ghost"
+//                     size="sm"
+//                     onClick={(e) => {
+//                       e.stopPropagation()
+//                       console.log("Delete conversation:", conversation.id)
+//                     }}
+//                     className="text-muted-foreground hover:text-destructive p-0 h-auto"
+//                   >
+//                     <Trash2 size={12} />
+//                   </Button>
+//                 </TooltipTrigger>
+//                 <TooltipContent>
+//                   <p>Delete conversation</p>
+//                 </TooltipContent>
+//               </Tooltip>
+//             </TooltipProvider>
+//           </div>
+//         </motion.div>
+//       ))}
+//     </div>
+//   )
+// }
+
+// export default ExampleConversations
 
