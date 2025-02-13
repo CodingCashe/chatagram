@@ -781,6 +781,41 @@ export class InstagramAPI {
     }
   }
 
+  // Add this method to the InstagramAPI class
+
+async publishNow(instagramBusinessAccountId: string, contentData: any): Promise<any> {
+  console.log(`[InstagramAPI.publishNow] Publishing content immediately for account: ${instagramBusinessAccountId}`)
+  console.log(`[InstagramAPI.publishNow] Content data:`, contentData)
+  try {
+    // Step 1: Create media container
+    const createContainerResponse = await axios.post(
+      `${this.baseUrl}/${instagramBusinessAccountId}/media`,
+      {
+        access_token: this.accessToken,
+        image_url: contentData.mediaUrl,
+        caption: contentData.caption,
+      }
+    )
+
+    const containerId = createContainerResponse.data.id
+
+    // Step 2: Publish container
+    const publishResponse = await axios.post(
+      `${this.baseUrl}/${instagramBusinessAccountId}/media_publish`,
+      {
+        access_token: this.accessToken,
+        creation_id: containerId,
+      }
+    )
+
+    console.log(`[InstagramAPI.publishNow] Response:`, publishResponse.data)
+    return publishResponse.data
+  } catch (error) {
+    console.error("[InstagramAPI.publishNow] Error:", error)
+    throw this.handleError(error)
+  }
+}
+
   async createScheduledContent(instagramBusinessAccountId: string, contentData: any): Promise<any> {
     console.log(`[InstagramAPI.createScheduledContent] Creating content for account: ${instagramBusinessAccountId}`)
     console.log(`[InstagramAPI.createScheduledContent] Content data:`, contentData)
