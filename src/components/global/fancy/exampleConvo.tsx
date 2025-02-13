@@ -679,12 +679,12 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { Trash2, MessageSquare, Zap, Star, User, Bot, Sparkles, Clock, ThumbsUp, ThumbsDown } from "lucide-react"
+import { Trash2, MessageSquare, Clock } from "lucide-react"
 import type { Message } from "@/types/dashboard"
 
 type ConversationWithExtra = {
@@ -706,18 +706,7 @@ interface ExampleConversationsProps {
 
 const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation, className }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [isSmallScreen, setIsSmallScreen] = useState(false)
   const [expandedId, setExpandedId] = useState<string | null>(null)
-  const [hoveredId, setHoveredId] = useState<string | null>(null)
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsSmallScreen(window.innerWidth < 640)
-    }
-    checkScreenSize()
-    window.addEventListener("resize", checkScreenSize)
-    return () => window.removeEventListener("resize", checkScreenSize)
-  }, [])
 
   const exampleConversations: ConversationWithExtra[] = [
     {
@@ -729,7 +718,7 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
         {
           id: "23",
           role: "user",
-          content: "Hello, I have a question about your Service.",
+          content: "Hello, I have a question about your service.",
           senderId: "user1",
           createdAt: new Date(Date.now() - 3600000),
         },
@@ -750,7 +739,7 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
         {
           id: "26",
           role: "assistant",
-          content: "Yes, we actually have a free version. Feel free to check out the plans.",
+          content: "Yes, we do offer a free version. You can find more details about our plans on our pricing page.",
           senderId: "assistant",
           createdAt: new Date(Date.now() - 3420000),
         },
@@ -769,44 +758,24 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
         {
           id: "27",
           role: "user",
-          content: "Can you tell me about your pricing plans?",
+          content: "I'm interested in your premium features. Can you tell me more?",
           senderId: "user2",
           createdAt: new Date(Date.now() - 7200000),
         },
         {
           id: "28",
           role: "assistant",
-          content: "We offer two pricing tiers at the moment, a FREE and a PRO plan at just $89.",
+          content: "Our premium plan includes advanced analytics, priority support, and custom integrations.",
           senderId: "assistant",
           createdAt: new Date(Date.now() - 7140000),
         },
-        {
-          id: "29",
-          role: "user",
-          content: "I would like to know more about the PRO plan. I think it has hidden gems behind its working?",
-          senderId: "user2",
-          createdAt: new Date(Date.now() - 7080000),
-        },
-        {
-          id: "30",
-          role: "assistant",
-          content:
-            "You are absolutely right, the PRO plan includes a lot of cool, really cool automation features. It might seem too good to be true but you only need to upgrade to use that.",
-          senderId: "assistant",
-          createdAt: new Date(Date.now() - 7020000),
-        },
       ],
       createdAt: new Date(Date.now() - 7200000),
-      updatedAt: new Date(Date.now() - 7020000),
-      unreadCount: 2,
+      updatedAt: new Date(Date.now() - 7140000),
+      unreadCount: 1,
       Automation: null,
     },
   ]
-
-  const getRandomEmoji = () => {
-    const emojis = ["💡", "🚀", "💬", "🔮", "🎨", "🌟", "🔥", "✨"]
-    return emojis[Math.floor(Math.random() * emojis.length)]
-  }
 
   const formatTimestamp = (timestamp: Date) => {
     return timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
@@ -816,35 +785,26 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
     setExpandedId(expandedId === id ? null : id)
   }
 
-  const handleHover = (id: string | null) => {
-    setHoveredId(id)
-  }
-
   const getActivityStatus = (lastActive: Date) => {
     const now = new Date()
     const diffInMinutes = Math.floor((now.getTime() - lastActive.getTime()) / 60000)
 
-    if (diffInMinutes < 1) return "Active now"
-    if (diffInMinutes < 60) return `Active ${diffInMinutes} minute${diffInMinutes > 1 ? "s" : ""} ago`
+    if (diffInMinutes < 1) return "Just now"
+    if (diffInMinutes < 60) return `${diffInMinutes}m ago`
 
     const diffInHours = Math.floor(diffInMinutes / 60)
-    if (diffInHours < 24) return `Active ${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`
+    if (diffInHours < 24) return `${diffInHours}h ago`
 
     const diffInDays = Math.floor(diffInHours / 24)
-    return `Active ${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`
-  }
-
-  const getFancyName = (userId: string) => {
-    const names = ["Alice", "Bob", "Charlie", "David", "Eva"]
-    return names[Number.parseInt(userId.slice(-1)) % names.length]
+    return `${diffInDays}d ago`
   }
 
   const getAvatarUrl = (userId: string) => {
-    return `https://api.dicebear.com/6.x/initials/svg?seed=${userId}`
+    return `https://i.pravatar.cc/150?u=${userId}`
   }
 
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`space-y-2 ${className}`}>
       {exampleConversations.map((conversation) => (
         <motion.div
           key={conversation.id}
@@ -852,98 +812,65 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
             setSelectedId(conversation.id)
             onSelectConversation(conversation)
           }}
-          onMouseEnter={() => handleHover(conversation.id)}
-          onMouseLeave={() => handleHover(null)}
           className={`
-            p-4 rounded-lg border border-gray-700 
-            bg-gradient-to-br from-gray-900 to-gray-800 
-            hover:from-gray-800 hover:to-gray-700 
-            cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300
-            ${selectedId === conversation.id ? "ring-2 ring-purple-500" : ""}
-            ${hoveredId === conversation.id ? "scale-105" : ""}
+            p-2 rounded-lg border border-gray-200 dark:border-gray-700
+            bg-white dark:bg-gray-800 
+            hover:bg-gray-50 dark:hover:bg-gray-700
+            cursor-pointer shadow-sm hover:shadow transition-all duration-200
+            ${selectedId === conversation.id ? "ring-2 ring-primary" : ""}
           `}
         >
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-1">
             <div className="flex items-center space-x-2">
-              <Avatar className="w-10 h-10 relative border-2 border-primary">
+              <Avatar className="w-8 h-8 relative">
                 <AvatarImage src={getAvatarUrl(conversation.userId)} />
-                <AvatarFallback>{getFancyName(conversation.userId).slice(0, 2)}</AvatarFallback>
+                <AvatarFallback>{conversation.userId.slice(0, 2).toUpperCase()}</AvatarFallback>
                 {conversation.unreadCount > 0 && (
-                  <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-primary transform translate-x-1/2 -translate-y-1/2"></span>
+                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold px-1 rounded-full">
+                    {conversation.unreadCount}
+                  </span>
                 )}
               </Avatar>
               <div>
-                <p className="font-bold text-sm text-purple-300">{getFancyName(conversation.userId)}</p>
-                <div className="flex items-center space-x-1">
-                  <MessageSquare className="w-3 h-3 text-purple-400" />
-                  <span className="text-xs text-purple-400">{conversation.messages.length}</span>
+                <p className="font-medium text-sm">{`User ${conversation.id}`}</p>
+                <div className="flex items-center space-x-1 text-xs text-muted-foreground">
+                  <MessageSquare className="w-3 h-3" />
+                  <span>{conversation.messages.length}</span>
                 </div>
               </div>
             </div>
-            {!isSmallScreen && (
-              <div className="flex items-center space-x-2">
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-900 text-purple-300">
-                  <Zap className="w-3 h-3 mr-1" />
-                  AI Powered
-                </span>
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-900 text-yellow-300">
-                  <Star className="w-3 h-3 mr-1" />
-                  Featured
-                </span>
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-900 text-blue-300">
-                  <Clock className="w-3 h-3 mr-1" />
-                  {formatTimestamp(conversation.updatedAt)}
-                </span>
-              </div>
-            )}
+            <div className="flex items-center space-x-1 text-xs text-muted-foreground">
+              <Clock className="w-3 h-3" />
+              <span>{getActivityStatus(conversation.updatedAt)}</span>
+            </div>
           </div>
-          <div className="space-y-2">
-            {(expandedId === conversation.id ? conversation.messages : conversation.messages.slice(-2)).map(
-              (message, index) => (
+          <div className="space-y-1">
+            {(expandedId === conversation.id ? conversation.messages : conversation.messages.slice(-1)).map(
+              (message) => (
                 <div
                   key={message.id}
-                  className={`flex items-start space-x-2 ${message.role === "user" ? "justify-end" : ""}`}
+                  className={`text-xs p-1 rounded ${
+                    message.role === "user" ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
+                  }`}
                 >
-                  {message.role === "assistant" && <Bot className="w-4 h-4 mt-1 text-green-400" />}
-                  <div
-                    className={`p-2 rounded-lg ${
-                      message.role === "user" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-200"
-                    }`}
-                  >
-                    <p className="text-xs">{message.content}</p>
-                    <p className="text-xxs text-gray-400 mt-1">{formatTimestamp(message.createdAt)}</p>
-                  </div>
-                  {message.role === "user" && <User className="w-4 h-4 mt-1 text-blue-400" />}
+                  <p className="line-clamp-2">{message.content}</p>
                 </div>
               ),
             )}
           </div>
-          <div className="mt-3 flex justify-between items-center">
+          {conversation.messages.length > 1 && (
             <button
               onClick={(e) => {
                 e.stopPropagation()
                 handleExpand(conversation.id)
               }}
-              className="text-xs text-purple-400 hover:text-purple-300 transition-colors duration-200"
+              className="text-xs text-primary hover:underline mt-1"
             >
               {expandedId === conversation.id ? "Show Less" : "Show More"}
             </button>
-            <div className="flex items-center space-x-2">
-              <Sparkles className="w-4 h-4 text-yellow-500" />
-              <div className="w-24 h-2 bg-gray-700 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500"
-                  style={{ width: `${(conversation.messages.length / 10) * 100}%` }}
-                ></div>
-              </div>
-              <div className="flex space-x-1">
-                <ThumbsUp className="w-4 h-4 text-green-500" />
-                <ThumbsDown className="w-4 h-4 text-red-500" />
-              </div>
-            </div>
-          </div>
-          <div className="mt-2 flex justify-between items-center text-xs text-muted-foreground">
-            <span>{getActivityStatus(conversation.updatedAt)}</span>
+          )}
+          <div className="mt-1 flex justify-between items-center text-xs text-muted-foreground">
+            <span>{formatTimestamp(conversation.updatedAt)}</span>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -954,9 +881,9 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
                       e.stopPropagation()
                       console.log("Delete conversation:", conversation.id)
                     }}
-                    className="text-muted-foreground hover:text-red-500"
+                    className="text-muted-foreground hover:text-destructive p-0 h-auto"
                   >
-                    <Trash2 size={16} />
+                    <Trash2 size={12} />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
