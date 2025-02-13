@@ -1162,7 +1162,7 @@ export class InstagramAPI {
   constructor(accessToken: string, apiVersion = "v22.0") {
     this.accessToken = accessToken
     this.apiVersion = apiVersion
-    this.baseUrl = `https://graph.facebook.com/${this.apiVersion}`
+    this.baseUrl = `https://graph.instagram.com/${this.apiVersion}`
     this.tokenExpirationTime = null
   }
 
