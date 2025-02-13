@@ -415,16 +415,181 @@
 
 // export default ExampleConversations
 
+// import type React from "react"
+// import type { Conversation } from "@/types/chat"
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+// interface ExampleConversationsProps {
+//   onSelectConversation: (conversation: Conversation) => void
+//   className?: string
+// }
+
+// const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation, className }) => {
+//   const exampleConversations: Conversation[] = [
+//     {
+//       id: "1",
+//       pageId: "example1",
+//       messages: [
+//         {
+//           id: "23",
+//           role: "user",
+//           content: "Hello, I have a question about your Service.",
+//           senderId: "user1",
+//           createdAt: new Date(),
+//         },
+//         {
+//           id: "24",
+//           role: "assistant",
+//           content: "Of course! I'd be happy to help. What would you like to know?",
+//           senderId: "assistant",
+//           createdAt: new Date(),
+//         },
+//         {
+//           id: "25",
+//           role: "user",
+//           content: "Do you have a free version?",
+//           senderId: "user1",
+//           createdAt: new Date(),
+//         },
+//         {
+//           id: "26",
+//           role: "assistant",
+//           content: "Yap, we actually have a free version. Feel free to check out the plans",
+//           senderId: "assistant",
+//           createdAt: new Date(),
+//         },
+//       ],
+//       createdAt: new Date(),
+//       updatedAt: new Date(),
+//       unreadCount: 0,
+//       Automation: null,
+//     },
+//     {
+//       id: "2",
+//       pageId: "example2",
+//       messages: [
+//         {
+//           id: "27",
+//           role: "user",
+//           content: "Can you tell me about your pricing plans?",
+//           senderId: "user2",
+//           createdAt: new Date(),
+//         },
+//         {
+//           id: "28",
+//           role: "assistant",
+//           content: "We offer two pricing tiers at the moment, a FREE and a PRO plan at just $89.",
+//           senderId: "assistant",
+//           createdAt: new Date(),
+//         },
+//         {
+//           id: "29",
+//           role: "user",
+//           content: "I would like to know more about the PRO plan. I think it has hidden gems behind its working?",
+//           senderId: "user2",
+//           createdAt: new Date(),
+//         },
+//         {
+//           id: "30",
+//           role: "assistant",
+//           content: "You are absolutely right, the free plan includes a lot of cool, really cool automation features.Might seem too good to be true but you only need to upgrade to use that.",
+//           senderId: "assistant",
+//           createdAt: new Date(),
+//         },
+//       ],
+//       createdAt: new Date(),
+//       updatedAt: new Date(),
+//       unreadCount: 0,
+//       Automation: null,
+//     },
+//     // Add more example conversations as needed
+//   ]
+
+//   return (
+//     <div className={`space-y-4 ${className}`}>
+//       {exampleConversations.map((conversation) => (
+//         <div
+//           key={conversation.id}
+//           onClick={() => onSelectConversation(conversation)}
+//           className="flex items-center p-3 rounded-lg border border-gray-200 hover:border-gray-400 cursor-pointer"
+//         >
+//           <Avatar className="w-10 h-10 mr-3">
+//             <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.id}`} />
+//             <AvatarFallback>{conversation.id}</AvatarFallback>
+//           </Avatar>
+//           <div className="flex-grow min-w-0">
+//             <p className="font-medium text-sm text-foreground truncate">Conversation {conversation.id}</p>
+//             <p className="text-xs text-muted-foreground truncate">
+//               {conversation.messages[conversation.messages.length - 1].content.split(" ").slice(0, 5).join(" ")}...
+//             </p>
+//           </div>
+//         </div>
+//       ))}
+//     </div>
+//   )
+// }
+
+// export default ExampleConversations
+
+"use client"
+
 import type React from "react"
+import { useState, useRef } from "react"
 import type { Conversation } from "@/types/chat"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { motion, AnimatePresence } from "framer-motion"
+import { useSpring, animated } from "react-spring"
+import { Canvas, useFrame, useThree } from "@react-three/fiber"
+import { Text, OrbitControls, Sphere, MeshDistortMaterial } from "@react-three/drei"
+import type * as THREE from "three"
+import { Sparkles, MessageCircle, User, Bot } from "lucide-react"
 
 interface ExampleConversationsProps {
   onSelectConversation: (conversation: Conversation) => void
   className?: string
 }
 
+const AnimatedSphere = ({ color }: { color: string }) => {
+  const mesh = useRef<THREE.Mesh>(null!)
+  useFrame((state, delta) => {
+    mesh.current.rotation.x = mesh.current.rotation.y += delta * 0.5
+  })
+
+  return (
+    <Sphere args={[0.5, 32, 32]} ref={mesh}>
+      <MeshDistortMaterial color={color} attach="material" distort={0.3} speed={1.5} roughness={0} />
+    </Sphere>
+  )
+}
+
+const FloatingMessages = ({ messages }: { messages: string[] }) => {
+  const { size, viewport } = useThree()
+  const aspect = size.width / viewport.width
+
+  return (
+    <group>
+      {messages.map((message, index) => (
+        <Text
+          key={index}
+          position={[Math.random() * 4 - 2, Math.random() * 4 - 2, Math.random() * 4 - 2]}
+          rotation={[0, 0, 0]}
+          fontSize={0.1}
+          color="white"
+          anchorX="center"
+          anchorY="middle"
+          maxWidth={2}
+        >
+          {message}
+        </Text>
+      ))}
+    </group>
+  )
+}
+
 const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation, className }) => {
+  const [hoveredConversation, setHoveredConversation] = useState<string | null>(null)
+  const [expandedConversation, setExpandedConversation] = useState<string | null>(null)
+
   const exampleConversations: Conversation[] = [
     {
       id: "1",
@@ -492,7 +657,8 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
         {
           id: "30",
           role: "assistant",
-          content: "You are absolutely right, the free plan includes a lot of cool, really cool automation features.Might seem too good to be true but you only need to upgrade to use that.",
+          content:
+            "You are absolutely right, the free plan includes a lot of cool, really cool automation features. Might seem too good to be true but you only need to upgrade to use that.",
           senderId: "assistant",
           createdAt: new Date(),
         },
@@ -502,28 +668,123 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
       unreadCount: 0,
       Automation: null,
     },
-    // Add more example conversations as needed
   ]
 
+  const glowAnimation = useSpring({
+    from: { boxShadow: "0 0 10px rgba(0, 100, 255, 0.5)" },
+    to: { boxShadow: "0 0 20px rgba(0, 100, 255, 0.8)" },
+    config: { duration: 1500 },
+    loop: { reverse: true },
+  })
+
   return (
-    <div className={`space-y-4 ${className}`}>
+    <div className={`space-y-8 ${className}`}>
+      <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">
+        Example Conversations
+      </h2>
       {exampleConversations.map((conversation) => (
-        <div
+        <animated.div
           key={conversation.id}
-          onClick={() => onSelectConversation(conversation)}
-          className="flex items-center p-3 rounded-lg border border-gray-200 hover:border-gray-400 cursor-pointer"
+          style={glowAnimation}
+          className="relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl overflow-hidden"
+          onMouseEnter={() => setHoveredConversation(conversation.id)}
+          onMouseLeave={() => setHoveredConversation(null)}
         >
-          <Avatar className="w-10 h-10 mr-3">
-            <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.id}`} />
-            <AvatarFallback>{conversation.id}</AvatarFallback>
-          </Avatar>
-          <div className="flex-grow min-w-0">
-            <p className="font-medium text-sm text-foreground truncate">Conversation {conversation.id}</p>
-            <p className="text-xs text-muted-foreground truncate">
-              {conversation.messages[conversation.messages.length - 1].content.split(" ").slice(0, 5).join(" ")}...
-            </p>
-          </div>
-        </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 opacity-50"></div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="relative z-10 p-6"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <Avatar className="w-12 h-12 mr-4 border-2 border-blue-500">
+                  <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.id}`} />
+                  <AvatarFallback>{conversation.id}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="text-xl font-semibold text-white">Conversation {conversation.id}</h3>
+                  <p className="text-sm text-gray-400">{conversation.messages.length} messages</p>
+                </div>
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="bg-blue-600 text-white px-4 py-2 rounded-full font-semibold text-sm flex items-center"
+                onClick={() => onSelectConversation(conversation)}
+              >
+                <MessageCircle className="mr-2" size={16} />
+                View Conversation
+              </motion.button>
+            </div>
+            <div className="h-40 mb-4">
+              <Canvas camera={{ position: [0, 0, 5] }}>
+                <ambientLight intensity={0.5} />
+                <pointLight position={[10, 10, 10]} />
+                <AnimatedSphere color={hoveredConversation === conversation.id ? "#4CAF50" : "#2196F3"} />
+                <FloatingMessages messages={conversation.messages.map((m) => m.content)} />
+                <OrbitControls enableZoom={false} />
+              </Canvas>
+            </div>
+            <div className="space-y-2">
+              {conversation.messages
+                .slice(0, expandedConversation === conversation.id ? undefined : 2)
+                .map((message) => (
+                  <motion.div
+                    key={message.id}
+                    initial={{ opacity: 0, x: message.role === "user" ? -20 : 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className={`flex items-start ${message.role === "user" ? "justify-start" : "justify-end"}`}
+                  >
+                    <div
+                      className={`max-w-[80%] p-3 rounded-lg ${
+                        message.role === "user" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-200"
+                      }`}
+                    >
+                      <div className="flex items-center mb-1">
+                        {message.role === "user" ? <User className="w-4 h-4 mr-2" /> : <Bot className="w-4 h-4 mr-2" />}
+                        <span className="font-semibold">{message.role === "user" ? "User" : "Assistant"}</span>
+                      </div>
+                      <p className="text-sm">{message.content}</p>
+                    </div>
+                  </motion.div>
+                ))}
+            </div>
+            {conversation.messages.length > 2 && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="mt-4 text-blue-400 hover:text-blue-300 text-sm font-medium"
+                onClick={() =>
+                  setExpandedConversation(expandedConversation === conversation.id ? null : conversation.id)
+                }
+              >
+                {expandedConversation === conversation.id ? "Show Less" : "Show More"}
+              </motion.button>
+            )}
+          </motion.div>
+          <AnimatePresence>
+            {hoveredConversation === conversation.id && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 pointer-events-none"
+              >
+                <div className="absolute inset-0 overflow-hidden">
+                  <Sparkles
+                    className="w-full h-full text-white opacity-50"
+                    style={{
+                      animation: "float 3s ease-in-out infinite",
+                    }}
+                  />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </animated.div>
       ))}
     </div>
   )
