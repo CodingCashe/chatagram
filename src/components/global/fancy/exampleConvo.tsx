@@ -531,23 +531,184 @@
 
 // export default ExampleConversations
 
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect } from "react"
+// import { MessageSquare, Zap, Star, User, Bot } from "lucide-react"
+
+// interface Message {
+//   id: string
+//   role: "user" | "assistant"
+//   content: string
+// }
+
+// interface Conversation {
+//   id: string
+//   messages: Message[]
+// }
+
+// interface ExampleConversationsProps {
+//   onSelectConversation: (conversation: Conversation) => void
+//   className?: string
+// }
+
+// const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation, className }) => {
+//   const [selectedId, setSelectedId] = useState<string | null>(null)
+//   const [isSmallScreen, setIsSmallScreen] = useState(false)
+
+//   useEffect(() => {
+//     const checkScreenSize = () => {
+//       setIsSmallScreen(window.innerWidth < 640)
+//     }
+//     checkScreenSize()
+//     window.addEventListener("resize", checkScreenSize)
+//     return () => window.removeEventListener("resize", checkScreenSize)
+//   }, [])
+
+//   const exampleConversations: Conversation[] = [
+//     {
+//       id: "1",
+//       messages: [
+//         { id: "23", role: "user", content: "Hello, I have a question about your Service." },
+//         { id: "24", role: "assistant", content: "Of course! I'd be happy to help. What would you like to know?" },
+//         { id: "25", role: "user", content: "Do you have a free version?" },
+//         {
+//           id: "26",
+//           role: "assistant",
+//           content: "Yes, we actually have a free version. Feel free to check out the plans.",
+//         },
+//       ],
+//     },
+//     {
+//       id: "2",
+//       messages: [
+//         { id: "27", role: "user", content: "Can you tell me about your pricing plans?" },
+//         {
+//           id: "28",
+//           role: "assistant",
+//           content: "We offer two pricing tiers at the moment, a FREE and a PRO plan at just $89.",
+//         },
+//         {
+//           id: "29",
+//           role: "user",
+//           content: "I would like to know more about the PRO plan. I think it has hidden gems behind its working?",
+//         },
+//         {
+//           id: "30",
+//           role: "assistant",
+//           content:
+//             "You are absolutely right, the PRO plan includes a lot of cool, really cool automation features. It might seem too good to be true but you only need to upgrade to use that.",
+//         },
+//       ],
+//     },
+//   ]
+
+//   const getRandomEmoji = () => {
+//     const emojis = ["💡", "🚀", "💬", "🔮", "🎨", "🌟", "🔥", "✨"]
+//     return emojis[Math.floor(Math.random() * emojis.length)]
+//   }
+
+//   return (
+//     <div className={`space-y-6 ${className}`}>
+//       {exampleConversations.map((conversation) => (
+//         <div
+//           key={conversation.id}
+//           onClick={() => {
+//             setSelectedId(conversation.id)
+//             onSelectConversation(conversation)
+//           }}
+//           className={`
+//             p-4 rounded-lg border border-gray-700 
+//             bg-gradient-to-br from-gray-900 to-gray-800 
+//             hover:from-gray-800 hover:to-gray-700 
+//             cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300
+//             ${selectedId === conversation.id ? "ring-2 ring-purple-500" : ""}
+//           `}
+//         >
+//           <div className="flex items-center justify-between mb-3">
+//             <div className="flex items-center space-x-2">
+//               <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white text-xl font-bold">
+//                 {getRandomEmoji()}
+//               </div>
+//               <div>
+//                 <p className="font-bold text-sm text-purple-300">Conversation {conversation.id}</p>
+//                 <div className="flex items-center space-x-1">
+//                   <MessageSquare className="w-3 h-3 text-purple-400" />
+//                   <span className="text-xs text-purple-400">{conversation.messages.length}</span>
+//                 </div>
+//               </div>
+//             </div>
+//             {!isSmallScreen && (
+//               <div className="flex items-center space-x-2">
+//                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-900 text-purple-300">
+//                   <Zap className="w-3 h-3 mr-1" />
+//                   AI Powered
+//                 </span>
+//                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-900 text-yellow-300">
+//                   <Star className="w-3 h-3 mr-1" />
+//                   Featured
+//                 </span>
+//               </div>
+//             )}
+//           </div>
+//           <div className="space-y-2">
+//             {conversation.messages.slice(-2).map((message, index) => (
+//               <div
+//                 key={message.id}
+//                 className={`flex items-start space-x-2 ${message.role === "user" ? "justify-end" : ""}`}
+//               >
+//                 {message.role === "assistant" && <Bot className="w-4 h-4 mt-1 text-green-400" />}
+//                 <div
+//                   className={`p-2 rounded-lg ${message.role === "user" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-200"}`}
+//                 >
+//                   <p className="text-xs">{message.content}</p>
+//                 </div>
+//                 {message.role === "user" && <User className="w-4 h-4 mt-1 text-blue-400" />}
+//               </div>
+//             ))}
+//           </div>
+//         </div>
+//       ))}
+//     </div>
+//   )
+// }
+
+// export default ExampleConversations
+
 "use client"
 
+import type React from "react"
 import { useState, useEffect } from "react"
-import type { Conversation } from "@/types/chat"
+import { motion } from "framer-motion"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { motion, AnimatePresence } from "framer-motion"
-import { MessageSquare, Zap, Star } from "lucide-react"
-import type React from "react" // Added import for React
+import { Button } from "@/components/ui/button"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Trash2, MessageSquare, Zap, Star, User, Bot, Sparkles, Clock, ThumbsUp, ThumbsDown } from "lucide-react"
+import type { Message } from "@/types/dashboard"
+
+type ConversationWithExtra = {
+  id: string
+  chatId: string
+  pageId: string
+  userId: string
+  messages: Message[]
+  createdAt: Date
+  updatedAt: Date
+  unreadCount: number
+  Automation: null
+}
 
 interface ExampleConversationsProps {
-  onSelectConversation: (conversation: Conversation) => void
+  onSelectConversation: (conversation: ConversationWithExtra) => void
   className?: string
 }
 
 const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation, className }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [isSmallScreen, setIsSmallScreen] = useState(false)
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [hoveredId, setHoveredId] = useState<string | null>(null)
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -558,8 +719,88 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
     return () => window.removeEventListener("resize", checkScreenSize)
   }, [])
 
-  const exampleConversations: Conversation[] = [
-    // ... (your existing conversation data)
+  const exampleConversations: ConversationWithExtra[] = [
+    {
+      id: "1",
+      chatId: "chat1",
+      pageId: "page1",
+      userId: "user1",
+      messages: [
+        {
+          id: "23",
+          role: "user",
+          content: "Hello, I have a question about your Service.",
+          senderId: "user1",
+          createdAt: new Date(Date.now() - 3600000),
+        },
+        {
+          id: "24",
+          role: "assistant",
+          content: "Of course! I'd be happy to help. What would you like to know?",
+          senderId: "assistant",
+          createdAt: new Date(Date.now() - 3540000),
+        },
+        {
+          id: "25",
+          role: "user",
+          content: "Do you have a free version?",
+          senderId: "user1",
+          createdAt: new Date(Date.now() - 3480000),
+        },
+        {
+          id: "26",
+          role: "assistant",
+          content: "Yes, we actually have a free version. Feel free to check out the plans.",
+          senderId: "assistant",
+          createdAt: new Date(Date.now() - 3420000),
+        },
+      ],
+      createdAt: new Date(Date.now() - 3600000),
+      updatedAt: new Date(Date.now() - 3420000),
+      unreadCount: 0,
+      Automation: null,
+    },
+    {
+      id: "2",
+      chatId: "chat2",
+      pageId: "page1",
+      userId: "user2",
+      messages: [
+        {
+          id: "27",
+          role: "user",
+          content: "Can you tell me about your pricing plans?",
+          senderId: "user2",
+          createdAt: new Date(Date.now() - 7200000),
+        },
+        {
+          id: "28",
+          role: "assistant",
+          content: "We offer two pricing tiers at the moment, a FREE and a PRO plan at just $89.",
+          senderId: "assistant",
+          createdAt: new Date(Date.now() - 7140000),
+        },
+        {
+          id: "29",
+          role: "user",
+          content: "I would like to know more about the PRO plan. I think it has hidden gems behind its working?",
+          senderId: "user2",
+          createdAt: new Date(Date.now() - 7080000),
+        },
+        {
+          id: "30",
+          role: "assistant",
+          content:
+            "You are absolutely right, the PRO plan includes a lot of cool, really cool automation features. It might seem too good to be true but you only need to upgrade to use that.",
+          senderId: "assistant",
+          createdAt: new Date(Date.now() - 7020000),
+        },
+      ],
+      createdAt: new Date(Date.now() - 7200000),
+      updatedAt: new Date(Date.now() - 7020000),
+      unreadCount: 2,
+      Automation: null,
+    },
   ]
 
   const getRandomEmoji = () => {
@@ -567,63 +808,165 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
     return emojis[Math.floor(Math.random() * emojis.length)]
   }
 
+  const formatTimestamp = (timestamp: Date) => {
+    return timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+  }
+
+  const handleExpand = (id: string) => {
+    setExpandedId(expandedId === id ? null : id)
+  }
+
+  const handleHover = (id: string | null) => {
+    setHoveredId(id)
+  }
+
+  const getActivityStatus = (lastActive: Date) => {
+    const now = new Date()
+    const diffInMinutes = Math.floor((now.getTime() - lastActive.getTime()) / 60000)
+
+    if (diffInMinutes < 1) return "Active now"
+    if (diffInMinutes < 60) return `Active ${diffInMinutes} minute${diffInMinutes > 1 ? "s" : ""} ago`
+
+    const diffInHours = Math.floor(diffInMinutes / 60)
+    if (diffInHours < 24) return `Active ${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`
+
+    const diffInDays = Math.floor(diffInHours / 24)
+    return `Active ${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`
+  }
+
+  const getFancyName = (userId: string) => {
+    const names = ["Alice", "Bob", "Charlie", "David", "Eva"]
+    return names[Number.parseInt(userId.slice(-1)) % names.length]
+  }
+
+  const getAvatarUrl = (userId: string) => {
+    return `https://api.dicebear.com/6.x/initials/svg?seed=${userId}`
+  }
+
   return (
-    <div className={`space-y-4 ${className}`}>
-      <AnimatePresence>
-        {exampleConversations.map((conversation) => (
-          <motion.div
-            key={conversation.id}
-            layoutId={conversation.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            onClick={() => {
-              setSelectedId(conversation.id)
-              onSelectConversation(conversation)
-            }}
-            className={`
-              flex items-center p-4 rounded-lg border border-gray-700 
-              bg-gradient-to-br from-gray-900 to-gray-800 
-              hover:from-gray-800 hover:to-gray-700 
-              cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300
-              ${selectedId === conversation.id ? "ring-2 ring-purple-500" : ""}
-            `}
-          >
-            <div className="relative">
-              <Avatar className="w-12 h-12 mr-4 border-2 border-purple-500">
-                <AvatarImage src={`https://api.dicebear.com/6.x/bottts/svg?seed=${conversation.id}`} />
-                <AvatarFallback>{getRandomEmoji()}</AvatarFallback>
+    <div className={`space-y-6 ${className}`}>
+      {exampleConversations.map((conversation) => (
+        <motion.div
+          key={conversation.id}
+          onClick={() => {
+            setSelectedId(conversation.id)
+            onSelectConversation(conversation)
+          }}
+          onMouseEnter={() => handleHover(conversation.id)}
+          onMouseLeave={() => handleHover(null)}
+          className={`
+            p-4 rounded-lg border border-gray-700 
+            bg-gradient-to-br from-gray-900 to-gray-800 
+            hover:from-gray-800 hover:to-gray-700 
+            cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300
+            ${selectedId === conversation.id ? "ring-2 ring-purple-500" : ""}
+            ${hoveredId === conversation.id ? "scale-105" : ""}
+          `}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-2">
+              <Avatar className="w-10 h-10 relative border-2 border-primary">
+                <AvatarImage src={getAvatarUrl(conversation.userId)} />
+                <AvatarFallback>{getFancyName(conversation.userId).slice(0, 2)}</AvatarFallback>
+                {conversation.unreadCount > 0 && (
+                  <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-primary transform translate-x-1/2 -translate-y-1/2"></span>
+                )}
               </Avatar>
-              <span className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-gray-800 rounded-full"></span>
-            </div>
-            <div className="flex-grow min-w-0">
-              <div className="flex items-center justify-between mb-1">
-                <p className="font-bold text-sm text-purple-300">Conversation {conversation.id}</p>
+              <div>
+                <p className="font-bold text-sm text-purple-300">{getFancyName(conversation.userId)}</p>
                 <div className="flex items-center space-x-1">
                   <MessageSquare className="w-3 h-3 text-purple-400" />
                   <span className="text-xs text-purple-400">{conversation.messages.length}</span>
                 </div>
               </div>
-              <p className="text-xs text-gray-400 truncate">
-                {conversation.messages[conversation.messages.length - 1].content}
-              </p>
-              {!isSmallScreen && (
-                <div className="flex items-center mt-2 space-x-2">
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-900 text-purple-300">
-                    <Zap className="w-3 h-3 mr-1" />
-                    AI Powered
-                  </span>
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-900 text-yellow-300">
-                    <Star className="w-3 h-3 mr-1" />
-                    Featured
-                  </span>
-                </div>
-              )}
             </div>
-          </motion.div>
-        ))}
-      </AnimatePresence>
+            {!isSmallScreen && (
+              <div className="flex items-center space-x-2">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-900 text-purple-300">
+                  <Zap className="w-3 h-3 mr-1" />
+                  AI Powered
+                </span>
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-900 text-yellow-300">
+                  <Star className="w-3 h-3 mr-1" />
+                  Featured
+                </span>
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-900 text-blue-300">
+                  <Clock className="w-3 h-3 mr-1" />
+                  {formatTimestamp(conversation.updatedAt)}
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="space-y-2">
+            {(expandedId === conversation.id ? conversation.messages : conversation.messages.slice(-2)).map(
+              (message, index) => (
+                <div
+                  key={message.id}
+                  className={`flex items-start space-x-2 ${message.role === "user" ? "justify-end" : ""}`}
+                >
+                  {message.role === "assistant" && <Bot className="w-4 h-4 mt-1 text-green-400" />}
+                  <div
+                    className={`p-2 rounded-lg ${
+                      message.role === "user" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-200"
+                    }`}
+                  >
+                    <p className="text-xs">{message.content}</p>
+                    <p className="text-xxs text-gray-400 mt-1">{formatTimestamp(message.createdAt)}</p>
+                  </div>
+                  {message.role === "user" && <User className="w-4 h-4 mt-1 text-blue-400" />}
+                </div>
+              ),
+            )}
+          </div>
+          <div className="mt-3 flex justify-between items-center">
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                handleExpand(conversation.id)
+              }}
+              className="text-xs text-purple-400 hover:text-purple-300 transition-colors duration-200"
+            >
+              {expandedId === conversation.id ? "Show Less" : "Show More"}
+            </button>
+            <div className="flex items-center space-x-2">
+              <Sparkles className="w-4 h-4 text-yellow-500" />
+              <div className="w-24 h-2 bg-gray-700 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500"
+                  style={{ width: `${(conversation.messages.length / 10) * 100}%` }}
+                ></div>
+              </div>
+              <div className="flex space-x-1">
+                <ThumbsUp className="w-4 h-4 text-green-500" />
+                <ThumbsDown className="w-4 h-4 text-red-500" />
+              </div>
+            </div>
+          </div>
+          <div className="mt-2 flex justify-between items-center text-xs text-muted-foreground">
+            <span>{getActivityStatus(conversation.updatedAt)}</span>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      console.log("Delete conversation:", conversation.id)
+                    }}
+                    className="text-muted-foreground hover:text-red-500"
+                  >
+                    <Trash2 size={16} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Delete conversation</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        </motion.div>
+      ))}
     </div>
   )
 }
