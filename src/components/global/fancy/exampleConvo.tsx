@@ -511,7 +511,7 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
         <div
           key={conversation.id}
           onClick={() => onSelectConversation(conversation)}
-          className="flex items-center p-3 rounded-lg border border-gray-200 hover:border-gray-400 cursor-pointer"
+          className="flex items-center justify-between mb-1 p-3 space-x-2 rounded-lg border border-gray-200 hover:border-gray-400 cursor-pointer"
         >
           <Avatar className="w-10 h-10 mr-3">
             <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.id}`} />
