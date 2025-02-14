@@ -540,6 +540,7 @@ export async function getConversationsForUserQuery(userId: string): Promise<Conv
     createdAt: conversation.createdAt,
     updatedAt: conversation.updatedAt,
     Automation: conversation.Automation,
+    unreadCount:0
   }))
 }
 
