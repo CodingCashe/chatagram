@@ -6384,7 +6384,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
       }
     } catch (error) {
       console.error("Error in fetchChats:", error)
-      setError(`Oops! We're having trouble loading your chats. Let's try again in a moment.`)
+      setError(`Oops! We're having trouble loading your chats. Retrying...`)
       // Retry after 5 seconds
       setTimeout(() => {
         fetchChats()
@@ -6644,7 +6644,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                             {message.role === "assistant" && (
                               <div
                                 className={`flex items-center ${
-                                  message.status === "sent" ? "text-green-400" : "text-red-400"
+                                  message.status === "sent" ? "text-green-400" : "text-green-400"
                                 }`}
                               >
                                 {message.status === "sent" || true ? (
@@ -6718,7 +6718,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                     </Popover>
                     <div className="flex-grow relative">
                       <Textarea
-                        placeholder="Type a message..."
+                        placeholder="Type here..."
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                         onKeyPress={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
@@ -6745,7 +6745,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                             </motion.button>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>Send message</p>
+                            <p>Send Dm</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -6806,13 +6806,13 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
               <>
                 <h3 className="text-lg font-semibold p-4 bg-background flex justify-between items-center">
                   <span>Recent Chats</span>
-                  {totalUnreadMessages > 0 && (
+                  {totalUnreadMessages < 0 ||true && (
                     <span className="bg-red-500 text-primary-foreground text-xs font-bold px-2 py-1 rounded-full">
                       {totalUnreadMessages}
                     </span>
                   )}
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
                   {!token ? (
                     <div className="col-span-full p-4 bg-background rounded-lg shadow-md">
                       <ExampleConversations onSelectConversation={handleSelectConversation} className="mb-4" />
