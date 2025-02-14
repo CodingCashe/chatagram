@@ -7,6 +7,7 @@ export interface Message {
   receiverId?:string
   createdAt: Date
   status?: "sending" | "sent" | "error"
+  read?: boolean
 }
 
 export interface Conversation {
@@ -18,6 +19,7 @@ export interface Conversation {
   createdAt: Date
   updatedAt: Date
   unreadCount?: number
+  read?: boolean
   Automation: {
     id: string
     name: string
