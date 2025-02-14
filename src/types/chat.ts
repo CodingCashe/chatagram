@@ -70,7 +70,7 @@ export interface Conversation {
   messages: Message[]
   createdAt: Date
   updatedAt: Date
-  unreadCount?: number
+  unreadCount: number
   Automation: {
     id: string
     name: string
