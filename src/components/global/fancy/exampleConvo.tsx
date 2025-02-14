@@ -415,128 +415,9 @@
 
 // export default ExampleConversations
 
-// import type React from "react"
-// import type { Conversation } from "@/types/chat"
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
-// interface ExampleConversationsProps {
-//   onSelectConversation: (conversation: Conversation) => void
-//   className?: string
-// }
-
-// const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectConversation, className }) => {
-//   const exampleConversations: Conversation[] = [
-//     {
-//       id: "1",
-//       pageId: "example1",
-//       messages: [
-//         {
-//           id: "23",
-//           role: "user",
-//           content: "Hello, I have a question about your Service.",
-//           senderId: "user1",
-//           createdAt: new Date(),
-//         },
-//         {
-//           id: "24",
-//           role: "assistant",
-//           content: "Of course! I'd be happy to help. What would you like to know?",
-//           senderId: "assistant",
-//           createdAt: new Date(),
-//         },
-//         {
-//           id: "25",
-//           role: "user",
-//           content: "Do you have a free version?",
-//           senderId: "user1",
-//           createdAt: new Date(),
-//         },
-//         {
-//           id: "26",
-//           role: "assistant",
-//           content: "Yap, we actually have a free version. Feel free to check out the plans",
-//           senderId: "assistant",
-//           createdAt: new Date(),
-//         },
-//       ],
-//       createdAt: new Date(),
-//       updatedAt: new Date(),
-//       unreadCount: 0,
-//       Automation: null,
-//     },
-//     {
-//       id: "2",
-//       pageId: "example2",
-//       messages: [
-//         {
-//           id: "27",
-//           role: "user",
-//           content: "Can you tell me about your pricing plans?",
-//           senderId: "user2",
-//           createdAt: new Date(),
-//         },
-//         {
-//           id: "28",
-//           role: "assistant",
-//           content: "We offer two pricing tiers at the moment, a FREE and a PRO plan at just $89.",
-//           senderId: "assistant",
-//           createdAt: new Date(),
-//         },
-//         {
-//           id: "29",
-//           role: "user",
-//           content: "I would like to know more about the PRO plan. I think it has hidden gems behind its working?",
-//           senderId: "user2",
-//           createdAt: new Date(),
-//         },
-//         {
-//           id: "30",
-//           role: "assistant",
-//           content: "You are absolutely right, the free plan includes a lot of cool, really cool automation features.Might seem too good to be true but you only need to upgrade to use that.",
-//           senderId: "assistant",
-//           createdAt: new Date(),
-//         },
-//       ],
-//       createdAt: new Date(),
-//       updatedAt: new Date(),
-//       unreadCount: 0,
-//       Automation: null,
-//     },
-//     // Add more example conversations as needed
-//   ]
-
-//   return (
-//     <div className={`space-y-4 ${className}`}>
-//       {exampleConversations.map((conversation) => (
-//         <div
-//           key={conversation.id}
-//           onClick={() => onSelectConversation(conversation)}
-//           className="flex items-center justify-between mb-1 p-3 space-x-2 rounded-lg border border-gray-200 hover:border-gray-400 cursor-pointer"
-//         >
-//           <Avatar className="w-10 h-10 mr-3">
-//             <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.id}`} />
-//             <AvatarFallback>{conversation.id}</AvatarFallback>
-//           </Avatar>
-//           <div className="flex-grow min-w-0">
-//             <p className="font-medium text-sm text-foreground truncate">Conversation {conversation.id}</p>
-//             <p className="text-xs text-muted-foreground truncate">
-//               {conversation.messages[conversation.messages.length - 1].content.split(" ").slice(0, 5).join(" ")}...
-//             </p>
-//           </div>
-//         </div>
-//       ))}
-//     </div>
-//   )
-// }
-
-// export default ExampleConversations
-
-
-
 import type React from "react"
 import type { Conversation } from "@/types/chat"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface ExampleConversationsProps {
   onSelectConversation: (conversation: Conversation) => void
@@ -611,8 +492,7 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
         {
           id: "30",
           role: "assistant",
-          content:
-            "You are absolutely right, the free plan includes a lot of cool, really cool automation features.Might seem too good to be true but you only need to upgrade to use that.",
+          content: "You are absolutely right, the free plan includes a lot of cool, really cool automation features.Might seem too good to be true but you only need to upgrade to use that.",
           senderId: "assistant",
           createdAt: new Date(),
         },
@@ -626,30 +506,30 @@ const ExampleConversations: React.FC<ExampleConversationsProps> = ({ onSelectCon
   ]
 
   return (
-    <ScrollArea className={`h-[calc(100vh-4rem)] px-2 ${className}`}>
-      <div className="space-y-2">
-        {exampleConversations.map((conversation) => (
-          <button
-            key={conversation.id}
-            onClick={() => onSelectConversation(conversation)}
-            className="w-full flex items-center p-3 space-x-3 rounded-lg border border-gray-200 hover:border-gray-400 active:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
-          >
-            <Avatar className="flex-shrink-0 w-10 h-10">
-              <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.id}`} />
-              <AvatarFallback>{conversation.id}</AvatarFallback>
-            </Avatar>
-            <div className="flex-grow min-w-0 text-left">
-              <p className="font-medium text-sm text-foreground truncate">Conversation {conversation.id}</p>
-              <p className="text-xs text-muted-foreground truncate">
-                {conversation.messages[conversation.messages.length - 1].content.split(" ").slice(0, 5).join(" ")}...
-              </p>
-            </div>
-          </button>
-        ))}
-      </div>
-    </ScrollArea>
+    <div className={`space-y-4 ${className}`}>
+      {exampleConversations.map((conversation) => (
+        <div
+          key={conversation.id}
+          onClick={() => onSelectConversation(conversation)}
+          className="flex items-center justify-between mb-1 p-3 space-x-2 rounded-lg border border-gray-200 hover:border-gray-400 cursor-pointer"
+        >
+          <Avatar className="w-10 h-10 mr-3">
+            <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${conversation.id}`} />
+            <AvatarFallback>{conversation.id}</AvatarFallback>
+          </Avatar>
+          <div className="flex-grow min-w-0">
+            <p className="font-medium text-sm text-foreground truncate">Conversation {conversation.id}</p>
+            <p className="text-xs text-muted-foreground truncate">
+              {conversation.messages[conversation.messages.length - 1].content.split(" ").slice(0, 5).join(" ")}...
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
   )
 }
 
 export default ExampleConversations
+
+
 
