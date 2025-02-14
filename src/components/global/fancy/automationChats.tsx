@@ -5435,9 +5435,9 @@
 //               <>
 //                 <h3 className="text-lg font-semibold p-4 bg-background flex justify-between items-center">
 //                   <span>Recent Chats</span>
-//                   {totalUnreadMessages > 0 && (
+//                   {totalUnreadMessages < 0 && (
 //                     <span className="bg-red-500 text-primary-foreground text-xs font-bold px-2 py-1 rounded-full">
-//                       {totalUnreadMessages}
+//                       {4}
 //                     </span>
 //                   )}
 //                 </h3>
@@ -5721,7 +5721,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [scrollRef, conversations]) //Corrected useEffect dependency
+  }, [scrollRef]) //Corrected useEffect dependency
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
@@ -6120,8 +6120,8 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                   {!token ? (
                     <div className="p-4 space-y-4">
                       <ExampleConversations onSelectConversation={handleSelectConversation} className="px-4" />
-                      <div className="text-center">
-                        <p className="text-muted-foreground mb-2">
+                      <div className="text-center px-2 sm:px-4">
+                        <p className="text-muted-foreground mb-4 text-sm sm:text-base">
                           Connect your Instagram account to start receiving real messages.
                         </p>
                         <Button
@@ -6129,7 +6129,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                             // Implement navigation to integration page
                             console.log("Navigate to integration page")
                           }}
-                          className="bg-[#3352CC] hover:bg-[#3352CC]/90 text-white font-bold py-2 px-4 rounded-full transition-all duration-200 transform hover:scale-105 w-full sm:w-auto whitespace-nowrap"
+                          className="bg-[#3352CC] hover:bg-[#3352CC]/90 text-white font-bold py-2 px-4 rounded-full transition-all duration-200 transform hover:scale-105 w-full max-w-[250px]"
                         >
                           Connect Instagram
                         </Button>
