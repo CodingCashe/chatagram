@@ -6227,7 +6227,7 @@ import type React from "react"
 import { useState, useEffect, useRef, useCallback } from "react"
 import { motion } from "framer-motion"
 import { useSpring, animated } from "react-spring"
-import { Send, ArrowLeft, Smile, Paperclip, Mic, Trash2, Check, Sparkles, Zap } from "lucide-react"
+import { Send, ArrowLeft, Smile, Paperclip, Mic, Trash2, Check, Sparkles, Zap, Loader2 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
@@ -6256,7 +6256,7 @@ interface RawConversation {
 
 const BOT_NAME = "AiAssist"
 // const BOT_AVATAR = "https://api.dicebear.com/6.x/bottts/svg?seed=AiAssist"
-const BOT_AVATAR = "/profilepic"
+const BOT_AVATAR = "/fancy-profile-pic.svg"
 
 const BOT_ID = "17841444435951291"
 const EXCLUDED_CHAT_ID = "17841444435951291"
@@ -6319,25 +6319,32 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const [aiSuggestion, setAiSuggestion] = useState<string | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  const getAvatarUrl = (userId: string) => {
-    return `https://api.dicebear.com/6.x/initials/svg?seed=${userId}`
+  const getAvatarUrl = () => {
+    return `https://source.unsplash.com/random/100x100?portrait&${Math.random()}`
   }
 
   const fetchChats = useCallback(async () => {
     setIsLoading(true)
     setError(null)
     try {
-      const { conversations, token, businessVariables } = (await fetchChatsAndBusinessVariables(automationId)) as {
+      const result = await fetchChatsAndBusinessVariables(automationId)
+      if (!result || typeof result !== "object") {
+        throw new Error("Invalid response from server")
+      }
+      const { conversations, token, businessVariables } = result as {
         conversations: RawConversation[]
         token: string
         businessVariables: BusinessVariables
+      }
+      if (!Array.isArray(conversations)) {
+        throw new Error("Conversations data is not in the expected format")
       }
       const filteredConversations = conversations
         .filter((conv) => conv.chatId !== EXCLUDED_CHAT_ID)
         .map(
           (conv): Conversation => ({
             id: conv.chatId,
-            userId: conv.messages[0]?.senderId || conv.chatId, // Use senderId from the first message, or fallback to chatId
+            userId: conv.messages[0]?.senderId || conv.chatId,
             pageId: conv.pageId,
             messages: conv.messages.map(
               (msg): Message => ({
@@ -6355,7 +6362,6 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
           }),
         )
 
-      // Sort conversations by the timestamp of the last message
       filteredConversations.sort((a, b) => {
         const lastMessageA = a.messages[a.messages.length - 1]
         const lastMessageB = b.messages[b.messages.length - 1]
@@ -6373,13 +6379,16 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
       setToken(token)
       setBusinessVariables(businessVariables)
 
-      // Show example conversations by default if there are no active conversations
       if (filteredConversations.length === 0) {
         setSelectedConversation(null)
       }
     } catch (error) {
       console.error("Error in fetchChats:", error)
-      setError(`Failed to fetch chats: ${error instanceof Error ? error.message : String(error)}`)
+      setError(`Oops! We're having trouble loading your chats. Let's try again in a moment.`)
+      // Retry after 5 seconds
+      setTimeout(() => {
+        fetchChats()
+      }, 5000)
     } finally {
       setIsLoading(false)
     }
@@ -6544,15 +6553,32 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     }
   }, [selectedConversation])
 
+  const FancyErrorMessage: React.FC<{ message: string }> = ({ message }) => {
+    return (
+      <div className="flex flex-col items-center justify-center h-full p-4 text-center">
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+        >
+          <Zap className="w-16 h-16 text-yellow-400 mb-4" />
+        </motion.div>
+        <h3 className="text-xl font-semibold mb-2">Hang tight!</h3>
+        <p className="text-muted-foreground mb-4">{message}</p>
+        <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}>
+          <Loader2 className="w-6 h-6 text-primary animate-spin" />
+        </motion.div>
+      </div>
+    )
+  }
+
   return (
     <ShimmeringBorder>
-      <div
-        className={`flex flex-col ${fancyBackground} text-foreground rounded-lg overflow-hidden h-[calc(100vh-4rem)] md:h-[calc(100vh-8rem)]`}
-      >
+      <div className={`flex flex-col ${fancyBackground} text-foreground rounded-lg overflow-hidden h-full`}>
         {isLoading ? (
           <FancyLoader />
         ) : error ? (
-          <div className="p-4 text-red-500">{error}</div>
+          <FancyErrorMessage message={error} />
         ) : (
           <>
             {selectedConversation ? (
@@ -6618,7 +6644,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                             {message.role === "assistant" && (
                               <div
                                 className={`flex items-center ${
-                                  message.status === "sent" ? "text-green-400" : "text-green-400"
+                                  message.status === "sent" ? "text-green-400" : "text-red-400"
                                 }`}
                               >
                                 {message.status === "sent" || true ? (
@@ -6786,98 +6812,85 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                     </span>
                   )}
                 </h3>
-                <div className="overflow-x-auto">
-                  <div className="flex space-x-4 p-4 min-w-max">
-                    {!token ? (
-                      <div className="w-full max-w-sm p-4 bg-background rounded-lg shadow-md">
-                        <ExampleConversations onSelectConversation={handleSelectConversation} className="mb-4" />
-                        <div className="text-center">
-                          <p className="text-muted-foreground mb-4 text-sm sm:text-base">
-                            Connect your Instagram account to start receiving real messages.
-                          </p>
-                          <Button
-                            onClick={() => {
-                              // Implement navigation to integration page
-                              console.log("Navigate to integration page")
-                            }}
-                            className="bg-[#3352CC] hover:bg-[#3352CC]/90 text-white font-bold py-2 px-4 rounded-full transition-all duration-200 transform hover:scale-105 w-full"
-                          >
-                            Connect Instagram
-                          </Button>
-                        </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                  {!token ? (
+                    <div className="col-span-full p-4 bg-background rounded-lg shadow-md">
+                      <ExampleConversations onSelectConversation={handleSelectConversation} className="mb-4" />
+                      <div className="text-center">
+                        <p className="text-muted-foreground mb-4 text-sm sm:text-base">
+                          Connect your Instagram account to start receiving real messages.
+                        </p>
+                        <Button
+                          onClick={() => {
+                            // Implement navigation to integration page
+                            console.log("Navigate to integration page")
+                          }}
+                          className="bg-[#3352CC] hover:bg-[#3352CC]/90 text-white font-bold py-2 px-4 rounded-full transition-all duration-200 transform hover:scale-105 w-full"
+                        >
+                          Connect Instagram
+                        </Button>
                       </div>
-                    ) : conversations.length === 0 ? (
-                      <div className="w-full max-w-sm p-4 bg-background rounded-lg shadow-md">
-                        <ExampleConversations onSelectConversation={handleSelectConversation} />
-                      </div>
-                    ) : (
-                      <>
-                        {conversations.slice(0, displayedConversations).map((conversation) => (
-                          <motion.div
-                            key={conversation.id}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="w-72 p-4 bg-background rounded-lg shadow-md hover:bg-muted cursor-pointer transition-colors duration-200"
-                            onClick={() => handleSelectConversation(conversation)}
-                          >
-                            <div className="flex items-center mb-2">
-                              <Avatar className="w-10 h-10 relative border-2 border-primary">
-                                <AvatarImage src={getAvatarUrl(conversation.id)} />
-                                <AvatarFallback>{getFancyName(conversation.id).slice(0, 2)}</AvatarFallback>
-                                {unreadChats.has(conversation.id) && (
-                                  <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-primary transform translate-x-1/2 -translate-y-1/2"></span>
-                                )}
-                              </Avatar>
-                              <div className="ml-3 flex-grow overflow-hidden">
-                                <p className="font-medium text-sm text-foreground">{getFancyName(conversation.id)}</p>
-                                <p className="text-xs text-muted-foreground">
-                                  {getActivityStatus(conversation.updatedAt)}
-                                </p>
-                              </div>
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={(e) => {
-                                        e.stopPropagation()
-                                        handleDeleteConversation(conversation)
-                                      }}
-                                      className="text-muted-foreground hover:text-red-500"
-                                    >
-                                      <Trash2 size={18} />
-                                    </Button>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p>Delete conversation</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
+                    </div>
+                  ) : conversations.length === 0 ? (
+                    <div className="col-span-full p-4 bg-background rounded-lg shadow-md">
+                      <ExampleConversations onSelectConversation={handleSelectConversation} />
+                    </div>
+                  ) : (
+                    <>
+                      {conversations.map((conversation) => (
+                        <motion.div
+                          key={conversation.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="p-4 bg-background rounded-lg shadow-md hover:bg-muted cursor-pointer transition-colors duration-200"
+                          onClick={() => handleSelectConversation(conversation)}
+                        >
+                          <div className="flex items-center mb-2">
+                            <Avatar className="w-10 h-10 relative border-2 border-primary">
+                              <AvatarImage src={getAvatarUrl()} />
+                              <AvatarFallback>{getFancyName(conversation.id).slice(0, 2)}</AvatarFallback>
+                              {unreadChats.has(conversation.id) && (
+                                <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-primary transform translate-x-1/2 -translate-y-1/2"></span>
+                              )}
+                            </Avatar>
+                            <div className="ml-3 flex-grow overflow-hidden">
+                              <p className="font-medium text-sm text-foreground">{getFancyName(conversation.id)}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {getActivityStatus(conversation.updatedAt)}
+                              </p>
                             </div>
-                            <p className="text-xs text-muted-foreground truncate">
-                              {conversation.messages.length > 0
-                                ? conversation.messages[conversation.messages.length - 1].content
-                                : "No messages"}
-                            </p>
-                          </motion.div>
-                        ))}
-                      </>
-                    )}
-                  </div>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      handleDeleteConversation(conversation)
+                                    }}
+                                    className="text-muted-foreground hover:text-red-500"
+                                  >
+                                    <Trash2 size={18} />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Delete conversation</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                          <p className="text-xs text-muted-foreground truncate">
+                            {conversation.messages.length > 0
+                              ? conversation.messages[conversation.messages.length - 1].content
+                              : "No messages"}
+                          </p>
+                        </motion.div>
+                      ))}
+                    </>
+                  )}
                 </div>
-                {!token && displayedConversations < conversations.length && (
-                  <div className="p-4 text-center">
-                    <Button
-                      onClick={() => setDisplayedConversations((prev) => Math.min(prev + 4, conversations.length))}
-                      variant="outline"
-                      className="w-full max-w-sm"
-                    >
-                      Load More
-                    </Button>
-                  </div>
-                )}
               </>
             )}
           </>
