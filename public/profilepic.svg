@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="faceGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff9a9e">
+        <animate attributeName="stop-color" values="#ff9a9e; #fad0c4; #ffecd2; #ff9a9e" dur="10s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%" stop-color="#fad0c4">
+        <animate attributeName="stop-color" values="#fad0c4; #ffecd2; #ff9a9e; #fad0c4" dur="10s" repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
+    <radialGradient id="eyeGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#4facfe" />
+      <stop offset="100%" stop-color="#00f2fe" />
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Face -->
+  <circle cx="100" cy="100" r="90" fill="url(#faceGradient)">
+    <animate attributeName="r" values="90;93;90" dur="4s" repeatCount="indefinite" />
+  </circle>
+  
+  <!-- Eyes -->
+  <g id="eyes">
+    <circle cx="70" cy="80" r="15" fill="url(#eyeGradient)" filter="url(#glow)">
+      <animate attributeName="r" values="15;17;15" dur="3s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="130" cy="80" r="15" fill="url(#eyeGradient)" filter="url(#glow)">
+      <animate attributeName="r" values="15;17;15" dur="3s" repeatCount="indefinite" />
+    </circle>
+  </g>
+  
+  <!-- Smile -->
+  <path d="M70 120 Q100 150 130 120" fill="none" stroke="#ff6b6b" stroke-width="5" stroke-linecap="round">
+    <animate attributeName="d" values="M70 120 Q100 150 130 120; M70 125 Q100 160 130 125; M70 120 Q100 150 130 120" dur="5s" repeatCount="indefinite" />
+  </path>
+  
+  <!-- Decorative elements -->
+  <g id="decorations" opacity="0.7">
+    <circle cx="30" cy="30" r="5" fill="#00f2fe">
+      <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="170" cy="30" r="5" fill="#4facfe">
+      <animate attributeName="r" values="5;7;5" dur="2.5s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="30" cy="170" r="5" fill="#ffecd2">
+      <animate attributeName="r" values="5;7;5" dur="3s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="170" cy="170" r="5" fill="#ff9a9e">
+      <animate attributeName="r" values="5;7;5" dur="3.5s" repeatCount="indefinite" />
+    </circle>
+  </g>
+  
+  <!-- Animated ring -->
+  <circle cx="100" cy="100" r="95" fill="none" stroke="url(#faceGradient)" stroke-width="3" opacity="0.5">
+    <animate attributeName="r" values="95;98;95" dur="4s" repeatCount="indefinite" />
+    <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="20s" repeatCount="indefinite" />
+  </circle>
+</svg>
+
