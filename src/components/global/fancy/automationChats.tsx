@@ -7628,729 +7628,6 @@
 
 // export default AutomationChats
 
-// "use client"
-
-// import type React from "react"
-// import { useState, useEffect, useRef, useCallback } from "react"
-// import { motion } from "framer-motion"
-// import { useSpring, animated } from "react-spring"
-// import { Send, ArrowLeft, Smile, Paperclip, Mic, Trash2, Check, Sparkles, Zap, Loader2 } from "lucide-react"
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-// import { Textarea } from "@/components/ui/textarea"
-// import { Button } from "@/components/ui/button"
-// import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-// import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-// import type { Conversation, Message } from "@/types/dashboard"
-// import data from "@emoji-mart/data"
-// import Picker from "@emoji-mart/react"
-// import ExampleConversations from "./exampleConvo"
-// import DeleteConfirmationModal from "./confirmDelete"
-// import { fetchChatsAndBusinessVariables, sendMessage } from "@/actions/messageAction/messageAction"
-// import { cn } from "@/lib/utils"
-// import FancyLoader from "./fancy-loader"
-
-// interface RawConversation {
-//   chatId: string
-//   pageId: string
-//   messages: Array<{
-//     id: string
-//     role: "user" | "assistant"
-//     content: string
-//     senderId: string
-//     createdAt: string
-//     read?:boolean
-//   }>
-// }
-
-// const BOT_NAME = "AiAssist"
-// const BOT_AVATAR = "/fancy-profile-pic.svg"
-
-// const BOT_ID = "17841444435951291"
-// const EXCLUDED_CHAT_ID = "17841444435951291"
-
-// interface AutomationChatsProps {
-//   automationId: string
-// }
-
-// interface BusinessVariables {
-//   [key: string]: string
-//   business_name: string
-//   welcome_message: string
-//   business_industry: string
-// }
-
-// const gradientBorder = "bg-gradient-to-r from-primary via-purple-500 to-secondary p-[2px] rounded-lg"
-// const fancyBackground = "bg-gradient-to-br from-[#1a1a1a] via-[#2a2a2a] to-[#1d1d1d]"
-
-// const ShimmeringBorder = ({ children }: { children: React.ReactNode }) => {
-//   const styles = useSpring({
-//     from: { backgroundPosition: "0% 50%" },
-//     to: { backgroundPosition: "100% 50%" },
-//     config: { duration: 5000 },
-//     loop: true,
-//   })
-
-//   return (
-//     <animated.div
-//       style={{
-//         ...styles,
-//         backgroundSize: "200% 200%",
-//       }}
-//       className={`${gradientBorder} p-[2px] rounded-lg`}
-//     >
-//       {children}
-//     </animated.div>
-//   )
-// }
-
-// const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
-//   const [conversations, setConversations] = useState<Conversation[]>([])
-//   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
-//   const [newMessage, setNewMessage] = useState("")
-//   const [isTyping, setIsTyping] = useState(false)
-//   const [isLoading, setIsLoading] = useState(false)
-//   const [error, setError] = useState<string | null>(null)
-//   const [isRecording, setIsRecording] = useState(false)
-//   const [unreadChats, setUnreadChats] = useState<Set<string>>(new Set())
-//   const [token, setToken] = useState<string | null>(null)
-//   const [pageId, setPageId] = useState<string | null>(null)
-//   const [businessVariables, setBusinessVariables] = useState<BusinessVariables>({
-//     business_name: "",
-//     welcome_message: "",
-//     business_industry: "",
-//   })
-//   const [totalUnreadMessages, setTotalUnreadMessages] = useState(0)
-//   const [displayedConversations, setDisplayedConversations] = useState(4)
-//   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-//   const [conversationToDelete, setConversationToDelete] = useState<Conversation | null>(null)
-//   const [aiSuggestion, setAiSuggestion] = useState<string | null>(null)
-//   const scrollRef = useRef<HTMLDivElement>(null)
-//   const [displayedMessages, setDisplayedMessages] = useState<Message[]>([])
-//   const [unreadSeparatorIndex, setUnreadSeparatorIndex] = useState<number | null>(null)
-
-//   const getAvatarUrl = () => {
-//     return `https://source.unsplash.com/random/100x100?portrait&${Math.random()}`
-//   }
-
-//   const fetchChats = useCallback(async () => {
-//     setIsLoading(true)
-//     setError(null)
-//     try {
-//       const result = await fetchChatsAndBusinessVariables(automationId)
-//       if (!result || typeof result !== "object") {
-//         throw new Error("Invalid response from server")
-//       }
-//       const { conversations, token, businessVariables } = result as {
-//         conversations: RawConversation[]
-//         token: string
-//         businessVariables: BusinessVariables
-//       }
-//       if (!Array.isArray(conversations)) {
-//         throw new Error("Conversations data is not in the expected format")
-//       }
-//       const filteredConversations = conversations
-//         .filter((conv) => conv.chatId !== EXCLUDED_CHAT_ID)
-//         .map(
-//           (conv): Conversation => ({
-//             id: conv.chatId,
-//             userId: conv.messages[0]?.senderId || conv.chatId,
-//             pageId: conv.pageId,
-//             messages: conv.messages.map(
-//               (msg): Message => ({
-//                 id: msg.id,
-//                 role: msg.role,
-//                 content: msg.content,
-//                 senderId: msg.senderId,
-//                 createdAt: new Date(msg.createdAt),
-//                 read: false,
-//               }),
-//             ),
-//             createdAt: new Date(conv.messages[0]?.createdAt ?? Date.now()),
-//             updatedAt: new Date(conv.messages[conv.messages.length - 1]?.createdAt ?? Date.now()),
-//             unreadCount: conv.messages.filter((msg) => !msg.read).length,
-//             Automation: null,
-//           }),
-//         )
-
-//       filteredConversations.sort((a, b) => {
-//         const lastMessageA = a.messages[a.messages.length - 1]
-//         const lastMessageB = b.messages[b.messages.length - 1]
-//         return new Date(lastMessageB.createdAt).getTime() - new Date(lastMessageA.createdAt).getTime()
-//       })
-
-//       setConversations(filteredConversations)
-//       setUnreadChats(new Set(filteredConversations.filter((conv) => conv.unreadCount > 0).map((conv) => conv.id)))
-//       setTotalUnreadMessages(filteredConversations.reduce((total, conv) => total + conv.unreadCount, 0))
-
-//       if (filteredConversations.length > 0) {
-//         setPageId(filteredConversations[0].pageId)
-//       }
-
-//       setToken(token)
-//       setBusinessVariables(businessVariables)
-
-//       if (filteredConversations.length === 0) {
-//         setSelectedConversation(null)
-//       }
-//     } catch (error) {
-//       console.error("Error in fetchChats:", error)
-//       setError(`Oops! We're having trouble loading your chats. Retrying...`)
-//       // Retry after 5 seconds
-//       setTimeout(() => {
-//         fetchChats()
-//       }, 5000)
-//     } finally {
-//       setIsLoading(false)
-//     }
-//   }, [automationId])
-
-//   useEffect(() => {
-//     fetchChats()
-//   }, [fetchChats])
-
-//   useEffect(() => {
-//     if (scrollRef.current) {
-//       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-//     }
-//   }, [scrollRef, displayedMessages]) //Corrected useEffect dependency
-
-//   const handleSendMessage = async () => {
-//     if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
-
-//     setIsTyping(true)
-//     setError(null)
-
-//     try {
-//       const userId = `${pageId}_${selectedConversation.userId}`
-//       const result = await sendMessage(newMessage, userId, pageId, automationId, token, businessVariables)
-
-//       if (result.success && result.userMessage) {
-//         const userMessage: Message = {
-//           id: Date.now().toString(),
-//           role: "user",
-//           content: result.userMessage.content,
-//           senderId: selectedConversation.userId,
-//           receiverId: pageId,
-//           createdAt: result.userMessage.timestamp,
-//           status: "sent",
-//           read: true, // Mark the new message as read
-//         }
-
-//         setSelectedConversation((prev) => {
-//           if (!prev) return null
-//           const updatedMessages = [...prev.messages, userMessage]
-//           return { ...prev, messages: updatedMessages }
-//         })
-
-//         setConversations((prevConversations) => {
-//           const updatedConversations = prevConversations.map((conv) =>
-//             conv.id === selectedConversation.id ? { ...conv, messages: [...conv.messages, userMessage] } : conv,
-//           )
-
-//           // Sort conversations to ensure the most recent one is at the top
-//           return updatedConversations.sort((a, b) => {
-//             const lastMessageA = a.messages[a.messages.length - 1]
-//             const lastMessageB = b.messages[b.messages.length - 1]
-//             return new Date(lastMessageB.createdAt).getTime() - new Date(lastMessageA.createdAt).getTime()
-//           })
-//         })
-
-//         setNewMessage("")
-
-//         // Update displayed messages
-//         setDisplayedMessages((prev) => [...prev, userMessage])
-//       } else {
-//         console.error("Failed to send message:", result.message)
-//       }
-//     } catch (error) {
-//       console.error("Error sending message:", error)
-//     } finally {
-//       setIsTyping(false)
-//     }
-//   }
-
-//   const handleEmojiSelect = (emoji: any) => {
-//     setNewMessage((prev) => prev + emoji.native)
-//   }
-
-//   const handleVoiceMessage = () => {
-//     setIsRecording(!isRecording)
-//   }
-
-//   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = event.target.files?.[0]
-//     if (file) {
-//       console.log("File selected:", file.name)
-//     }
-//   }
-
-//   const getFancyName = (userId: string) => {
-//     const names = ["Client", "Client", "Client"]
-//     return names[Math.floor(Math.random() * names.length)]
-//   }
-
-//   const handleSelectConversation = (conversation: Conversation) => {
-//     setSelectedConversation(conversation)
-//     setUnreadChats((prev) => {
-//       const newUnreadChats = new Set(prev)
-//       newUnreadChats.delete(conversation.id)
-//       return newUnreadChats
-//     })
-//     setTotalUnreadMessages((prev) => Math.max(0, prev - (conversation.unreadCount ?? 0)))
-
-//     // Display only the last 20 messages
-//     const lastMessages = conversation.messages.slice(-20)
-//     setDisplayedMessages(lastMessages)
-
-//     // Find the index of the first unread message
-//     const unreadIndex = lastMessages.findIndex((msg) => !msg.read)
-//     setUnreadSeparatorIndex(unreadIndex !== -1 ? unreadIndex : null)
-
-//     // Mark all messages as read
-//     const updatedMessages = conversation.messages.map((msg) => ({ ...msg, read: true }))
-
-//     // Update the conversation with read messages
-//     setConversations((prevConversations) =>
-//       prevConversations.map((conv) =>
-//         conv.id === conversation.id ? { ...conv, messages: updatedMessages, unreadCount: 0 } : conv,
-//       ),
-//     )
-//   }
-
-//   const handleDeleteConversation = (conversation: Conversation) => {
-//     setConversationToDelete(conversation)
-//     setIsDeleteModalOpen(true)
-//   }
-
-//   const confirmDelete = async () => {
-//     if (!conversationToDelete || !pageId) return
-
-//     try {
-//       // Implement the delete functionality here
-//       setConversations((prev) => prev.filter((conv) => conv.id !== conversationToDelete.id))
-//       if (selectedConversation?.id === conversationToDelete.id) {
-//         setSelectedConversation(null)
-//       }
-//     } catch (error) {
-//       console.error("Error deleting conversation:", error)
-//       setError(`Failed to delete conversation: ${error instanceof Error ? error.message : String(error)}`)
-//     } finally {
-//       setIsDeleteModalOpen(false)
-//       setConversationToDelete(null)
-//     }
-//   }
-
-//   const getActivityStatus = (lastActive: Date) => {
-//     const now = new Date()
-//     const diffInMinutes = Math.floor((now.getTime() - lastActive.getTime()) / 60000)
-
-//     if (diffInMinutes < 1) return "Active now"
-//     if (diffInMinutes < 60) return `Active ${diffInMinutes} minute${diffInMinutes > 1 ? "s" : ""} ago`
-
-//     const diffInHours = Math.floor(diffInMinutes / 60)
-//     if (diffInHours < 24) return `Active ${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`
-
-//     const diffInDays = Math.floor(diffInHours / 24)
-//     return `Active ${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`
-//   }
-
-//   const ActiveNowIndicator = () => (
-//     <span className="relative flex h-3 w-3 ml-2">
-//       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-//       <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-//     </span>
-//   )
-
-//   const generateAiSuggestion = () => {
-//     const suggestions = [
-//       "Would you like to know more about our products?",
-//       "Can I assist you with anything specific today?",
-//       "Have you checked out our latest offers?",
-//       "Is there anything else I can help you with?",
-//     ]
-//     setAiSuggestion(suggestions[Math.floor(Math.random() * suggestions.length)])
-//   }
-
-//   useEffect(() => {
-//     if (selectedConversation && selectedConversation.messages.length > 0) {
-//       const lastMessage = selectedConversation.messages[selectedConversation.messages.length - 1]
-//       if (lastMessage && lastMessage.role === "user") {
-//         generateAiSuggestion()
-//       }
-//     }
-//   }, [selectedConversation])
-
-//   const FancyErrorMessage: React.FC<{ message: string }> = ({ message }) => {
-//     return (
-//       <div className="flex flex-col items-center justify-center h-full p-4 text-center">
-//         <motion.div
-//           initial={{ scale: 0 }}
-//           animate={{ scale: 1 }}
-//           transition={{ type: "spring", stiffness: 260, damping: 20 }}
-//         >
-//           <Zap className="w-16 h-16 text-yellow-400 mb-4" />
-//         </motion.div>
-//         <h3 className="text-xl font-semibold mb-2">Hang tight!</h3>
-//         <p className="text-muted-foreground mb-4">{message}</p>
-//         <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}>
-//           <Loader2 className="w-6 h-6 text-primary animate-spin" />
-//         </motion.div>
-//       </div>
-//     )
-//   }
-
-//   return (
-//     <ShimmeringBorder>
-//       <div className={`flex flex-col ${fancyBackground} text-foreground rounded-lg overflow-hidden h-full`}>
-//         {isLoading ? (
-//           <FancyLoader />
-//         ) : error ? (
-//           <FancyErrorMessage message={error} />
-//         ) : (
-//           <>
-//             {selectedConversation ? (
-//               <>
-//                 <div className="p-2 sm:p-4 bg-background border-b border-primary/10 flex items-center">
-//                   <Button variant="ghost" className="mr-4 p-2" onClick={() => setSelectedConversation(null)}>
-//                     <ArrowLeft size={20} />
-//                   </Button>
-//                   <Avatar className="w-10 h-10">
-//                     <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${selectedConversation.id}`} />
-//                     <AvatarFallback>{getFancyName(selectedConversation.id).slice(0, 2)}</AvatarFallback>
-//                   </Avatar>
-//                   <div className="ml-3 flex-grow">
-//                     <h4 className="font-medium text-lg">{getFancyName(selectedConversation.id)}</h4>
-//                     {selectedConversation && selectedConversation.messages.length > 0 && (
-//                       <p className="text-sm text-muted-foreground flex items-center">
-//                         {getActivityStatus(
-//                           new Date(selectedConversation.messages[selectedConversation.messages.length - 1].createdAt),
-//                         )}
-//                         {getActivityStatus(
-//                           new Date(selectedConversation.messages[selectedConversation.messages.length - 1].createdAt),
-//                         ) === "Active now" && <ActiveNowIndicator />}
-//                       </p>
-//                     )}
-//                   </div>
-//                 </div>
-//                 <div className="flex-grow overflow-y-auto" ref={scrollRef}>
-//                   <div className="p-4 space-y-4">
-//                     {displayedMessages.map((message, index) => (
-//                       <>
-//                         {index === unreadSeparatorIndex && (
-//                           <div className="flex items-center my-2">
-//                             <div className="flex-grow border-t border-gray-600"></div>
-//                             <span className="mx-4 px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded">
-//                               Unread messages
-//                             </span>
-//                             <div className="flex-grow border-t border-gray-600"></div>
-//                           </div>
-//                         )}
-//                         <motion.div
-//                           key={index}
-//                           initial={{ opacity: 0, y: 20, scale: 0.9 }}
-//                           animate={{ opacity: 1, y: 0, scale: 1 }}
-//                           transition={{ duration: 0.3, delay: index * 0.1 }}
-//                           className={`flex items-end mb-4 ${message.role === "assistant" ? "justify-end" : "justify-start"}`}
-//                         >
-//                           {message.role === "assistant" ? (
-//                             <Avatar className="w-8 h-8 mr-2 border-2 border-primary">
-//                               <AvatarImage src={BOT_AVATAR} />
-//                               <AvatarFallback>{BOT_NAME.slice(0, 2)}</AvatarFallback>
-//                             </Avatar>
-//                           ) : (
-//                             <Avatar className="w-8 h-8 ml-2 order-last border-2 border-primary">
-//                               <AvatarImage src={`https://i.pravatar.cc/150?u=${message.senderId}`} />
-//                               <AvatarFallback>{getFancyName("123456789").slice(0, 2)}</AvatarFallback>
-//                             </Avatar>
-//                           )}
-//                           <div
-//                             className={cn(
-//                               "max-w-[85%] sm:max-w-[75%] p-2 sm:p-3 rounded-3xl text-sm relative",
-//                               message.role === "assistant"
-//                                 ? "bg-gradient-to-br from-blue-400/30 to-blue-600/30 border-2 border-blue-500/50 text-white"
-//                                 : "bg-gradient-to-br from-purple-400/30 to-purple-600/30 border-2 border-purple-500/50 text-white",
-//                             )}
-//                             style={{
-//                               backdropFilter: "blur(10px)",
-//                               WebkitBackdropFilter: "blur(10px)",
-//                             }}
-//                           >
-//                             <p className="break-words relative z-10">{message.content}</p>
-//                             <div className="flex justify-between items-center mt-1 text-xs text-gray-300">
-//                               <p>{new Date(message.createdAt).toLocaleString()}</p>
-//                               {message.role === "assistant" && (
-//                                 <div
-//                                   className={`flex items-center ${
-//                                     message.status === "sent" ? "text-green-400" : "text-green-400"
-//                                   }`}
-//                                 >
-//                                   {message.status === "sent" || true ? (
-//                                     <>
-//                                       <Check size={12} className="mr-1" />
-//                                       <span>Sent</span>
-//                                     </>
-//                                   ) : (
-//                                     <span>Failed</span>
-//                                   )}
-//                                 </div>
-//                               )}
-//                             </div>
-//                             <div
-//                               className={cn(
-//                                 "absolute inset-0 rounded-3xl opacity-20",
-//                                 message.role === "assistant"
-//                                   ? "bg-gradient-to-br from-blue-400 to-blue-600"
-//                                   : "bg-gradient-to-br from-purple-400 to-purple-600",
-//                               )}
-//                             ></div>
-//                           </div>
-//                         </motion.div>
-//                       </>
-//                     ))}
-//                   </div>
-//                 </div>
-//                 <div className="p-2 sm:p-4 bg-background border-t border-primary/10">
-//                   <div className="flex space-x-2 mb-2 overflow-x-auto pb-2 -mx-2 px-2 sm:mx-0 sm:px-0">
-//                     {["Hello!", "How can I help?", "Thank you!", "I'll get back to you soon."].map(
-//                       (response, index) => (
-//                         <motion.button
-//                           key={index}
-//                           whileHover={{ scale: 1.05 }}
-//                           whileTap={{ scale: 0.95 }}
-//                           className="bg-primary/20 text-primary px-3 py-1 rounded-full text-sm whitespace-nowrap"
-//                           onClick={() => setNewMessage(response)}
-//                         >
-//                           {response}
-//                         </motion.button>
-//                       ),
-//                     )}
-//                   </div>
-//                   {isTyping && (
-//                     <motion.div
-//                       initial={{ opacity: 0, y: 10 }}
-//                       animate={{ opacity: 1, y: 0 }}
-//                       exit={{ opacity: 0, y: 10 }}
-//                       className="flex items-center space-x-2 p-2 bg-muted rounded-lg mb-2"
-//                     >
-//                       <span className="text-sm text-muted-foreground">AiAssist is typing</span>
-//                       <motion.div
-//                         animate={{
-//                           scale: [1, 1.2, 1],
-//                           transition: { repeat: Number.POSITIVE_INFINITY, duration: 1 },
-//                         }}
-//                       >
-//                         <Sparkles className="h-4 w-4 text-primary" />
-//                       </motion.div>
-//                     </motion.div>
-//                   )}
-//                   <div className="flex items-center space-x-2 relative">
-//                     <Popover>
-//                       <PopoverTrigger asChild>
-//                         <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full flex-shrink-0">
-//                           <Smile className="h-5 w-5" />
-//                         </Button>
-//                       </PopoverTrigger>
-//                       <PopoverContent className="w-60 p-0">
-//                         <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="dark" />
-//                       </PopoverContent>
-//                     </Popover>
-//                     <div className="flex-grow relative">
-//                       <Textarea
-//                         placeholder="Type here..."
-//                         value={newMessage}
-//                         onChange={(e) => setNewMessage(e.target.value)}
-//                         onKeyPress={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
-//                         className="flex-grow text-sm bg-muted border-primary/20 text-foreground placeholder-muted-foreground min-h-[36px] max-h-[96px] py-2 px-2 rounded-lg resize-none overflow-hidden w-full"
-//                         style={{ height: "36px", transition: "height 0.1s ease" }}
-//                         onInput={(e) => {
-//                           const target = e.target as HTMLTextAreaElement
-//                           target.style.height = "36px"
-//                           target.style.height = `${Math.min(target.scrollHeight, 96)}px`
-//                         }}
-//                       />
-//                     </div>
-//                     <div className="flex space-x-1">
-//                       <TooltipProvider>
-//                         <Tooltip>
-//                           <TooltipTrigger asChild>
-//                             <motion.button
-//                               whileHover={{ scale: 1.1 }}
-//                               whileTap={{ scale: 0.9 }}
-//                               onClick={handleSendMessage}
-//                               className="bg-primary hover:bg-green text-primary-foreground h-7 w-7 rounded-full flex-shrink-0 flex items-center justify-center"
-//                             >
-//                               <Send className="h-5 w-5" />
-//                             </motion.button>
-//                           </TooltipTrigger>
-//                           <TooltipContent>
-//                             <p>Send Dm</p>
-//                           </TooltipContent>
-//                         </Tooltip>
-//                       </TooltipProvider>
-//                       <TooltipProvider>
-//                         <Tooltip>
-//                           <TooltipTrigger asChild>
-//                             <Button
-//                               variant="ghost"
-//                               size="icon"
-//                               className={`h-6 w-6 rounded-full ${isRecording ? "text-red-500" : ""}`}
-//                               onClick={handleVoiceMessage}
-//                             >
-//                               <Mic className="h-5 w-5" />
-//                             </Button>
-//                           </TooltipTrigger>
-//                           <TooltipContent>
-//                             <p>Record voice message</p>
-//                           </TooltipContent>
-//                         </Tooltip>
-//                       </TooltipProvider>
-//                       <TooltipProvider>
-//                         <Tooltip>
-//                           <TooltipTrigger asChild>
-//                             <label htmlFor="file-upload">
-//                               <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full">
-//                                 <Paperclip className="h-5 w-5" />
-//                               </Button>
-//                             </label>
-//                           </TooltipTrigger>
-//                           <TooltipContent>
-//                             <p>Attach file</p>
-//                           </TooltipContent>
-//                         </Tooltip>
-//                       </TooltipProvider>
-//                     </div>
-//                     <input type="file" id="file-upload" onChange={handleFileUpload} style={{ display: "none" }} />
-//                   </div>
-//                   {aiSuggestion && (
-//                     <motion.div
-//                       initial={{ opacity: 0, y: 10 }}
-//                       animate={{ opacity: 1, y: 0 }}
-//                       exit={{ opacity: 0, y: 10 }}
-//                       className="mt-2 p-2 bg-blue-500/20 rounded-lg flex items-center space-x-2"
-//                     >
-//                       <Zap className="h-4 w-4 text-blue-500" />
-//                       <p className="text-sm text-blue-500">{aiSuggestion}</p>
-//                       <button
-//                         className="text-xs text-blue-700 hover:underline"
-//                         onClick={() => setNewMessage(aiSuggestion)}
-//                       >
-//                         Use
-//                       </button>
-//                     </motion.div>
-//                   )}
-//                 </div>
-//               </>
-//             ) : (
-//               <>
-//                 <h3 className="text-lg font-semibold p-4 bg-background flex justify-between items-center">
-//                   <span>Recent Chats</span>
-//                   {totalUnreadMessages > 0 && (
-//                     <span className="bg-red-500 text-primary-foreground text-xs font-bold px-2 py-1 rounded-full">
-//                       {totalUnreadMessages}
-//                     </span>
-//                   )}
-//                 </h3>
-//                 <div className="flex flex-1 overflow-y-auto">
-//                   <div className="grid grid-cols-4 gap-4 p-4">
-//                     {!token ? (
-//                       <div className="col-span-full p-4 bg-background rounded-lg shadow-md">
-//                         <ExampleConversations onSelectConversation={handleSelectConversation} className="mb-4" />
-//                         <div className="text-center">
-//                           <p className="text-muted-foreground mb-4 text-sm sm:text-base">
-//                             Connect your Instagram account to start receiving real messages.
-//                           </p>
-//                           <Button
-//                             onClick={() => {
-//                               // Implement navigation to integration page
-//                               console.log("Navigate to integration page")
-//                             }}
-//                             className="bg-[#3352CC] hover:bg-[#3352CC]/90 text-white font-bold py-2 px-4 rounded-full transition-all duration-200 transform hover:scale-105 w-full"
-//                           >
-//                             Connect Instagram
-//                           </Button>
-//                         </div>
-//                       </div>
-//                     ) : conversations.length === 0 ? (
-//                       <div className="col-span-full p-4 bg-background rounded-lg shadow-md">
-//                         <ExampleConversations onSelectConversation={handleSelectConversation} />
-//                       </div>
-//                     ) : (
-//                       <>
-//                         {conversations.map((conversation) => (
-//                           <motion.div
-//                             key={conversation.id}
-//                             initial={{ opacity: 0, y: 10 }}
-//                             animate={{ opacity: 1, y: 0 }}
-//                             transition={{ duration: 0.2 }}
-//                             className="p-4 bg-background rounded-lg shadow-md hover:bg-muted cursor-pointer transition-colors duration-200 flex items-center"
-//                             onClick={() => handleSelectConversation(conversation)}
-//                           >
-//                             <div className="flex-grow mr-2">
-//                               <div className="flex items-center mb-2">
-//                                 <Avatar className="w-10 h-10 relative border-2 border-primary">
-//                                   <AvatarImage src={getAvatarUrl()} />
-//                                   <AvatarFallback>{getFancyName(conversation.id).slice(0, 2)}</AvatarFallback>
-//                                   {unreadChats.has(conversation.id) && (
-//                                     <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-primary transform translate-x-1/2 -translate-y-1/2"></span>
-//                                   )}
-//                                 </Avatar>
-//                                 <div className="ml-3 overflow-hidden">
-//                                   <p className="font-medium text-sm text-foreground truncate">
-//                                     {getFancyName(conversation.id)}
-//                                   </p>
-//                                   <p className="text-xs text-muted-foreground truncate">
-//                                     {getActivityStatus(conversation.updatedAt)}
-//                                   </p>
-//                                 </div>
-//                               </div>
-//                               <p className="text-xs text-muted-foreground truncate">
-//                                 {conversation.messages.length > 0
-//                                   ? conversation.messages[conversation.messages.length - 1].content
-//                                   : "No messages"}
-//                               </p>
-//                             </div>
-//                             <TooltipProvider>
-//                               <Tooltip>
-//                                 <TooltipTrigger asChild>
-//                                   <Button
-//                                     variant="ghost"
-//                                     size="sm"
-//                                     onClick={(e) => {
-//                                       e.stopPropagation()
-//                                       handleDeleteConversation(conversation)
-//                                     }}
-//                                     className="text-muted-foreground hover:text-red-500"
-//                                   >
-//                                     <Trash2 size={18} />
-//                                   </Button>
-//                                 </TooltipTrigger>
-//                                 <TooltipContent>
-//                                   <p>Delete conversation</p>
-//                                 </TooltipContent>
-//                               </Tooltip>
-//                             </TooltipProvider>
-//                           </motion.div>
-//                         ))}
-//                       </>
-//                     )}
-//                   </div>
-//                 </div>
-//               </>
-//             )}
-//           </>
-//         )}
-//         <DeleteConfirmationModal
-//           isOpen={isDeleteModalOpen}
-//           onClose={() => setIsDeleteModalOpen(false)}
-//           onConfirm={confirmDelete}
-//         />
-//       </div>
-//     </ShimmeringBorder>
-//   )
-// }
-
-// export default AutomationChats
-
 "use client"
 
 import type React from "react"
@@ -8371,7 +7648,6 @@ import DeleteConfirmationModal from "./confirmDelete"
 import { fetchChatsAndBusinessVariables, sendMessage } from "@/actions/messageAction/messageAction"
 import { cn } from "@/lib/utils"
 import FancyLoader from "./fancy-loader"
-import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface RawConversation {
   chatId: string
@@ -8382,7 +7658,7 @@ interface RawConversation {
     content: string
     senderId: string
     createdAt: string
-    read?: boolean
+    read?:boolean
   }>
 }
 
@@ -8474,9 +7750,8 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
       }
       const filteredConversations = conversations
         .filter((conv) => conv.chatId !== EXCLUDED_CHAT_ID)
-        .map((conv): Conversation => {
-          const isRead = localStorage.getItem(`conversation_${conv.chatId}_read`) === "true"
-          return {
+        .map(
+          (conv): Conversation => ({
             id: conv.chatId,
             userId: conv.messages[0]?.senderId || conv.chatId,
             pageId: conv.pageId,
@@ -8487,15 +7762,15 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                 content: msg.content,
                 senderId: msg.senderId,
                 createdAt: new Date(msg.createdAt),
-                read: isRead,
+                read: false,
               }),
             ),
             createdAt: new Date(conv.messages[0]?.createdAt ?? Date.now()),
             updatedAt: new Date(conv.messages[conv.messages.length - 1]?.createdAt ?? Date.now()),
-            unreadCount: isRead ? 0 : conv.messages.filter((msg) => !msg.read).length,
+            unreadCount: conv.messages.filter((msg) => !msg.read).length,
             Automation: null,
-          }
-        })
+          }),
+        )
 
       filteredConversations.sort((a, b) => {
         const lastMessageA = a.messages[a.messages.length - 1]
@@ -8537,7 +7812,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [scrollRef, displayedMessages])
+  }, [scrollRef, displayedMessages]) //Corrected useEffect dependency
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
@@ -8623,8 +7898,8 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     })
     setTotalUnreadMessages((prev) => Math.max(0, prev - (conversation.unreadCount ?? 0)))
 
-    // Display only the last 6 messages
-    const lastMessages = conversation.messages.slice(-6)
+    // Display only the last 20 messages
+    const lastMessages = conversation.messages.slice(-20)
     setDisplayedMessages(lastMessages)
 
     // Find the index of the first unread message
@@ -8640,9 +7915,6 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
         conv.id === conversation.id ? { ...conv, messages: updatedMessages, unreadCount: 0 } : conv,
       ),
     )
-
-    // Store the read status in localStorage
-    localStorage.setItem(`conversation_${conversation.id}_read`, "true")
   }
 
   const handleDeleteConversation = (conversation: Conversation) => {
@@ -8708,27 +7980,6 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     }
   }, [selectedConversation])
 
-  useEffect(() => {
-    const loadUnreadStatus = () => {
-      const updatedConversations = conversations.map((conv) => {
-        const isRead = localStorage.getItem(`conversation_${conv.id}_read`) === "true"
-        if (isRead) {
-          return { ...conv, unreadCount: 0, messages: conv.messages.map((msg) => ({ ...msg, read: true })) }
-        }
-        return conv
-      })
-      setConversations(updatedConversations)
-
-      const newUnreadChats = new Set(updatedConversations.filter((conv) => conv.unreadCount > 0).map((conv) => conv.id))
-      setUnreadChats(newUnreadChats)
-
-      const newTotalUnreadMessages = updatedConversations.reduce((total, conv) => total + (conv.unreadCount || 0), 0)
-      setTotalUnreadMessages(newTotalUnreadMessages)
-    }
-
-    loadUnreadStatus()
-  }, [conversations])
-
   const FancyErrorMessage: React.FC<{ message: string }> = ({ message }) => {
     return (
       <div className="flex flex-col items-center justify-center h-full p-4 text-center">
@@ -8781,7 +8032,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                     )}
                   </div>
                 </div>
-                <ScrollArea className="flex-grow">
+                <div className="flex-grow overflow-y-auto" ref={scrollRef}>
                   <div className="p-4 space-y-4">
                     {displayedMessages.map((message, index) => (
                       <>
@@ -8857,7 +8108,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                       </>
                     ))}
                   </div>
-                </ScrollArea>
+                </div>
                 <div className="p-2 sm:p-4 bg-background border-t border-primary/10">
                   <div className="flex space-x-2 mb-2 overflow-x-auto pb-2 -mx-2 px-2 sm:mx-0 sm:px-0">
                     {["Hello!", "How can I help?", "Thank you!", "I'll get back to you soon."].map(
@@ -9099,4 +8350,757 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 }
 
 export default AutomationChats
+
+// "use client"
+
+// import React from "react"
+// import { useState, useEffect, useRef, useCallback, useMemo } from "react"
+// import { motion } from "framer-motion"
+// import { useSpring, animated } from "react-spring"
+// import { Send, ArrowLeft, Smile, Paperclip, Mic, Trash2, Check, Sparkles, Zap, Loader2 } from "lucide-react"
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+// import { Textarea } from "@/components/ui/textarea"
+// import { Button } from "@/components/ui/button"
+// import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+// import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+// import type { Conversation, Message } from "@/types/dashboard"
+// import data from "@emoji-mart/data"
+// import Picker from "@emoji-mart/react"
+// import ExampleConversations from "./exampleConvo"
+// import DeleteConfirmationModal from "./confirmDelete"
+// import { fetchChatsAndBusinessVariables, sendMessage } from "@/actions/messageAction/messageAction"
+// import { cn } from "@/lib/utils"
+// import FancyLoader from "./fancy-loader"
+// import { ScrollArea } from "@/components/ui/scroll-area"
+// import { useLocalStorage } from "@/hooks/use-local-storage"
+
+// interface RawConversation {
+//   chatId: string
+//   pageId: string
+//   messages: Array<{
+//     id: string
+//     role: "user" | "assistant"
+//     content: string
+//     senderId: string
+//     createdAt: string
+//     read?: boolean
+//   }>
+// }
+
+// const BOT_NAME = "AiAssist"
+// const BOT_AVATAR = "/fancy-profile-pic.svg"
+
+// const BOT_ID = "17841444435951291"
+// const EXCLUDED_CHAT_ID = "17841444435951291"
+
+// interface AutomationChatsProps {
+//   automationId: string
+// }
+
+// interface BusinessVariables {
+//   [key: string]: string
+//   business_name: string
+//   welcome_message: string
+//   business_industry: string
+// }
+
+// const gradientBorder = "bg-gradient-to-r from-primary via-purple-500 to-secondary p-[2px] rounded-lg"
+// const fancyBackground = "bg-gradient-to-br from-[#1a1a1a] via-[#2a2a2a] to-[#1d1d1d]"
+
+// const ShimmeringBorder = ({ children }: { children: React.ReactNode }) => {
+//   const styles = useSpring({
+//     from: { backgroundPosition: "0% 50%" },
+//     to: { backgroundPosition: "100% 50%" },
+//     config: { duration: 5000 },
+//     loop: true,
+//   })
+
+//   return (
+//     <animated.div
+//       style={{
+//         ...styles,
+//         backgroundSize: "200% 200%",
+//       }}
+//       className={`${gradientBorder} p-[2px] rounded-lg`}
+//     >
+//       {children}
+//     </animated.div>
+//   )
+// }
+
+// const MessageBubble = React.memo(
+//   ({
+//     message,
+//     BOT_AVATAR,
+//     BOT_NAME,
+//     getFancyName,
+//   }: { message: Message; BOT_AVATAR: string; BOT_NAME: string; getFancyName: (userId: string) => string }) => {
+//     return (
+//       <motion.div
+//         initial={{ opacity: 0, y: 20, scale: 0.9 }}
+//         animate={{ opacity: 1, y: 0, scale: 1 }}
+//         transition={{ duration: 0.3 }}
+//         className={`flex items-end mb-4 ${message.role === "assistant" ? "justify-end" : "justify-start"}`}
+//         style={{
+//           willChange: "transform",
+//           transform: "translateZ(0)",
+//         }}
+//       >
+//         {message.role === "assistant" ? (
+//           <Avatar className="w-8 h-8 mr-2 border-2 border-primary">
+//             <AvatarImage src={BOT_AVATAR} />
+//             <AvatarFallback>{BOT_NAME.slice(0, 2)}</AvatarFallback>
+//           </Avatar>
+//         ) : (
+//           <Avatar className="w-8 h-8 ml-2 order-last border-2 border-primary">
+//             <AvatarImage src={`https://i.pravatar.cc/150?u=${message.senderId}`} />
+//             <AvatarFallback>{getFancyName("123456789").slice(0, 2)}</AvatarFallback>
+//           </Avatar>
+//         )}
+//         <div
+//           className={cn(
+//             "max-w-[85%] sm:max-w-[75%] p-2 sm:p-3 rounded-3xl text-sm relative",
+//             message.role === "assistant"
+//               ? "bg-gradient-to-br from-blue-400/30 to-blue-600/30 border-2 border-blue-500/50 text-white"
+//               : "bg-gradient-to-br from-purple-400/30 to-purple-600/30 border-2 border-purple-500/50 text-white",
+//           )}
+//           style={{
+//             backdropFilter: "blur(10px)",
+//             WebkitBackdropFilter: "blur(10px)",
+//             willChange: "transform",
+//             transform: "translateZ(0)",
+//           }}
+//         >
+//           <p className="break-words relative z-10">{message.content}</p>
+//           <div className="flex justify-between items-center mt-1 text-xs text-gray-300">
+//             <p>{new Date(message.createdAt).toLocaleString()}</p>
+//             {message.role === "assistant" && (
+//               <div className={`flex items-center ${message.status === "sent" ? "text-green-400" : "text-green-400"}`}>
+//                 {message.status === "sent" || true ? (
+//                   <>
+//                     <Check size={12} className="mr-1" />
+//                     <span>Sent</span>
+//                   </>
+//                 ) : (
+//                   <span>Failed</span>
+//                 )}
+//               </div>
+//             )}
+//           </div>
+//           <div
+//             className={cn(
+//               "absolute inset-0 rounded-3xl opacity-20",
+//               message.role === "assistant"
+//                 ? "bg-gradient-to-br from-blue-400 to-blue-600"
+//                 : "bg-gradient-to-br from-purple-400 to-purple-600",
+//             )}
+//           ></div>
+//         </div>
+//       </motion.div>
+//     )
+//   },
+// )
+
+// MessageBubble.displayName = "MessageBubble"
+
+// const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
+//   const [conversations, setConversations] = useState<Conversation[]>([])
+//   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
+//   const [newMessage, setNewMessage] = useState("")
+//   const [isTyping, setIsTyping] = useState(false)
+//   const [isLoading, setIsLoading] = useState(false)
+//   const [error, setError] = useState<string | null>(null)
+//   const [isRecording, setIsRecording] = useState(false)
+//   const [unreadChats, setUnreadChats] = useLocalStorage<string[]>("unreadChats", [])
+//   const [totalUnreadMessages, setTotalUnreadMessages] = useLocalStorage<number>("totalUnreadMessages", 0)
+//   const [token, setToken] = useState<string | null>(null)
+//   const [pageId, setPageId] = useState<string | null>(null)
+//   const [businessVariables, setBusinessVariables] = useState<BusinessVariables>({
+//     business_name: "",
+//     welcome_message: "",
+//     business_industry: "",
+//   })
+//   const [displayedConversations, setDisplayedConversations] = useState(4)
+//   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+//   const [conversationToDelete, setConversationToDelete] = useState<Conversation | null>(null)
+//   const [aiSuggestion, setAiSuggestion] = useState<string | null>(null)
+//   const scrollRef = useRef<HTMLDivElement>(null)
+//   const [displayedMessages, setDisplayedMessages] = useState<Message[]>([])
+//   const [unreadSeparatorIndex, setUnreadSeparatorIndex] = useState<number | null>(null)
+
+//   const getAvatarUrl = () => {
+//     return `https://source.unsplash.com/random/100x100?portrait&${Math.random()}`
+//   }
+
+//   const fetchChats = useCallback(async () => {
+//     setIsLoading(true)
+//     setError(null)
+//     try {
+//       const result = await fetchChatsAndBusinessVariables(automationId)
+//       if (!result || typeof result !== "object") {
+//         throw new Error("Invalid response from server")
+//       }
+//       const { conversations, token, businessVariables } = result as {
+//         conversations: RawConversation[]
+//         token: string
+//         businessVariables: BusinessVariables
+//       }
+//       if (!Array.isArray(conversations)) {
+//         throw new Error("Conversations data is not in the expected format")
+//       }
+//       const filteredConversations = conversations
+//         .filter((conv) => conv.chatId !== EXCLUDED_CHAT_ID)
+//         .map(
+//           (conv): Conversation => ({
+//             id: conv.chatId,
+//             userId: conv.messages[0]?.senderId || conv.chatId,
+//             pageId: conv.pageId,
+//             messages: conv.messages.map(
+//               (msg): Message => ({
+//                 id: msg.id,
+//                 role: msg.role,
+//                 content: msg.content,
+//                 senderId: msg.senderId,
+//                 createdAt: new Date(msg.createdAt),
+//                 read: false,
+//               }),
+//             ),
+//             createdAt: new Date(conv.messages[0]?.createdAt ?? Date.now()),
+//             updatedAt: new Date(conv.messages[conv.messages.length - 1]?.createdAt ?? Date.now()),
+//             unreadCount: conv.messages.filter((msg) => !msg.read).length,
+//             Automation: null,
+//           }),
+//         )
+
+//       filteredConversations.sort((a, b) => {
+//         const lastMessageA = a.messages[a.messages.length - 1]
+//         const lastMessageB = b.messages[b.messages.length - 1]
+//         return new Date(lastMessageB.createdAt).getTime() - new Date(lastMessageA.createdAt).getTime()
+//       })
+
+//       const persistedUnreadChats = unreadChats
+//       const persistedTotalUnreadMessages = totalUnreadMessages
+
+//       setConversations(filteredConversations)
+//       setUnreadChats([
+//         ...new Set([
+//           ...persistedUnreadChats,
+//           ...filteredConversations.filter((conv) => conv.unreadCount > 0).map((conv) => conv.id),
+//         ]),
+//       ])
+//       setTotalUnreadMessages(
+//         persistedTotalUnreadMessages +
+//           filteredConversations.reduce((total, conv) => total + (conv.unreadCount || 0), 0),
+//       )
+
+//       if (filteredConversations.length > 0) {
+//         setPageId(filteredConversations[0].pageId)
+//       }
+
+//       setToken(token)
+//       setBusinessVariables(businessVariables)
+
+//       if (filteredConversations.length === 0) {
+//         setSelectedConversation(null)
+//       }
+//     } catch (error) {
+//       console.error("Error in fetchChats:", error)
+//       setError(`Oops! We're having trouble loading your chats. Retrying...`)
+//       // Retry after 5 seconds
+//       setTimeout(() => {
+//         fetchChats()
+//       }, 5000)
+//     } finally {
+//       setIsLoading(false)
+//     }
+//   }, [automationId, unreadChats, totalUnreadMessages, setTotalUnreadMessages, setUnreadChats]) // Added setUnreadChats to dependencies
+
+//   useEffect(() => {
+//     fetchChats()
+//   }, [fetchChats])
+
+//   useEffect(() => {
+//     if (scrollRef.current) {
+//       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+//     }
+//   }, [scrollRef, displayedMessages])
+
+//   const handleSendMessage = async () => {
+//     if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
+
+//     setIsTyping(true)
+//     setError(null)
+
+//     try {
+//       const userId = `${pageId}_${selectedConversation.userId}`
+//       const result = await sendMessage(newMessage, userId, pageId, automationId, token, businessVariables)
+
+//       if (result.success && result.userMessage) {
+//         const userMessage: Message = {
+//           id: Date.now().toString(),
+//           role: "user",
+//           content: result.userMessage.content,
+//           senderId: selectedConversation.userId,
+//           receiverId: pageId,
+//           createdAt: result.userMessage.timestamp,
+//           status: "sent",
+//           read: true, // Mark the new message as read
+//         }
+
+//         setSelectedConversation((prev) => {
+//           if (!prev) return null
+//           const updatedMessages = [...prev.messages, userMessage]
+//           return { ...prev, messages: updatedMessages }
+//         })
+
+//         setConversations((prevConversations) => {
+//           const updatedConversations = prevConversations.map((conv) =>
+//             conv.id === selectedConversation.id ? { ...conv, messages: [...conv.messages, userMessage] } : conv,
+//           )
+
+//           return updatedConversations.sort((a, b) => {
+//             const lastMessageA = a.messages[a.messages.length - 1]
+//             const lastMessageB = b.messages[b.messages.length - 1]
+//             return new Date(lastMessageB.createdAt).getTime() - new Date(lastMessageA.createdAt).getTime()
+//           })
+//         })
+
+//         setNewMessage("")
+
+//         setDisplayedMessages((prev) => [...prev, userMessage])
+//       } else {
+//         console.error("Failed to send message:", result.message)
+//       }
+//     } catch (error) {
+//       console.error("Error sending message:", error)
+//     } finally {
+//       setIsTyping(false)
+//     }
+//   }
+
+//   const handleEmojiSelect = (emoji: any) => {
+//     setNewMessage((prev) => prev + emoji.native)
+//   }
+
+//   const handleVoiceMessage = () => {
+//     setIsRecording(!isRecording)
+//   }
+
+//   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+//     const file = event.target.files?.[0]
+//     if (file) {
+//       console.log("File selected:", file.name)
+//     }
+//   }
+
+//   const getFancyName = (userId: string) => {
+//     const names = ["Client", "Client", "Client"]
+//     return names[Math.floor(Math.random() * names.length)]
+//   }
+
+//   const handleSelectConversation = useCallback(
+//     (conversation: Conversation) => {
+//       setSelectedConversation(conversation)
+//       setUnreadChats((prev) => prev.filter((id) => id !== conversation.id))
+//       setTotalUnreadMessages((prev) => Math.max(0, prev - (conversation.unreadCount || 0)))
+
+//       const lastMessages = conversation.messages.slice(-6)
+//       setDisplayedMessages(lastMessages)
+
+//       const unreadIndex = lastMessages.findIndex((msg) => !msg.read)
+//       setUnreadSeparatorIndex(unreadIndex !== -1 ? unreadIndex : null)
+
+//       const updatedMessages = conversation.messages.map((msg) => ({ ...msg, read: true }))
+
+//       setConversations((prevConversations) =>
+//         prevConversations.map((conv) =>
+//           conv.id === conversation.id ? { ...conv, messages: updatedMessages, unreadCount: 0 } : conv,
+//         ),
+//       )
+//     },
+//     [setUnreadChats, setTotalUnreadMessages, setConversations], // Added setConversations to dependencies
+//   )
+
+//   const handleDeleteConversation = (conversation: Conversation) => {
+//     setConversationToDelete(conversation)
+//     setIsDeleteModalOpen(true)
+//   }
+
+//   const confirmDelete = async () => {
+//     if (!conversationToDelete || !pageId) return
+
+//     try {
+//       setConversations((prev) => prev.filter((conv) => conv.id !== conversationToDelete.id))
+//       if (selectedConversation?.id === conversationToDelete.id) {
+//         setSelectedConversation(null)
+//       }
+//     } catch (error) {
+//       console.error("Error deleting conversation:", error)
+//       setError(`Failed to delete conversation: ${error instanceof Error ? error.message : String(error)}`)
+//     } finally {
+//       setIsDeleteModalOpen(false)
+//       setConversationToDelete(null)
+//     }
+//   }
+
+//   const getActivityStatus = (lastActive: Date) => {
+//     const now = new Date()
+//     const diffInMinutes = Math.floor((now.getTime() - lastActive.getTime()) / 60000)
+
+//     if (diffInMinutes < 1) return "Active now"
+//     if (diffInMinutes < 60) return `Active ${diffInMinutes} minute${diffInMinutes > 1 ? "s" : ""} ago`
+
+//     const diffInHours = Math.floor(diffInMinutes / 60)
+//     if (diffInHours < 24) return `Active ${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`
+
+//     const diffInDays = Math.floor(diffInHours / 24)
+//     return `Active ${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`
+//   }
+
+//   const ActiveNowIndicator = () => (
+//     <span className="relative flex h-3 w-3 ml-2">
+//       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+//       <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+//     </span>
+//   )
+
+//   const generateAiSuggestion = () => {
+//     const suggestions = [
+//       "Would you like to know more about our products?",
+//       "Can I assist you with anything specific today?",
+//       "Have you checked out our latest offers?",
+//       "Is there anything else I can help you with?",
+//     ]
+//     setAiSuggestion(suggestions[Math.floor(Math.random() * suggestions.length)])
+//   }
+
+//   useEffect(() => {
+//     if (selectedConversation && selectedConversation.messages.length > 0) {
+//       const lastMessage = selectedConversation.messages[selectedConversation.messages.length - 1]
+//       if (lastMessage && lastMessage.role === "user") {
+//         generateAiSuggestion()
+//       }
+//     }
+//   }, [selectedConversation])
+
+//   const FancyErrorMessage: React.FC<{ message: string }> = ({ message }) => {
+//     return (
+//       <div className="flex flex-col items-center justify-center h-full p-4 text-center">
+//         <motion.div
+//           initial={{ scale: 0 }}
+//           animate={{ scale: 1 }}
+//           transition={{ type: "spring", stiffness: 260, damping: 20 }}
+//         >
+//           <Zap className="w-16 h-16 text-yellow-400 mb-4" />
+//         </motion.div>
+//         <h3 className="text-xl font-semibold mb-2">Hang tight!</h3>
+//         <p className="text-muted-foreground mb-4">{message}</p>
+//         <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}>
+//           <Loader2 className="w-6 h-6 text-primary animate-spin" />
+//         </motion.div>
+//       </div>
+//     )
+//   }
+
+//   const memoizedDisplayedMessages = useMemo(() => displayedMessages, [displayedMessages])
+
+//   return (
+//     <ShimmeringBorder>
+//       <div className={`flex flex-col ${fancyBackground} text-foreground rounded-lg overflow-hidden h-full`}>
+//         {isLoading ? (
+//           <FancyLoader />
+//         ) : error ? (
+//           <FancyErrorMessage message={error} />
+//         ) : (
+//           <>
+//             {selectedConversation ? (
+//               <>
+//                 <div className="p-2 sm:p-4 bg-background border-b border-primary/10 flex items-center">
+//                   <Button variant="ghost" className="mr-4 p-2" onClick={() => setSelectedConversation(null)}>
+//                     <ArrowLeft size={20} />
+//                   </Button>
+//                   <Avatar className="w-10 h-10">
+//                     <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${selectedConversation.id}`} />
+//                     <AvatarFallback>{getFancyName(selectedConversation.id).slice(0, 2)}</AvatarFallback>
+//                   </Avatar>
+//                   <div className="ml-3 flex-grow">
+//                     <h4 className="font-medium text-lg">{getFancyName(selectedConversation.id)}</h4>
+//                     {selectedConversation && selectedConversation.messages.length > 0 && (
+//                       <p className="text-sm text-muted-foreground flex items-center">
+//                         {getActivityStatus(
+//                           new Date(selectedConversation.messages[selectedConversation.messages.length - 1].createdAt),
+//                         )}
+//                         {getActivityStatus(
+//                           new Date(selectedConversation.messages[selectedConversation.messages.length - 1].createdAt),
+//                         ) === "Active now" && <ActiveNowIndicator />}
+//                       </p>
+//                     )}
+//                   </div>
+//                 </div>
+//                 <ScrollArea
+//                   className="flex-grow relative"
+//                   style={{ willChange: "transform", transform: "translateZ(0)" }}
+//                 >
+//                   <div className="p-4 space-y-4" ref={scrollRef}>
+//                     {memoizedDisplayedMessages.map((message, index) => (
+//                       <React.Fragment key={message.id}>
+//                         {index === unreadSeparatorIndex && (
+//                           <div className="flex items-center my-2">
+//                             <div className="flex-grow border-t border-gray-600"></div>
+//                             <span className="mx-4 px-2 py-1 bg-gray-800 text-gray-300 text-xs rounded">
+//                               Unread messages
+//                             </span>
+//                             <div className="flex-grow border-t border-gray-600"></div>
+//                           </div>
+//                         )}
+//                         <MessageBubble
+//                           message={message}
+//                           BOT_AVATAR={BOT_AVATAR}
+//                           BOT_NAME={BOT_NAME}
+//                           getFancyName={getFancyName}
+//                         />
+//                       </React.Fragment>
+//                     ))}
+//                   </div>
+//                 </ScrollArea>
+//                 <div className="p-2 sm:p-4 bg-background border-t border-primary/10">
+//                   <div className="flex space-x-2 mb-2 overflow-x-auto pb-2 -mx-2 px-2 sm:mx-0 sm:px-0">
+//                     {["Hello!", "How can I help?", "Thank you!", "I'll get back to you soon."].map(
+//                       (response, index) => (
+//                         <motion.button
+//                           key={index}
+//                           whileHover={{ scale: 1.05 }}
+//                           whileTap={{ scale: 0.95 }}
+//                           className="bg-primary/20 text-primary px-3 py-1 rounded-full text-sm whitespace-nowrap"
+//                           onClick={() => setNewMessage(response)}
+//                         >
+//                           {response}
+//                         </motion.button>
+//                       ),
+//                     )}
+//                   </div>
+//                   {isTyping && (
+//                     <motion.div
+//                       initial={{ opacity: 0, y: 10 }}
+//                       animate={{ opacity: 1, y: 0 }}
+//                       exit={{ opacity: 0, y: 10 }}
+//                       className="flex items-center space-x-2 p-2 bg-muted rounded-lg mb-2"
+//                     >
+//                       <span className="text-sm text-muted-foreground">AiAssist is typing</span>
+//                       <motion.div
+//                         animate={{
+//                           scale: [1, 1.2, 1],
+//                           transition: { repeat: Number.POSITIVE_INFINITY, duration: 1 },
+//                         }}
+//                       >
+//                         <Sparkles className="h-4 w-4 text-primary" />
+//                       </motion.div>
+//                     </motion.div>
+//                   )}
+//                   <div className="flex items-center space-x-2 relative">
+//                     <Popover>
+//                       <PopoverTrigger asChild>
+//                         <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full flex-shrink-0">
+//                           <Smile className="h-5 w-5" />
+//                         </Button>
+//                       </PopoverTrigger>
+//                       <PopoverContent className="w-60 p-0">
+//                         <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="dark" />
+//                       </PopoverContent>
+//                     </Popover>
+//                     <div className="flex-grow relative">
+//                       <Textarea
+//                         placeholder="Type here..."
+//                         value={newMessage}
+//                         onChange={(e) => setNewMessage(e.target.value)}
+//                         onKeyPress={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
+//                         className="flex-grow text-sm bg-muted border-primary/20 text-foreground placeholder-muted-foreground min-h-[36px] max-h-[96px] py-2 px-2 rounded-lg resize-none overflow-hidden w-full"
+//                         style={{ height: "36px", transition: "height 0.1s ease" }}
+//                         onInput={(e) => {
+//                           const target = e.target as HTMLTextAreaElement
+//                           target.style.height = "36px"
+//                           target.style.height = `${Math.min(target.scrollHeight, 96)}px`
+//                         }}
+//                       />
+//                     </div>
+//                     <div className="flex space-x-1">
+//                       <TooltipProvider>
+//                         <Tooltip>
+//                           <TooltipTrigger asChild>
+//                             <motion.button
+//                               whileHover={{ scale: 1.1 }}
+//                               whileTap={{ scale: 0.9 }}
+//                               onClick={handleSendMessage}
+//                               className="bg-primary hover:bg-green text-primary-foreground h-7 w-7 rounded-full flex-shrink-0 flex items-center justify-center"
+//                             >
+//                               <Send className="h-5 w-5" />
+//                             </motion.button>
+//                           </TooltipTrigger>
+//                           <TooltipContent>
+//                             <p>Send Dm</p>
+//                           </TooltipContent>
+//                         </Tooltip>
+//                       </TooltipProvider>
+//                       <TooltipProvider>
+//                         <Tooltip>
+//                           <TooltipTrigger asChild>
+//                             <Button
+//                               variant="ghost"
+//                               size="icon"
+//                               className={`h-6 w-6 rounded-full ${isRecording ? "text-red-500" : ""}`}
+//                               onClick={handleVoiceMessage}
+//                             >
+//                               <Mic className="h-5 w-5" />
+//                             </Button>
+//                           </TooltipTrigger>
+//                           <TooltipContent>
+//                             <p>Record voice message</p>
+//                           </TooltipContent>
+//                         </Tooltip>
+//                       </TooltipProvider>
+//                       <TooltipProvider>
+//                         <Tooltip>
+//                           <TooltipTrigger asChild>
+//                             <label htmlFor="file-upload">
+//                               <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full">
+//                                 <Paperclip className="h-5 w-5" />
+//                               </Button>
+//                             </label>
+//                           </TooltipTrigger>
+//                           <TooltipContent>
+//                             <p>Attach file</p>
+//                           </TooltipContent>
+//                         </Tooltip>
+//                       </TooltipProvider>
+//                     </div>
+//                     <input type="file" id="file-upload" onChange={handleFileUpload} style={{ display: "none" }} />
+//                   </div>
+//                   {aiSuggestion && (
+//                     <motion.div
+//                       initial={{ opacity: 0, y: 10 }}
+//                       animate={{ opacity: 1, y: 0 }}
+//                       exit={{ opacity: 0, y: 10 }}
+//                       className="mt-2 p-2 bg-blue-500/20 rounded-lg flex items-center space-x-2"
+//                     >
+//                       <Zap className="h-4 w-4 text-blue-500" />
+//                       <p className="text-sm text-blue-500">{aiSuggestion}</p>
+//                       <button
+//                         className="text-xs text-blue-700 hover:underline"
+//                         onClick={() => setNewMessage(aiSuggestion)}
+//                       >
+//                         Use
+//                       </button>
+//                     </motion.div>
+//                   )}
+//                 </div>
+//               </>
+//             ) : (
+//               <>
+//                 <h3 className="text-lg font-semibold p-4 bg-background flex justify-between items-center">
+//                   <span>Recent Chats</span>
+//                   {totalUnreadMessages > 0 && (
+//                     <span className="bg-red-500 text-primary-foreground text-xs font-bold px-2 py-1 rounded-full">
+//                       {totalUnreadMessages}
+//                     </span>
+//                   )}
+//                 </h3>
+//                 <div className="flex flex-1 overflow-y-auto">
+//                   <div className="grid grid-cols-4 gap-4 p-4">
+//                     {!token ? (
+//                       <div className="col-span-full p-4 bg-background rounded-lg shadow-md">
+//                         <ExampleConversations onSelectConversation={handleSelectConversation} className="mb-4" />
+//                         <div className="text-center">
+//                           <p className="text-muted-foreground mb-4 text-sm sm:text-base">
+//                             Connect your Instagram account to start receiving real messages.
+//                           </p>
+//                           <Button
+//                             onClick={() => {
+//                               console.log("Navigate to integration page")
+//                             }}
+//                             className="bg-[#3352CC] hover:bg-[#3352CC]/90 text-white font-bold py-2 px-4 rounded-full transition-all duration-200 transform hover:scale-105 w-full"
+//                           >
+//                             Connect Instagram
+//                           </Button>
+//                         </div>
+//                       </div>
+//                     ) : conversations.length === 0 ? (
+//                       <div className="col-span-full p-4 bg-background rounded-lg shadow-md">
+//                         <ExampleConversations onSelectConversation={handleSelectConversation} />
+//                       </div>
+//                     ) : (
+//                       <>
+//                         {conversations.map((conversation) => (
+//                           <motion.div
+//                             key={conversation.id}
+//                             initial={{ opacity: 0, y: 10 }}
+//                             animate={{ opacity: 1, y: 0 }}
+//                             transition={{ duration: 0.2 }}
+//                             className="p-4 bg-background rounded-lg shadow-md hover:bg-muted cursor-pointer transition-colors duration-200 flex items-center"
+//                             onClick={() => handleSelectConversation(conversation)}
+//                           >
+//                             <div className="flex-grow mr-2">
+//                               <div className="flex items-center mb-2">
+//                                 <Avatar className="w-10 h-10 relative border-2 border-primary">
+//                                   <AvatarImage src={getAvatarUrl()} />
+//                                   <AvatarFallback>{getFancyName(conversation.id).slice(0, 2)}</AvatarFallback>
+//                                   {unreadChats.includes(conversation.id) && (
+//                                     <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-primary transform translate-x-1/2 -translate-y-1/2"></span>
+//                                   )}
+//                                 </Avatar>
+//                                 <div className="ml-3 overflow-hidden">
+//                                   <p className="font-medium text-sm text-foreground truncate">
+//                                     {getFancyName(conversation.id)}
+//                                   </p>
+//                                   <p className="text-xs text-muted-foreground truncate">
+//                                     {getActivityStatus(conversation.updatedAt)}
+//                                   </p>
+//                                 </div>
+//                               </div>
+//                               <p className="text-xs text-muted-foreground truncate">
+//                                 {conversation.messages.length > 0
+//                                   ? conversation.messages[conversation.messages.length - 1].content
+//                                   : "No messages"}
+//                               </p>
+//                             </div>
+//                             <TooltipProvider>
+//                               <Tooltip>
+//                                 <TooltipTrigger asChild>
+//                                   <Button
+//                                     variant="ghost"
+//                                     size="sm"
+//                                     onClick={(e) => {
+//                                       e.stopPropagation()
+//                                       handleDeleteConversation(conversation)
+//                                     }}
+//                                     className="text-muted-foreground hover:text-red-500"
+//                                   >
+//                                     <Trash2 size={18} />
+//                                   </Button>
+//                                 </TooltipTrigger>
+//                                 <TooltipContent>
+//                                   <p>Delete conversation</p>
+//                                 </TooltipContent>
+//                               </Tooltip>
+//                             </TooltipProvider>
+//                           </motion.div>
+//                         ))}
+//                       </>
+//                     )}
+//                   </div>
+//                 </div>
+//               </>
+//             )}
+//           </>
+//         )}
+//         <DeleteConfirmationModal
+//           isOpen={isDeleteModalOpen}
+//           onClose={() => setIsDeleteModalOpen(false)}
+//           onConfirm={confirmDelete}
+//         />
+//       </div>
+//     </ShimmeringBorder>
+//   )
+// }
+
+// export default React.memo(AutomationChats)
 
