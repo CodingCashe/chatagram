@@ -773,7 +773,7 @@
 import { Sparkles, Zap, Trash2, Settings, BarChart2 } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { AutomationChats } from "./automation-chats"
+import AutomationChats  from "./automationChats"
 
 interface AutomationProps {
   automation: any
