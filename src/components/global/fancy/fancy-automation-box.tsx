@@ -1169,7 +1169,7 @@ import { InactiveIndicator } from "../indicators/inactive-indicator"
 import { Sparkles, Zap, Trash2, Settings, BarChart2 } from "lucide-react"
 import AutomationStats from "./automation-stats"
 import AutomationChats from "./automationChats"
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts"
+import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, Tooltip } from "recharts"
 import { useSpring, animated } from "react-spring"
 
 type Keyword = {
@@ -1202,8 +1202,6 @@ interface FancyAutomationBoxProps {
   onDelete: () => void
   pathname: string
 }
-
-const COLORS = ["#00FFFF", "#FF00FF", "#FFFF00", "#FF8042", "#8884d8"]
 
 const NoKeywordsAnimation: React.FC = () => {
   const styles = useSpring({
@@ -1317,16 +1315,71 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
                   </motion.div>
                 ))}
               </motion.div>
-              {automation.keywords.length === 0 && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.7 }}
-                  className="rounded-full border border-dashed border-white/30 px-3 py-1 inline-block mb-4"
-                >
-                  <NoKeywordsAnimation />
-                </motion.div>
-              )}
+              <div className="md:w-1/2 md:pl-4 mt-6 md:mt-0 border-t md:border-t-0 md:border-l border-[#545454] pt-6 md:pt-0 md:pl-6">
+                <h3 className="text-xl font-semibold mb-4 text-white">Keyword Performance</h3>
+                {automation.keywords.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <RadarChart outerRadius={90} data={data}>
+                      <PolarGrid stroke="#545454" />
+                      <PolarAngleAxis dataKey="name" tick={{ fill: "#9B9CA0" }} />
+                      <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: "#9B9CA0" }} />
+                      <Radar name="Keywords" dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                      <Tooltip
+                        contentStyle={{ background: "#1A1A1A", border: "1px solid #545454", color: "#9B9CA0" }}
+                      />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="h-[300px] flex flex-col items-center justify-center">
+                    <motion.div
+                      animate={{ rotate: [0, 30, 0] }}
+                      transition={{ repeat: Number.POSITIVE_INFINITY, duration: 3, ease: "easeInOut" }}
+                      className="w-32 h-32 rounded-full bg-gradient-to-br from-[#2A2A2A] to-[#1D1D1D] flex items-center justify-center mb-4"
+                    >
+                      <motion.div
+                        animate={{ opacity: [1, 0], scale: [1, 0.8] }}
+                        transition={{ repeat: Number.POSITIVE_INFINITY, duration: 3, ease: "easeInOut" }}
+                      >
+                        {[Zap, Sparkles, BarChart2].map((Icon, index) => (
+                          <motion.div
+                            key={index}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            transition={{ duration: 0.5 }}
+                            style={{ display: index === 0 ? "block" : "none" }}
+                          >
+                            <Icon size={48} className="text-blue-400" />
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                    >
+                      {[
+                        "You haven't set up keywords yet",
+                        "Keywords will help in triggering an automation",
+                        "Add keywords to get started",
+                      ].map((text, index) => (
+                        <motion.p
+                          key={index}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.5 }}
+                          className="text-center text-[#9B9CA0] mb-2"
+                          style={{ display: index === 0 ? "block" : "none" }}
+                        >
+                          {text}
+                        </motion.p>
+                      ))}
+                    </motion.div>
+                  </div>
+                )}
+              </div>
               <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.8 }}>
                 <AutomationStats automation={automation} />
               </motion.div>
@@ -1423,26 +1476,13 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
                 transition={{ delay: 1.2 }}
               >
                 <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={data}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {data.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip contentStyle={{ background: "#1A1A1A", border: "1px solid #545454" }} />
-                    <Legend
-                      wrapperStyle={{ color: "#9B9CA0" }}
-                      formatter={(value, entry, index) => <span style={{ color: "#9B9CA0" }}>{value}</span>}
-                    />
-                  </PieChart>
+                  <RadarChart outerRadius={90} data={data}>
+                    <PolarGrid stroke="#545454" />
+                    <PolarAngleAxis dataKey="name" tick={{ fill: "#9B9CA0" }} />
+                    <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: "#9B9CA0" }} />
+                    <Radar name="Keywords" dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                    <Tooltip contentStyle={{ background: "#1A1A1A", border: "1px solid #545454", color: "#9B9CA0" }} />
+                  </RadarChart>
                 </ResponsiveContainer>
               </motion.div>
             </div>
