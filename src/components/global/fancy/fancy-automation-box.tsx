@@ -950,6 +950,427 @@
 
 // export default FancyAutomationBox
 
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect } from "react"
+// import { cn, getRelativeTime } from "@/lib/utils"
+// import Link from "next/link"
+// import { Button } from "@/components/ui/button"
+// import GradientButton from "../gradient-button"
+// import { ActiveIndicator } from "../indicators/active-indicator"
+// import { InactiveIndicator } from "../indicators/inactive-indicator"
+// import { Sparkles, Zap, Trash2, Settings } from "lucide-react"
+// import AutomationStats from "./automation-stats"
+// import AutomationChats from "./automationChats"
+// import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts"
+
+// type Keyword = {
+//   id: string
+//   automationId: string | null
+//   word: string
+//   replyPercentage?: number
+// }
+
+// type Listener = {
+//   id: string
+//   listener: string
+//   automationId: string
+//   prompt: string
+//   commentReply: string | null
+//   dmCount: number
+//   commentCount: number
+// }
+
+// interface Automation {
+//   id: string
+//   name: string
+//   active: boolean
+//   keywords: Keyword[]
+//   createdAt: Date
+//   listener: Listener | null
+// }
+
+// interface FancyAutomationBoxProps {
+//   automation: Automation
+//   onDelete: () => void
+//   pathname: string
+// }
+
+// const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"]
+
+// export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automation, onDelete, pathname }) => {
+//   const [isHovered, setIsHovered] = useState(false)
+//   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+
+//   useEffect(() => {
+//     if (!isHovered) {
+//       setShowDeleteConfirm(false)
+//     }
+//   }, [isHovered])
+
+//   const keywordData = automation.keywords.map((keyword, index) => ({
+//     name: keyword.word,
+//     value: Math.floor(Math.random() * 30) + 10, // Random value between 10 and 40
+//     color: COLORS[index % COLORS.length],
+//   }))
+
+//   return (
+//     <div
+//       className="relative bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-xl transition-all duration-300 hover:shadow-lg group"
+//       onMouseEnter={() => setIsHovered(true)}
+//       onMouseLeave={() => setIsHovered(false)}
+//     >
+//       <div className="absolute inset-0 rounded-xl border border-[#545454] opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
+//       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-10 transition-opacity duration-7000 rounded-xl overflow-hidden"></div>
+//       <div className="absolute -top-px left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+//       <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 flex items-center justify-center z-10">
+//         <div className="bg-[#1D1D1D] px-1 rounded-full border border-[#545454] shadow-sm">
+//           {automation.listener?.listener === "SMARTAI" ? (
+//             <GradientButton
+//               type="BUTTON"
+//               className="text-xs bg-background-80 text-white hover:bg-background-80 px-4 py-1 -my-[3px] flex items-center gap-2"
+//             >
+//               <Sparkles size={14} />
+//               Smart AI
+//             </GradientButton>
+//           ) : (
+//             <GradientButton
+//               type="BUTTON"
+//               className="text-xs bg-background-80 text-white hover:bg-background-80 px-4 py-1 -my-[3px] flex items-center gap-2"
+//             >
+//               <Zap size={14} />
+//               FREE
+//             </GradientButton>
+//           )}
+//         </div>
+//       </div>
+//       <div className="relative z-10 p-6 flex flex-col lg:flex-row">
+//         <div className="w-full lg:w-1/2 mb-6 lg:mb-0">
+//           <div className="absolute top-2 right-2 z-10">
+//             {automation.active ? <ActiveIndicator /> : <InactiveIndicator />}
+//           </div>
+//           <div className="mt-4">
+//             <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+//               {automation.name}
+//             </h2>
+//             <div className="flex flex-wrap gap-2 mb-4">
+//               {automation.keywords.map((keyword, key) => (
+//                 <div
+//                   key={keyword.id}
+//                   className={cn(
+//                     "rounded-full px-3 py-1 text-xs capitalize backdrop-blur-sm",
+//                     (key + 1) % 1 === 0 && "bg-keyword-green/30 border border-keyword-green/50",
+//                     (key + 1) % 2 === 0 && "bg-keyword-purple/30 border border-keyword-purple/50",
+//                     (key + 1) % 3 === 0 && "bg-keyword-yellow/30 border border-keyword-yellow/50",
+//                     (key + 1) % 4 === 0 && "bg-keyword-red/30 border border-keyword-red/50",
+//                   )}
+//                 >
+//                   {keyword.word}
+//                 </div>
+//               ))}
+//             </div>
+//             {automation.keywords.length === 0 && (
+//               <div className="rounded-full border border-dashed border-white/30 px-3 py-1 inline-block mb-4">
+//                 <p className="text-sm text-[#bfc0c3]">No Keywords</p>
+//               </div>
+//             )}
+//             <AutomationStats automation={automation} />
+//             <p className="text-sm font-light text-[#9B9CA0] mb-4">Created {getRelativeTime(automation.createdAt)}</p>
+//             <div className="flex flex-col sm:flex-row gap-2">
+//               {showDeleteConfirm ? (
+//                 <>
+//                   <Button
+//                     className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 transition-colors duration-300"
+//                     onClick={onDelete}
+//                   >
+//                     Confirm Delete
+//                   </Button>
+//                   <Button
+//                     className="bg-transparent border-2 border-gray-500 text-gray-500 px-4 hover:bg-gray-500 hover:text-white flex-1 transition-colors duration-300"
+//                     onClick={() => setShowDeleteConfirm(false)}
+//                   >
+//                     Cancel
+//                   </Button>
+//                 </>
+//               ) : (
+//                 <>
+//                   <Button
+//                     className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300"
+//                     onClick={() => setShowDeleteConfirm(true)}
+//                   >
+//                     <Trash2 size={18} className="mr-2" />
+//                     Delete
+//                   </Button>
+//                   <Button className="bg-transparent border-2 border-blue-500 text-blue-500 px-4 hover:bg-blue-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300">
+//                     <Link href={`${pathname}/${automation.id}`} className="flex items-center">
+//                       <Settings size={18} className="mr-2" />
+//                       Configure
+//                     </Link>
+//                   </Button>
+//                 </>
+//               )}
+//             </div>
+//           </div>
+//         </div>
+//         <div className="hidden lg:block w-px bg-[#545454] mx-4"></div>
+//         <div className="w-full lg:w-1/2 lg:pl-4">
+//           <h3 className="text-xl font-semibold mb-4 text-white">Keyword Reply Distribution</h3>
+//           <div className="h-64 w-full">
+//             <ResponsiveContainer width="100%" height="100%">
+//               <PieChart>
+//                 <Pie
+//                   data={keywordData}
+//                   cx="50%"
+//                   cy="50%"
+//                   innerRadius={60}
+//                   outerRadius={80}
+//                   fill="#8884d8"
+//                   paddingAngle={5}
+//                   dataKey="value"
+//                 >
+//                   {keywordData.map((entry, index) => (
+//                     <Cell key={`cell-${index}`} fill={entry.color} />
+//                   ))}
+//                 </Pie>
+//                 <Tooltip
+//                   content={({ active, payload }) => {
+//                     if (active && payload && payload.length) {
+//                       return (
+//                         <div className="bg-background-80 p-2 rounded-md shadow-md">
+//                           <p className="text-sm text-white">{`${payload[0].name}: ${payload[0].value}%`}</p>
+//                         </div>
+//                       )
+//                     }
+//                     return null
+//                   }}
+//                 />
+//               </PieChart>
+//             </ResponsiveContainer>
+//           </div>
+//         </div>
+//       </div>
+//       <div className="w-full border-t border-[#545454] mt-6 pt-6">
+//         <AutomationChats automationId={automation.id} />
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default FancyAutomationBox
+
+
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect } from "react"
+// import { cn, getRelativeTime } from "@/lib/utils"
+// import Link from "next/link"
+// import { Button } from "@/components/ui/button"
+// import GradientButton from "../gradient-button"
+// import { ActiveIndicator } from "../indicators/active-indicator"
+// import { InactiveIndicator } from "../indicators/inactive-indicator"
+// import { Sparkles, Zap, Trash2, Settings } from "lucide-react"
+// import AutomationStats from "./automation-stats"
+// import AutomationChats from "./automationChats"
+// import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts"
+
+// type Keyword = {
+//   id: string
+//   automationId: string | null
+//   word: string
+//   replyPercentage: number
+// }
+
+// type Listener = {
+//   id: string
+//   listener: string
+//   automationId: string
+//   prompt: string
+//   commentReply: string | null
+//   dmCount: number
+//   commentCount: number
+// }
+
+// interface Automation {
+//   id: string
+//   name: string
+//   active: boolean
+//   keywords: Keyword[]
+//   createdAt: Date
+//   listener: Listener | null
+// }
+
+// interface FancyAutomationBoxProps {
+//   automation: Automation
+//   onDelete: () => void
+//   pathname: string
+// }
+
+// const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"]
+
+// export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automation, onDelete, pathname }) => {
+//   const [isHovered, setIsHovered] = useState(false)
+//   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+
+//   useEffect(() => {
+//     if (!isHovered) {
+//       setShowDeleteConfirm(false)
+//     }
+//   }, [isHovered])
+
+//   const keywordData = automation.keywords.map((keyword, index) => ({
+//     name: keyword.word,
+//     value: Math.floor(Math.random() * 30) + 10, // Random value between 10 and 40
+//     color: COLORS[index % COLORS.length],
+//   }))
+
+//   return (
+//     <div
+//       className="relative bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-xl transition-all duration-300 hover:shadow-lg group"
+//       onMouseEnter={() => setIsHovered(true)}
+//       onMouseLeave={() => setIsHovered(false)}
+//     >
+//       <div className="absolute inset-0 rounded-xl border border-[#545454] opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
+//       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-10 transition-opacity duration-7000 rounded-xl overflow-hidden"></div>
+//       <div className="absolute -top-px left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+//       <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 flex items-center justify-center z-10">
+//         <div className="bg-[#1D1D1D] px-1 rounded-full border border-[#545454] shadow-sm">
+//           {automation.listener?.listener === "SMARTAI" ? (
+//             <GradientButton
+//               type="BUTTON"
+//               className="text-xs bg-background-80 text-white hover:bg-background-80 px-4 py-1 -my-[3px] flex items-center gap-2"
+//             >
+//               <Sparkles size={14} />
+//               Smart AI
+//             </GradientButton>
+//           ) : (
+//             <GradientButton
+//               type="BUTTON"
+//               className="text-xs bg-background-80 text-white hover:bg-background-80 px-4 py-1 -my-[3px] flex items-center gap-2"
+//             >
+//               <Zap size={14} />
+//               FREE
+//             </GradientButton>
+//           )}
+//         </div>
+//       </div>
+//       <div className="relative z-10 p-6 flex flex-col lg:flex-row">
+//         <div className="w-full lg:w-1/2 mb-6 lg:mb-0">
+//           <div className="absolute top-2 right-2 z-10">
+//             {automation.active ? <ActiveIndicator /> : <InactiveIndicator />}
+//           </div>
+//           <div className="mt-4">
+//             <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+//               {automation.name}
+//             </h2>
+//             <div className="flex flex-wrap gap-2 mb-4">
+//               {automation.keywords.map((keyword, key) => (
+//                 <div
+//                   key={keyword.id}
+//                   className={cn(
+//                     "rounded-full px-3 py-1 text-xs capitalize backdrop-blur-sm",
+//                     (key + 1) % 1 === 0 && "bg-keyword-green/30 border border-keyword-green/50",
+//                     (key + 1) % 2 === 0 && "bg-keyword-purple/30 border border-keyword-purple/50",
+//                     (key + 1) % 3 === 0 && "bg-keyword-yellow/30 border border-keyword-yellow/50",
+//                     (key + 1) % 4 === 0 && "bg-keyword-red/30 border border-keyword-red/50",
+//                   )}
+//                 >
+//                   {keyword.word}
+//                 </div>
+//               ))}
+//             </div>
+//             {automation.keywords.length === 0 && (
+//               <div className="rounded-full border border-dashed border-white/30 px-3 py-1 inline-block mb-4">
+//                 <p className="text-sm text-[#bfc0c3]">No Keywords</p>
+//               </div>
+//             )}
+//             <AutomationStats automation={automation} />
+//             <p className="text-sm font-light text-[#9B9CA0] mb-4">Created {getRelativeTime(automation.createdAt)}</p>
+//             <div className="flex flex-col sm:flex-row gap-2">
+//               {showDeleteConfirm ? (
+//                 <>
+//                   <Button
+//                     className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 transition-colors duration-300"
+//                     onClick={onDelete}
+//                   >
+//                     Confirm Delete
+//                   </Button>
+//                   <Button
+//                     className="bg-transparent border-2 border-gray-500 text-gray-500 px-4 hover:bg-gray-500 hover:text-white flex-1 transition-colors duration-300"
+//                     onClick={() => setShowDeleteConfirm(false)}
+//                   >
+//                     Cancel
+//                   </Button>
+//                 </>
+//               ) : (
+//                 <>
+//                   <Button
+//                     className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300"
+//                     onClick={() => setShowDeleteConfirm(true)}
+//                   >
+//                     <Trash2 size={18} className="mr-2" />
+//                     Delete
+//                   </Button>
+//                   <Button className="bg-transparent border-2 border-blue-500 text-blue-500 px-4 hover:bg-blue-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300">
+//                     <Link href={`${pathname}/${automation.id}`} className="flex items-center">
+//                       <Settings size={18} className="mr-2" />
+//                       Configure
+//                     </Link>
+//                   </Button>
+//                 </>
+//               )}
+//             </div>
+//           </div>
+//         </div>
+//         <div className="hidden lg:block w-px bg-[#545454] mx-4"></div>
+//         <div className="w-full lg:w-1/2 lg:pl-4">
+//           <h3 className="text-xl font-semibold mb-4 text-white">Keyword Reply Distribution</h3>
+//           <div className="h-64 w-full">
+//             <ResponsiveContainer width="100%" height="100%">
+//               <PieChart>
+//                 <Pie
+//                   data={keywordData}
+//                   cx="50%"
+//                   cy="50%"
+//                   innerRadius={60}
+//                   outerRadius={80}
+//                   fill="#8884d8"
+//                   paddingAngle={5}
+//                   dataKey="value"
+//                 >
+//                   {keywordData.map((entry, index) => (
+//                     <Cell key={`cell-${index}`} fill={entry.color} />
+//                   ))}
+//                 </Pie>
+//                 <Tooltip
+//                   content={({ active, payload }) => {
+//                     if (active && payload && payload.length) {
+//                       return (
+//                         <div className="bg-background-80 p-2 rounded-md shadow-md">
+//                           <p className="text-sm text-white">{`${payload[0].name}: ${payload[0].value}%`}</p>
+//                         </div>
+//                       )
+//                     }
+//                     return null
+//                   }}
+//                 />
+//               </PieChart>
+//             </ResponsiveContainer>
+//           </div>
+//         </div>
+//       </div>
+//       <div className="w-full border-t border-[#545454] mt-6 pt-6">
+//         <div className="w-full">
+//           <AutomationChats automationId={automation.id} />
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default FancyAutomationBox
+
 "use client"
 
 import type React from "react"
@@ -969,7 +1390,7 @@ type Keyword = {
   id: string
   automationId: string | null
   word: string
-  replyPercentage?: number
+  replyPercentage: number
 }
 
 type Listener = {
@@ -1158,3 +1579,4 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
 }
 
 export default FancyAutomationBox
+
