@@ -963,19 +963,32 @@ import { InactiveIndicator } from "../indicators/inactive-indicator"
 import { Sparkles, Zap, Trash2, Settings } from "lucide-react"
 import AutomationStats from "./automation-stats"
 import AutomationChats from "./automationChats"
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts"
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts"
+
+type Keyword = {
+  id: string
+  automationId: string | null
+  word: string
+  replyPercentage?: number
+}
+
+type Listener = {
+  id: string
+  listener: string
+  automationId: string
+  prompt: string
+  commentReply: string | null
+  dmCount: number
+  commentCount: number
+}
 
 interface Automation {
   id: string
   name: string
   active: boolean
+  keywords: Keyword[]
   createdAt: Date
-  keywords: { id: string; word: string }[]
-  listener: {
-    listener: string
-    commentCount: number
-    dmCount: number
-  } | null
+  listener: Listener | null
 }
 
 interface FancyAutomationBoxProps {
@@ -984,13 +997,7 @@ interface FancyAutomationBoxProps {
   pathname: string
 }
 
-const data = [
-  { name: "Comments", value: 400 },
-  { name: "DMs", value: 300 },
-  { name: "Other", value: 300 },
-]
-
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28"]
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"]
 
 export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automation, onDelete, pathname }) => {
   const [isHovered, setIsHovered] = useState(false)
@@ -1001,6 +1008,12 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
       setShowDeleteConfirm(false)
     }
   }, [isHovered])
+
+  const keywordData = automation.keywords.map((keyword, index) => ({
+    name: keyword.word,
+    value: Math.floor(Math.random() * 30) + 10, // Random value between 10 and 40
+    color: COLORS[index % COLORS.length],
+  }))
 
   return (
     <div
@@ -1033,7 +1046,7 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
         </div>
       </div>
       <div className="relative z-10 p-6 flex flex-col lg:flex-row">
-        <div className="flex-1 lg:pr-6 mb-6 lg:mb-0">
+        <div className="w-full lg:w-1/2 mb-6 lg:mb-0">
           <div className="absolute top-2 right-2 z-10">
             {automation.active ? <ActiveIndicator /> : <InactiveIndicator />}
           </div>
@@ -1063,9 +1076,7 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
               </div>
             )}
             <AutomationStats automation={automation} />
-            <p className="text-sm font-light text-[#9B9CA0] mb-4">
-              Created {getRelativeTime(new Date(automation.createdAt))}
-            </p>
+            <p className="text-sm font-light text-[#9B9CA0] mb-4">Created {getRelativeTime(automation.createdAt)}</p>
             <div className="flex flex-col sm:flex-row gap-2">
               {showDeleteConfirm ? (
                 <>
@@ -1102,14 +1113,14 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
             </div>
           </div>
         </div>
-        <div className="w-px bg-[#545454] self-stretch mx-4 hidden lg:block"></div>
-        <div className="flex-1 lg:pl-6">
-          <h3 className="text-xl font-semibold mb-4 text-white">Engagement Overview</h3>
-          <div className="h-48 w-full">
+        <div className="hidden lg:block w-px bg-[#545454] mx-4"></div>
+        <div className="w-full lg:w-1/2 lg:pl-4">
+          <h3 className="text-xl font-semibold mb-4 text-white">Keyword Reply Distribution</h3>
+          <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={data}
+                  data={keywordData}
                   cx="50%"
                   cy="50%"
                   innerRadius={60}
@@ -1118,17 +1129,28 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
                   paddingAngle={5}
                   dataKey="value"
                 >
-                  {data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  {keywordData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
+                <Tooltip
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      return (
+                        <div className="bg-background-80 p-2 rounded-md shadow-md">
+                          <p className="text-sm text-white">{`${payload[0].name}: ${payload[0].value}%`}</p>
+                        </div>
+                      )
+                    }
+                    return null
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
         </div>
       </div>
-      <div className="w-full border-t border-[#545454] mt-6 mx-auto" style={{ width: "90%" }}></div>
-      <div className="p-6">
+      <div className="w-full border-t border-[#545454] mt-6 pt-6">
         <AutomationChats automationId={automation.id} />
       </div>
     </div>
@@ -1136,4 +1158,3 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
 }
 
 export default FancyAutomationBox
-
