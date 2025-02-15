@@ -8353,7 +8353,7 @@
 
 "use client"
 
-import type React from "react"
+import React from "react"
 import { useState, useEffect, useRef, useCallback } from "react"
 import { motion } from "framer-motion"
 import { useSpring, animated } from "react-spring"
@@ -8451,7 +8451,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [displayedMessages, setDisplayedMessages] = useState<Message[]>([])
   const [unreadSeparatorIndex, setUnreadSeparatorIndex] = useState<number | null>(null)
-  const [hasMoreMessages, setHasMoreMessages] = useState(false)
+  //const [hasMoreMessages, setHasMoreMessages] = useState(false) // Removed
 
   const getAvatarUrl = () => {
     return `https://source.unsplash.com/random/100x100?portrait&${Math.random()}`
@@ -8537,7 +8537,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [scrollRef, displayedMessages])
+  }, [scrollRef, displayedMessages]) //Corrected useEffect dependency
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
@@ -8582,6 +8582,11 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
         setNewMessage("")
 
         setDisplayedMessages((prev) => [...prev, userMessage])
+
+        // Scroll to the bottom after sending a message
+        if (scrollRef.current) {
+          scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+        }
       } else {
         console.error("Failed to send message:", result.message)
       }
@@ -8621,9 +8626,9 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     })
     setTotalUnreadMessages((prev) => Math.max(0, prev - (conversation.unreadCount ?? 0)))
 
-    const lastMessages = conversation.messages.slice(-6)
+    const lastMessages = conversation.messages.slice(-10)
     setDisplayedMessages(lastMessages)
-    setHasMoreMessages(conversation.messages.length > 6)
+    //setHasMoreMessages(conversation.messages.length > 10) // Removed
 
     const unreadIndex = lastMessages.findIndex((msg) => !msg.read)
     setUnreadSeparatorIndex(unreadIndex !== -1 ? unreadIndex : null)
@@ -8697,7 +8702,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
         generateAiSuggestion()
       }
     }
-  }, [selectedConversation])
+  }, [selectedConversation, generateAiSuggestion]) //Corrected useEffect dependency
 
   const FancyErrorMessage: React.FC<{ message: string }> = ({ message }) => {
     return (
@@ -8722,21 +8727,33 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     if (selectedConversation) {
       const currentLength = displayedMessages.length
       const newMessages = selectedConversation.messages.slice(
-        Math.max(0, selectedConversation.messages.length - currentLength - 6),
+        Math.max(0, selectedConversation.messages.length - currentLength - 10),
         selectedConversation.messages.length - currentLength,
       )
       setDisplayedMessages((prevMessages) => [...newMessages, ...prevMessages])
-      setHasMoreMessages(currentLength + 6 < selectedConversation.messages.length)
     }
-  }, [selectedConversation, displayedMessages])
+  }, [selectedConversation, setDisplayedMessages])
 
   useEffect(() => {
     if (selectedConversation) {
-      const lastMessages = selectedConversation.messages.slice(-6)
+      const lastMessages = selectedConversation.messages.slice(-10)
       setDisplayedMessages(lastMessages)
-      setHasMoreMessages(selectedConversation.messages.length > 6)
     }
-  }, [selectedConversation])
+  }, [selectedConversation, setDisplayedMessages])
+
+  useEffect(() => {
+    const scrollArea = scrollRef.current
+    if (!scrollArea) return
+
+    const handleScroll = () => {
+      if (scrollArea.scrollTop === 0) {
+        loadMoreMessages()
+      }
+    }
+
+    scrollArea.addEventListener("scroll", handleScroll)
+    return () => scrollArea.removeEventListener("scroll", handleScroll)
+  }, [loadMoreMessages, scrollRef])
 
   return (
     <ShimmeringBorder>
@@ -8771,15 +8788,10 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                     )}
                   </div>
                 </div>
-                <ScrollArea className="flex-grow">
-                  <div className="p-4 space-y-4">
-                    {hasMoreMessages && (
-                      <Button variant="ghost" onClick={loadMoreMessages} className="w-full">
-                        Load More
-                      </Button>
-                    )}
+                <ScrollArea className="flex-grow h-[calc(100vh-200px)] overflow-hidden">
+                  <div className="p-4 space-y-4" ref={scrollRef}>
                     {displayedMessages.map((message, index) => (
-                      <>
+                      <React.Fragment key={index}>
                         {index === unreadSeparatorIndex && (
                           <div className="flex items-center my-2">
                             <div className="flex-grow border-t border-gray-600"></div>
@@ -8849,7 +8861,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                             ></div>
                           </div>
                         </motion.div>
-                      </>
+                      </React.Fragment>
                     ))}
                   </div>
                 </ScrollArea>
