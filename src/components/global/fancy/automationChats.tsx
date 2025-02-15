@@ -8757,7 +8757,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 
   return (
     <ShimmeringBorder>
-      <div className={`flex flex-col text-foreground rounded-lg overflow-hidden h-full`}>
+      <div className={`flex flex-col ${fancyBackground} text-foreground rounded-lg overflow-hidden h-full`}>
         {isLoading ? (
           <FancyLoader />
         ) : error ? (
@@ -9007,7 +9007,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                   )}
                 </h3>
                 <div className="flex flex-1 overflow-y-auto">
-                  <div className="grid grid-cols-4 gap-4 p-4">
+                  <div className="flex flex-wrap gap-4 p-4">
                     {!token ? (
                       <div className="col-span-full p-4 bg-background rounded-lg shadow-md">
                         <ExampleConversations onSelectConversation={handleSelectConversation} className="mb-4" />
