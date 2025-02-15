@@ -770,186 +770,6 @@
 // export default FancyAutomationBox;
 
 
-// "use client"
-
-// import type React from "react"
-// import { useState, useEffect } from "react"
-// import { cn, getRelativeTime } from "@/lib/utils"
-// import Link from "next/link"
-// import { Button } from "@/components/ui/button"
-// import GradientButton from "../gradient-button"
-// import { ActiveIndicator } from "../indicators/active-indicator"
-// import { InactiveIndicator } from "../indicators/inactive-indicator"
-// import { Sparkles, Zap, Trash2, Settings, BarChart2 } from "lucide-react"
-// import AutomationStats from "./automation-stats"
-// import AutomationChats from "./automationChats"
-
-// type Keyword = {
-//   id: string
-//   automationId: string | null
-//   word: string
-// }
-
-// type Listener = {
-//   id: string
-//   listener: string
-//   automationId: string
-//   prompt: string
-//   commentReply: string | null
-//   dmCount: number
-//   commentCount: number
-// }
-
-// interface Automation {
-//   id: string
-//   name: string
-//   active: boolean
-//   keywords: Keyword[]
-//   createdAt: Date
-//   listener: Listener | null
-// }
-
-// interface FancyAutomationBoxProps {
-//   automation: Automation
-//   onDelete: () => void
-//   pathname: string
-// }
-
-// export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automation, onDelete, pathname }) => {
-//   const [isHovered, setIsHovered] = useState(false)
-//   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-
-//   useEffect(() => {
-//     if (!isHovered) {
-//       setShowDeleteConfirm(false)
-//     }
-//   }, [isHovered])
-
-//   return (
-//     <div
-//       className="relative bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-xl transition-all duration-300 hover:shadow-lg group"
-//       onMouseEnter={() => setIsHovered(true)}
-//       onMouseLeave={() => setIsHovered(false)}
-//     >
-//       <div className="absolute inset-0 rounded-xl border border-[#545454] opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
-//       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-10 transition-opacity duration-7000 rounded-xl overflow-hidden"></div>
-//       <div className="absolute -top-px left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
-//       <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 flex items-center justify-center z-10">
-//         <div className="bg-[#1D1D1D] px-1 rounded-full border border-[#545454] shadow-sm">
-//           {automation.listener?.listener === "SMARTAI" ? (
-//             <GradientButton
-//               type="BUTTON"
-//               className="text-xs bg-background-80 text-white hover:bg-background-80 px-4 py-1 -my-[3px] flex items-center gap-2"
-//             >
-//               <Sparkles size={14} />
-//               Smart AI
-//             </GradientButton>
-//           ) : (
-//             <GradientButton
-//               type="BUTTON"
-//               className="text-xs bg-background-80 text-white hover:bg-background-80 px-4 py-1 -my-[3px] flex items-center gap-2"
-//             >
-//               <Zap size={14} />
-//               FREE
-//             </GradientButton>
-//           )}
-//         </div>
-//       </div>
-//       <div className="relative z-10 p-6 flex flex-col">
-//         <div className="w-full mb-6">
-//           <div className="absolute top-2 right-2 z-10">
-//             {automation.active ? <ActiveIndicator /> : <InactiveIndicator />}
-//           </div>
-//           <div className="mt-4">
-//             <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-//               {automation.name}
-//             </h2>
-//             <div className="flex flex-wrap gap-2 mb-4">
-//               {automation.keywords.map((keyword, key) => (
-//                 <div
-//                   key={keyword.id}
-//                   className={cn(
-//                     "rounded-full px-3 py-1 text-xs capitalize backdrop-blur-sm",
-//                     (key + 1) % 1 === 0 && "bg-keyword-green/30 border border-keyword-green/50",
-//                     (key + 1) % 2 === 0 && "bg-keyword-purple/30 border border-keyword-purple/50",
-//                     (key + 1) % 3 === 0 && "bg-keyword-yellow/30 border border-keyword-yellow/50",
-//                     (key + 1) % 4 === 0 && "bg-keyword-red/30 border border-keyword-red/50",
-//                   )}
-//                 >
-//                   {keyword.word}
-//                 </div>
-//               ))}
-//             </div>
-//             {automation.keywords.length === 0 && (
-//               <div className="rounded-full border border-dashed border-white/30 px-3 py-1 inline-block mb-4">
-//                 <p className="text-sm text-[#bfc0c3]">No Keywords</p>
-//               </div>
-//             )}
-//             <AutomationStats automation={automation} />
-//             <p className="text-sm font-light text-[#9B9CA0] mb-4">Created {getRelativeTime(automation.createdAt)}</p>
-//             <div className="flex flex-col sm:flex-row gap-2">
-//               {showDeleteConfirm ? (
-//                 <>
-//                   <Button
-//                     className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 transition-colors duration-300"
-//                     onClick={onDelete}
-//                   >
-//                     Confirm Delete
-//                   </Button>
-//                   <Button
-//                     className="bg-transparent border-2 border-gray-500 text-gray-500 px-4 hover:bg-gray-500 hover:text-white flex-1 transition-colors duration-300"
-//                     onClick={() => setShowDeleteConfirm(false)}
-//                   >
-//                     Cancel
-//                   </Button>
-//                 </>
-//               ) : (
-//                 <>
-//                   <Button
-//                     className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300"
-//                     onClick={() => setShowDeleteConfirm(true)}
-//                   >
-//                     <Trash2 size={18} className="mr-2" />
-//                     Delete
-//                   </Button>
-//                   <Button className="bg-transparent border-2 border-blue-500 text-blue-500 px-4 hover:bg-blue-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300">
-//                     <Link href={`${pathname}/${automation.id}`} className="flex items-center">
-//                       <Settings size={18} className="mr-2" />
-//                       Configure
-//                     </Link>
-//                   </Button>
-//                 </>
-//               )}
-//             </div>
-//           </div>
-//         </div>
-//         <div className="w-full border-t border-[#545454] pt-4">
-//           <h3 className="text-xl font-semibold mb-4 text-white">Quick Actions</h3>
-//           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-//             <Button className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white">
-//               <Zap size={18} className="mr-2" />
-//               Boost Engagement
-//             </Button>
-//             <Button className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white">
-//               <Sparkles size={18} className="mr-2" />
-//               Generate Content
-//             </Button>
-//             <Button className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white">
-//               <BarChart2 size={18} className="mr-2" />
-//               View Analytics
-//             </Button>
-//           </div>
-//         </div>
-//         <div className="w-full border-t border-[#545454] mt-6 pt-6">
-//           <AutomationChats automationId={automation.id} />
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
-
-// export default FancyAutomationBox
-
 "use client"
 
 import type React from "react"
@@ -964,17 +784,29 @@ import { Sparkles, Zap, Trash2, Settings, BarChart2 } from "lucide-react"
 import AutomationStats from "./automation-stats"
 import AutomationChats from "./automationChats"
 
+type Keyword = {
+  id: string
+  automationId: string | null
+  word: string
+}
+
+type Listener = {
+  id: string
+  listener: string
+  automationId: string
+  prompt: string
+  commentReply: string | null
+  dmCount: number
+  commentCount: number
+}
+
 interface Automation {
   id: string
   name: string
   active: boolean
-  createdAt: Date // Change this back to Date
-  keywords: { id: string; word: string }[]
-  listener: {
-    listener: string
-    commentCount: number
-    dmCount: number
-  } | null // Make sure this matches the expected type
+  keywords: Keyword[]
+  createdAt: Date
+  listener: Listener | null
 }
 
 interface FancyAutomationBoxProps {
@@ -1023,8 +855,8 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
           )}
         </div>
       </div>
-      <div className="relative z-10 p-6 flex flex-col lg:flex-row">
-        <div className="flex-1 lg:pr-6 lg:border-r border-[#545454] mb-6 lg:mb-0">
+      <div className="relative z-10 p-6 flex flex-col">
+        <div className="w-full mb-6">
           <div className="absolute top-2 right-2 z-10">
             {automation.active ? <ActiveIndicator /> : <InactiveIndicator />}
           </div>
@@ -1054,9 +886,7 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
               </div>
             )}
             <AutomationStats automation={automation} />
-            <p className="text-sm font-light text-[#9B9CA0] mb-4">
-              Created {getRelativeTime(new Date(automation.createdAt))}
-            </p>
+            <p className="text-sm font-light text-[#9B9CA0] mb-4">Created {getRelativeTime(automation.createdAt)}</p>
             <div className="flex flex-col sm:flex-row gap-2">
               {showDeleteConfirm ? (
                 <>
@@ -1093,9 +923,9 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
             </div>
           </div>
         </div>
-        <div className="flex-1 lg:pl-6">
+        <div className="w-full border-t border-[#545454] pt-4">
           <h3 className="text-xl font-semibold mb-4 text-white">Quick Actions</h3>
-          <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Button className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white">
               <Zap size={18} className="mr-2" />
               Boost Engagement
@@ -1110,13 +940,183 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
             </Button>
           </div>
         </div>
-      </div>
-      <div className="w-full border-t border-[#545454] mt-6 p-6">
-        <AutomationChats automationId={automation.id} />
+        <div className="w-full border-t border-[#545454] mt-6 pt-6">
+          <AutomationChats automationId={automation.id} />
+        </div>
       </div>
     </div>
   )
 }
 
 export default FancyAutomationBox
+
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect } from "react"
+// import { cn, getRelativeTime } from "@/lib/utils"
+// import Link from "next/link"
+// import { Button } from "@/components/ui/button"
+// import GradientButton from "../gradient-button"
+// import { ActiveIndicator } from "../indicators/active-indicator"
+// import { InactiveIndicator } from "../indicators/inactive-indicator"
+// import { Sparkles, Zap, Trash2, Settings, BarChart2 } from "lucide-react"
+// import AutomationStats from "./automation-stats"
+// import AutomationChats from "./automationChats"
+
+// interface Automation {
+//   id: string
+//   name: string
+//   active: boolean
+//   createdAt: Date // Change this back to Date
+//   keywords: { id: string; word: string }[]
+//   listener: {
+//     listener: string
+//     commentCount: number
+//     dmCount: number
+//   } | null // Make sure this matches the expected type
+// }
+
+// interface FancyAutomationBoxProps {
+//   automation: Automation
+//   onDelete: () => void
+//   pathname: string
+// }
+
+// export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automation, onDelete, pathname }) => {
+//   const [isHovered, setIsHovered] = useState(false)
+//   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+
+//   useEffect(() => {
+//     if (!isHovered) {
+//       setShowDeleteConfirm(false)
+//     }
+//   }, [isHovered])
+
+//   return (
+//     <div
+//       className="relative bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-xl transition-all duration-300 hover:shadow-lg group"
+//       onMouseEnter={() => setIsHovered(true)}
+//       onMouseLeave={() => setIsHovered(false)}
+//     >
+//       <div className="absolute inset-0 rounded-xl border border-[#545454] opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
+//       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-10 transition-opacity duration-7000 rounded-xl overflow-hidden"></div>
+//       <div className="absolute -top-px left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+//       <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 flex items-center justify-center z-10">
+//         <div className="bg-[#1D1D1D] px-1 rounded-full border border-[#545454] shadow-sm">
+//           {automation.listener?.listener === "SMARTAI" ? (
+//             <GradientButton
+//               type="BUTTON"
+//               className="text-xs bg-background-80 text-white hover:bg-background-80 px-4 py-1 -my-[3px] flex items-center gap-2"
+//             >
+//               <Sparkles size={14} />
+//               Smart AI
+//             </GradientButton>
+//           ) : (
+//             <GradientButton
+//               type="BUTTON"
+//               className="text-xs bg-background-80 text-white hover:bg-background-80 px-4 py-1 -my-[3px] flex items-center gap-2"
+//             >
+//               <Zap size={14} />
+//               FREE
+//             </GradientButton>
+//           )}
+//         </div>
+//       </div>
+//       <div className="relative z-10 p-6 flex flex-col lg:flex-row">
+//         <div className="flex-1 lg:pr-6 lg:border-r border-[#545454] mb-6 lg:mb-0">
+//           <div className="absolute top-2 right-2 z-10">
+//             {automation.active ? <ActiveIndicator /> : <InactiveIndicator />}
+//           </div>
+//           <div className="mt-4">
+//             <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+//               {automation.name}
+//             </h2>
+//             <div className="flex flex-wrap gap-2 mb-4">
+//               {automation.keywords.map((keyword, key) => (
+//                 <div
+//                   key={keyword.id}
+//                   className={cn(
+//                     "rounded-full px-3 py-1 text-xs capitalize backdrop-blur-sm",
+//                     (key + 1) % 1 === 0 && "bg-keyword-green/30 border border-keyword-green/50",
+//                     (key + 1) % 2 === 0 && "bg-keyword-purple/30 border border-keyword-purple/50",
+//                     (key + 1) % 3 === 0 && "bg-keyword-yellow/30 border border-keyword-yellow/50",
+//                     (key + 1) % 4 === 0 && "bg-keyword-red/30 border border-keyword-red/50",
+//                   )}
+//                 >
+//                   {keyword.word}
+//                 </div>
+//               ))}
+//             </div>
+//             {automation.keywords.length === 0 && (
+//               <div className="rounded-full border border-dashed border-white/30 px-3 py-1 inline-block mb-4">
+//                 <p className="text-sm text-[#bfc0c3]">No Keywords</p>
+//               </div>
+//             )}
+//             <AutomationStats automation={automation} />
+//             <p className="text-sm font-light text-[#9B9CA0] mb-4">
+//               Created {getRelativeTime(new Date(automation.createdAt))}
+//             </p>
+//             <div className="flex flex-col sm:flex-row gap-2">
+//               {showDeleteConfirm ? (
+//                 <>
+//                   <Button
+//                     className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 transition-colors duration-300"
+//                     onClick={onDelete}
+//                   >
+//                     Confirm Delete
+//                   </Button>
+//                   <Button
+//                     className="bg-transparent border-2 border-gray-500 text-gray-500 px-4 hover:bg-gray-500 hover:text-white flex-1 transition-colors duration-300"
+//                     onClick={() => setShowDeleteConfirm(false)}
+//                   >
+//                     Cancel
+//                   </Button>
+//                 </>
+//               ) : (
+//                 <>
+//                   <Button
+//                     className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300"
+//                     onClick={() => setShowDeleteConfirm(true)}
+//                   >
+//                     <Trash2 size={18} className="mr-2" />
+//                     Delete
+//                   </Button>
+//                   <Button className="bg-transparent border-2 border-blue-500 text-blue-500 px-4 hover:bg-blue-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300">
+//                     <Link href={`${pathname}/${automation.id}`} className="flex items-center">
+//                       <Settings size={18} className="mr-2" />
+//                       Configure
+//                     </Link>
+//                   </Button>
+//                 </>
+//               )}
+//             </div>
+//           </div>
+//         </div>
+//         <div className="flex-1 lg:pl-6">
+//           <h3 className="text-xl font-semibold mb-4 text-white">Quick Actions</h3>
+//           <div className="flex flex-col gap-4">
+//             <Button className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white">
+//               <Zap size={18} className="mr-2" />
+//               Boost Engagement
+//             </Button>
+//             <Button className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white">
+//               <Sparkles size={18} className="mr-2" />
+//               Generate Content
+//             </Button>
+//             <Button className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white">
+//               <BarChart2 size={18} className="mr-2" />
+//               View Analytics
+//             </Button>
+//           </div>
+//         </div>
+//       </div>
+//       <div className="w-full border-t border-[#545454] mt-6 p-6">
+//         <AutomationChats automationId={automation.id} />
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default FancyAutomationBox
 
