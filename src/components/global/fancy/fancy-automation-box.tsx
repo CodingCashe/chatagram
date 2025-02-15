@@ -968,9 +968,13 @@ interface Automation {
   id: string
   name: string
   active: boolean
-  createdAt: string
+  createdAt: Date // Change this back to Date
   keywords: { id: string; word: string }[]
-  listener?: { listener: string }
+  listener: {
+    listener: string
+    commentCount: number
+    dmCount: number
+  } | null // Make sure this matches the expected type
 }
 
 interface FancyAutomationBoxProps {
@@ -1050,7 +1054,9 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
               </div>
             )}
             <AutomationStats automation={automation} />
-            <p className="text-sm font-light text-[#9B9CA0] mb-4">Created {getRelativeTime(automation.createdAt)}</p>
+            <p className="text-sm font-light text-[#9B9CA0] mb-4">
+              Created {getRelativeTime(new Date(automation.createdAt))}
+            </p>
             <div className="flex flex-col sm:flex-row gap-2">
               {showDeleteConfirm ? (
                 <>
@@ -1113,4 +1119,3 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
 }
 
 export default FancyAutomationBox
-
