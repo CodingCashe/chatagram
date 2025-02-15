@@ -1023,8 +1023,8 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
           )}
         </div>
       </div>
-      <div className="relative z-10 p-6 flex flex-row">
-        <div className="flex-grow pr-6 border-r border-[#545454]">
+      <div className="relative z-10 p-6 flex flex-col lg:flex-row">
+        <div className="flex-1 lg:pr-6 lg:border-r border-[#545454] mb-6 lg:mb-0">
           <div className="absolute top-2 right-2 z-10">
             {automation.active ? <ActiveIndicator /> : <InactiveIndicator />}
           </div>
@@ -1093,7 +1093,7 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
             </div>
           </div>
         </div>
-        <div className="w-64 pl-6">
+        <div className="flex-1 lg:pl-6">
           <h3 className="text-xl font-semibold mb-4 text-white">Quick Actions</h3>
           <div className="flex flex-col gap-4">
             <Button className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white">
@@ -1119,3 +1119,4 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
 }
 
 export default FancyAutomationBox
+
