@@ -9009,7 +9009,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                 <div className="flex flex-1 overflow-y-auto">
                   <div className="flex flex-wrap gap-4 p-4">
                     {!token ? (
-                      <div className="col-span-full p-4 bg-background rounded-lg shadow-md">
+                      <div className="p-4 bg-background rounded-lg shadow-md w-full sm:w-auto max-w-full">
                         <ExampleConversations onSelectConversation={handleSelectConversation} className="mb-4" />
                         <div className="text-center">
                           <p className="text-muted-foreground mb-4 text-sm sm:text-base">
