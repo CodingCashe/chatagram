@@ -8518,8 +8518,8 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
         setSelectedConversation(null)
       }
     } catch (error) {
-      console.error("Error in fetchChats:", error)
-      setError(`Oops! We're having trouble loading your chats. Retrying...`)
+      console.error("Please wait", error)
+      setError(`Getting things ready...`)
       // Retry after 5 seconds
       setTimeout(() => {
         fetchChats()
@@ -8757,7 +8757,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 
   return (
     <ShimmeringBorder>
-      <div className={`flex flex-col ${fancyBackground} text-foreground rounded-lg overflow-hidden h-full`}>
+      <div className={`flex flex-col text-foreground rounded-lg overflow-hidden h-full`}>
         {isLoading ? (
           <FancyLoader />
         ) : error ? (
@@ -8788,7 +8788,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                     )}
                   </div>
                 </div>
-                <ScrollArea className="flex-grow h-[calc(100vh-200px)] overflow-hidden">
+                <ScrollArea className="flex-grow h-[calc(100vh-300px)] overflow-hidden">
                   <div className="p-4 space-y-4" ref={scrollRef}>
                     {displayedMessages.map((message, index) => (
                       <React.Fragment key={index}>
@@ -8867,7 +8867,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                 </ScrollArea>
                 <div className="p-2 sm:p-4 bg-background border-t border-primary/10">
                   <div className="flex space-x-2 mb-2 overflow-x-auto pb-2 -mx-2 px-2 sm:mx-0 sm:px-0">
-                    {["Hello!", "How can I help?", "Thank you!", "I'll get back to you soon."].map(
+                    {["Hello!","Torever","Hi there","Awesome", "How can I help?", "Thank you!", "I'll get back to you soon.","You are welcome"].map(
                       (response, index) => (
                         <motion.button
                           key={index}
@@ -8906,7 +8906,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                           <Smile className="h-5 w-5" />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-60 p-0">
+                      <PopoverContent className="w-40 p-0">
                         <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="dark" />
                       </PopoverContent>
                     </Popover>
