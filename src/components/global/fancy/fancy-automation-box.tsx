@@ -773,15 +773,15 @@
 import { Sparkles, Zap, Trash2, Settings, BarChart2 } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import AutomationChats  from "./automationChats"
+import AutomationChats from "./automationChats"
 
 interface AutomationProps {
   automation: any
   pathname: string
-  setShowDeleteConfirm: (value: boolean) => void
+  onDelete: () => void
 }
 
-export function FancyAutomationBox({ automation, pathname, setShowDeleteConfirm }: AutomationProps) {
+export function FancyAutomationBox({ automation, pathname, onDelete }: AutomationProps) {
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
       <div className="flex flex-col md:flex-row items-center justify-between mb-6">
@@ -789,7 +789,7 @@ export function FancyAutomationBox({ automation, pathname, setShowDeleteConfirm 
         <div className="flex space-x-4">
           <Button
             className="border-2 border-red-500 bg-transparent text-red-500 hover:bg-red-500 hover:text-white px-4 flex-1 sm:flex-none transition-colors duration-300"
-            onClick={() => setShowDeleteConfirm(true)}
+            onClick={onDelete}
           >
             <Trash2 size={18} className="mr-2" />
             Delete
