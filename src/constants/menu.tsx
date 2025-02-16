@@ -279,7 +279,7 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
       },
       {
         id: uuid(),
-        label: 'Scheduler',
+        label: 'Schedule',
         icon: <Calendar />,
       },
     ]
