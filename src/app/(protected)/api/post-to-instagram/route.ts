@@ -188,7 +188,7 @@ export async function POST(request: Request) {
     // Fetch the user's Instagram integration
     console.log("Fetching user Instagram integration")
     const user = await client.user.findUnique({
-      where: { id: userId },
+      where: { clerkId: userId }, // Changed from id to clerkId
       include: { integrations: { where: { name: "INSTAGRAM" } } },
     })
 
@@ -260,7 +260,7 @@ export async function POST(request: Request) {
           status: "published",
           scheduledDate: now,
           publishedDate: now,
-          userId,
+          userId: user.id, // Use the actual UUID from the user object
         },
       })
       console.log("Post stored in database:", storedPost)
