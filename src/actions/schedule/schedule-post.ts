@@ -160,34 +160,76 @@ export async function schedulePost(formData: FormData) {
 }
 
 export async function getScheduledPosts(
-  userId: string,
-): Promise<{ success: boolean; data?: ScheduledPost[]; error?: string }> {
-  try {
-    const scheduledPosts = await client.scheduledContent.findMany({
-      where: { userId },
-      orderBy: { scheduledDate: "asc" },
-      select: {
-        id: true,
-        caption: true,
-        mediaType: true,
-        mediaUrl: true,
-        thumbnailUrl: true,
-        scheduledDate: true,
-        publishedDate: true,
-        status: true,
-      },
-    })
-
-    const formattedPosts: ScheduledPost[] = scheduledPosts.map((post) => ({
-      ...post,
-      scheduledDate: post.scheduledDate.toISOString(),
-      publishedDate: post.publishedDate ? post.publishedDate.toISOString() : null,
-    }))
-
-    return { success: true, data: formattedPosts }
-  } catch (error) {
-    console.error("Error fetching scheduled posts:", error)
-    return { success: false, error: "Failed to fetch scheduled posts" }
+    clerkId: string
+  ): Promise<{ success: boolean; data?: ScheduledPost[]; error?: string }> {
+    try {
+      // First, find the user by their clerkId
+      const user = await client.user.findUnique({
+        where: { clerkId },
+      })
+  
+      if (!user) {
+        return { success: false, error: "User not found" }
+      }
+  
+      // Now use the user's id to find their scheduled posts
+      const scheduledPosts = await client.scheduledContent.findMany({
+        where: { userId: user.id },
+        orderBy: { scheduledDate: "asc" },
+        select: {
+          id: true,
+          caption: true,
+          mediaType: true,
+          mediaUrl: true,
+          thumbnailUrl: true,
+          scheduledDate: true,
+          publishedDate: true,
+          status: true,
+        },
+      })
+  
+      const formattedPosts: ScheduledPost[] = scheduledPosts.map((post) => ({
+        ...post,
+        scheduledDate: post.scheduledDate.toISOString(),
+        publishedDate: post.publishedDate ? post.publishedDate.toISOString() : null,
+      }))
+  
+      return { success: true, data: formattedPosts }
+    } catch (error) {
+      console.error("Error fetching scheduled posts:", error)
+      return { success: false, error: "Failed to fetch scheduled posts" }
+    }
   }
-}
+
+// export async function getScheduledPosts(
+//   userId: string,
+// ): Promise<{ success: boolean; data?: ScheduledPost[]; error?: string }> {
+//   try {
+//     const scheduledPosts = await client.scheduledContent.findMany({
+//       where: { userId },
+//       orderBy: { scheduledDate: "asc" },
+//       select: {
+//         id: true,
+//         caption: true,
+//         mediaType: true,
+//         mediaUrl: true,
+//         thumbnailUrl: true,
+//         scheduledDate: true,
+//         publishedDate: true,
+//         status: true,
+//       },
+//     })
+
+//     const formattedPosts: ScheduledPost[] = scheduledPosts.map((post) => ({
+//       ...post,
+//       scheduledDate: post.scheduledDate.toISOString(),
+//       publishedDate: post.publishedDate ? post.publishedDate.toISOString() : null,
+//     }))
+
+//     return { success: true, data: formattedPosts }
+//   } catch (error) {
+//     console.error("Error fetching scheduled posts:", error)
+//     return { success: false, error: "Failed to fetch scheduled posts" }
+//   }
+// }
 
