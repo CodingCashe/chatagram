@@ -284,6 +284,74 @@
 //   )
 // }
 
+// import { onCurrentUser } from "@/actions/user"
+// import PostScheduleForm from "../_components/instagram/PostScheduleForm"
+// import InstagramSimulator from "../_components/instagram/InstagramSimulator"
+// import ErrorBoundary from "../_components/instagram/ErrorBoundary"
+// import { getScheduledPosts } from "@/actions/schedule/schedule-post"
+// import AIContentGenerator from "../_components/instagram/AIContentGenerator"
+// import PendingPosts from "../_components/instagram/PendingPosts"
+// import MediaSelector from "../_components/instagram/MediaSelector"
+// import DashboardStats from "../_components/instagram/DashboardStats"
+// import PublishingLimitCheck from "../_components/instagram/PublishingLimitCheck"
+
+// export default async function SchedulePage() {
+//   const user = await onCurrentUser()
+
+//   if (!user) {
+//     return <div className="text-center text-white">Please log in to access this page.</div>
+//   }
+
+//   const postsResult = await getScheduledPosts(user.id)
+//   const posts = postsResult.success ? postsResult.data || [] : []
+
+//   return (
+//     <div className="bg-gray-900 min-h-screen text-white">
+//       <div className="container mx-auto px-4 py-8">
+//         <h1 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
+//           Instagram Post Manager
+//         </h1>
+//         <DashboardStats posts={posts} />
+//         <PublishingLimitCheck userId={user.id} />
+//         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+//           <div className="lg:col-span-2">
+//             <h2 className="text-2xl font-bold mb-4">Create New Post</h2>
+//             <ErrorBoundary
+//               fallback={
+//                 <div className="text-red-500">Something went wrong with the post form. Please try again later.</div>
+//               }
+//             >
+//               <PostScheduleForm userId={user.id} />
+//             </ErrorBoundary>
+//           </div>
+//           <div>
+//             <h2 className="text-2xl font-bold mb-4">Media Library</h2>
+//             <MediaSelector onSelect={(media) => console.log("Selected media:", media)} maxItems={10} />
+//           </div>
+//         </div>
+//         <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+//           <div>
+//             <h2 className="text-2xl font-bold mb-4">AI Content Generator</h2>
+//             <AIContentGenerator userId={user.id} />
+//           </div>
+//           <div>
+//             <h2 className="text-2xl font-bold mb-4">Pending Posts</h2>
+//             <PendingPosts posts={posts.filter((post) => post.status === "scheduled")} />
+//           </div>
+//         </div>
+//         <div className="mt-12">
+//           <h2 className="text-2xl font-bold mb-4">Instagram Feed Preview</h2>
+//           <ErrorBoundary
+//             fallback={<div className="text-red-500">Something went wrong loading posts. Please try again later.</div>}
+//           >
+//             <InstagramSimulator posts={posts} />
+//           </ErrorBoundary>
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }
+
 import { onCurrentUser } from "@/actions/user"
 import PostScheduleForm from "../_components/instagram/PostScheduleForm"
 import InstagramSimulator from "../_components/instagram/InstagramSimulator"
@@ -291,7 +359,7 @@ import ErrorBoundary from "../_components/instagram/ErrorBoundary"
 import { getScheduledPosts } from "@/actions/schedule/schedule-post"
 import AIContentGenerator from "../_components/instagram/AIContentGenerator"
 import PendingPosts from "../_components/instagram/PendingPosts"
-import MediaSelector from "../_components/instagram/MediaSelector"
+import MediaSelectorWrapper from "../_components/instagram/wrapper"
 import DashboardStats from "../_components/instagram/DashboardStats"
 import PublishingLimitCheck from "../_components/instagram/PublishingLimitCheck"
 
@@ -326,7 +394,7 @@ export default async function SchedulePage() {
           </div>
           <div>
             <h2 className="text-2xl font-bold mb-4">Media Library</h2>
-            <MediaSelector onSelect={(media) => console.log("Selected media:", media)} maxItems={10} />
+            <MediaSelectorWrapper maxItems={10} />
           </div>
         </div>
         <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
