@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion"
 import { format } from "date-fns"
@@ -18,6 +18,16 @@ const InstagramSimulator: React.FC<InstagramSimulatorProps> = ({ posts }) => {
   const [currentPostIndex, setCurrentPostIndex] = useState(0)
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set())
   const [savedPosts, setSavedPosts] = useState<Set<string>>(new Set())
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Simulate loading delay
+    const timer = setTimeout(() => {
+      setLoading(false)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [])
 
   const sortedPosts = [...posts].sort((a, b) => {
     return new Date(b.scheduledDate).getTime() - new Date(a.scheduledDate).getTime()
@@ -55,6 +65,14 @@ const InstagramSimulator: React.FC<InstagramSimulatorProps> = ({ posts }) => {
     })
   }
 
+  if (loading) {
+    return <LoadingAnimation />
+  }
+
+  if (sortedPosts.length === 0) {
+    return <NoPosts />
+  }
+
   return (
     <div className="bg-gray-900 min-h-screen text-white">
       <div className="max-w-md mx-auto">
@@ -69,14 +87,16 @@ const InstagramSimulator: React.FC<InstagramSimulatorProps> = ({ posts }) => {
             onSave={() => toggleSave(sortedPosts[currentPostIndex].id)}
           />
         </AnimatePresence>
-        <div className="flex justify-between px-4 py-2">
-          <button onClick={handlePrev} className="text-white">
-            <ChevronLeft size={24} />
-          </button>
-          <button onClick={handleNext} className="text-white">
-            <ChevronRight size={24} />
-          </button>
-        </div>
+        {sortedPosts.length > 1 && (
+          <div className="flex justify-between px-4 py-2">
+            <button onClick={handlePrev} className="text-white">
+              <ChevronLeft size={24} />
+            </button>
+            <button onClick={handleNext} className="text-white">
+              <ChevronRight size={24} />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -220,6 +240,29 @@ const Post: React.FC<{
     </motion.div>
   )
 }
+
+const NoPosts: React.FC = () => (
+  <motion.div
+    className="bg-gray-800 rounded-lg overflow-hidden shadow-lg mb-4 p-8 text-center"
+    initial={{ opacity: 0, y: 50 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -50 }}
+    transition={{ duration: 0.5 }}
+  >
+    <h2 className="text-2xl font-bold mb-4">No Posts Yet</h2>
+    <p className="text-gray-400">Your Instagram posts will appear here after you create and publish them.</p>
+  </motion.div>
+)
+
+const LoadingAnimation: React.FC = () => (
+  <div className="flex items-center justify-center h-64">
+    <motion.div
+      className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full"
+      animate={{ rotate: 360 }}
+      transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+    />
+  </div>
+)
 
 export default InstagramSimulator
 
