@@ -207,7 +207,6 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import Image from "next/image"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -215,11 +214,33 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { Calendar, Clock } from "lucide-react"
-import MediaSelector from "./MediaSelector"
 
 interface PostScheduleFormProps {
   userId: string
 }
+
+const mediaOptions = [
+  {
+    name: "Cat",
+    url: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80",
+  },
+  {
+    name: "Fancy",
+    url: "https://picsum.photos/1080/1080?random=1",
+  },
+  {
+    name: "Dog",
+    url: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80",
+  },
+  {
+    name: "Landscape",
+    url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80",
+  },
+  {
+    name: "Food",
+    url: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80",
+  },
+]
 
 export default function PostScheduleForm({ userId }: PostScheduleFormProps) {
   const [message, setMessage] = useState("")
@@ -301,24 +322,6 @@ export default function PostScheduleForm({ userId }: PostScheduleFormProps) {
               </SelectContent>
             </Select>
           </div>
-
-          <div>
-            <Label>Select Media</Label>
-            <MediaSelector onSelect={setSelectedMedia} />
-          </div>
-
-          {selectedMedia && (
-            <div>
-              <Label>Selected Image</Label>
-              <Image
-                src={selectedMedia || "/placeholder.svg"}
-                alt="Selected media"
-                width={200}
-                height={200}
-                className="object-cover rounded-lg mt-2"
-              />
-            </div>
-          )}
 
           <div>
             <Label htmlFor="caption">Caption</Label>

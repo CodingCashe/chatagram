@@ -460,7 +460,7 @@ export default async function SchedulePage() {
           </div>
           <div>
             <h2 className="text-2xl font-bold mb-4">Media Library</h2>
-            <MediaSelector onSelect={(url) => console.log("Selected image:", url)} />
+            <MediaSelector />
           </div>
         </div>
         <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">

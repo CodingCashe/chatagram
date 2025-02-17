@@ -391,7 +391,7 @@ import type React from "react"
 import { useState } from "react"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { ChevronLeft, ChevronRight, Check } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const mediaOptions = [
   {
@@ -416,13 +416,8 @@ const mediaOptions = [
   },
 ]
 
-interface MediaSelectorProps {
-  onSelect: (url: string) => void
-}
-
-const MediaSelector: React.FC<MediaSelectorProps> = ({ onSelect }) => {
+const MediaSelector: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % mediaOptions.length)
@@ -430,11 +425,6 @@ const MediaSelector: React.FC<MediaSelectorProps> = ({ onSelect }) => {
 
   const prevSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + mediaOptions.length) % mediaOptions.length)
-  }
-
-  const handleSelect = (url: string) => {
-    setSelectedImage(url)
-    onSelect(url)
   }
 
   return (
@@ -446,7 +436,7 @@ const MediaSelector: React.FC<MediaSelectorProps> = ({ onSelect }) => {
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
           {mediaOptions.map((option, index) => (
-            <div key={index} className="w-full flex-shrink-0 relative">
+            <div key={index} className="w-full flex-shrink-0">
               <Image
                 src={option.url || "/placeholder.svg"}
                 alt={option.name}
@@ -455,14 +445,6 @@ const MediaSelector: React.FC<MediaSelectorProps> = ({ onSelect }) => {
                 className="w-full h-64 object-cover rounded-lg"
               />
               <p className="text-center mt-2">{option.name}</p>
-              <button
-                className={`absolute top-2 right-2 p-2 rounded-full ${
-                  selectedImage === option.url ? "bg-green-500" : "bg-gray-500 bg-opacity-50"
-                }`}
-                onClick={() => handleSelect(option.url)}
-              >
-                <Check className="w-4 h-4 text-white" />
-              </button>
             </div>
           ))}
         </motion.div>
