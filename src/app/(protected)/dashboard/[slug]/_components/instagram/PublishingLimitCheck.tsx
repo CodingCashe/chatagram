@@ -74,7 +74,7 @@ export default function PublishingLimitCheck({ userId }: PublishingLimitCheckPro
         <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-2">
           <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${usagePercentage}%` }}></div>
         </div>
-        {remaining <= 5 && <p className="text-yellow-600 mt-2">Warning: You're close to your publishing limit!</p>}
+        {remaining <= 5 && <p className="text-yellow-600 mt-2">Warning: You are close to your publishing limit!</p>}
       </CardContent>
     </Card>
   )
