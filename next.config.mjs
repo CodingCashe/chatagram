@@ -26,6 +26,18 @@ const nextConfig = {
           protocol: 'https',
           hostname: 'images.unsplash.com'
         },
+        {
+          protocol: 'https',
+          hostname: 'player.vimeo.com'
+        },
+        {
+          protocol: 'https',
+          hostname: 'i.vimeocdn.com'
+        },
+        {
+          protocol: 'https',
+          hostname: 'v.pinimg.com'
+        },
       ],
   },
 };
