@@ -467,13 +467,156 @@
 
 // export default MediaSelector
 
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect } from "react"
+// import Image from "next/image"
+// import { motion, AnimatePresence } from "framer-motion"
+// import { ChevronLeft, ChevronRight, Plus } from "lucide-react"
+// import { Button } from "@/components/ui/button"
+
+// const mediaOptions = [
+//   {
+//     name: "Mountain Landscape",
+//     url: "https://images.pexels.com/photos/1619317/pexels-photo-1619317.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+//   },
+//   {
+//     name: "City Skyline",
+//     url: "https://images.pexels.com/photos/1519088/pexels-photo-1519088.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+//   },
+//   {
+//     name: "Beach Sunset",
+//     url: "https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+//   },
+//   {
+//     name: "Forest Path",
+//     url: "https://images.pexels.com/photos/1496373/pexels-photo-1496373.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+//   },
+//   {
+//     name: "Coffee and Laptop",
+//     url: "https://images.pexels.com/photos/1280560/pexels-photo-1280560.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+//   },
+// ]
+
+// const MediaSelector: React.FC = () => {
+//   const [currentIndex, setCurrentIndex] = useState(0)
+//   const [selectedImages, setSelectedImages] = useState<string[]>([])
+
+//   const nextSlide = () => {
+//     setCurrentIndex((prevIndex) => (prevIndex + 1) % mediaOptions.length)
+//   }
+
+//   const prevSlide = () => {
+//     setCurrentIndex((prevIndex) => (prevIndex - 1 + mediaOptions.length) % mediaOptions.length)
+//   }
+
+//   const toggleImageSelection = (url: string) => {
+//     setSelectedImages((prev) => (prev.includes(url) ? prev.filter((item) => item !== url) : [...prev, url]))
+//   }
+
+//   useEffect(() => {
+//     const handleKeyDown = (e: KeyboardEvent) => {
+//       if (e.key === "ArrowRight") nextSlide()
+//       if (e.key === "ArrowLeft") prevSlide()
+//     }
+//     window.addEventListener("keydown", handleKeyDown)
+//     return () => window.removeEventListener("keydown", handleKeyDown)
+//   }, []) // Removed dependencies here
+
+//   return (
+//     <div className="relative bg-gray-800 p-6 rounded-lg shadow-lg">
+//       <div className="overflow-hidden">
+//         <motion.div
+//           className="flex"
+//           animate={{ x: `${-currentIndex * 100}%` }}
+//           transition={{ type: "spring", stiffness: 300, damping: 30 }}
+//         >
+//           {mediaOptions.map((option, index) => (
+//             <div key={index} className="w-full flex-shrink-0 relative">
+//               <Image
+//                 src={option.url || "/placeholder.svg"}
+//                 alt={option.name}
+//                 width={400}
+//                 height={400}
+//                 className="w-full h-64 object-cover rounded-lg"
+//               />
+//               <div className="absolute inset-0 flex items-center justify-center">
+//                 <Button
+//                   variant={selectedImages.includes(option.url) ? "default" : "outline"}
+//                   size="icon"
+//                   className="rounded-full"
+//                   onClick={() => toggleImageSelection(option.url)}
+//                 >
+//                   <Plus className={selectedImages.includes(option.url) ? "rotate-45" : ""} />
+//                 </Button>
+//               </div>
+//               <p className="text-center mt-2 text-white">{option.name}</p>
+//             </div>
+//           ))}
+//         </motion.div>
+//       </div>
+//       <Button
+//         variant="ghost"
+//         size="icon"
+//         className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full"
+//         onClick={prevSlide}
+//       >
+//         <ChevronLeft size={24} />
+//       </Button>
+//       <Button
+//         variant="ghost"
+//         size="icon"
+//         className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full"
+//         onClick={nextSlide}
+//       >
+//         <ChevronRight size={24} />
+//       </Button>
+//       <div className="mt-4">
+//         <h3 className="text-lg font-semibold text-white mb-2">Selected Images:</h3>
+//         <div className="flex flex-wrap gap-2">
+//           <AnimatePresence>
+//             {selectedImages.map((url) => (
+//               <motion.div
+//                 key={url}
+//                 initial={{ opacity: 0, scale: 0.8 }}
+//                 animate={{ opacity: 1, scale: 1 }}
+//                 exit={{ opacity: 0, scale: 0.8 }}
+//                 className="relative"
+//               >
+//                 <Image
+//                   src={url || "/placeholder.svg"}
+//                   alt="Selected"
+//                   width={80}
+//                   height={80}
+//                   className="w-20 h-20 object-cover rounded-md"
+//                 />
+//                 <Button
+//                   variant="destructive"
+//                   size="icon"
+//                   className="absolute -top-2 -right-2 rounded-full w-6 h-6"
+//                   onClick={() => toggleImageSelection(url)}
+//                 >
+//                   <Plus className="rotate-45" />
+//                 </Button>
+//               </motion.div>
+//             ))}
+//           </AnimatePresence>
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default MediaSelector
+
 "use client"
 
 import type React from "react"
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
-import { ChevronLeft, ChevronRight, Plus } from "lucide-react"
+import { ChevronLeft, ChevronRight, Plus, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const mediaOptions = [
@@ -502,6 +645,7 @@ const mediaOptions = [
 const MediaSelector: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedImages, setSelectedImages] = useState<string[]>([])
+  const [imageLoadError, setImageLoadError] = useState<Record<string, boolean>>({})
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % mediaOptions.length)
@@ -515,6 +659,10 @@ const MediaSelector: React.FC = () => {
     setSelectedImages((prev) => (prev.includes(url) ? prev.filter((item) => item !== url) : [...prev, url]))
   }
 
+  const handleImageError = (url: string) => {
+    setImageLoadError((prev) => ({ ...prev, [url]: true }))
+  }
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") nextSlide()
@@ -522,7 +670,7 @@ const MediaSelector: React.FC = () => {
     }
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, []) // Removed dependencies here
+  }, []) // Removed dependencies
 
   return (
     <div className="relative bg-gray-800 p-6 rounded-lg shadow-lg">
@@ -534,13 +682,20 @@ const MediaSelector: React.FC = () => {
         >
           {mediaOptions.map((option, index) => (
             <div key={index} className="w-full flex-shrink-0 relative">
-              <Image
-                src={option.url || "/placeholder.svg"}
-                alt={option.name}
-                width={400}
-                height={400}
-                className="w-full h-64 object-cover rounded-lg"
-              />
+              {imageLoadError[option.url] ? (
+                <div className="w-full h-64 bg-gray-700 flex items-center justify-center rounded-lg">
+                  <AlertCircle className="text-gray-400" size={48} />
+                </div>
+              ) : (
+                <Image
+                  src={option.url || "/placeholder.svg"}
+                  alt={option.name}
+                  width={400}
+                  height={400}
+                  className="w-full h-64 object-cover rounded-lg"
+                  onError={() => handleImageError(option.url)}
+                />
+              )}
               <div className="absolute inset-0 flex items-center justify-center">
                 <Button
                   variant={selectedImages.includes(option.url) ? "default" : "outline"}
@@ -584,13 +739,20 @@ const MediaSelector: React.FC = () => {
                 exit={{ opacity: 0, scale: 0.8 }}
                 className="relative"
               >
-                <Image
-                  src={url || "/placeholder.svg"}
-                  alt="Selected"
-                  width={80}
-                  height={80}
-                  className="w-20 h-20 object-cover rounded-md"
-                />
+                {imageLoadError[url] ? (
+                  <div className="w-20 h-20 bg-gray-700 flex items-center justify-center rounded-md">
+                    <AlertCircle className="text-gray-400" size={24} />
+                  </div>
+                ) : (
+                  <Image
+                    src={url || "/placeholder.svg"}
+                    alt="Selected"
+                    width={80}
+                    height={80}
+                    className="w-20 h-20 object-cover rounded-md"
+                    onError={() => handleImageError(url)}
+                  />
+                )}
                 <Button
                   variant="destructive"
                   size="icon"
