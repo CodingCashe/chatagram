@@ -317,12 +317,6 @@ interface PostScheduleFormProps {
 export default function PostScheduleForm({ userId, selectedMedia, onMediaClear }: PostScheduleFormProps) {
   const [message, setMessage] = useState("")
   const [loading, setLoading] = useState(false)
-  const [
-    isScheduled,
-
-    setMessage,
-  ] = useState("")
-  const [loading, setLoading] = useState(false)
   const [isScheduled, setIsScheduled] = useState(false)
   const [caption, setCaption] = useState("")
   const [scheduledDate, setScheduledDate] = useState("")
@@ -496,4 +490,3 @@ export default function PostScheduleForm({ userId, selectedMedia, onMediaClear }
     </form>
   )
 }
-
