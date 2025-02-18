@@ -491,6 +491,280 @@
 //   )
 // }
 
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect } from "react"
+// import Image from "next/image"
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+// import { Button } from "@/components/ui/button"
+// import { Input } from "@/components/ui/input"
+// import { Textarea } from "@/components/ui/textarea"
+// import { Label } from "@/components/ui/label"
+// import { Switch } from "@/components/ui/switch"
+// import { Loader2, Calendar, Clock, Hash } from "lucide-react"
+// import { motion, AnimatePresence } from "framer-motion"
+// import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+// import { Calendar as CalendarComponent } from "@/components/ui/calendar"
+// import { format } from "date-fns"
+
+// interface PostScheduleFormProps {
+//   userId: string
+//   selectedMedia: Array<{ type: string; name: string; url: string }>
+//   onMediaClear: () => void
+// }
+
+// export default function PostScheduleForm({ userId, selectedMedia, onMediaClear }: PostScheduleFormProps) {
+//   const [message, setMessage] = useState("")
+//   const [loading, setLoading] = useState(false)
+//   const [isScheduled, setIsScheduled] = useState(false)
+//   const [caption, setCaption] = useState("")
+//   const [scheduledDate, setScheduledDate] = useState<Date | undefined>(undefined)
+//   const [scheduledTime, setScheduledTime] = useState("")
+//   const [mediaType, setMediaType] = useState<"IMAGE" | "CAROUSEL" | "REELS" | "STORIES">("IMAGE")
+//   const [hashtags, setHashtags] = useState<string[]>([])
+
+//   useEffect(() => {
+//     if (selectedMedia.length > 1) {
+//       setMediaType("CAROUSEL")
+//     } else if (selectedMedia.length === 1) {
+//       setMediaType(selectedMedia[0].type === "video" ? "REELS" : "IMAGE")
+//     }
+//   }, [selectedMedia])
+
+//   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+//     event.preventDefault()
+//     setLoading(true)
+//     setMessage("")
+
+//     try {
+//       let response
+//       const postData = {
+//         userId,
+//         caption: `${caption}\n\n${hashtags.map((tag) => `#${tag}`).join(" ")}`,
+//         mediaUrls: selectedMedia.map((media) => media.url),
+//         mediaType,
+//         ...(isScheduled &&
+//           scheduledDate &&
+//           scheduledTime && {
+//             scheduledDate: new Date(`${format(scheduledDate, "yyyy-MM-dd")}T${scheduledTime}`).toISOString(),
+//           }),
+//       }
+
+//       if (isScheduled) {
+//         response = await fetch("/api/schedule-post", {
+//           method: "POST",
+//           headers: { "Content-Type": "application/json" },
+//           body: JSON.stringify(postData),
+//         })
+//       } else {
+//         response = await fetch("/api/post-to-instagram", {
+//           method: "POST",
+//           headers: { "Content-Type": "application/json" },
+//           body: JSON.stringify(postData),
+//         })
+//       }
+
+//       const data = await response.json()
+
+//       if (response.ok) {
+//         setMessage(isScheduled ? "Post scheduled successfully!" : "Post successfully published to Instagram!")
+//         onMediaClear()
+//         setCaption("")
+//         setScheduledDate(undefined)
+//         setScheduledTime("")
+//         setHashtags([])
+//       } else {
+//         setMessage(`Error: ${data.error || (isScheduled ? "Failed to schedule post" : "Failed to post to Instagram")}`)
+//       }
+//     } catch (error) {
+//       setMessage("An error occurred while trying to process your request.")
+//       console.error("Error:", error)
+//     } finally {
+//       setLoading(false)
+//     }
+//   }
+
+//   const handleAddHashtag = (event: React.KeyboardEvent<HTMLInputElement>) => {
+//     if (event.key === "Enter" && event.currentTarget.value) {
+//       setHashtags([...hashtags, event.currentTarget.value])
+//       event.currentTarget.value = ""
+//     }
+//   }
+
+//   const handleRemoveHashtag = (tagToRemove: string) => {
+//     setHashtags(hashtags.filter((tag) => tag !== tagToRemove))
+//   }
+
+//   return (
+//     <form onSubmit={handleSubmit} className="space-y-4">
+//       <div>
+//         <Label htmlFor="mediaType">Media Type</Label>
+//         <Select
+//           value={mediaType}
+//           onValueChange={(value: "IMAGE" | "CAROUSEL" | "REELS" | "STORIES") => setMediaType(value)}
+//         >
+//           <SelectTrigger>
+//             <SelectValue placeholder="Select media type" />
+//           </SelectTrigger>
+//           <SelectContent>
+//             <SelectItem value="IMAGE">Single Image</SelectItem>
+//             <SelectItem value="CAROUSEL">Carousel</SelectItem>
+//             <SelectItem value="REELS">Reels</SelectItem>
+//             <SelectItem value="STORIES">Stories</SelectItem>
+//           </SelectContent>
+//         </Select>
+//       </div>
+
+//       {selectedMedia.length > 0 && (
+//         <div>
+//           <Label>Selected Media</Label>
+//           <div className="flex space-x-2 overflow-x-auto">
+//             <AnimatePresence>
+//               {selectedMedia.map((media, index) => (
+//                 <motion.div
+//                   key={media.url}
+//                   initial={{ opacity: 0, scale: 0.8 }}
+//                   animate={{ opacity: 1, scale: 1 }}
+//                   exit={{ opacity: 0, scale: 0.8 }}
+//                   className="relative"
+//                 >
+//                   {media.type === "image" ? (
+//                     <Image
+//                       src={media.url || "/placeholder.svg"}
+//                       alt={`Selected media ${index + 1}`}
+//                       width={100}
+//                       height={100}
+//                       className="object-cover rounded-md"
+//                     />
+//                   ) : (
+//                     <video
+//                       src={media.url}
+//                       className="w-[100px] h-[100px] object-cover rounded-md"
+//                       loop
+//                       muted
+//                       playsInline
+//                     />
+//                   )}
+//                 </motion.div>
+//               ))}
+//             </AnimatePresence>
+//           </div>
+//         </div>
+//       )}
+
+//       <div>
+//         <Label htmlFor="caption">Caption</Label>
+//         <Textarea
+//           id="caption"
+//           value={caption}
+//           onChange={(e) => setCaption(e.target.value)}
+//           rows={3}
+//           className="mt-1 block w-full"
+//           required
+//         />
+//       </div>
+
+//       <div>
+//         <Label htmlFor="hashtags">Hashtags</Label>
+//         <div className="flex flex-wrap gap-2 mb-2">
+//           {hashtags.map((tag) => (
+//             <motion.span
+//               key={tag}
+//               initial={{ opacity: 0, scale: 0.8 }}
+//               animate={{ opacity: 1, scale: 1 }}
+//               exit={{ opacity: 0, scale: 0.8 }}
+//               className="bg-blue-500 text-white px-2 py-1 rounded-full text-sm flex items-center"
+//             >
+//               #{tag}
+//               <button
+//                 type="button"
+//                 onClick={() => handleRemoveHashtag(tag)}
+//                 className="ml-2 text-white hover:text-red-300"
+//               >
+//                 &times;
+//               </button>
+//             </motion.span>
+//           ))}
+//         </div>
+//         <div className="flex items-center">
+//           <Hash className="text-gray-400 w-5 h-5 mr-2" />
+//           <Input
+//             type="text"
+//             placeholder="Add hashtags (press Enter)"
+//             onKeyPress={handleAddHashtag}
+//             className="flex-grow"
+//           />
+//         </div>
+//       </div>
+
+//       <div className="flex items-center space-x-2">
+//         <Switch id="isScheduled" checked={isScheduled} onCheckedChange={setIsScheduled} />
+//         <Label htmlFor="isScheduled">Schedule post?</Label>
+//       </div>
+
+//       {isScheduled && (
+//         <div className="flex space-x-4">
+//           <div className="flex-1">
+//             <Label htmlFor="scheduledDate">Date</Label>
+//             <Popover>
+//               <PopoverTrigger asChild>
+//                 <Button
+//                   variant="outline"
+//                   className={`w-full justify-start text-left font-normal ${!scheduledDate && "text-muted-foreground"}`}
+//                 >
+//                   <Calendar className="mr-2 h-4 w-4" />
+//                   {scheduledDate ? format(scheduledDate, "PPP") : "Pick a date"}
+//                 </Button>
+//               </PopoverTrigger>
+//               <PopoverContent className="w-auto p-0" align="start">
+//                 <CalendarComponent mode="single" selected={scheduledDate} onSelect={setScheduledDate} initialFocus />
+//               </PopoverContent>
+//             </Popover>
+//           </div>
+//           <div className="flex-1">
+//             <Label htmlFor="scheduledTime">Time</Label>
+//             <div className="flex">
+//               <Clock className="text-gray-400 w-5 h-5 mr-2 self-center" />
+//               <Input
+//                 type="time"
+//                 id="scheduledTime"
+//                 value={scheduledTime}
+//                 onChange={(e) => setScheduledTime(e.target.value)}
+//                 className="flex-grow"
+//                 required={isScheduled}
+//               />
+//             </div>
+//           </div>
+//         </div>
+//       )}
+
+//       <Button type="submit" disabled={loading || selectedMedia.length === 0}>
+//         {loading ? (
+//           <>
+//             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+//             Processing...
+//           </>
+//         ) : isScheduled ? (
+//           "Schedule Post"
+//         ) : (
+//           "Post to Instagram"
+//         )}
+//       </Button>
+
+//       {message && (
+//         <motion.p
+//           initial={{ opacity: 0, y: -10 }}
+//           animate={{ opacity: 1, y: 0 }}
+//           className={`mt-2 text-sm ${message.startsWith("Error") ? "text-red-500" : "text-green-500"}`}
+//         >
+//           {message}
+//         </motion.p>
+//       )}
+//     </form>
+//   )
+// }
+
 "use client"
 
 import type React from "react"
@@ -502,11 +776,14 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Loader2, Calendar, Clock, Hash } from "lucide-react"
+import { Loader2, Calendar, Clock, Hash, Globe, Lock, Users, Sparkles } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
 import { format } from "date-fns"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Card, CardContent } from "@/components/ui/card"
+import { Slider } from "@/components/ui/slider"
 
 interface PostScheduleFormProps {
   userId: string
@@ -523,6 +800,11 @@ export default function PostScheduleForm({ userId, selectedMedia, onMediaClear }
   const [scheduledTime, setScheduledTime] = useState("")
   const [mediaType, setMediaType] = useState<"IMAGE" | "CAROUSEL" | "REELS" | "STORIES">("IMAGE")
   const [hashtags, setHashtags] = useState<string[]>([])
+  const [visibility, setVisibility] = useState<"public" | "private" | "friends">("public")
+  const [location, setLocation] = useState("")
+  const [aiAssistance, setAiAssistance] = useState(false)
+  const [aiSuggestions, setAiSuggestions] = useState<string[]>([])
+  const [engagement, setEngagement] = useState(50)
 
   useEffect(() => {
     if (selectedMedia.length > 1) {
@@ -544,6 +826,9 @@ export default function PostScheduleForm({ userId, selectedMedia, onMediaClear }
         caption: `${caption}\n\n${hashtags.map((tag) => `#${tag}`).join(" ")}`,
         mediaUrls: selectedMedia.map((media) => media.url),
         mediaType,
+        visibility,
+        location,
+        engagement,
         ...(isScheduled &&
           scheduledDate &&
           scheduledTime && {
@@ -574,6 +859,8 @@ export default function PostScheduleForm({ userId, selectedMedia, onMediaClear }
         setScheduledDate(undefined)
         setScheduledTime("")
         setHashtags([])
+        setLocation("")
+        setEngagement(50)
       } else {
         setMessage(`Error: ${data.error || (isScheduled ? "Failed to schedule post" : "Failed to post to Instagram")}`)
       }
@@ -594,6 +881,28 @@ export default function PostScheduleForm({ userId, selectedMedia, onMediaClear }
 
   const handleRemoveHashtag = (tagToRemove: string) => {
     setHashtags(hashtags.filter((tag) => tag !== tagToRemove))
+  }
+
+  const handleAIAssist = async () => {
+    setLoading(true)
+    try {
+      const response = await fetch("/api/ai-assist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ caption, hashtags, mediaType }),
+      })
+      const data = await response.json()
+      if (response.ok) {
+        setAiSuggestions(data.suggestions)
+      } else {
+        setMessage("Failed to get AI suggestions")
+      }
+    } catch (error) {
+      setMessage("An error occurred while getting AI suggestions")
+      console.error("Error:", error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -653,50 +962,154 @@ export default function PostScheduleForm({ userId, selectedMedia, onMediaClear }
         </div>
       )}
 
-      <div>
-        <Label htmlFor="caption">Caption</Label>
-        <Textarea
-          id="caption"
-          value={caption}
-          onChange={(e) => setCaption(e.target.value)}
-          rows={3}
-          className="mt-1 block w-full"
-          required
-        />
-      </div>
-
-      <div>
-        <Label htmlFor="hashtags">Hashtags</Label>
-        <div className="flex flex-wrap gap-2 mb-2">
-          {hashtags.map((tag) => (
-            <motion.span
-              key={tag}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              className="bg-blue-500 text-white px-2 py-1 rounded-full text-sm flex items-center"
-            >
-              #{tag}
-              <button
-                type="button"
-                onClick={() => handleRemoveHashtag(tag)}
-                className="ml-2 text-white hover:text-red-300"
-              >
-                &times;
-              </button>
-            </motion.span>
-          ))}
-        </div>
-        <div className="flex items-center">
-          <Hash className="text-gray-400 w-5 h-5 mr-2" />
-          <Input
-            type="text"
-            placeholder="Add hashtags (press Enter)"
-            onKeyPress={handleAddHashtag}
-            className="flex-grow"
-          />
-        </div>
-      </div>
+      <Tabs defaultValue="caption" className="w-full">
+        <TabsList>
+          <TabsTrigger value="caption">Caption</TabsTrigger>
+          <TabsTrigger value="hashtags">Hashtags</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+        </TabsList>
+        <TabsContent value="caption">
+          <Card>
+            <CardContent className="space-y-2">
+              <Textarea
+                id="caption"
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+                rows={3}
+                className="mt-1 block w-full"
+                placeholder="Write your caption here..."
+                required
+              />
+              <div className="flex items-center space-x-2">
+                <Switch id="ai-assistance" checked={aiAssistance} onCheckedChange={setAiAssistance} />
+                <Label htmlFor="ai-assistance">AI Assistance</Label>
+              </div>
+              {aiAssistance && (
+                <Button type="button" onClick={handleAIAssist} disabled={loading}>
+                  {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                  Get AI Suggestions
+                </Button>
+              )}
+              {aiSuggestions.length > 0 && (
+                <div className="space-y-2">
+                  <Label>AI Suggestions</Label>
+                  {aiSuggestions.map((suggestion, index) => (
+                    <div key={index} className="p-2 bg-gray-100 rounded-md">
+                      <p>{suggestion}</p>
+                      <Button
+                        type="button"
+                        onClick={() => setCaption(suggestion)}
+                        className="mt-2"
+                        variant="outline"
+                        size="sm"
+                      >
+                        Use This Suggestion
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="hashtags">
+          <Card>
+            <CardContent className="space-y-2">
+              <div className="flex flex-wrap gap-2 mb-2">
+                {hashtags.map((tag) => (
+                  <motion.span
+                    key={tag}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="bg-blue-500 text-white px-2 py-1 rounded-full text-sm flex items-center"
+                  >
+                    #{tag}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveHashtag(tag)}
+                      className="ml-2 text-white hover:text-red-300"
+                    >
+                      &times;
+                    </button>
+                  </motion.span>
+                ))}
+              </div>
+              <div className="flex items-center">
+                <Hash className="text-gray-400 w-5 h-5 mr-2" />
+                <Input
+                  type="text"
+                  placeholder="Add hashtags (press Enter)"
+                  onKeyPress={handleAddHashtag}
+                  className="flex-grow"
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="settings">
+          <Card>
+            <CardContent className="space-y-2">
+              <div>
+                <Label htmlFor="visibility">Visibility</Label>
+                <Select
+                  value={visibility}
+                  onValueChange={(value: "public" | "private" | "friends") => setVisibility(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select visibility" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="public">
+                      <div className="flex items-center">
+                        <Globe className="mr-2 h-4 w-4" />
+                        Public
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="private">
+                      <div className="flex items-center">
+                        <Lock className="mr-2 h-4 w-4" />
+                        Private
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="friends">
+                      <div className="flex items-center">
+                        <Users className="mr-2 h-4 w-4" />
+                        Friends Only
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="location">Location</Label>
+                <Input
+                  id="location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="Add a location"
+                />
+              </div>
+              <div>
+                <Label htmlFor="engagement">Expected Engagement</Label>
+                <Slider
+                  id="engagement"
+                  min={0}
+                  max={100}
+                  step={1}
+                  value={[engagement]}
+                  onValueChange={([value]) => setEngagement(value)}
+                />
+                <div className="flex justify-between text-sm text-gray-500">
+                  <span>Low</span>
+                  <span>Medium</span>
+                  <span>High</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
 
       <div className="flex items-center space-x-2">
         <Switch id="isScheduled" checked={isScheduled} onCheckedChange={setIsScheduled} />
