@@ -44,6 +44,7 @@ model ScheduledContent {
   permalink         String?
   scheduledDate     DateTime
   publishedDate     DateTime?
+  mediaProductType  String?
   status            String   @default("scheduled")
   User              User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId            String?  @db.Uuid

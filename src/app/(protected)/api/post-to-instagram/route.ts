@@ -579,6 +579,12 @@ export async function POST(request: Request) {
       instagramId: instagramIntegration.instagramId,
     })
 
+    // Check if instagramId is null
+    if (!instagramIntegration.instagramId) {
+      console.error("Instagram ID is missing for the integration")
+      return NextResponse.json({ error: "Instagram ID is missing for the integration" }, { status: 400 })
+    }
+
     // Refresh the token before using it
     let refreshedToken: string
     try {
@@ -707,7 +713,7 @@ export async function POST(request: Request) {
           scheduledDate: now,
           publishedDate: now,
           userId: user.id,
-          mediaProductType: mediaType === "REELS" ? "REELS" : mediaType === "STORIES" ? "STORY" : undefined,
+          mediaProductType: mediaType === "REELS" ? "REELS" : mediaType === "STORIES" ? "STORY" : null,
         },
       })
       console.log("Post stored in database:", storedPost)
