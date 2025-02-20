@@ -160,7 +160,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({ userId }) => {
           <Button
             onClick={() => {
               // TODO: Implement saving to your database
-              console.log("Save content:", generatedContent)
+              console.log("Save contentg:", generatedContent)
             }}
             variant="secondary"
             className="w-full"
