@@ -1915,25 +1915,6 @@ export default function PostScheduleForm({ userId, selectedMedia, onMediaClear }
                 className="bg-gray-700 text-gray-200 border-gray-600"
               />
             </div>
-            <div>
-              <Label htmlFor="engagement" className="mb-1 block text-gray-200">
-                Expected Engagement
-              </Label>
-              <Slider
-                id="engagement"
-                min={0}
-                max={100}
-                step={1}
-                value={[engagement]}
-                onValueChange={([value]) => setEngagement(value)}
-                className="[&>span]:bg-blue-600"
-              />
-              <div className="flex justify-between text-sm text-gray-400 mt-1">
-                <span>Low</span>
-                <span>Medium</span>
-                <span>High</span>
-              </div>
-            </div>
           </div>
         )
     }
