@@ -47,7 +47,7 @@ export async function GET(request: Request) {
         const mediaUrls = post.mediaUrl.split(",").filter(Boolean)
 
         if (mediaUrls.length === 0) {
-          throw new Error("No valid media URLs founnd")
+          throw new Error("No valid media URLs founnnnnd")
         }
 
         const response = await fetch(`${process.env.VERCEL_URL}/api/post-to-instagram`, {
