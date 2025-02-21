@@ -282,6 +282,11 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
         label: 'Schedule',
         icon: <Calendar />,
       },
+      {
+        id: uuid(),
+        label: 'Posting',
+        icon: <MessageCircle />,
+      },
     ]
   },
 ]

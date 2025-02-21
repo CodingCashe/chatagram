@@ -38,6 +38,11 @@ const nextConfig = {
           protocol: 'https',
           hostname: 'v.pinimg.com'
         },
+        {
+          protocol: "https",
+          hostname: "*.public.blob.vercel-storage.com",
+          port: "",
+        },
       ],
   },
 };
