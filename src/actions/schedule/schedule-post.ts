@@ -167,6 +167,7 @@
 
 "use server"
 
+import { revalidatePath } from "next/cache"
 import { client } from "@/lib/prisma"
 
 export interface ScheduledPost {
@@ -245,6 +246,62 @@ export async function getScheduledPosts(
   } catch (error) {
     console.error("Error fetching scheduled posts:", error)
     return { success: false, error: "Failed to fetch scheduled posts" }
+  }
+}
+
+// ... previous code remains the same ...
+
+export async function publishPost(postId: string) {
+  try {
+    const post = await client.scheduledContent.findUnique({
+      where: { id: postId },
+      include: {
+        User: {
+          include: {
+            integrations: {
+              where: { name: "INSTAGRAM" },
+            },
+          },
+        },
+      },
+    })
+
+    if (!post) {
+      return { success: false, error: "Post not found" }
+    }
+
+    // Call the Instagram API endpoint
+    const response = await fetch(`${process.env.VERCEL_URL}/api/post-to-instagram`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: post.User?.clerkId,
+        caption: post.caption,
+        mediaUrls: post.mediaUrl.split(","),
+        mediaType: post.mediaType,
+      }),
+    })
+
+    if (!response.ok) {
+      throw new Error("Failed to publish to Instagram")
+    }
+
+    // Update post status
+    await client.scheduledContent.update({
+      where: { id: postId },
+      data: {
+        status: "published",
+        publishedDate: new Date(),
+      },
+    })
+
+    revalidatePath("/schedule")
+    return { success: true }
+  } catch (error) {
+    console.error("Error publishing post:", error)
+    return { success: false, error: "Failed to publish post" }
   }
 }
 
