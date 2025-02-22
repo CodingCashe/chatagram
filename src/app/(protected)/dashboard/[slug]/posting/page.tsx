@@ -298,16 +298,23 @@ interface User {
 export default function SchedulePage() {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<"scheduler" | "posts">("scheduler")
 
   useEffect(() => {
     async function fetchUser() {
-      const userData = await onCurrentUser()
-      if (!userData) {
-        redirect("/sign-in")
+      try {
+        const userData = await onCurrentUser()
+        if (!userData) {
+          throw new Error("User not found")
+        }
+        setUser(userData as User)
+      } catch (err) {
+        setError("Failed to load user data. Please try again.")
+        console.error("Error fetching user:", err)
+      } finally {
+        setLoading(false)
       }
-      setUser(userData as User)
-      setLoading(false)
     }
     fetchUser()
   }, [])
@@ -316,8 +323,12 @@ export default function SchedulePage() {
     return <LoadingSpinner />
   }
 
+  if (error) {
+    return <ErrorMessage message={error} />
+  }
+
   if (!user) {
-    return null // or return a message, or redirect
+    redirect("/sign-in")
   }
 
   return (
@@ -459,6 +470,17 @@ function LoadingSpinner() {
         animate={{ rotate: 360 }}
         transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
       />
+    </div>
+  )
+}
+
+function ErrorMessage({ message }: { message: string }) {
+  return (
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong className="font-bold">Error: </strong>
+        <span className="block sm:inline">{message}</span>
+      </div>
     </div>
   )
 }
