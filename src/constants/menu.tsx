@@ -219,6 +219,7 @@ import {
   RocketDuoToneWhite,
   SettingsDuoToneWhite,
   PencilDuoToneBlack,
+  TinyInstagram
 } from '@/icons'
 import { MessageCircle,Clock, BarChart2, Users, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone } from 'lucide-react'
 import { v4 as uuid } from 'uuid'
@@ -287,7 +288,7 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
       {
         id: uuid(),
         label: 'Posting',
-        icon: <InstagramDuoToneBlue />,
+        icon: <TinyInstagram />,
       },
     ]
   },
