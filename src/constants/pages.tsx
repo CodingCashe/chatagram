@@ -6,7 +6,8 @@ import {
   SettingsDuoToneWhite,
   Tech,
   InstagramDuoToneBlue,
-  MegaPhoneDuoToneWhite
+  MegaPhoneDuoToneWhite,
+  PencilDuoToneBlack
 } from '@/icons'
 
 export const PAGE_BREAD_CRUMBS: string[] = [
@@ -35,6 +36,7 @@ export const PAGE_ICON: Props = {
   AUDIENCE: <MegaPhoneDuoToneWhite />,
   POSTING: <InstagramDuoToneBlue />,
   SCHEDULE: <Tech />,
+  INFORMATION:<PencilDuoToneBlack/>
 }
 
 export const PLANS = [

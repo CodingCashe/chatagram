@@ -211,14 +211,16 @@
 //   },
 // ]
 
+
 import {
+  InstagramDuoToneBlue,
   HomeDuoToneWhite,
   AutomationDuoToneWhite,
   RocketDuoToneWhite,
   SettingsDuoToneWhite,
   PencilDuoToneBlack,
 } from '@/icons'
-import { MessageCircle, BarChart2, Users, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone } from 'lucide-react'
+import { MessageCircle,Clock, BarChart2, Users, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone } from 'lucide-react'
 import { v4 as uuid } from 'uuid'
 
 export interface SideBarItemProps {
@@ -280,12 +282,12 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
       {
         id: uuid(),
         label: 'Schedule',
-        icon: <Calendar />,
+        icon: <Clock />,
       },
       {
         id: uuid(),
         label: 'Posting',
-        icon: <MessageCircle />,
+        icon: <InstagramDuoToneBlue />,
       },
     ]
   },
