@@ -281,8 +281,8 @@
 
 import type React from "react"
 
-import { onCurrentUser } from "@/actions/user"
-import { redirect } from "next/navigation"
+import { onCurrentUser, onUserInfor } from "@/actions/user"
+import { useRouter } from "next/navigation"
 import { PostScheduler } from "../_components/newSchedule/post-scheduler"
 import { ScheduledPosts } from "../_components/newSchedule/scheduled-post"
 import { CalendarDays, Clock, Sparkles, TrendingUp, Instagram, type LucideIcon } from "lucide-react"
@@ -292,7 +292,9 @@ import { Button } from "@/components/ui/button"
 
 interface User {
   id: string
-  // Add other user properties as needed
+  firstname: string
+  lastname: string
+  email: string
 }
 
 export default function SchedulePage() {
@@ -300,15 +302,18 @@ export default function SchedulePage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<"scheduler" | "posts">("scheduler")
+  const router = useRouter()
 
   useEffect(() => {
     async function fetchUser() {
       try {
-        const userData = await onCurrentUser()
-        if (!userData) {
-          throw new Error("User not found")
+        await onCurrentUser() // This will redirect if no user is found
+        const userInfo = await onUserInfor()
+        if (userInfo.status === 200 && userInfo.data) {
+          setUser(userInfo.data as User)
+        } else {
+          throw new Error("Failed to fetch user info")
         }
-        setUser(userData as User)
       } catch (err) {
         setError("Failed to load user data. Please try again.")
         console.error("Error fetching user:", err)
@@ -328,7 +333,8 @@ export default function SchedulePage() {
   }
 
   if (!user) {
-    redirect("/sign-in")
+    router.push("/sign-in")
+    return null
   }
 
   return (
@@ -358,8 +364,8 @@ export default function SchedulePage() {
                   Instagram Scheduler
                 </h1>
                 <p className="mt-2 text-sm sm:text-base text-muted-foreground max-w-2xl">
-                  Plan and schedule your Instagram content with ease. Create engaging posts, schedule them for the
-                  perfect time, and manage your content calendar all in one place.
+                  Welcome, {user.firstname}! Plan and schedule your Instagram content with ease. Create engaging posts,
+                  schedule them for the perfect time, and manage your content calendar all in one place.
                 </p>
               </motion.div>
               <motion.div
