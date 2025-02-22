@@ -506,14 +506,14 @@ export default function Hero() {
                             </Avatar>
                             <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 max-w-[80%] shadow-sm">
                               <p className="text-lg text-gray-900 dark:text-gray-100">
-                                Hi! I'm your AI assistant. I can help automate your Instagram DMs and boost engagement.
+                                Hi! I am your AI assistant. I can help automate your Instagram DMs and boost engagement.
                                 What would you like to know? 👋
                               </p>
                             </div>
                           </div>
                           <div className="flex gap-3 justify-end">
                             <div className="bg-purple-500 text-white rounded-2xl p-4 max-w-[80%] shadow-sm">
-                              <p className="text-lg">I'm interested in automating my Instagram DMs for my business.</p>
+                              <p className="text-lg">I am interested in automating my Instagram DMs for my business.</p>
                             </div>
                           </div>
                           <div className="flex gap-3">
