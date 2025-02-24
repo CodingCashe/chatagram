@@ -90,185 +90,128 @@
 //   }
 // }
 
-// import { NextResponse } from "next/server"
-
-// const MAX_RETRIES = 3
-// const RETRY_DELAY = 2000 // 2 seconds
-
-// async function delay(ms: number) {
-//   return new Promise((resolve) => setTimeout(resolve, ms))
-// }
-
-// async function retryFetch(url: string, options: RequestInit, retries = MAX_RETRIES): Promise<Response> {
-//   try {
-//     const response = await fetch(url, options)
-//     if (!response.ok) {
-//       const errorData = await response.json()
-//       throw new Error(errorData.error || `Request failed with status ${response.status}`)
-//     }
-//     return response
-//   } catch (error) {
-//     if (retries > 0) {
-//       console.log(`Retrying... ${MAX_RETRIES - retries + 1}/${MAX_RETRIES}`)
-//       await delay(RETRY_DELAY)
-//       return retryFetch(url, options, retries - 1)
-//     }
-//     throw error
-//   }
-// }
-
-// async function generateCaption(prompt: string): Promise<string> {
-//   const systemPrompt = `You are an Instagram caption writer. Create a short, engaging caption (max 150 characters) for an image of: ${prompt}
-//   Include relevant hashtags. Focus on describing the scene and creating engagement.
-//   Format: [Main caption text] [Hashtags]
-//   Example: "Chasing sunsets and dreams in paradise 🌅✨ #NatureLover #SunsetVibes #WanderlustLife"`
-
-//   const response = await retryFetch("https://api-inference.huggingface.co/models/meta-llama/Llama-2-70b-chat-hf", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
-//     },
-//     body: JSON.stringify({
-//       inputs: systemPrompt,
-//       parameters: {
-//         max_length: 150,
-//         temperature: 0.7,
-//         top_p: 0.9,
-//       },
-//     }),
-//   })
-
-//   const data = await response.json()
-//   return data[0]?.generated_text || "Capturing moments that matter ✨ #Photography"
-// }
-
-// export async function POST(req: Request) {
-//   try {
-//     const { prompt } = await req.json()
-
-//     // Remove style flag from prompt for caption generation
-//     const cleanPrompt = prompt.replace(/--style \w+/, "").trim()
-
-//     // Start both operations concurrently
-//     const [imageResponse, caption] = await Promise.all([
-//       retryFetch("https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${process.env.STABILITY_API_KEY}`,
-//         },
-//         body: JSON.stringify({
-//           text_prompts: [
-//             {
-//               text: prompt,
-//               weight: 1,
-//             },
-//           ],
-//           cfg_scale: 7,
-//           height: 1024,
-//           width: 1024,
-//           steps: 30,
-//           samples: 1,
-//         }),
-//       }).then(async (res) => {
-//         const data = await res.json()
-//         if (!data.artifacts?.[0]?.base64) {
-//           throw new Error("No image generated")
-//         }
-//         return data
-//       }),
-//       generateCaption(cleanPrompt),
-//     ])
-
-//     const base64Image = imageResponse.artifacts[0].base64
-//     const imageUrl = `data:image/png;base64,${base64Image}`
-
-//     return NextResponse.json({
-//       imageUrl,
-//       caption,
-//     })
-//   } catch (error) {
-//     console.error("Error generating content:", error)
-//     return NextResponse.json({ error: "Failed to generate content. Please try again." }, { status: 500 })
-//   }
-// }
-
 import { NextResponse } from "next/server"
 
-const MAX_RETRIES = 3
-const RETRY_DELAY = 2000 // 2 seconds
+const MAX_RETRIES = 5 // Increased from 3
+const INITIAL_RETRY_DELAY = 1000 // 1 second
 
 async function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-async function retryFetch(url: string, options: RequestInit, retries = MAX_RETRIES): Promise<Response> {
+async function retryFetch(url: string, options: RequestInit, retries = MAX_RETRIES, attempt = 1): Promise<Response> {
   try {
     const response = await fetch(url, options)
+
+    // Handle rate limiting specifically
+    if (response.status === 429) {
+      // Get retry-after header or use exponential backoff
+      const retryAfter = response.headers.get("retry-after")
+      const waitTime = retryAfter ? Number.parseInt(retryAfter) * 1000 : INITIAL_RETRY_DELAY * Math.pow(2, attempt - 1)
+
+      if (retries > 0) {
+        console.log(`Rate limited. Waiting ${waitTime}ms before retry ${attempt}/${MAX_RETRIES}`)
+        await delay(waitTime)
+        return retryFetch(url, options, retries - 1, attempt + 1)
+      }
+    }
+
     if (!response.ok) {
-      const errorData = await response.json()
+      const errorData = await response.json().catch(() => ({}))
       throw new Error(errorData.error || `Request failed with status ${response.status}`)
     }
+
     return response
   } catch (error) {
     if (retries > 0) {
-      console.log(`Retrying... ${MAX_RETRIES - retries + 1}/${MAX_RETRIES}`)
-      await delay(RETRY_DELAY)
-      return retryFetch(url, options, retries - 1)
+      // Use exponential backoff for other errors too
+      const waitTime = INITIAL_RETRY_DELAY * Math.pow(2, attempt - 1)
+      console.log(`Error occurred. Waiting ${waitTime}ms before retry ${attempt}/${MAX_RETRIES}`)
+      await delay(waitTime)
+      return retryFetch(url, options, retries - 1, attempt + 1)
     }
     throw error
   }
 }
 
-async function generateCaption(prompt: string): Promise<string> {
-  // Using GPT-2 model which is free to use
-  const response = await retryFetch("https://api-inference.huggingface.co/models/gpt2", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
-    },
-    body: JSON.stringify({
-      inputs: `Create an Instagram caption for: ${prompt}\nMake it engaging and include relevant hashtags.\nKeep it under 150 characters.\n\nCaption:`,
-      parameters: {
-        max_length: 150,
-        temperature: 0.7,
-        top_p: 0.9,
-        return_full_text: false,
-      },
-    }),
-  })
+// Create a queue for API requests
+class RequestQueue {
+  private queue: Array<() => Promise<any>> = []
+  private processing = false
 
-  const data = await response.json()
-
-  // Clean up the generated caption
-  let caption = data[0]?.generated_text || ""
-
-  // If no hashtags are present, add some generic ones based on the prompt
-  if (!caption.includes("#")) {
-    const promptWords = prompt.toLowerCase().split(" ")
-    const hashtags = promptWords
-      .filter((word) => word.length > 2)
-      .map((word) => `#${word.replace(/[^a-z0-9]/g, "")}`)
-      .slice(0, 3)
-      .join(" ")
-    caption = `${caption.trim()} ${hashtags} #photography #instagood`
+  async add<T>(request: () => Promise<T>): Promise<T> {
+    return new Promise((resolve, reject) => {
+      this.queue.push(async () => {
+        try {
+          const result = await request()
+          resolve(result)
+        } catch (error) {
+          reject(error)
+        }
+      })
+      this.process()
+    })
   }
 
-  return caption
+  private async process() {
+    if (this.processing || this.queue.length === 0) return
+    this.processing = true
+
+    while (this.queue.length > 0) {
+      const request = this.queue.shift()!
+      await request()
+      // Add a small delay between requests
+      await delay(500)
+    }
+
+    this.processing = false
+  }
 }
 
-export async function POST(req: Request) {
-  try {
-    const { prompt } = await req.json()
+const requestQueue = new RequestQueue()
 
-    // Remove style flag from prompt for caption generation
-    const cleanPrompt = prompt.replace(/--style \w+/, "").trim()
+async function generateCaption(prompt: string): Promise<string> {
+  return requestQueue.add(async () => {
+    const response = await retryFetch("https://api-inference.huggingface.co/models/gpt2", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
+      },
+      body: JSON.stringify({
+        inputs: `Create an Instagram caption for: ${prompt}\nMake it engaging and include relevant hashtags.\nKeep it under 150 characters.\n\nCaption:`,
+        parameters: {
+          max_length: 150,
+          temperature: 0.7,
+          top_p: 0.9,
+          return_full_text: false,
+        },
+      }),
+    })
 
-    // Start both operations concurrently
-    const [imageResponse, caption] = await Promise.all([
-      retryFetch("https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image", {
+    const data = await response.json()
+
+    let caption = data[0]?.generated_text || ""
+
+    if (!caption.includes("#")) {
+      const promptWords = prompt.toLowerCase().split(" ")
+      const hashtags = promptWords
+        .filter((word) => word.length > 2)
+        .map((word) => `#${word.replace(/[^a-z0-9]/g, "")}`)
+        .slice(0, 3)
+        .join(" ")
+      caption = `${caption.trim()} ${hashtags} #photography #instagood`
+    }
+
+    return caption
+  })
+}
+
+async function generateImage(prompt: string): Promise<string> {
+  return requestQueue.add(async () => {
+    const response = await retryFetch(
+      "https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image",
+      {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -287,26 +230,41 @@ export async function POST(req: Request) {
           steps: 30,
           samples: 1,
         }),
-      }).then(async (res) => {
-        const data = await res.json()
-        if (!data.artifacts?.[0]?.base64) {
-          throw new Error("No image generated")
-        }
-        return data
-      }),
-      generateCaption(cleanPrompt),
-    ])
+      },
+    )
 
-    const base64Image = imageResponse.artifacts[0].base64
-    const imageUrl = `data:image/png;base64,${base64Image}`
+    const data = await response.json()
+    if (!data.artifacts?.[0]?.base64) {
+      throw new Error("No image generated")
+    }
 
-    return NextResponse.json({
-      imageUrl,
-      caption,
-    })
+    return `data:image/png;base64,${data.artifacts[0].base64}`
+  })
+}
+
+export async function POST(req: Request) {
+  try {
+    const { prompt } = await req.json()
+    const cleanPrompt = prompt.replace(/--style \w+/, "").trim()
+
+    // Process requests sequentially through the queue
+    const [imageUrl, caption] = await Promise.all([generateImage(prompt), generateCaption(cleanPrompt)])
+
+    return NextResponse.json({ imageUrl, caption })
   } catch (error) {
     console.error("Error generating content:", error)
-    return NextResponse.json({ error: "Failed to generate content. Please try again." }, { status: 500 })
+
+    // Provide more specific error messages
+    let errorMessage = "Failed to generate content. Please try again."
+    if (error instanceof Error) {
+      if (error.message.includes("429")) {
+        errorMessage = "Service is busy. Please wait a moment and try again."
+      } else if (error.message.includes("No image generated")) {
+        errorMessage = "Failed to generate image. Please try a different prompt."
+      }
+    }
+
+    return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }
 
