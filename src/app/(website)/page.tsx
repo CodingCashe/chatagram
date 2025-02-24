@@ -15,7 +15,7 @@ import FAQ from '@/components/global/homestuff/faq';
 import CTA from '@/components/global/homestuff/cta';
 import Footer from '@/components/global/homestuff/footer';
 import FloatingNotification from '@/components/global/homestuff/floating-notification';
-import InteractiveDemo from '@/components/global/homestuff/interactive-demo';
+// import InteractiveDemo from '@/components/global/homestuff/interactive-demo';
 import DynamicStats from '@/components/global/homestuff/dynamic-stats';
 import GlobalReach from '@/components/global/homestuff/global-reach';
 import ParticleBackground from '@/components/global/homestuff/particle-background';
@@ -151,10 +151,10 @@ export default function Home() {
       {/* Page Content */}
       <main>
         <Hero />
-        <section className="py-20 px-4 sm:px-6 lg:px-8">
+        {/* <section className="py-20 px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Experience Chatal in Action</h2>
           <InteractiveDemo />
-        </section>
+        </section> */}
         <Features />
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#2563EB]">
           <h2 className="text-3xl font-bold text-center text-white mb-12">Chatal Global Impact</h2>
