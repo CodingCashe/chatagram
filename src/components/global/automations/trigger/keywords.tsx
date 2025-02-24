@@ -102,7 +102,7 @@ export const Keywords = ({ id }: Props) => {
         )}
 
         <Input
-          placeholder="Add keyword..."
+          placeholder="Add a keyword..."
           style={{
             width: Math.min(Math.max(keyword.length || 10, 2), 50) + 'ch',
           }}

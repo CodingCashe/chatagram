@@ -142,7 +142,7 @@ const PostButton = ({ id }: Props) => {
           </Button>
         </div>
       ) : (
-        <p className="text-text-secondary text-center p-4 bg-background-90 rounded-xl">No posts found!</p>
+        <p className="text-text-secondary text-center p-4 bg-background-90 rounded-xl">We do not see any posts!</p>
       )}
     </TriggerButton>
   )

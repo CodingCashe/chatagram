@@ -52,7 +52,7 @@ const Trigger = ({ id }: Props) => {
     )
   }
   return (
-    <TriggerButton label="Add Trigger">
+    <TriggerButton label="Add a Trigger">
       <div className="flex flex-col gap-y-2">
         {AUTOMATION_TRIGGERS.map((trigger) => (
           <div
@@ -78,7 +78,7 @@ const Trigger = ({ id }: Props) => {
           disabled={types?.length === 0}
           className="bg-gradient-to-br from-[#3352CC] font-medium text-white to-[#1C2D70]"
         >
-          <Loader state={isPending}>Create Trigger</Loader>
+          <Loader state={isPending}>Create a Trigger</Loader>
         </Button>
       </div>
     </TriggerButton>

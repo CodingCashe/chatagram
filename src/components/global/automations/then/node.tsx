@@ -38,8 +38,8 @@ const ThenNode = ({ id }: Props) => {
           )}
           <p className=" text-lg">
             {data.data.listener.listener === 'MESSAGE'
-              ? 'Send the user a message.'
-              : 'Let Smart AI take over'}
+              ? 'Manually send the client a message.'
+              : 'Use dynamic intelligent replies'}
           </p>
         </div>
         <p className="flont-light text-text-secondary">

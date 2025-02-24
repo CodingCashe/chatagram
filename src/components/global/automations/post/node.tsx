@@ -94,12 +94,12 @@ const PostNode = ({ id }: Props) => {
         </div>
         <div className="flex gap-x-2 items-center bg-background-80 p-3 rounded-xl shadow-inner">
           <Warning />
-          <span className="text-lg font-semibold">If they comment on...</span>
+          <span className="text-lg font-semibold">If they write comments on...</span>
         </div>
         <div className="bg-background-80 p-4 rounded-xl flex flex-col gap-y-3 shadow-lg">
           <div className="flex gap-x-3 items-center">
             <InstagramBlue />
-            <p className="text-xl font-semibold">These posts</p>
+            <p className="text-xl font-semibold">These Posts</p>
           </div>
           <div className="grid grid-cols-3 gap-3 mt-3">
             {data.data.posts.map((post) => (
