@@ -104,7 +104,7 @@ export async function publishPost(postId: string) {
     }
 
     // Call the Instagram API endpoint
-    const response = await fetch(`${process.env.VERCEL_URL}/api/post-to-instagram`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/post-to-instagram`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
