@@ -217,7 +217,6 @@
 // }
 
 
-
 import { NextResponse } from "next/server"
 import { client } from "@/lib/prisma"
 import axios from "axios"
@@ -273,16 +272,17 @@ async function createMediaContainer(
   try {
     const params: any = {
       [mediaType === "VIDEO" || mediaType === "REELS" ? "video_url" : "image_url"]: mediaUrl,
-      media_type: mediaType === "REELS" ? "REELS" : mediaType,
-      ...(isCarouselItem && { is_carousel_item: "true" }),
+      media_type: mediaType === "REELS" ? "REELS" : isCarouselItem ? "IMAGE" : mediaType,
+      ...(isCarouselItem && { is_carousel_item: true }),
     }
 
     if (caption && !isCarouselItem) {
       params.caption = caption
     }
 
-    const response = await axios.post(`https://graph.instagram.com/v22.0/${instagramId}/media`, null, {
-      params: { ...params, access_token: token },
+    const response = await axios.post(`https://graph.instagram.com/v22.0/${instagramId}/media`, params, {
+      params: { access_token: token },
+      headers: { "Content-Type": "application/json" },
     })
     return response.data.id
   } catch (error) {
@@ -389,7 +389,7 @@ export async function POST(request: Request) {
           instagramIntegration.instagramId,
           refreshedToken,
           mediaUrl,
-          mediaType,
+          "IMAGE", // Always use "IMAGE" for carousel items
           true,
         )
         containerIds.push(containerId)
