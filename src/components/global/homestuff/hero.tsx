@@ -1078,7 +1078,7 @@ export default function Hero() {
       <div className="absolute top-0 -right-4 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
       <div className="absolute -bottom-8 left-20 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
 
-      <div className="container relative px-4 py-24 mx-auto sm:px-6 lg:px-8">
+      <div className="container relative px-4 py-10 mx-auto sm:px-6 lg:px-8">
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-8 items-center">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-md mb-8">
