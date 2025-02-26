@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   MessageSquare,
   Plus,
@@ -21,8 +21,54 @@ import {
   AlertTriangle,
   Check,
   Info,
+  ChevronRight,
 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
+// Industry templates moved to a separate constant
+const industryTemplates = {
+  ecommerce: [
+    {
+      title: "Welcome Message",
+      content: "👋 Welcome to our store! How can I assist you with your shopping today?",
+      tags: ["greeting", "shopping"],
+    },
+    {
+      title: "Product Inquiry",
+      content: "Would you like to browse our latest collection? I can help you find exactly what you're looking for.",
+      tags: ["products", "browsing"],
+    },
+    {
+      title: "Order Status",
+      content: "I can help you track your order. Could you please provide your order number?",
+      tags: ["orders", "support"],
+    },
+  ],
+  services: [
+    {
+      title: "Service Introduction",
+      content: "Welcome! I'd be happy to tell you more about our services. What are you interested in?",
+      tags: ["introduction", "services"],
+    },
+    {
+      title: "Consultation Booking",
+      content: "Would you like to schedule a consultation? I can show you our available time slots.",
+      tags: ["booking", "consultation"],
+    },
+  ],
+  creator: [
+    {
+      title: "Collaboration Inquiry",
+      content: "Thanks for reaching out! I'd love to discuss potential collaboration opportunities.",
+      tags: ["collaboration", "partnership"],
+    },
+    {
+      title: "Content Request",
+      content: "I can help you with content-related inquiries. What type of content are you interested in?",
+      tags: ["content", "inquiry"],
+    },
+  ],
+}
 
 type FlowStep = {
   id: string
@@ -41,37 +87,17 @@ type FlowStep = {
   sentiment?: "positive" | "neutral" | "negative"
 }
 
-const industryTemplates = {
-  ecommerce: [
-    "Welcome! 👋 How can I help you with your shopping today?",
-    "Would you like to browse our latest collection?",
-    "Here's your order status: [Order Details]",
-  ],
-  services: [
-    "Thanks for reaching out! What service are you interested in?",
-    "Would you like to schedule a consultation?",
-    "Here are our available time slots: [Calendar]",
-  ],
-  creator: [
-    "Thanks for connecting! Are you interested in collaborations?",
-    "Would you like to see my media kit?",
-    "Let's discuss your project requirements",
-  ],
-}
-
 export function CustomerFlowBuilder() {
   const [steps, setSteps] = useState<FlowStep[]>([])
   const [isRecording, setIsRecording] = useState(false)
   const [currentTemplate, setCurrentTemplate] = useState("ecommerce")
+  const [selectedTab, setSelectedTab] = useState("builder")
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const [aiThinking, setAiThinking] = useState(false)
 
-  // Simulated AI suggestions based on current flow
   const generateAISuggestions = async (currentMessage: string) => {
     setAiThinking(true)
-    // Simulate API call delay
     await new Promise((resolve) => setTimeout(resolve, 1500))
-
     const suggestions = [
       "Consider adding a personalized greeting with their name",
       "You might want to add a follow-up question here",
@@ -82,7 +108,6 @@ export function CustomerFlowBuilder() {
     return suggestions
   }
 
-  // Voice recording functionality
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
@@ -96,8 +121,6 @@ export function CustomerFlowBuilder() {
 
       mediaRecorder.onstop = async () => {
         const audioBlob = new Blob(audioChunks)
-        // Here you would normally send this to a speech-to-text API
-        // Simulating response for demo
         addStep("message", "Voice transcription: Hello, how can I help you today?")
       }
 
@@ -138,7 +161,6 @@ export function CustomerFlowBuilder() {
     const newSteps = steps.map((step) => {
       if (step.id === id) {
         const updatedStep = { ...step, ...updates }
-        // Generate AI suggestions when message changes
         if (updates.message && updates.message !== step.message) {
           generateAISuggestions(updates.message).then((suggestions) => {
             updatedStep.aiSuggestions = suggestions
@@ -159,28 +181,50 @@ export function CustomerFlowBuilder() {
         <p className="text-gray-400">Build and visualize your automated conversation flow</p>
       </div>
 
-      <Tabs defaultValue="builder" className="w-full">
-        <TabsList className="bg-gray-800/50 border border-gray-700">
-          <TabsTrigger value="builder" className="data-[state=active]:bg-gray-700">
-            Builder
-          </TabsTrigger>
-          <TabsTrigger value="templates" className="data-[state=active]:bg-gray-700">
-            Templates
-          </TabsTrigger>
-          <TabsTrigger value="visualization" className="data-[state=active]:bg-gray-700">
-            Visualization
-          </TabsTrigger>
-        </TabsList>
+      <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
+        <div className="space-y-6">
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="outline"
+              onClick={() => addStep("message")}
+              className="border-gray-700 text-gray-400 hover:text-gray-100 hover:border-purple-500/50"
+            >
+              <MessageSquare className="w-4 h-4 mr-2" /> Add Message
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => addStep("choice")}
+              className="border-gray-700 text-gray-400 hover:text-gray-100 hover:border-purple-500/50"
+            >
+              <GitBranch className="w-4 h-4 mr-2" /> Add Choice
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => addStep("conditional")}
+              className="border-gray-700 text-gray-400 hover:text-gray-100 hover:border-purple-500/50"
+            >
+              <AlertCircle className="w-4 h-4 mr-2" /> Add Conditional
+            </Button>
+            <Button
+              variant="outline"
+              onClick={isRecording ? stopRecording : startRecording}
+              className={`border-gray-700 text-gray-400 hover:text-gray-100 ${
+                isRecording ? "border-red-500 text-red-500" : "hover:border-purple-500/50"
+              }`}
+            >
+              <Mic className={`w-4 h-4 mr-2 ${isRecording ? "animate-pulse" : ""}`} />
+              {isRecording ? "Stop Recording" : "Voice Input"}
+            </Button>
+          </div>
 
-        <TabsContent value="builder" className="mt-4">
-          <div className="grid gap-8 lg:grid-cols-[2fr,1fr]">
+          <ScrollArea className="h-[calc(100vh-300px)] pr-4">
             <div className="space-y-4">
               {steps.map((step, index) => (
                 <Card
                   key={step.id}
                   className="p-4 bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-gray-700 relative group hover:border-purple-500/50 transition-all duration-300"
                 >
-                  <div className="absolute left-0 top-0 bottom-0 w-8 cursor-move bg-gray-800/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute left-0 top-0 bottom-0 w-8 cursor-move bg-gray-800/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-l-lg">
                     <GripVertical className="w-4 h-4 text-gray-500" />
                   </div>
                   <div className="pl-8 space-y-4">
@@ -227,7 +271,7 @@ export function CustomerFlowBuilder() {
                       {step.type === "conditional" && step.conditions && (
                         <div className="space-y-2">
                           {step.conditions.map((condition, idx) => (
-                            <div key={idx} className="grid grid-cols-2 gap-2">
+                            <div key={idx} className="grid gap-2 sm:grid-cols-2">
                               <Input
                                 placeholder="If contains..."
                                 value={condition.if}
@@ -305,7 +349,7 @@ export function CustomerFlowBuilder() {
                         </div>
                       )}
 
-                      <div className="flex items-center gap-4">
+                      <div className="flex flex-wrap items-center gap-4">
                         <div className="flex items-center gap-2">
                           <Timer className="w-4 h-4 text-blue-400" />
                           <Input
@@ -360,97 +404,78 @@ export function CustomerFlowBuilder() {
                   </div>
                 </Card>
               ))}
+            </div>
+          </ScrollArea>
+        </div>
 
-              <div className="flex items-center justify-center gap-4 pt-4">
-                <Button
-                  variant="outline"
-                  onClick={() => addStep("message")}
-                  className="border-gray-700 text-gray-400 hover:text-gray-100 hover:border-purple-500/50"
-                >
-                  <MessageSquare className="w-4 h-4 mr-2" /> Add Message
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => addStep("choice")}
-                  className="border-gray-700 text-gray-400 hover:text-gray-100 hover:border-purple-500/50"
-                >
-                  <GitBranch className="w-4 h-4 mr-2" /> Add Choice
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => addStep("conditional")}
-                  className="border-gray-700 text-gray-400 hover:text-gray-100 hover:border-purple-500/50"
-                >
-                  <AlertCircle className="w-4 h-4 mr-2" /> Add Conditional
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={isRecording ? stopRecording : startRecording}
-                  className={`border-gray-700 text-gray-400 hover:text-gray-100 ${
-                    isRecording ? "border-red-500 text-red-500" : "hover:border-purple-500/50"
-                  }`}
-                >
-                  <Mic className={`w-4 h-4 mr-2 ${isRecording ? "animate-pulse" : ""}`} />
-                  {isRecording ? "Stop Recording" : "Voice Input"}
-                </Button>
+        <div className="space-y-6">
+          <Card className="p-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-gray-700">
+            <h3 className="text-lg font-medium mb-4 flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-purple-400" />
+              Quick Templates
+            </h3>
+            <ScrollArea className="h-[300px] pr-4">
+              <div className="space-y-3">
+                {industryTemplates[currentTemplate as keyof typeof industryTemplates].map((template, index) => (
+                  <Card
+                    key={index}
+                    className="p-4 bg-gray-800/30 border-gray-700 hover:border-purple-500/50 transition-all duration-200 cursor-pointer group"
+                    onClick={() => addStep("message", template.content)}
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-medium text-gray-100">{template.title}</h4>
+                        <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-purple-400 transition-colors" />
+                      </div>
+                      <p className="text-sm text-gray-400 line-clamp-2">{template.content}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {template.tags.map((tag, tagIndex) => (
+                          <Badge
+                            key={tagIndex}
+                            variant="secondary"
+                            className="bg-gray-700/50 text-gray-300 border-gray-600"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </Card>
+                ))}
               </div>
-            </div>
+            </ScrollArea>
+          </Card>
 
+          <Card className="p-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-gray-700">
+            <h3 className="text-lg font-medium mb-4 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-orange-400" />
+              Flow Validation
+            </h3>
             <div className="space-y-4">
-              <Card className="p-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-gray-700">
-                <h3 className="text-lg font-medium mb-4 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-purple-400" />
-                  Quick Templates
-                </h3>
-                <div className="space-y-2">
-                  {industryTemplates[currentTemplate as keyof typeof industryTemplates].map((template, index) => (
-                    <Button
-                      key={index}
-                      variant="ghost"
-                      onClick={() => addStep("message", template)}
-                      className="w-full justify-start text-gray-400 hover:text-gray-100 hover:bg-gray-700/50"
-                    >
-                      <MessageSquare className="w-4 h-4 mr-2" />
-                      {template.length > 40 ? template.substring(0, 40) + "..." : template}
-                    </Button>
-                  ))}
+              {steps.length === 0 ? (
+                <div className="p-4 bg-gray-800/30 rounded-lg border border-gray-700">
+                  <p className="text-gray-400 text-sm">Add some steps to see validation results</p>
                 </div>
-              </Card>
-
-              <Card className="p-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-gray-700">
-                <h3 className="text-lg font-medium mb-4 flex items-center gap-2">
-                  <AlertTriangle className="w-4 h-4 text-orange-400" />
-                  Flow Validation
-                </h3>
-                <div className="space-y-2">
-                  {steps.length === 0 ? (
-                    <p className="text-gray-400 text-sm">Add some steps to see validation results</p>
-                  ) : (
-                    <>
-                      <div className="flex items-center gap-2 text-green-400 text-sm">
-                        <Check className="w-4 h-4" />
-                        Flow structure is valid
-                      </div>
-                      <div className="flex items-center gap-2 text-gray-400 text-sm">
-                        <Info className="w-4 h-4" />
-                        Average response time: {steps.reduce((acc, step) => acc + (step.timing?.delay || 0), 0)}s
-                      </div>
-                    </>
-                  )}
+              ) : (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-green-400 text-sm bg-green-500/10 p-3 rounded-lg">
+                    <Check className="w-4 h-4" />
+                    Flow structure is valid
+                  </div>
+                  <div className="flex items-center gap-2 text-blue-400 text-sm bg-blue-500/10 p-3 rounded-lg">
+                    <Info className="w-4 h-4" />
+                    {steps.length} steps in total
+                  </div>
+                  <div className="flex items-center gap-2 text-purple-400 text-sm bg-purple-500/10 p-3 rounded-lg">
+                    <Timer className="w-4 h-4" />
+                    Average response time: {steps.reduce((acc, step) => acc + (step.timing?.delay || 0), 0)}s
+                  </div>
                 </div>
-              </Card>
+              )}
             </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="templates" className="mt-4">
-          {/* Template content */}
-        </TabsContent>
-
-        <TabsContent value="visualization" className="mt-4">
-          {/* Flow visualization */}
-        </TabsContent>
-      </Tabs>
+          </Card>
+        </div>
+      </div>
     </section>
   )
 }
