@@ -281,13 +281,8 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
       },
       {
         id: uuid(),
-        label: 'Schedule',
-        icon: <Clock />,
-      },
-      {
-        id: uuid(),
         label: 'Posting',
-        icon: <Instagram />,
+        icon: <Clock />,
       },
     ]
   },
