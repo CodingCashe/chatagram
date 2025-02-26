@@ -17,7 +17,7 @@ const SchedulePost = (props: Props) => {
     const slug = slugMatch ? slugMatch[1] : ""
 
     // Redirect to the integrations page with the correct slug
-    router.push(`/dashboard/${slug}/schedule`)
+    router.push(`/dashboard/${slug}/post`)
   }
 
 
@@ -27,7 +27,7 @@ const SchedulePost = (props: Props) => {
       onClick={handleSchedule}
     >
       <CalendarPlus className="h-5 w-5" />
-      <p className="lg:inline hidden">Schedule a Post</p>
+      <p className="lg:inline md:hidden hidden">Schedule a Post</p>
     </Button>
   )
 }
