@@ -670,7 +670,7 @@ async function generateCaption(prompt: string): Promise<{ caption: string; model
     .filter((word) => word.length > 2)
     .map((word) => `#${word.replace(/[^a-z0-9]/g, "")}`)
     .slice(0, 3)
-    .join(" ")} #photography #instagood`
+    .join(" ")} #photography #CasheIsKing #instagood`
 
   return { caption: defaultCaption, modelUsed: "Fallback Template" }
 }
