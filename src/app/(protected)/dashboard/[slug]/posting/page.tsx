@@ -200,128 +200,7 @@
 //   )
 // }
 
-// import { onCurrentUser } from "@/actions/user"
-// import { redirect } from "next/navigation"
-// import { PostScheduler } from "../_components/newSchedule/post-scheduler"
-// import { ScheduledPosts } from "../_components/newSchedule/scheduled-post"
-// import { ContentSuggestions } from "../_components/newSchedule/content-suggestions"
-// import { CaptionGenerator } from "../_components/newSchedule/caption-generator"
-// import { HashtagAnalyzer } from "../_components/newSchedule/hashtag-analyzer"
-// import { PostTimeSuggester } from "../_components/newSchedule/post-time-suggester"
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-// import { CalendarDays, Clock, Sparkles, Hash, Zap, MessageSquareText } from "lucide-react"
-
-// export default async function SchedulePage() {
-//   const user = await onCurrentUser()
-
-//   if (!user) {
-//     redirect("/sign-in")
-//   }
-
-//   return (
-//     <div className="min-h-screen bg-gradient-to-b from-gray-950 to-gray-900">
-//       <div className="container mx-auto py-4 px-4 sm:py-8">
-//         <div className="space-y-8">
-//           {/* Header Section */}
-//           <div className="relative">
-//             <div className="relative overflow-hidden bg-gray-900/30 rounded-xl p-6 sm:p-8 border border-gray-800 backdrop-blur-sm">
-//               <div className="relative z-10">
-//                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-200 mb-3">Content Creation Studio</h1>
-//                 <p className="text-sm text-gray-400 max-w-2xl mb-4">
-//                   Your all-in-one Instagram content powerhouse. Create, schedule, and optimize your posts with
-//                   AI-powered tools designed to maximize engagement.
-//                 </p>
-//                 <div className="flex flex-wrap gap-4 text-xs sm:text-sm text-gray-400">
-//                   <div className="flex items-center gap-2 bg-gray-800/50 rounded-full px-3 py-1">
-//                     <CalendarDays className="w-4 h-4" />
-//                     <span>Smart Scheduling</span>
-//                   </div>
-//                   <div className="flex items-center gap-2 bg-gray-800/50 rounded-full px-3 py-1">
-//                     <Sparkles className="w-4 h-4" />
-//                     <span>AI Content Generation</span>
-//                   </div>
-//                   <div className="flex items-center gap-2 bg-gray-800/50 rounded-full px-3 py-1">
-//                     <Hash className="w-4 h-4" />
-//                     <span>Hashtag Analytics</span>
-//                   </div>
-//                 </div>
-//               </div>
-//               <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10" />
-//               <div className="absolute -top-24 -right-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl" />
-//               <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl" />
-//             </div>
-//           </div>
-
-//           {/* Tools Section */}
-//           <Tabs defaultValue="schedule" className="space-y-6">
-//             <TabsList className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 h-auto p-1 bg-gray-900/50 backdrop-blur-sm">
-//               <TabsTrigger value="schedule" className="data-[state=active]:bg-gray-800">
-//                 <CalendarDays className="w-4 h-4 mr-2" />
-//                 Schedule
-//               </TabsTrigger>
-//               <TabsTrigger value="content" className="data-[state=active]:bg-gray-800">
-//                 <Sparkles className="w-4 h-4 mr-2" />
-//                 Ideas
-//               </TabsTrigger>
-//               <TabsTrigger value="captions" className="data-[state=active]:bg-gray-800">
-//                 <MessageSquareText className="w-4 h-4 mr-2" />
-//                 Captions
-//               </TabsTrigger>
-//               <TabsTrigger value="hashtags" className="data-[state=active]:bg-gray-800">
-//                 <Hash className="w-4 h-4 mr-2" />
-//                 Hashtags
-//               </TabsTrigger>
-//               <TabsTrigger value="timing" className="data-[state=active]:bg-gray-800">
-//                 <Clock className="w-4 h-4 mr-2" />
-//                 Timing
-//               </TabsTrigger>
-//               <TabsTrigger value="insights" className="data-[state=active]:bg-gray-800">
-//                 <Zap className="w-4 h-4 mr-2" />
-//                 Insights
-//               </TabsTrigger>
-//             </TabsList>
-
-//             <TabsContent value="schedule" className="space-y-6 mt-6">
-//               <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
-//                 <PostScheduler userId={user.id} />
-//                 <div className="space-y-4">
-//                   <PostTimeSuggester />
-//                 </div>
-//               </div>
-//             </TabsContent>
-
-//             <TabsContent value="content" className="mt-6">
-//               <ContentSuggestions />
-//             </TabsContent>
-
-//             <TabsContent value="captions" className="mt-6">
-//               <CaptionGenerator />
-//             </TabsContent>
-
-//             <TabsContent value="hashtags" className="mt-6">
-//               <HashtagAnalyzer />
-//             </TabsContent>
-//           </Tabs>
-
-//           {/* Scheduled Posts Carousel */}
-//           <section className="w-full">
-//             <div className="space-y-4">
-//               <div className="relative">
-//                 <div className="relative bg-gray-900/30 rounded-lg p-4 border border-gray-800 backdrop-blur-sm">
-//                   <h2 className="text-xl font-semibold text-gray-200">Scheduled Posts</h2>
-//                   <p className="text-sm text-gray-400">Your upcoming content calendar</p>
-//                 </div>
-//               </div>
-//               <ScheduledPosts userId={user.id} />
-//             </div>
-//           </section>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
-
-"use client"
+import { onCurrentUser } from "@/actions/user"
 import { redirect } from "next/navigation"
 import { PostScheduler } from "../_components/newSchedule/post-scheduler"
 import { ScheduledPosts } from "../_components/newSchedule/scheduled-post"
@@ -330,51 +209,9 @@ import { CaptionGenerator } from "../_components/newSchedule/caption-generator"
 import { HashtagAnalyzer } from "../_components/newSchedule/hashtag-analyzer"
 import { PostTimeSuggester } from "../_components/newSchedule/post-time-suggester"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MobileTabs } from "@/components/ui/mobile-tabs"
-import { CalendarDays, Clock, Sparkles, Hash, Zap, MessageSquareText, Wand2 } from "lucide-react"
-import { useMediaQuery } from "@/hooks/use-media-queries"
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { onCurrentUser } from "@/actions/user"
-
-
-const tabs = [
-  {
-    value: "schedule",
-    label: "Schedule",
-    icon: <CalendarDays className="w-4 h-4" />,
-  },
-  {
-    value: "content",
-    label: "Ideas",
-    icon: <Sparkles className="w-4 h-4" />,
-  },
-  {
-    value: "captions",
-    label: "Captions",
-    icon: <MessageSquareText className="w-4 h-4" />,
-  },
-  {
-    value: "hashtags",
-    label: "Hashtags",
-    icon: <Hash className="w-4 h-4" />,
-  },
-  {
-    value: "timing",
-    label: "Timing",
-    icon: <Clock className="w-4 h-4" />,
-  },
-  {
-    value: "insights",
-    label: "Insights",
-    icon: <Zap className="w-4 h-4" />,
-  },
-]
+import { CalendarDays, Clock, Sparkles, Hash, Zap, MessageSquareText } from "lucide-react"
 
 export default async function SchedulePage() {
-  const [activeTab, setActiveTab] = useState("schedule")
-  const isMobile = useMediaQuery("(max-width: 768px)")
-
   const user = await onCurrentUser()
 
   if (!user) {
@@ -383,150 +220,99 @@ export default async function SchedulePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 to-gray-900">
-      {/* Floating Elements */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-500" />
-      </div>
-
-      <div className="container mx-auto py-4 px-4 sm:py-8 relative">
+      <div className="container mx-auto py-4 px-4 sm:py-8">
         <div className="space-y-8">
           {/* Header Section */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <div className="relative">
             <div className="relative overflow-hidden bg-gray-900/30 rounded-xl p-6 sm:p-8 border border-gray-800 backdrop-blur-sm">
               <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-blue-500">
-                    <Wand2 className="h-6 w-6 text-white" />
-                  </div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
-                    Content Creation Studio
-                  </h1>
-                </div>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-200 mb-3">Content Creation Studio</h1>
                 <p className="text-sm text-gray-400 max-w-2xl mb-4">
                   Your all-in-one Instagram content powerhouse. Create, schedule, and optimize your posts with
                   AI-powered tools designed to maximize engagement.
                 </p>
                 <div className="flex flex-wrap gap-4 text-xs sm:text-sm text-gray-400">
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 bg-gray-800/50 rounded-full px-3 py-1 border border-gray-700/50 hover:border-purple-500/50 transition-colors"
-                  >
+                  <div className="flex items-center gap-2 bg-gray-800/50 rounded-full px-3 py-1">
                     <CalendarDays className="w-4 h-4" />
                     <span>Smart Scheduling</span>
-                  </motion.div>
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 bg-gray-800/50 rounded-full px-3 py-1 border border-gray-700/50 hover:border-blue-500/50 transition-colors"
-                  >
+                  </div>
+                  <div className="flex items-center gap-2 bg-gray-800/50 rounded-full px-3 py-1">
                     <Sparkles className="w-4 h-4" />
                     <span>AI Content Generation</span>
-                  </motion.div>
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 bg-gray-800/50 rounded-full px-3 py-1 border border-gray-700/50 hover:border-pink-500/50 transition-colors"
-                  >
+                  </div>
+                  <div className="flex items-center gap-2 bg-gray-800/50 rounded-full px-3 py-1">
                     <Hash className="w-4 h-4" />
                     <span>Hashtag Analytics</span>
-                  </motion.div>
+                  </div>
                 </div>
               </div>
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10" />
-              <div className="absolute -top-24 -right-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
-              <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-700" />
+              <div className="absolute -top-24 -right-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl" />
+              <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl" />
             </div>
-          </motion.div>
+          </div>
 
           {/* Tools Section */}
-          <div className="space-y-6">
-            {isMobile ? (
-              <MobileTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-            ) : (
-              <Tabs defaultValue="schedule" className="space-y-6">
-                <TabsList className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 h-auto p-1 bg-gray-900/50 backdrop-blur-sm">
-                  {tabs.map((tab) => (
-                    <TabsTrigger
-                      key={tab.value}
-                      value={tab.value}
-                      className="data-[state=active]:bg-gray-800 data-[state=active]:text-purple-400"
-                    >
-                      {tab.icon}
-                      <span className="ml-2">{tab.label}</span>
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
+          <Tabs defaultValue="schedule" className="space-y-6">
+            <TabsList className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 h-auto p-1 bg-gray-900/50 backdrop-blur-sm">
+              <TabsTrigger value="schedule" className="data-[state=active]:bg-gray-800">
+                <CalendarDays className="w-4 h-4 mr-2" />
+                Schedule
+              </TabsTrigger>
+              <TabsTrigger value="content" className="data-[state=active]:bg-gray-800">
+                <Sparkles className="w-4 h-4 mr-2" />
+                Ideas
+              </TabsTrigger>
+              <TabsTrigger value="captions" className="data-[state=active]:bg-gray-800">
+                <MessageSquareText className="w-4 h-4 mr-2" />
+                Captions
+              </TabsTrigger>
+              <TabsTrigger value="hashtags" className="data-[state=active]:bg-gray-800">
+                <Hash className="w-4 h-4 mr-2" />
+                Hashtags
+              </TabsTrigger>
+              <TabsTrigger value="timing" className="data-[state=active]:bg-gray-800">
+                <Clock className="w-4 h-4 mr-2" />
+                Timing
+              </TabsTrigger>
+              <TabsTrigger value="insights" className="data-[state=active]:bg-gray-800">
+                <Zap className="w-4 h-4 mr-2" />
+                Insights
+              </TabsTrigger>
+            </TabsList>
 
-                <TabsContent value="schedule" className="space-y-6 mt-6">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="grid gap-6 lg:grid-cols-[2fr,1fr]"
-                  >
-                    {user && <PostScheduler userId={user.id} />}
-                    <div className="space-y-4">
-                      <PostTimeSuggester />
-                    </div>
-                  </motion.div>
-                </TabsContent>
+            <TabsContent value="schedule" className="space-y-6 mt-6">
+              <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
+                <PostScheduler userId={user.id} />
+                <div className="space-y-4">
+                  <PostTimeSuggester />
+                </div>
+              </div>
+            </TabsContent>
 
-                <TabsContent value="content" className="mt-6">
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                    <ContentSuggestions />
-                  </motion.div>
-                </TabsContent>
+            <TabsContent value="content" className="mt-6">
+              <ContentSuggestions />
+            </TabsContent>
 
-                <TabsContent value="captions" className="mt-6">
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                    <CaptionGenerator />
-                  </motion.div>
-                </TabsContent>
+            <TabsContent value="captions" className="mt-6">
+              <CaptionGenerator />
+            </TabsContent>
 
-                <TabsContent value="hashtags" className="mt-6">
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                    <HashtagAnalyzer />
-                  </motion.div>
-                </TabsContent>
-              </Tabs>
-            )}
-
-            {/* Mobile Tab Contents */}
-            {isMobile && (
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-              >
-                {activeTab === "schedule" && (
-                  <div className="space-y-6">
-                    {user && <PostScheduler userId={user.id} />}
-                    <PostTimeSuggester />
-                  </div>
-                )}
-                {activeTab === "content" && <ContentSuggestions />}
-                {activeTab === "captions" && <CaptionGenerator />}
-                {activeTab === "hashtags" && <HashtagAnalyzer />}
-              </motion.div>
-            )}
-          </div>
+            <TabsContent value="hashtags" className="mt-6">
+              <HashtagAnalyzer />
+            </TabsContent>
+          </Tabs>
 
           {/* Scheduled Posts Carousel */}
           <section className="w-full">
             <div className="space-y-4">
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative">
+              <div className="relative">
                 <div className="relative bg-gray-900/30 rounded-lg p-4 border border-gray-800 backdrop-blur-sm">
-                  <h2 className="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
-                    Scheduled Posts
-                  </h2>
+                  <h2 className="text-xl font-semibold text-gray-200">Scheduled Posts</h2>
                   <p className="text-sm text-gray-400">Your upcoming content calendar</p>
                 </div>
-              </motion.div>
-              {user && <ScheduledPosts userId={user.id} />}
+              </div>
+              <ScheduledPosts userId={user.id} />
             </div>
           </section>
         </div>
