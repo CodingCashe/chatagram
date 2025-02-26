@@ -220,7 +220,7 @@ import {
   SettingsDuoToneWhite,
   PencilDuoToneBlack,
 } from '@/icons'
-import { MessageCircle,Instagram,Clock, BarChart2, Users, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone } from 'lucide-react'
+import { MessageCircle,Instagram,Clock, BarChart2, Users, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone, TargetIcon } from 'lucide-react'
 import { v4 as uuid } from 'uuid'
 
 export interface SideBarItemProps {
@@ -257,6 +257,11 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
         id: uuid(),
         label: 'Audience',
         icon: <Users />,
+      },
+      {
+        id: uuid(),
+        label: 'Customize',
+        icon: <TargetIcon />,
       },
     ]
   },
