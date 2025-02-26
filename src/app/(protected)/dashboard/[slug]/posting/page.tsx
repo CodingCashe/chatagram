@@ -71,6 +71,72 @@
 //   )
 // }
 
+// import { onCurrentUser } from "@/actions/user"
+// import { redirect } from "next/navigation"
+// import { PostScheduler } from "../_components/newSchedule/post-scheduler"
+// import { ScheduledPosts } from "../_components/newSchedule/scheduled-post"
+// import { CalendarDays, Clock } from "lucide-react"
+
+// export default async function SchedulePage() {
+//   const user = await onCurrentUser()
+
+//   if (!user) {
+//     redirect("/sign-in")
+//   }
+
+//   return (
+//     <div className="min-h-screen bg-gray-950">
+//       <div className="container mx-auto py-4 px-4 sm:py-8">
+//         <div className="space-y-6">
+//           {/* Header Section */}
+//           <div className="relative">
+//             <div className="relative bg-gray-900/50 rounded-lg p-4 sm:p-6 border border-gray-800">
+//               <h1 className="text-2xl sm:text-3xl font-bold text-gray-200">Instagram Scheduler</h1>
+//               <p className="mt-2 text-sm text-gray-400 max-w-2xl">
+//                 Plan and schedule your Instagram content with ease. Create engaging posts, schedule them for the perfect
+//                 time, and manage your content calendar all in one place.
+//               </p>
+//               <div className="mt-4 flex flex-wrap gap-3 text-xs sm:text-sm text-gray-400">
+//                 <div className="flex items-center gap-2">
+//                   <CalendarDays className="w-4 h-4" />
+//                   <span>Schedule for any time</span>
+//                 </div>
+//                 <div className="flex items-center gap-2">
+//                   <Clock className="w-4 h-4" />
+//                   <span>Automatic publishing</span>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Main Content Grid */}
+//           <div className="grid gap-6 lg:grid-cols-[1fr,400px]">
+//             {/* Scheduler Section */}
+//             <section className="order-2 lg:order-1">
+//               <div className="lg:sticky lg:top-8">
+//                 <PostScheduler userId={user.id} />
+//               </div>
+//             </section>
+
+//             {/* Posts List Section */}
+//             <section className="order-1 lg:order-2">
+//               <div className="space-y-4">
+//                 <div className="relative">
+//                   <div className="relative bg-gray-900/50 rounded-lg p-3 sm:p-4 border border-gray-800">
+//                     <h2 className="text-xl font-semibold text-gray-200">Scheduled Posts</h2>
+//                     <p className="text-sm text-gray-400">View and manage your content calendar</p>
+//                   </div>
+//                 </div>
+//                 <ScheduledPosts userId={user.id} />
+//               </div>
+//             </section>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }
+
 import { onCurrentUser } from "@/actions/user"
 import { redirect } from "next/navigation"
 import { PostScheduler } from "../_components/newSchedule/post-scheduler"
@@ -87,7 +153,7 @@ export default async function SchedulePage() {
   return (
     <div className="min-h-screen bg-gray-950">
       <div className="container mx-auto py-4 px-4 sm:py-8">
-        <div className="space-y-6">
+        <div className="space-y-8">
           {/* Header Section */}
           <div className="relative">
             <div className="relative bg-gray-900/50 rounded-lg p-4 sm:p-6 border border-gray-800">
@@ -109,28 +175,25 @@ export default async function SchedulePage() {
             </div>
           </div>
 
-          {/* Main Content Grid */}
-          <div className="grid gap-6 lg:grid-cols-[1fr,400px]">
-            {/* Scheduler Section */}
-            <section className="order-2 lg:order-1">
-              <div className="lg:sticky lg:top-8">
-                <PostScheduler userId={user.id} />
-              </div>
-            </section>
+          {/* Scheduler Section */}
+          <section className="max-w-3xl mx-auto w-full">
+            <PostScheduler userId={user.id} />
+          </section>
 
-            {/* Posts List Section */}
-            <section className="order-1 lg:order-2">
-              <div className="space-y-4">
-                <div className="relative">
-                  <div className="relative bg-gray-900/50 rounded-lg p-3 sm:p-4 border border-gray-800">
-                    <h2 className="text-xl font-semibold text-gray-200">Scheduled Posts</h2>
-                    <p className="text-sm text-gray-400">View and manage your content calendar</p>
-                  </div>
+          {/* Posts List Section */}
+          <section className="w-full">
+            <div className="space-y-4">
+              <div className="relative">
+                <div className="relative bg-gray-900/50 rounded-lg p-3 sm:p-4 border border-gray-800">
+                  <h2 className="text-xl font-semibold text-gray-200">Scheduled Posts</h2>
+                  <p className="text-sm text-gray-400">View and manage your content calendar</p>
                 </div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <ScheduledPosts userId={user.id} />
               </div>
-            </section>
-          </div>
+            </div>
+          </section>
         </div>
       </div>
     </div>
