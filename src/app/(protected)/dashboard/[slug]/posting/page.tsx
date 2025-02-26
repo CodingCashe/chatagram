@@ -332,7 +332,7 @@ import { PostTimeSuggester } from "../_components/newSchedule/post-time-suggeste
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { MobileTabs } from "@/components/ui/mobile-tabs"
 import { CalendarDays, Clock, Sparkles, Hash, Zap, MessageSquareText, Wand2 } from "lucide-react"
-import { useMediaQuery } from "@/hooks/use-media-query"
+import { useMediaQuery } from "@/hooks/use-media-queries"
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { onCurrentUser } from "@/actions/user"
