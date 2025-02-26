@@ -718,13 +718,13 @@ export function PostScheduler({ userId }: PostSchedulerProps) {
       formData.append("mediaType", mediaType)
       formData.append("scheduledDate", date.toISOString())
       formData.append("userId", userId)
-      // formData.append("media", fileInputRef.current.files[0])
-      const files = fileInputRef.current.files;
-      if (files) {
-        for (let i = 0; i < files.length; i++) {
-          formData.append("media[]", files[i]); // Append all files for carousel
-        }
-      }
+      formData.append("media", fileInputRef.current.files[0])
+      // const files = fileInputRef.current.files;
+      // if (files) {
+      //   for (let i = 0; i < files.length; i++) {
+      //     formData.append("media[]", files[i]); // Append all files for carousel
+      //   }
+      // }
 
       const response = await fetch("/api/schedule-post", {
         method: "POST",
