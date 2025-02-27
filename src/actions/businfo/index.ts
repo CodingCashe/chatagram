@@ -16,6 +16,7 @@ import {
   createBusiness,
   getBusinesses,
   findBusiness,
+  updateBusines,
   updateBusiness,
   deleteBusiness as deleteBusinessQuery
 } from './queries'
@@ -119,7 +120,7 @@ export const saveAutomationGoals = async (businessId: string, automationGoals: A
   await onCurrentUser()
   try {
     const update: Partial<FormSchema> = { automationGoals }
-    const result = await updateBusiness(businessId, update)
+    const result = await updateBusines(businessId, update)
     if (result) {
       return { status: 200, data: "Automation goals saved successfully" }
     }
@@ -133,7 +134,7 @@ export const saveCustomerJourney = async (businessId: string, customerJourney: C
   await onCurrentUser()
   try {
     const update: Partial<FormSchema> = { customerJourney }
-    const result = await updateBusiness(businessId, update)
+    const result = await updateBusines(businessId, update)
     if (result) {
       return { status: 200, data: "Customer journey saved successfully" }
     }
@@ -147,7 +148,7 @@ export const saveFeatureSelections = async (businessId: string, features: Featur
   await onCurrentUser()
   try {
     const update: Partial<FormSchema> = { features }
-    const result = await updateBusiness(businessId, update)
+    const result = await updateBusines(businessId, update)
     if (result) {
       return { status: 200, data: "Features saved successfully" }
     }
@@ -161,7 +162,7 @@ export const saveBusinessTypeData = async (businessId: string, businessTypeData:
   await onCurrentUser()
   try {
     const update: Partial<FormSchema> = { businessTypeData }
-    const result = await updateBusiness(businessId, update)
+    const result = await updateBusines(businessId, update)
     if (result) {
       return { status: 200, data: "Business type data saved successfully" }
     }
@@ -175,7 +176,7 @@ export const saveWebsiteAnalysis = async (businessId: string, websiteAnalysis: W
   await onCurrentUser()
   try {
     const update: Partial<FormSchema> = { websiteAnalysis }
-    const result = await updateBusiness(businessId, update)
+    const result = await updateBusines(businessId, update)
     if (result) {
       return { status: 200, data: "Website analysis saved successfully" }
     }
@@ -193,7 +194,7 @@ export const submitAutomationSetup = async (businessId: string, additionalNotes:
       automationSetupDate: new Date(),
       automationAdditionalNotes: additionalNotes,
     }
-    const result = await updateBusiness(businessId, update)
+    const result = await updateBusines(businessId, update)
     if (result) {
       return { status: 200, data: "Automation setup submitted successfully" }
     }
