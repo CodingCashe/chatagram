@@ -63,13 +63,13 @@ export default function SubmissionSummary() {
                     <span className="bg-purple-900/50 text-purple-400 rounded-full w-5 h-5 flex items-center justify-center text-xs mt-0.5">
                       1
                     </span>
-                    <span>Greeting: "👋 Hi there! Thanks for reaching out to us on Instagram!"</span>
+                    <span>Greeting: 👋 Hi there! Thanks for reaching out to us on Instagram!</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="bg-purple-900/50 text-purple-400 rounded-full w-5 h-5 flex items-center justify-center text-xs mt-0.5">
                       2
                     </span>
-                    <span>Ask Question: "What brings you to our page today?"</span>
+                    <span>Ask Question: What brings you to our page today? </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="bg-purple-900/50 text-purple-400 rounded-full w-5 h-5 flex items-center justify-center text-xs mt-0.5">

@@ -69,7 +69,7 @@ export default function WebsiteAnalyzer() {
           Website Analyzer
         </CardTitle>
         <CardDescription className="text-gray-400">
-          Enter your website URL and we'll extract key business details to help set up your automation
+          Enter your website URL and we will extract key business details to help set up your automation
         </CardDescription>
       </CardHeader>
       <CardContent>

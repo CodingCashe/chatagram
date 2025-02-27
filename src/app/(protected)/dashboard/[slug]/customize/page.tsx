@@ -21,7 +21,7 @@ export default function CustomAutomationRequestPage() {
           Custom Automation Request
         </h1>
         <p className="text-center text-gray-400 mb-12 max-w-2xl mx-auto">
-          Tell us about your business and automation needs, and we'll create a custom Instagram DM flow that converts
+          Tell us about your business and automation needs, and we will create a custom Instagram DM flow that converts
           visitors into customers.
         </p>
 
