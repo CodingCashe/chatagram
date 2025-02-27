@@ -36,7 +36,7 @@ export default async function CustomAutomationRequestPage() {
           <CustomerJourneyForm businessId={user.id} />
           <FeatureSelection businessId={user.id} />
           <PreviewFlow />
-          {/* <SubmissionSummary  /> */}
+          {/* <SubmissionSummary businessId={user.id} businessData={user.}  /> */}
         </div>
       </div>
     </div>
