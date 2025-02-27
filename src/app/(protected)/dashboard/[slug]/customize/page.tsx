@@ -1,84 +1,39 @@
-// import { BusinessUrlAnalyzer } from "@/components/global/customize/business-url-analyzer"
-// import { BusinessModelSelector } from "@/components/global/customize/business-model-selector"
-// import { CustomerFlowBuilder } from "@/components/global/customize/customer-flow-builder"
-// import { FeatureSelector } from "@/components/global/customize/feature-selector"
-// import { PreviewFlow } from "@/components/global/customize/preview-flow"
-// import { CompetitorAnalysis } from "@/components/global/customize/competitor-analysis"
-// import { ThemeCustomizer } from "@/components/global/customize/theme-customizer"
-// import { SuccessMetrics } from "@/components/global/customize/success-metrics"
+import type { Metadata } from "next"
+import BusinessInfoForm from "@/components/global/customize/business-info-form"
+import AutomationGoalsForm from "@/components/global/customize/automation-goals-form"
+import CustomerJourneyForm from "@/components/global/customize/customer-journey-form"
+import WebsiteAnalyzer from "@/components/global/customize/website-analyzer"
+import FeatureSelection from "@/components/global/customize/feature-selection"
+import PreviewFlow from "@/components/global/customize/preview-flow"
+import SubmissionSummary from "@/components/global/customize/submission-summary"
+import BusinessTypeSelector  from "@/components/global/customize/business-type-selector"
 
-// export default function AutomationPage() {
-//   return (
-//     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-gray-100">
-//       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-//         <div className="text-center">
-//           <h1 className="text-4xl font-bold tracking-tight sm:text-6xl bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
-//             Build Your Custom Instagram DM Automation
-//           </h1>
-//           <p className="mt-4 text-xl text-gray-400">
-//             Create a personalized automation flow that matches your business needs
-//           </p>
-//         </div>
+export const metadata: Metadata = {
+  title: "Custom Automation Request | Instagram DM Automation",
+  description: "Request a custom Instagram DM automation flow tailored to your business needs",
+}
 
-//         <div className="mt-16 space-y-16">
-//           <BusinessUrlAnalyzer />
-//           <CompetitorAnalysis />
-//           <BusinessModelSelector />
-//           <CustomerFlowBuilder />
-//           <FeatureSelector />
-//           <ThemeCustomizer />
-//           <SuccessMetrics />
-//           <PreviewFlow />
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
-
-import { Suspense } from "react"
-import { BusinessUrlAnalyzer } from "@/components/global/customize/business-url-analyzer"
-import { BusinessModelSelector } from "@/components/global/customize/business-model-selector"
-import { CustomerFlowBuilder } from "@/components/global/customize/customer-flow-builder"
-import { FeatureSelector } from "@/components/global/customize/feature-selector"
-import { PreviewFlow } from "@/components/global/customize/preview-flow"
-import { CompetitorAnalysis } from "@/components/global/customize/competitor-analysis"
-import { ThemeCustomizer } from "@/components/global/customize/theme-customizer"
-import { Templates } from "@/components/global/customize/templates"
-import { SuccessMetrics } from "@/components/global/customize/success-metrics"
-import { BusinessModelSkeleton, FeatureSkeleton, FlowBuilderSkeleton } from "@/components/global/customize/loading-skeleton"
-
-export default function AutomationPage() {
+export default function CustomAutomationRequestPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-gray-100">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
-            Build Your Custom Instagram DM Automation
-          </h1>
-          <p className="mt-4 text-lg sm:text-xl text-gray-400">
-            Create a personalized automation flow that matches your business needs
-          </p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100">
+      <div className="container mx-auto px-4 py-12">
+        <h1 className="text-4xl font-bold text-center mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+          Custom Automation Request
+        </h1>
+        <p className="text-center text-gray-400 mb-12 max-w-2xl mx-auto">
+          Tell us about your business and automation needs, and we'll create a custom Instagram DM flow that converts
+          visitors into customers.
+        </p>
 
-        <div className="mt-16 space-y-16">
-          <Suspense fallback={<BusinessModelSkeleton />}>
-            <BusinessModelSelector />
-          </Suspense>
-
-          <Suspense fallback={<FeatureSkeleton />}>
-            <FeatureSelector />
-          </Suspense>
-
-          <Suspense fallback={<FlowBuilderSkeleton />}>
-            <CustomerFlowBuilder />
-          </Suspense>
-
-          <Templates />
-          <BusinessUrlAnalyzer />
-          <CompetitorAnalysis />
-          <ThemeCustomizer />
-          <SuccessMetrics />
+        <div className="space-y-16">
+          <BusinessTypeSelector />
+          <WebsiteAnalyzer />
+          <BusinessInfoForm />
+          <AutomationGoalsForm />
+          <CustomerJourneyForm />
+          <FeatureSelection />
           <PreviewFlow />
+          <SubmissionSummary />
         </div>
       </div>
     </div>
