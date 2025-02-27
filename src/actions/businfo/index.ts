@@ -1,5 +1,15 @@
 'use server'
 
+
+import type {
+  AutomationGoalsData,
+  CustomerJourneyData,
+  FeatureSelectionData,
+  BusinessTypeData,
+  WebsiteAnalysisData,
+} from "@/types/business"
+
+
 import { onCurrentUser } from '../user'
 import {
   getBusinessesForWebhook,
@@ -9,7 +19,7 @@ import {
   updateBusiness,
   deleteBusiness as deleteBusinessQuery
 } from './queries'
-import { FormSchema } from '@/components/global/businessInfo/businessInfo'
+import { FormSchema } from '@/types/schema'
 
 export const createNewBusiness = async (businessData: FormSchema) => {
   const user = await onCurrentUser()
@@ -99,6 +109,97 @@ export const getBusinessForWebhook = async (businessId: string) => {
   } catch (error) {
     console.error('Error fetching business for webhook:', error)
     return { status: 500, data: { business: null } }
+  }
+}
+
+//added recently
+
+
+export const saveAutomationGoals = async (businessId: string, automationGoals: AutomationGoalsData) => {
+  await onCurrentUser()
+  try {
+    const update: Partial<FormSchema> = { automationGoals }
+    const result = await updateBusiness(businessId, update)
+    if (result) {
+      return { status: 200, data: "Automation goals saved successfully" }
+    }
+    return { status: 404, data: "Oops! could not find business" }
+  } catch (error) {
+    return { status: 500, data: "Oops! something went wrong" }
+  }
+}
+
+export const saveCustomerJourney = async (businessId: string, customerJourney: CustomerJourneyData) => {
+  await onCurrentUser()
+  try {
+    const update: Partial<FormSchema> = { customerJourney }
+    const result = await updateBusiness(businessId, update)
+    if (result) {
+      return { status: 200, data: "Customer journey saved successfully" }
+    }
+    return { status: 404, data: "Oops! could not find business" }
+  } catch (error) {
+    return { status: 500, data: "Oops! something went wrong" }
+  }
+}
+
+export const saveFeatureSelections = async (businessId: string, features: FeatureSelectionData) => {
+  await onCurrentUser()
+  try {
+    const update: Partial<FormSchema> = { features }
+    const result = await updateBusiness(businessId, update)
+    if (result) {
+      return { status: 200, data: "Features saved successfully" }
+    }
+    return { status: 404, data: "Oops! could not find business" }
+  } catch (error) {
+    return { status: 500, data: "Oops! something went wrong" }
+  }
+}
+
+export const saveBusinessTypeData = async (businessId: string, businessTypeData: BusinessTypeData) => {
+  await onCurrentUser()
+  try {
+    const update: Partial<FormSchema> = { businessTypeData }
+    const result = await updateBusiness(businessId, update)
+    if (result) {
+      return { status: 200, data: "Business type data saved successfully" }
+    }
+    return { status: 404, data: "Oops! could not find business" }
+  } catch (error) {
+    return { status: 500, data: "Oops! something went wrong" }
+  }
+}
+
+export const saveWebsiteAnalysis = async (businessId: string, websiteAnalysis: WebsiteAnalysisData) => {
+  await onCurrentUser()
+  try {
+    const update: Partial<FormSchema> = { websiteAnalysis }
+    const result = await updateBusiness(businessId, update)
+    if (result) {
+      return { status: 200, data: "Website analysis saved successfully" }
+    }
+    return { status: 404, data: "Oops! could not find business" }
+  } catch (error) {
+    return { status: 500, data: "Oops! something went wrong" }
+  }
+}
+
+export const submitAutomationSetup = async (businessId: string, additionalNotes: string) => {
+  await onCurrentUser()
+  try {
+    const update: Partial<FormSchema> = {
+      automationSetupComplete: true,
+      automationSetupDate: new Date(),
+      automationAdditionalNotes: additionalNotes,
+    }
+    const result = await updateBusiness(businessId, update)
+    if (result) {
+      return { status: 200, data: "Automation setup submitted successfully" }
+    }
+    return { status: 404, data: "Oops! could not find business" }
+  } catch (error) {
+    return { status: 500, data: "Oops! something went wrong" }
   }
 }
 

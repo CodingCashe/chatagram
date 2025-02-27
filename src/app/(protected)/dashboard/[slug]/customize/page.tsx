@@ -7,13 +7,16 @@ import FeatureSelection from "@/components/global/customize/feature-selection"
 import PreviewFlow from "@/components/global/customize/preview-flow"
 import SubmissionSummary from "@/components/global/customize/submission-summary"
 import BusinessTypeSelector  from "@/components/global/customize/business-type-selector"
+import { onCurrentUser } from "@/actions/user"
 
 export const metadata: Metadata = {
   title: "Custom Automation Request | Instagram DM Automation",
   description: "Request a custom Instagram DM automation flow tailored to your business needs",
 }
 
-export default function CustomAutomationRequestPage() {
+export default async function CustomAutomationRequestPage() {
+
+  const user = await onCurrentUser()
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100">
       <div className="container mx-auto px-4 py-12">
@@ -26,14 +29,14 @@ export default function CustomAutomationRequestPage() {
         </p>
 
         <div className="space-y-16">
-          <BusinessTypeSelector />
-          <WebsiteAnalyzer />
+          <BusinessTypeSelector businessId={user.id} />
+          <WebsiteAnalyzer businessId={user.id} />
           <BusinessInfoForm />
-          <AutomationGoalsForm />
-          <CustomerJourneyForm />
-          <FeatureSelection />
+          <AutomationGoalsForm businessId={user.id} />
+          <CustomerJourneyForm businessId={user.id} />
+          <FeatureSelection businessId={user.id} />
           <PreviewFlow />
-          <SubmissionSummary />
+          {/* <SubmissionSummary  /> */}
         </div>
       </div>
     </div>

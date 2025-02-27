@@ -2226,6 +2226,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
+import { saveBusinessTypeData } from "@/actions/businfo" 
+
 
 interface BusinessType {
   id: string
@@ -3554,10 +3556,65 @@ const businessTypes: BusinessType[] = [
   },
 ]
 
-const BusinessTypeSelector = () => {
+// const BusinessTypeSelector = ({ businessId }: { businessId: string }) => {
+  export default function BusinessTypeSelector({ businessId }: { businessId: string }) {
+
   const [selectedBusinessTypeId, setSelectedBusinessTypeId] = useState<string>("")
+  const [businessTypeData, setBusinessTypeData] = useState<any>({})
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveStatus, setSaveStatus] = useState<{ success: boolean; message: string } | null>(null)
 
   const selectedBusinessType = businessTypes.find((type) => type.id === selectedBusinessTypeId)
+
+  const handleDataChange = (data: any) => {
+    setBusinessTypeData({
+      ...businessTypeData,
+      ...data,
+    })
+  }
+
+  const handleSave = async () => {
+    if (!selectedBusinessTypeId) {
+      setSaveStatus({
+        success: false,
+        message: "Please select a business type",
+      })
+      return
+    }
+
+    setIsSaving(true)
+    setSaveStatus(null)
+
+    try {
+      const dataToSave = {
+        businessTypeId: selectedBusinessTypeId,
+        businessTypeName: selectedBusinessType?.name || "",
+        ...businessTypeData,
+      }
+
+      const result = await saveBusinessTypeData(businessId, dataToSave)
+
+      if (result.status === 200) {
+        setSaveStatus({
+          success: true,
+          message: "Business type data saved successfully",
+        })
+      } else {
+        setSaveStatus({
+          success: false,
+          message: result.data,
+        })
+      }
+    } catch (error) {
+      setSaveStatus({
+        success: false,
+        message: "An error occurred while saving",
+      })
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
 
   return (
     <div className="space-y-6">
@@ -3578,9 +3635,27 @@ const BusinessTypeSelector = () => {
         </SelectContent>
       </Select>
       {selectedBusinessType && selectedBusinessType.followUpComponent}
+
+      {saveStatus && (
+        <div
+          className={`p-3 rounded-md ${saveStatus.success ? "bg-green-900/20 text-green-400" : "bg-red-900/20 text-red-400"}`}
+        >
+          {saveStatus.message}
+        </div>
+      )}
+
+      <div className="flex justify-end">
+        <Button
+          onClick={handleSave}
+          disabled={isSaving || !selectedBusinessTypeId}
+          className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+        >
+          {isSaving ? "Saving..." : "Save Business Type Data"}
+        </Button>
+      </div>
     </div>
   )
 }
 
-export default BusinessTypeSelector
+
 
