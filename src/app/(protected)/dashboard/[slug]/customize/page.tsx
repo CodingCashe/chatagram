@@ -43,62 +43,26 @@
 //   )
 // }
 
-"use client"
-
-import { useState, useEffect } from "react"
-import { useToast } from "@/hooks/use-toast"
-import { getBusinessIdForUser } from "@/actions/businfo/queries"
-import { onCurrentUser } from "@/actions/user"
-import BusinessTypeSelector from "@/components/global/customize/business-type-selector"
-import WebsiteAnalyzer from "@/components/global/customize/website-analyzer"
+import type { Metadata } from "next"
 import BusinessInfoForm from "@/components/global/customize/business-info-form"
 import AutomationGoalsForm from "@/components/global/customize/automation-goals-form"
 import CustomerJourneyForm from "@/components/global/customize/customer-journey-form"
+import WebsiteAnalyzer from "@/components/global/customize/website-analyzer"
 import FeatureSelection from "@/components/global/customize/feature-selection"
 import PreviewFlow from "@/components/global/customize/preview-flow"
 import SubmissionSummary from "@/components/global/customize/submission-summary"
+import BusinessTypeSelector from "@/components/global/customize/business-type-selector"
+import { onCurrentUser } from "@/actions/user"
+import { getAllBusinesses } from "@/actions/businfo"
 
-export default function CustomAutomationRequestPage() {
-  const [businessId, setBusinessId] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const { toast } = useToast()
+export const metadata: Metadata = {
+  title: "Custom Automation Request | Instagram DM Automation",
+  description: "Request a custom Instagram DM automation flow tailored to your business needs",
+}
 
-  useEffect(() => {
-    const fetchBusinessId = async () => {
-      try {
-        const user = await onCurrentUser()
-        const result = await getBusinessIdForUser(user.id)
-        setBusinessId(result)
-      } catch (error) {
-        console.error("Error fetching business ID:", error)
-        toast({
-          title: "Error",
-          description: "An unexpected error occurred while fetching business data.",
-          variant: "destructive",
-        })
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchBusinessId()
-  }, [toast])
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-gray-900 to-gray-800">
-        <p>Loading...</p>
-      </div>
-    )
-  }
-
-  if (!businessId) {
-    return (
-      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-gray-900 to-gray-800">
-        <p>No business found. Please create a business first.</p>
-      </div>
-    )
-  }
+export default async function CustomAutomationRequestPage() {
+  const business = await getAllBusinesses()
+  const businessId = business.data.businesses[0].id
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100">
@@ -112,14 +76,14 @@ export default function CustomAutomationRequestPage() {
         </p>
 
         <div className="space-y-16">
-        <BusinessTypeSelector businessId={businessId} />
-           <WebsiteAnalyzer businessId={businessId} />
-           <BusinessInfoForm />
-           <AutomationGoalsForm businessId={businessId} />
-           <CustomerJourneyForm businessId={businessId} />
-           <FeatureSelection businessId={businessId} />
-           <PreviewFlow />
-           {/* <SubmissionSummary businessId={user.id} businessData={user.}  /> */}
+          <BusinessTypeSelector businessId={businessId} />
+          <WebsiteAnalyzer businessId={businessId} />
+          <BusinessInfoForm />
+          <AutomationGoalsForm businessId={businessId} />
+          <CustomerJourneyForm businessId={businessId} />
+          <FeatureSelection businessId={businessId} />
+          <PreviewFlow />
+          {/* <SubmissionSummary businessId={businessId} /> */}
         </div>
       </div>
     </div>
