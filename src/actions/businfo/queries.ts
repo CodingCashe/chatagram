@@ -186,3 +186,51 @@ export const getBusinessAutomationData = async (clerkId: string) => {
   }
 }
 
+//----
+
+
+export async function getBusinessInfo(businessId: string) {
+  try {
+    const business = await client.business.findUnique({
+      where: { id: businessId },
+      select: {
+        businessName: true,
+        instagramHandle: true,
+        website: true,
+        industry: true,
+        targetAudience: true,
+        businessDescription: true,
+      },
+    })
+
+    return business
+  } catch (error) {
+    console.error("Error fetching business info:", error)
+    throw error
+  }
+}
+
+export async function saveBusinessInfo(
+  businessId: string,
+  businessInfo: {
+    businessName: string
+    instagramHandle: string
+    website: string
+    industry: string
+    targetAudience: string
+    businessDescription: string
+  },
+) {
+  try {
+    const updatedBusiness = await client.business.update({
+      where: { id: businessId },
+      data: businessInfo,
+    })
+
+    return updatedBusiness
+  } catch (error) {
+    console.error("Error saving business info:", error)
+    throw error
+  }
+}
+

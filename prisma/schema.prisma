@@ -80,8 +80,8 @@ model Business {
   features            Json?
   businessTypeData    Json?
   websiteAnalysis     Json?
-  targetAudience      String?
-  website             String?
+  targetAudience      String
+  website             String
   instagramHandle     String
   welcomeMessage      String
   responseLanguage    String
