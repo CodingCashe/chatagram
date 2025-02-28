@@ -131,7 +131,7 @@ const handleSaveOperation = async (
   console.log(`[${operationName}] Data:`, JSON.stringify(data, null, 2))
 
   try {
-    const result = await updateBusiness(businessId, data)
+    const result = await updateBusines(businessId, data)
     console.log(`[${operationName}] Operation successful. Result:`, JSON.stringify(result, null, 2))
     return { status: 200, data: `${operationName} saved successfully` }
   } catch (error: unknown) {
