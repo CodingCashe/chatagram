@@ -103,8 +103,8 @@ type BusinessUpdateData = Partial<FormSchema> & {
   automationAdditionalNotes?: string
 }
 
-export const updateBusines = async (id: string, update: BusinessUpdateData) => {
-  console.log(`[updateBusiness] Starting update for business ID: ${id}`)
+export const updateBusines = async (clerkId: string, update: BusinessUpdateData) => {
+  console.log(`[updateBusiness] Starting update for business ID: ${clerkId}`)
   console.log(`[updateBusiness] Update data:`, JSON.stringify(update, null, 2))
 
   try {
@@ -119,7 +119,7 @@ export const updateBusines = async (id: string, update: BusinessUpdateData) => {
     }, {})
 
     const result = await client.business.update({
-      where: { id },
+      where: { id:clerkId },
       data: processedUpdate,
     })
 
@@ -134,10 +134,10 @@ export const updateBusines = async (id: string, update: BusinessUpdateData) => {
   }
 }
 
-export const getBusinessAutomationData = async (businessId: string) => {
+export const getBusinessAutomationData = async (clerkId: string) => {
   const business = await client.business.findUnique({
     where: {
-      id: businessId,
+      id: clerkId,
     },
     select: {
       id: true,
