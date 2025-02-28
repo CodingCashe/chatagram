@@ -177,13 +177,33 @@ export const getBusinessAutomationData = async (clerkId: string) => {
 
   // Parse JSON fields
   return {
-    ...business,
+    id: business.id,
+    name: business.name,
+    instagramHandle: business.instagramHandle,
+    website: business.website,
+    industry: business.industry,
+    targetAudience: business.targetAudience,
+    businessDescription: business.businessDescription,
+    autoReplyEnabled: business.autoReplyEnabled,
+    // Safely parse JSON fields
     automationGoals: business.automationGoals ? JSON.parse(business.automationGoals as string) : null,
     customerJourney: business.customerJourney ? JSON.parse(business.customerJourney as string) : null,
     features: business.features ? JSON.parse(business.features as string) : null,
     businessTypeData: business.businessTypeData ? JSON.parse(business.businessTypeData as string) : null,
     websiteAnalysis: business.websiteAnalysis ? JSON.parse(business.websiteAnalysis as string) : null,
+    automationSetupComplete: business.automationSetupComplete,
+    // Convert Date to string or number
+    automationSetupDate: business.automationSetupDate ? business.automationSetupDate.toISOString() : null,
+    automationAdditionalNotes: business.automationAdditionalNotes,
   }
+  // return {
+  //   ...business,
+  //   automationGoals: business.automationGoals ? JSON.parse(business.automationGoals as string) : null,
+  //   customerJourney: business.customerJourney ? JSON.parse(business.customerJourney as string) : null,
+  //   features: business.features ? JSON.parse(business.features as string) : null,
+  //   businessTypeData: business.businessTypeData ? JSON.parse(business.businessTypeData as string) : null,
+  //   websiteAnalysis: business.websiteAnalysis ? JSON.parse(business.websiteAnalysis as string) : null,
+  // }
 }
 
 //----
