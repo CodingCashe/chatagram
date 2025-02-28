@@ -8,6 +8,8 @@ import type {
   
   export interface FormSchema {
     id?: string
+    targetAudience: string
+    website:string
     businessName: string
     businessType: string
     businessDescription: string

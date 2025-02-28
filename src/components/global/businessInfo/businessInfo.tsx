@@ -806,6 +806,8 @@ import { Sparkles, Loader2 } from 'lucide-react'
 export const FormSchema = z.object({
   id: z.string().optional(),
   businessName: z.string().min(1, { message: 'Business name is required' }),
+  website: z.string().min(1, { message: 'Website url required' }),
+  targetAudience: z.string().min(1, { message: 'target audience required' }),
   businessType: z.string().min(1, { message: 'Business type is required' }),
   businessDescription: z.string().min(10, { message: 'Description must be at least 10 characters' }),
   industry: z.string().min(1, { message: 'Industry is required' }),
@@ -844,6 +846,7 @@ function BusinessForm({ onBusinessCreated }: BusinessFormProps) {
     ['businessDescription', 'instagramHandle'],
     ['welcomeMessage', 'responseLanguage', 'businessHours'],
     ['promotionMessage', 'autoReplyEnabled'],
+    ['targetAudience', 'website'],
   ]
 
   const onSubmit = async (data: FormSchema) => {
@@ -968,7 +971,7 @@ function BusinessForm({ onBusinessCreated }: BusinessFormProps) {
                             </SelectContent>
                           </Select>
                         )
-                      } else if (field === 'businessDescription' || field === 'welcomeMessage' || field === 'promotionMessage') {
+                      } else if (field === 'businessDescription' || field === 'website' || field === 'targetAudience' || field === 'welcomeMessage' || field === 'promotionMessage') {
                         return (
                           <Textarea
                             id={field}

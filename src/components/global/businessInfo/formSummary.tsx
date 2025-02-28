@@ -156,6 +156,28 @@ export function FormSummary({ data, onEdit, onConfirm }: FormSummaryProps) {
                 <p className="text-white">{data.promotionMessage}</p>
               </div>
             </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.9 }}
+            >
+              <h3 className="text-lg font-semibold text-gray-300 mb-2">Target Audience</h3>
+              <div className="bg-gray-800 bg-opacity-50 p-4 rounded-lg flex items-center space-x-3">
+                <DollarSign className="text-yellow-400 w-6 h-6" />
+                <p className="text-white">{data.targetAudience}</p>
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.9 }}
+            >
+              <h3 className="text-lg font-semibold text-gray-300 mb-2">Website Url</h3>
+              <div className="bg-gray-800 bg-opacity-50 p-4 rounded-lg flex items-center space-x-3">
+                <DollarSign className="text-yellow-400 w-6 h-6" />
+                <p className="text-white">{data.website}</p>
+              </div>
+            </motion.div>
           </div>
         </ScrollArea>
       </CardContent>

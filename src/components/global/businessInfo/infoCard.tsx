@@ -720,6 +720,8 @@ interface BusinessInfoProps {
 const editableFields = [
   'businessName',
   'businessType',
+  'targetAudience',
+  'website',
   'businessDescription',
   'industry',
   'instagramHandle',
@@ -856,7 +858,7 @@ function BusinessInfo({ business }: BusinessInfoProps) {
                         ))}
                       </SelectContent>
                     </Select>
-                  ) : key === 'businessDescription' || key === 'welcomeMessage' || key === 'promotionMessage' ? (
+                  ) : key === 'businessDescription' || key === 'targetAudience' || key === 'website' || key === 'welcomeMessage' || key === 'promotionMessage' ? (
                     <Textarea
                       id={key}
                       value={editedBusiness[key as keyof FormSchema] as string}
