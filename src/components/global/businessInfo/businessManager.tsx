@@ -133,7 +133,7 @@ export default function BusinessManager() {
           <Card className="w-64 h-64 flex items-center justify-center bg-gray-800 border-gray-700">
             <CardContent>
               <Loader2 className="h-16 w-16 animate-spin text-blue-500" />
-              <p className="mt-4 text-gray-400 text-center">Loading business data...</p>
+              <p className="mt-4 text-gray-400 text-center">Loading business...</p>
             </CardContent>
           </Card>
         </motion.div>

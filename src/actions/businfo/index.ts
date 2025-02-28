@@ -36,6 +36,8 @@ export const createNewBusiness = async (businessData: FormSchema) => {
   }
 }
 
+
+
 export const getAllBusinesses = async () => {
   const user = await onCurrentUser()
   try {

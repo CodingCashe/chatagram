@@ -25,6 +25,20 @@ export const createBusiness = async (clerkId: string, businessData: FormSchema) 
   })
 }
 
+export async function getBusinessIdForUser(userId: string) {
+  const user = await client.user.findUnique({
+    where: { id: userId },
+    include: { businesses: { select: { id: true } } },
+  })
+
+  if (!user || user.businesses.length === 0) {
+    throw new Error("No business found for this user")
+  }
+
+  return user.businesses[0].id
+}
+
+
 export const getBusinesses = async (clerkId: string) => {
   return await client.user.findUnique({
     where: {
