@@ -92,7 +92,6 @@ export const getBusinessesForWebhook = async (businessId: string) => {
 //JUST ADDED
 
 
-
 type BusinessUpdateData = Partial<FormSchema> & {
   automationGoals?: AutomationGoalsData
   customerJourney?: CustomerJourneyData
@@ -105,20 +104,34 @@ type BusinessUpdateData = Partial<FormSchema> & {
 }
 
 export const updateBusines = async (id: string, update: BusinessUpdateData) => {
-  // Convert the update object to be compatible with Prisma's expected input
-  const prismaUpdate = {
-    ...update,
-    automationGoals: update.automationGoals ? JSON.stringify(update.automationGoals) : undefined,
-    customerJourney: update.customerJourney ? JSON.stringify(update.customerJourney) : undefined,
-    features: update.features ? JSON.stringify(update.features) : undefined,
-    businessTypeData: update.businessTypeData ? JSON.stringify(update.businessTypeData) : undefined,
-    websiteAnalysis: update.websiteAnalysis ? JSON.stringify(update.websiteAnalysis) : undefined,
-  }
+  console.log(`[updateBusiness] Starting update for business ID: ${id}`)
+  console.log(`[updateBusiness] Update data:`, JSON.stringify(update, null, 2))
 
-  return await client.business.update({
-    where: { id },
-    data: prismaUpdate,
-  })
+  try {
+    // Ensure all JSON fields are properly stringified
+    const processedUpdate = Object.entries(update).reduce<Record<string, any>>((acc, [key, value]) => {
+      if (typeof value === 'object' && value !== null) {
+        acc[key] = JSON.stringify(value)
+      } else {
+        acc[key] = value
+      }
+      return acc
+    }, {})
+
+    const result = await client.business.update({
+      where: { id },
+      data: processedUpdate,
+    })
+
+    console.log(`[updateBusiness] Update successful. Result:`, JSON.stringify(result, null, 2))
+    return result
+  } catch (error: unknown) {
+    console.error(`[updateBusiness] Error updating business:`, error)
+    if (error instanceof Error) {
+      console.error(`[updateBusiness] Error stack:`, error.stack)
+    }
+    throw error
+  }
 }
 
 export const getBusinessAutomationData = async (businessId: string) => {

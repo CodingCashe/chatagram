@@ -1,5 +1,8 @@
 'use server'
-
+type SaveResult = {
+  status: number;
+  data: string;
+}
 
 import type {
   AutomationGoalsData,
@@ -113,94 +116,58 @@ export const getBusinessForWebhook = async (businessId: string) => {
   }
 }
 
-//added recently
+//added recent
+
+//--------
 
 
-export const saveAutomationGoals = async (businessId: string, automationGoals: AutomationGoalsData) => {
-  await onCurrentUser()
+
+const handleSaveOperation = async (
+  operationName: string,
+  businessId: string,
+  data: any
+): Promise<SaveResult> => {
+  console.log(`[${operationName}] Starting operation for business ID: ${businessId}`)
+  console.log(`[${operationName}] Data:`, JSON.stringify(data, null, 2))
+
   try {
-    const update: Partial<FormSchema> = { automationGoals }
-    const result = await updateBusines(businessId, update)
-    if (result) {
-      return { status: 200, data: "Automation goals saved successfully" }
+    const result = await updateBusiness(businessId, data)
+    console.log(`[${operationName}] Operation successful. Result:`, JSON.stringify(result, null, 2))
+    return { status: 200, data: `${operationName} saved successfully` }
+  } catch (error: unknown) {
+    console.error(`[${operationName}] Error:`, error)
+    if (error instanceof Error) {
+      return { status: 500, data: `Error in ${operationName}: ${error.message}` }
     }
-    return { status: 404, data: "Oops! could not find business" }
-  } catch (error) {
-    return { status: 500, data: "Oops! something went wrong" }
+    return { status: 500, data: `Unknown error in ${operationName}` }
   }
 }
 
-export const saveCustomerJourney = async (businessId: string, customerJourney: CustomerJourneyData) => {
-  await onCurrentUser()
-  try {
-    const update: Partial<FormSchema> = { customerJourney }
-    const result = await updateBusines(businessId, update)
-    if (result) {
-      return { status: 200, data: "Customer journey saved successfully" }
-    }
-    return { status: 404, data: "Oops! could not find business" }
-  } catch (error) {
-    return { status: 500, data: "Oops! something went wrong" }
-  }
+export const saveAutomationGoals = async (businessId: string, automationGoals: AutomationGoalsData): Promise<SaveResult> => {
+  return handleSaveOperation('saveAutomationGoals', businessId, { automationGoals })
 }
 
-export const saveFeatureSelections = async (businessId: string, features: FeatureSelectionData) => {
-  await onCurrentUser()
-  try {
-    const update: Partial<FormSchema> = { features }
-    const result = await updateBusines(businessId, update)
-    if (result) {
-      return { status: 200, data: "Features saved successfully" }
-    }
-    return { status: 404, data: "Oops! could not find business" }
-  } catch (error) {
-    return { status: 500, data: "Oops! something went wrong" }
-  }
+export const saveCustomerJourney = async (businessId: string, customerJourney: CustomerJourneyData): Promise<SaveResult> => {
+  return handleSaveOperation('saveCustomerJourney', businessId, { customerJourney })
 }
 
-export const saveBusinessTypeData = async (businessId: string, businessTypeData: BusinessTypeData) => {
-  await onCurrentUser()
-  try {
-    const update: Partial<FormSchema> = { businessTypeData }
-    const result = await updateBusines(businessId, update)
-    if (result) {
-      return { status: 200, data: "Business type data saved successfully" }
-    }
-    return { status: 404, data: "Oops! could not find business" }
-  } catch (error) {
-    return { status: 500, data: "Oops! something went wrong" }
-  }
+export const saveFeatureSelections = async (businessId: string, features: FeatureSelectionData): Promise<SaveResult> => {
+  return handleSaveOperation('saveFeatureSelections', businessId, { features })
 }
 
-export const saveWebsiteAnalysis = async (businessId: string, websiteAnalysis: WebsiteAnalysisData) => {
-  await onCurrentUser()
-  try {
-    const update: Partial<FormSchema> = { websiteAnalysis }
-    const result = await updateBusines(businessId, update)
-    if (result) {
-      return { status: 200, data: "Website analysis saved successfully" }
-    }
-    return { status: 404, data: "Oops! could not find business" }
-  } catch (error) {
-    return { status: 500, data: "Oops! something went wrong" }
-  }
+export const saveBusinessTypeData = async (businessId: string, businessTypeData: BusinessTypeData): Promise<SaveResult> => {
+  return handleSaveOperation('saveBusinessTypeData', businessId, { businessTypeData })
 }
 
-export const submitAutomationSetup = async (businessId: string, additionalNotes: string) => {
-  await onCurrentUser()
-  try {
-    const update: Partial<FormSchema> = {
-      automationSetupComplete: true,
-      automationSetupDate: new Date(),
-      automationAdditionalNotes: additionalNotes,
-    }
-    const result = await updateBusines(businessId, update)
-    if (result) {
-      return { status: 200, data: "Automation setup submitted successfully" }
-    }
-    return { status: 404, data: "Oops! could not find business" }
-  } catch (error) {
-    return { status: 500, data: "Oops! something went wrong" }
-  }
+export const saveWebsiteAnalysis = async (businessId: string, websiteAnalysis: WebsiteAnalysisData): Promise<SaveResult> => {
+  return handleSaveOperation('saveWebsiteAnalysis', businessId, { websiteAnalysis })
+}
+
+export const submitAutomationSetup = async (businessId: string, additionalNotes: string): Promise<SaveResult> => {
+  return handleSaveOperation('submitAutomationSetup', businessId, {
+    automationSetupComplete: true,
+    automationSetupDate: new Date(),
+    automationAdditionalNotes: additionalNotes,
+  })
 }
 
