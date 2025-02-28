@@ -27,11 +27,6 @@ type BusinessData = {
   }>
 }
 
- 
-export const metadata: Metadata = {
-  title: "Custom Automation Request | Instagram DM Automation",
-  description: "Request a custom Instagram DM automation flow tailored to your business needs",
-}
 
 export default async function CustomAutomationRequestPage() {
   const [businessData, setBusinessData] = useState<BusinessData | null>(null)
