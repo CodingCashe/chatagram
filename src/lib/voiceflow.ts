@@ -2174,88 +2174,422 @@
 // }
 
 
-import axios, { AxiosError } from 'axios';
-import { getBusinessForWebhook } from '@/actions/businfo';
-import type { VoiceflowVariables, VoiceflowResult } from "@/types/voiceflow"
+// import axios, { AxiosError } from 'axios';
+// import { getBusinessForWebhook } from '@/actions/businfo';
+// import type { VoiceflowVariables, VoiceflowResult } from "@/types/voiceflow"
 
-const API_KEY = process.env.VOICEFLOW_API_KEY;
-const PROJECT_ID = process.env.VOICEFLOW_PROJECT_ID;
-const VERSION_ID = process.env.VOICEFLOW_VERSION_ID;
+// const API_KEY = process.env.VOICEFLOW_API_KEY;
+// const PROJECT_ID = process.env.VOICEFLOW_PROJECT_ID;
+// const VERSION_ID = process.env.VOICEFLOW_VERSION_ID;
+
+// interface VoiceflowResponse {
+//   type: string;
+//   payload: any;
+// }
+
+
+
+// interface BusinessData {
+//   id: string;
+//   businessName: string;
+//   businessType: string;
+//   businessDescription: string;
+//   industry: string;
+//   instagramHandle: string;
+//   welcomeMessage: string;
+//   responseLanguage: string;
+//   businessHours: string;
+//   autoReplyEnabled: boolean;
+//   promotionMessage: string;
+//   createdAt: Date;
+//   updatedAt: Date;
+//   userId: string | null;
+// }
+
+// export async function fetchBusinessVariables(businessId: string): Promise<Record<string, string>> {
+//   console.log('Entering fetchBusinessVariables function');
+//   try {
+//     console.log('Attempting to call getBusinessForWebhook');
+//     const businessResponse = await getBusinessForWebhook(businessId);
+//     console.log('getBusinessForWebhook response:', JSON.stringify(businessResponse, null, 2));
+
+//     if (businessResponse.status !== 200 || !businessResponse.data.business) {
+//       console.error(`Unexpected response: ${JSON.stringify(businessResponse, null, 2)}`);
+//       throw new Error(`Failed to fetch business data. Status: ${businessResponse.status}`);
+//     }
+
+//     const businessData: BusinessData = businessResponse.data.business;
+
+//     console.log('Business data:', JSON.stringify(businessData, null, 2));
+
+//     if (!businessData.businessName && !businessData.welcomeMessage && !businessData.industry) {
+//       console.error('All business data fields are empty');
+//       throw new Error('All business data fields are empty');
+//     }
+
+//     const result = {
+//       business_name: businessData.businessName || 'Default Business Name',
+//       welcome_message: businessData.welcomeMessage || 'Welcome to our business!',
+//       business_industry: businessData.industry || 'General',
+//     };
+
+//     console.log('Returning business variables:', JSON.stringify(result, null, 2));
+//     return result;
+//   } catch (error) {
+//     console.error('Error in fetchBusinessVariables:');
+//     if (error instanceof Error) {
+//       console.error('Error name:', error.name);
+//       console.error('Error message:', error.message);
+//       console.error('Error stack:', error.stack);
+//     }
+//     if (axios.isAxiosError(error)) {
+//       const axiosError = error as AxiosError;
+//       console.error('Axios error details:');
+//       console.error('Request URL:', axiosError.config?.url);
+//       console.error('Request method:', axiosError.config?.method);
+//       console.error('Request headers:', JSON.stringify(axiosError.config?.headers, null, 2));
+//       console.error('Request data:', JSON.stringify(axiosError.config?.data, null, 2));
+//       console.error('Response status:', axiosError.response?.status);
+//       console.error('Response data:', JSON.stringify(axiosError.response?.data, null, 2));
+//     }
+//     console.error('Full error object:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+//     throw error;
+//   } finally {
+//     console.log('Exiting fetchBusinessVariables function');
+//   }
+// }
+
+// export async function getVoiceflowResponse(
+//   userInput: string,
+//   userId: string,
+//   businessVariables: Record<string, string>,
+// ): Promise<VoiceflowResult> {
+//   console.log("Entering getVoiceflowResponse function")
+//   console.log("User input:", userInput)
+//   console.log("User ID:", userId)
+//   console.log("Business variables:", JSON.stringify(businessVariables, null, 2))
+
+//   try {
+//     console.log("Sending request to Voiceflow API")
+//     const response = await axios.post<VoiceflowResponse[]>(
+//       `https://general-runtime.voiceflow.com/state/user/${userId}/interact`,
+//       {
+//         request: { type: "text", payload: userInput },
+//         state: { variables: businessVariables },
+//       },
+//       {
+//         headers: {
+//           Authorization: API_KEY,
+//           versionID: VERSION_ID,
+//           accept: "application/json",
+//           "content-type": "application/json",
+//         },
+//       },
+//     )
+
+//     console.log("Voiceflow API response status:", response.status)
+//     console.log("Voiceflow API response data:", JSON.stringify(response.data, null, 2))
+
+//     // Fetch updated variables after interaction
+//     const updatedVariables = await fetchVoiceflowVariables(userId)
+
+//     return { response: response.data, variables: updatedVariables }
+//   } catch (error) {
+//     console.error("Error interacting with Voiceflow:", error)
+//     throw error
+//   }
+// }
+
+// async function fetchVoiceflowVariables(userId: string): Promise<VoiceflowVariables> {
+//   console.log("Entering fetchVoiceflowVariables function")
+//   console.log("User ID:", userId)
+
+//   try {
+//     console.log("Sending request to fetch Voiceflow variables")
+//     const response = await axios.get<{ variables: VoiceflowVariables }>(
+//       `https://general-runtime.voiceflow.com/state/user/${userId}`,
+//       {
+//         headers: {
+//           Authorization: API_KEY,
+//           versionID: VERSION_ID,
+//           accept: "application/json",
+//         },
+//       },
+//     )
+//     console.log("Voiceflow variables fetch response status:", response.status)
+//     console.log("Voiceflow variables fetch response data:", JSON.stringify(response.data, null, 2))
+
+//     return response.data.variables || {}
+//   } catch (error) {
+//     console.error("Error fetching Voiceflow variables:", error)
+//     throw error
+//   }
+// }
+
+
+// export function processVoiceflowResponse(traces: VoiceflowResponse[]): string {
+//   console.log('Entering processVoiceflowResponse function');
+//   console.log('Input traces:', JSON.stringify(traces, null, 2));
+
+//   let result = '';
+//   try {
+//     for (const trace of traces) {
+//       console.log('Processing trace:', JSON.stringify(trace, null, 2));
+//       if (trace.type === 'text') {
+//         result += trace.payload.message + '\n';
+//       } else if (trace.type === 'choice') {
+//         result += '\nOptions:\n';
+//         for (const button of trace.payload.buttons) {
+//           result += `- ${button.name}\n`;
+//         }
+//       }
+//     }
+//     result = result.trim();
+//     console.log('Processed result:', result);
+//   } catch (error) {
+//     console.error('Error in processVoiceflowResponse:');
+//     if (error instanceof Error) {
+//       console.error('Error name:', error.name);
+//       console.error('Error message:', error.message);
+//       console.error('Error stack:', error.stack);
+//     }
+//     console.error('Full error object:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+//     throw error;
+//   } finally {
+//     console.log('Exiting processVoiceflowResponse function');
+//   }
+//   return result;
+// }
+
+// export async function createVoiceflowUser(userId: string): Promise<boolean> {
+//   console.log('Entering createVoiceflowUser function');
+//   console.log('User ID:', userId);
+
+//   try {
+//     console.log('Sending request to create Voiceflow user');
+//     const response = await axios.put(
+//       'https://api.voiceflow.com/v2/transcripts',
+//       {
+//         projectID: PROJECT_ID,
+//         versionID: VERSION_ID,
+//         sessionID: userId,
+//       },
+//       {
+//         headers: {
+//           'accept': 'application/json',
+//           'content-type': 'application/json',
+//           'Authorization': API_KEY,
+//         }
+//       }
+//     );
+//     console.log('Voiceflow user creation response status:', response.status);
+//     console.log('Voiceflow user creation response data:', JSON.stringify(response.data, null, 2));
+//     return true;
+//   } catch (error) {
+//     console.error('Error creating Voiceflow user:');
+//     if (error instanceof Error) {
+//       console.error('Error name:', error.name);
+//       console.error('Error message:', error.message);
+//       console.error('Error stack:', error.stack);
+//     }
+//     if (axios.isAxiosError(error)) {
+//       const axiosError = error as AxiosError;
+//       console.error('Axios error details:');
+//       console.error('Request URL:', axiosError.config?.url);
+//       console.error('Request method:', axiosError.config?.method);
+//       console.error('Request headers:', JSON.stringify(axiosError.config?.headers, null, 2));
+//       console.error('Request data:', JSON.stringify(axiosError.config?.data, null, 2));
+//       console.error('Response status:', axiosError.response?.status);
+//       console.error('Response data:', JSON.stringify(axiosError.response?.data, null, 2));
+//     }
+//     console.error('Full error object:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+//     return false;
+//   } finally {
+//     console.log('Exiting createVoiceflowUser function');
+//   }
+// }
+
+// export async function resetVoiceflowUser(userId: string): Promise<boolean> {
+//   console.log('Entering resetVoiceflowUser function');
+//   console.log('User ID:', userId);
+
+//   try {
+//     console.log('Sending request to reset Voiceflow user');
+//     const response = await axios.post(
+//       `https://general-runtime.voiceflow.com/state/user/${userId}/interact`,
+//       { request: { type: 'reset' } },
+//       {
+//         headers: {
+//           'Authorization': API_KEY,
+//           'versionID': VERSION_ID,
+//           'accept': 'application/json',
+//           'content-type': 'application/json',
+//         }
+//       }
+//     );
+//     console.log('Voiceflow user reset response status:', response.status);
+//     console.log('Voiceflow user reset response data:', JSON.stringify(response.data, null, 2));
+//     return response.status === 200;
+//   } catch (error) {
+//     console.error('Error resetting Voiceflow user:');
+//     if (error instanceof Error) {
+//       console.error('Error name:', error.name);
+//       console.error('Error message:', error.message);
+//       console.error('Error stack:', error.stack);
+//     }
+//     if (axios.isAxiosError(error)) {
+//       const axiosError = error as AxiosError;
+//       console.error('Axios error details:');
+//       console.error('Request URL:', axiosError.config?.url);
+//       console.error('Request method:', axiosError.config?.method);
+//       console.error('Request headers:', JSON.stringify(axiosError.config?.headers, null, 2));
+//       console.error('Request data:', JSON.stringify(axiosError.config?.data, null, 2));
+//       console.error('Response status:', axiosError.response?.status);
+//       console.error('Response data:', JSON.stringify(axiosError.response?.data, null, 2));
+//     }
+//     console.error('Full error object:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+//     return false;
+//   } finally {
+//     console.log('Exiting resetVoiceflowUser function');
+//   }
+// }
+
+
+
+
+import axios, { type AxiosError } from "axios"
+import { getBusinessForWebhook } from "@/actions/businfo"
+import type { VoiceflowVariables, VoiceflowResult } from "@/types/voiceflow"
+import type { JsonValue } from "@prisma/client/runtime/library"
+
+const API_KEY = process.env.VOICEFLOW_API_KEY
+const PROJECT_ID = process.env.VOICEFLOW_PROJECT_ID
+const VERSION_ID = process.env.VOICEFLOW_VERSION_ID
 
 interface VoiceflowResponse {
-  type: string;
-  payload: any;
+  type: string
+  payload: any
 }
 
-
-
 interface BusinessData {
-  id: string;
-  businessName: string;
-  businessType: string;
-  businessDescription: string;
-  industry: string;
-  instagramHandle: string;
-  welcomeMessage: string;
-  responseLanguage: string;
-  businessHours: string;
-  autoReplyEnabled: boolean;
-  promotionMessage: string;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string | null;
+  id: string
+  name: string | null
+  businessName: string
+  businessType: string
+  businessDescription: string
+  industry: string
+  automationSetupComplete: boolean
+  automationSetupDate: Date | null
+  automationAdditionalNotes: string | null
+  automationGoals: JsonValue | null
+  customerJourney: JsonValue | null
+  features: JsonValue | null
+  businessTypeData: JsonValue | null
+  websiteAnalysis: JsonValue | null
+  targetAudience: string
+  website: string
+  instagramHandle: string
+  welcomeMessage: string
+  responseLanguage: string
+  businessHours: string
+  autoReplyEnabled: boolean
+  promotionMessage: string
+  createdAt: Date
+  updatedAt: Date
+  userId: string | null
 }
 
 export async function fetchBusinessVariables(businessId: string): Promise<Record<string, string>> {
-  console.log('Entering fetchBusinessVariables function');
+  console.log("Entering fetchBusinessVariables function")
   try {
-    console.log('Attempting to call getBusinessForWebhook');
-    const businessResponse = await getBusinessForWebhook(businessId);
-    console.log('getBusinessForWebhook response:', JSON.stringify(businessResponse, null, 2));
+    console.log("Attempting to call getBusinessForWebhook")
+    const businessResponse = await getBusinessForWebhook(businessId)
+    console.log("getBusinessForWebhook response:", JSON.stringify(businessResponse, null, 2))
 
     if (businessResponse.status !== 200 || !businessResponse.data.business) {
-      console.error(`Unexpected response: ${JSON.stringify(businessResponse, null, 2)}`);
-      throw new Error(`Failed to fetch business data. Status: ${businessResponse.status}`);
+      console.error(`Unexpected response: ${JSON.stringify(businessResponse, null, 2)}`)
+      throw new Error(`Failed to fetch business data. Status: ${businessResponse.status}`)
     }
 
-    const businessData: BusinessData = businessResponse.data.business;
+    const businessData: BusinessData = businessResponse.data.business
 
-    console.log('Business data:', JSON.stringify(businessData, null, 2));
+    console.log("Business data:", JSON.stringify(businessData, null, 2))
 
     if (!businessData.businessName && !businessData.welcomeMessage && !businessData.industry) {
-      console.error('All business data fields are empty');
-      throw new Error('All business data fields are empty');
+      console.error("All business data fields are empty")
+      throw new Error("All business data fields are empty")
     }
 
-    const result = {
-      business_name: businessData.businessName || 'Default Business Name',
-      welcome_message: businessData.welcomeMessage || 'Welcome to our business!',
-      business_industry: businessData.industry || 'General',
-    };
+    const result: Record<string, string> = {
+      business_name: businessData.businessName || "Default Business Name",
+      welcome_message: businessData.welcomeMessage || "Welcome to our business!",
+      business_industry: businessData.industry || "General",
+      business_type: businessData.businessType || "General",
+      business_description: businessData.businessDescription || "No description provided",
+      instagram_handle: businessData.instagramHandle || "",
+      response_language: businessData.responseLanguage || "English",
+      business_hours: businessData.businessHours || "Not specified",
+      auto_reply_enabled: businessData.autoReplyEnabled ? "Yes" : "No",
+      promotion_message: businessData.promotionMessage || "No current promotions",
+    }
 
-    console.log('Returning business variables:', JSON.stringify(result, null, 2));
-    return result;
+    // Parse and add new fields
+    if (businessData.automationGoals) {
+      const automationGoals = businessData.automationGoals as Record<string, any>
+      result.primary_goal = automationGoals.primaryGoal || ""
+      result.response_time = automationGoals.responseTime?.toString() || ""
+      result.custom_goals = automationGoals.customGoals || ""
+    }
+
+    if (businessData.customerJourney) {
+      const customerJourney = businessData.customerJourney as Record<string, any>
+      result.journey_steps = JSON.stringify(customerJourney.journeySteps || [])
+    }
+
+    if (businessData.features) {
+      const features = businessData.features as Record<string, any>
+      result.enabled_features =
+        features.features
+          ?.filter((f: any) => f.enabled)
+          .map((f: any) => f.name)
+          .join(", ") || ""
+    }
+
+    if (businessData.businessTypeData) {
+      result.business_type_data = JSON.stringify(businessData.businessTypeData)
+    }
+
+    if (businessData.websiteAnalysis) {
+      result.website_analysis = JSON.stringify(businessData.websiteAnalysis)
+    }
+
+    result.automation_setup_complete = businessData.automationSetupComplete ? "Yes" : "No"
+    result.automation_setup_date = businessData.automationSetupDate?.toISOString() || ""
+    result.automation_additional_notes = businessData.automationAdditionalNotes || ""
+
+    console.log("Returning business variables:", JSON.stringify(result, null, 2))
+    return result
   } catch (error) {
-    console.error('Error in fetchBusinessVariables:');
+    console.error("Error in fetchBusinessVariables:")
     if (error instanceof Error) {
-      console.error('Error name:', error.name);
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
+      console.error("Error name:", error.name)
+      console.error("Error message:", error.message)
+      console.error("Error stack:", error.stack)
     }
     if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.error('Axios error details:');
-      console.error('Request URL:', axiosError.config?.url);
-      console.error('Request method:', axiosError.config?.method);
-      console.error('Request headers:', JSON.stringify(axiosError.config?.headers, null, 2));
-      console.error('Request data:', JSON.stringify(axiosError.config?.data, null, 2));
-      console.error('Response status:', axiosError.response?.status);
-      console.error('Response data:', JSON.stringify(axiosError.response?.data, null, 2));
+      const axiosError = error as AxiosError
+      console.error("Axios error details:")
+      console.error("Request URL:", axiosError.config?.url)
+      console.error("Request method:", axiosError.config?.method)
+      console.error("Request headers:", JSON.stringify(axiosError.config?.headers, null, 2))
+      console.error("Request data:", JSON.stringify(axiosError.config?.data, null, 2))
+      console.error("Response status:", axiosError.response?.status)
+      console.error("Response data:", JSON.stringify(axiosError.response?.data, null, 2))
     }
-    console.error('Full error object:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
-    throw error;
+    console.error("Full error object:", JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+    throw error
   } finally {
-    console.log('Exiting fetchBusinessVariables function');
+    console.log("Exiting fetchBusinessVariables function")
   }
 }
 
@@ -2326,49 +2660,48 @@ async function fetchVoiceflowVariables(userId: string): Promise<VoiceflowVariabl
   }
 }
 
-
 export function processVoiceflowResponse(traces: VoiceflowResponse[]): string {
-  console.log('Entering processVoiceflowResponse function');
-  console.log('Input traces:', JSON.stringify(traces, null, 2));
+  console.log("Entering processVoiceflowResponse function")
+  console.log("Input traces:", JSON.stringify(traces, null, 2))
 
-  let result = '';
+  let result = ""
   try {
     for (const trace of traces) {
-      console.log('Processing trace:', JSON.stringify(trace, null, 2));
-      if (trace.type === 'text') {
-        result += trace.payload.message + '\n';
-      } else if (trace.type === 'choice') {
-        result += '\nOptions:\n';
+      console.log("Processing trace:", JSON.stringify(trace, null, 2))
+      if (trace.type === "text") {
+        result += trace.payload.message + "\n"
+      } else if (trace.type === "choice") {
+        result += "\nOptions:\n"
         for (const button of trace.payload.buttons) {
-          result += `- ${button.name}\n`;
+          result += `- ${button.name}\n`
         }
       }
     }
-    result = result.trim();
-    console.log('Processed result:', result);
+    result = result.trim()
+    console.log("Processed result:", result)
   } catch (error) {
-    console.error('Error in processVoiceflowResponse:');
+    console.error("Error in processVoiceflowResponse:")
     if (error instanceof Error) {
-      console.error('Error name:', error.name);
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
+      console.error("Error name:", error.name)
+      console.error("Error message:", error.message)
+      console.error("Error stack:", error.stack)
     }
-    console.error('Full error object:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
-    throw error;
+    console.error("Full error object:", JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+    throw error
   } finally {
-    console.log('Exiting processVoiceflowResponse function');
+    console.log("Exiting processVoiceflowResponse function")
   }
-  return result;
+  return result
 }
 
 export async function createVoiceflowUser(userId: string): Promise<boolean> {
-  console.log('Entering createVoiceflowUser function');
-  console.log('User ID:', userId);
+  console.log("Entering createVoiceflowUser function")
+  console.log("User ID:", userId)
 
   try {
-    console.log('Sending request to create Voiceflow user');
+    console.log("Sending request to create Voiceflow user")
     const response = await axios.put(
-      'https://api.voiceflow.com/v2/transcripts',
+      "https://api.voiceflow.com/v2/transcripts",
       {
         projectID: PROJECT_ID,
         versionID: VERSION_ID,
@@ -2376,88 +2709,81 @@ export async function createVoiceflowUser(userId: string): Promise<boolean> {
       },
       {
         headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'Authorization': API_KEY,
-        }
-      }
-    );
-    console.log('Voiceflow user creation response status:', response.status);
-    console.log('Voiceflow user creation response data:', JSON.stringify(response.data, null, 2));
-    return true;
+          accept: "application/json",
+          "content-type": "application/json",
+          Authorization: API_KEY,
+        },
+      },
+    )
+    console.log("Voiceflow user creation response status:", response.status)
+    console.log("Voiceflow user creation response data:", JSON.stringify(response.data, null, 2))
+    return true
   } catch (error) {
-    console.error('Error creating Voiceflow user:');
+    console.error("Error creating Voiceflow user:")
     if (error instanceof Error) {
-      console.error('Error name:', error.name);
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
+      console.error("Error name:", error.name)
+      console.error("Error message:", error.message)
+      console.error("Error stack:", error.stack)
     }
     if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.error('Axios error details:');
-      console.error('Request URL:', axiosError.config?.url);
-      console.error('Request method:', axiosError.config?.method);
-      console.error('Request headers:', JSON.stringify(axiosError.config?.headers, null, 2));
-      console.error('Request data:', JSON.stringify(axiosError.config?.data, null, 2));
-      console.error('Response status:', axiosError.response?.status);
-      console.error('Response data:', JSON.stringify(axiosError.response?.data, null, 2));
+      const axiosError = error as AxiosError
+      console.error("Axios error details:")
+      console.error("Request URL:", axiosError.config?.url)
+      console.error("Request method:", axiosError.config?.method)
+      console.error("Request headers:", JSON.stringify(axiosError.config?.headers, null, 2))
+      console.error("Request data:", JSON.stringify(axiosError.config?.data, null, 2))
+      console.error("Response status:", axiosError.response?.status)
+      console.error("Response data:", JSON.stringify(axiosError.response?.data, null, 2))
     }
-    console.error('Full error object:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
-    return false;
+    console.error("Full error object:", JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+    return false
   } finally {
-    console.log('Exiting createVoiceflowUser function');
+    console.log("Exiting createVoiceflowUser function")
   }
 }
 
 export async function resetVoiceflowUser(userId: string): Promise<boolean> {
-  console.log('Entering resetVoiceflowUser function');
-  console.log('User ID:', userId);
+  console.log("Entering resetVoiceflowUser function")
+  console.log("User ID:", userId)
 
   try {
-    console.log('Sending request to reset Voiceflow user');
+    console.log("Sending request to reset Voiceflow user")
     const response = await axios.post(
       `https://general-runtime.voiceflow.com/state/user/${userId}/interact`,
-      { request: { type: 'reset' } },
+      { request: { type: "reset" } },
       {
         headers: {
-          'Authorization': API_KEY,
-          'versionID': VERSION_ID,
-          'accept': 'application/json',
-          'content-type': 'application/json',
-        }
-      }
-    );
-    console.log('Voiceflow user reset response status:', response.status);
-    console.log('Voiceflow user reset response data:', JSON.stringify(response.data, null, 2));
-    return response.status === 200;
+          Authorization: API_KEY,
+          versionID: VERSION_ID,
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+      },
+    )
+    console.log("Voiceflow user reset response status:", response.status)
+    console.log("Voiceflow user reset response data:", JSON.stringify(response.data, null, 2))
+    return response.status === 200
   } catch (error) {
-    console.error('Error resetting Voiceflow user:');
+    console.error("Error resetting Voiceflow user:")
     if (error instanceof Error) {
-      console.error('Error name:', error.name);
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
+      console.error("Error name:", error.name)
+      console.error("Error message:", error.message)
+      console.error("Error stack:", error.stack)
     }
     if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.error('Axios error details:');
-      console.error('Request URL:', axiosError.config?.url);
-      console.error('Request method:', axiosError.config?.method);
-      console.error('Request headers:', JSON.stringify(axiosError.config?.headers, null, 2));
-      console.error('Request data:', JSON.stringify(axiosError.config?.data, null, 2));
-      console.error('Response status:', axiosError.response?.status);
-      console.error('Response data:', JSON.stringify(axiosError.response?.data, null, 2));
+      const axiosError = error as AxiosError
+      console.error("Axios error details:")
+      console.error("Request URL:", axiosError.config?.url)
+      console.error("Request method:", axiosError.config?.method)
+      console.error("Request headers:", JSON.stringify(axiosError.config?.headers, null, 2))
+      console.error("Request data:", JSON.stringify(axiosError.config?.data, null, 2))
+      console.error("Response status:", axiosError.response?.status)
+      console.error("Response data:", JSON.stringify(axiosError.response?.data, null, 2))
     }
-    console.error('Full error object:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
-    return false;
+    console.error("Full error object:", JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+    return false
   } finally {
-    console.log('Exiting resetVoiceflowUser function');
+    console.log("Exiting resetVoiceflowUser function")
   }
 }
-
-
-
-
-
-
-
 
