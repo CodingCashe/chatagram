@@ -18,17 +18,17 @@ type Props = {}
 
 const Page = (props: Props) => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-3 tracking-tight">Create Your Account</h1>
-        <p className="text-white/70 text-sm sm:text-base">Join thousands of professionals today</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Get Started</h1>
+        <p className="text-white/70 text-sm">Create your account to automate Instagram DMs</p>
       </div>
 
       <SignUp
         appearance={{
           elements: {
             formButtonPrimary:
-              "bg-[#3352CC] hover:bg-[#4365E5] text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-lg shadow-[#3352CC]/25 hover:shadow-[#3352CC]/40 hover:scale-[1.02]",
+              "bg-[#3352CC] hover:bg-[#4365E5] text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-lg shadow-[#3352CC]/25 hover:shadow-[#3352CC]/40",
             card: "bg-transparent shadow-none",
             headerTitle: "text-white",
             headerSubtitle: "text-white/70",
@@ -56,18 +56,18 @@ const Page = (props: Props) => {
       />
 
       <div className="space-y-6">
-        <div className="flex items-center justify-center space-x-2 group cursor-pointer">
-          <Link href="/sign-in" className="text-white/70 text-sm sm:text-base group-hover:text-white transition-colors">
-            Already have an account? <span className="text-[#3352CC] group-hover:text-[#4365E5]">Sign in instead</span>
+        <div className="flex items-center justify-center space-x-2 group">
+          <Link href="/sign-in" className="text-white/70 text-sm group-hover:text-white transition-colors">
+            Already using DM Automation? <span className="text-[#3352CC] group-hover:text-[#4365E5]">Sign in</span>
           </Link>
           <ArrowRight className="w-4 h-4 text-[#3352CC] group-hover:text-[#4365E5] group-hover:translate-x-1 transition-all" />
         </div>
 
         <div className="text-center">
-          <p className="text-xs sm:text-sm text-white/50 max-w-sm mx-auto">
+          <p className="text-xs text-white/50">
             By signing up, you agree to our{" "}
             <Link href="/terms" className="text-[#3352CC] hover:text-[#4365E5] underline transition-colors">
-              Terms of Service
+              Terms
             </Link>{" "}
             and{" "}
             <Link href="/privacy" className="text-[#3352CC] hover:text-[#4365E5] underline transition-colors">

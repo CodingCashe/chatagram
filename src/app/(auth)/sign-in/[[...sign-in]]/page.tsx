@@ -18,17 +18,17 @@ type Props = {}
 
 const Page = (props: Props) => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-3 tracking-tight">Welcome Back</h1>
-        <p className="text-white/70 text-sm sm:text-base">Sign in to your account to continue</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Welcome Back</h1>
+        <p className="text-white/70 text-sm">Sign in to manage your Instagram automation</p>
       </div>
 
       <SignIn
         appearance={{
           elements: {
             formButtonPrimary:
-              "bg-[#3352CC] hover:bg-[#4365E5] text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-lg shadow-[#3352CC]/25 hover:shadow-[#3352CC]/40 hover:scale-[1.02]",
+              "bg-[#3352CC] hover:bg-[#4365E5] text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-lg shadow-[#3352CC]/25 hover:shadow-[#3352CC]/40",
             card: "bg-transparent shadow-none",
             headerTitle: "text-white",
             headerSubtitle: "text-white/70",
@@ -55,9 +55,9 @@ const Page = (props: Props) => {
         }}
       />
 
-      <div className="flex items-center justify-center space-x-2 group cursor-pointer">
-        <Link href="/sign-up" className="text-white/70 text-sm sm:text-base group-hover:text-white transition-colors">
-          Dont have an account? <span className="text-[#3352CC] group-hover:text-[#4365E5]">Create one now</span>
+      <div className="flex items-center justify-center space-x-2 group">
+        <Link href="/sign-up" className="text-white/70 text-sm group-hover:text-white transition-colors">
+          New to DM Automation? <span className="text-[#3352CC] group-hover:text-[#4365E5]">Create an account</span>
         </Link>
         <ArrowRight className="w-4 h-4 text-[#3352CC] group-hover:text-[#4365E5] group-hover:translate-x-1 transition-all" />
       </div>
