@@ -305,7 +305,6 @@ export async function saveBusinessInfo(
 // }
 
 export const getBusinessAutomationDatum = async (clerkId: string) => {
-  console.log("Fetching business data for clerkId:", clerkId)
   const business = await client.business.findUnique({
     where: {
       id: clerkId,
@@ -330,15 +329,10 @@ export const getBusinessAutomationDatum = async (clerkId: string) => {
     },
   })
 
-  console.log("Raw business data:", JSON.stringify(business, null, 2))
-
-  if (!business) {
-    console.log("No business found for clerkId:", clerkId)
-    return null
-  }
+  if (!business) return null
 
   // Parse JSON fields and return only serializable data
-  const processedData = {
+  return {
     id: business.id,
     name: business.name,
     instagramHandle: business.instagramHandle,
@@ -356,9 +350,5 @@ export const getBusinessAutomationDatum = async (clerkId: string) => {
     automationSetupDate: business.automationSetupDate ? business.automationSetupDate.toISOString() : null,
     automationAdditionalNotes: business.automationAdditionalNotes,
   }
-
-  console.log("Processed business data:", JSON.stringify(processedData, null, 2))
-
-  return processedData
 }
 

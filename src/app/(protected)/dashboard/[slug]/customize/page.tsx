@@ -354,7 +354,6 @@ import BusinessTypeSelector from "@/components/global/customize/business-type-se
 import { onCurrentUser } from "@/actions/user"
 import { getAllBusinesses } from "@/actions/businfo"
 import { getBusinessAutomationData } from "@/actions/businfo/queries"
-import { getBusinessAutomationDatum } from "@/actions/businfo/queries"
 import SubmissionSummary from "@/components/global/customize/submission-summary"
 
 // Define the shape of the incoming data
@@ -423,7 +422,7 @@ export default function CustomAutomationRequestPage() {
     const fetchBusinessData = async () => {
       try {
         const user = await onCurrentUser()
-        const data: AutomationData = await getBusinessAutomationDatum(user.id)
+        const data: AutomationData = await getBusinessAutomationData(user.id)
 
         console.log("Raw data from getBusinessAutomationData:", JSON.stringify(data, null, 2))
 
@@ -476,6 +475,12 @@ export default function CustomAutomationRequestPage() {
     fetchBusinessData()
   }, [toast])
 
+  useEffect(() => {
+    if (businessId && businessData) {
+      console.log("Rendering SubmissionSummary with data:", JSON.stringify(businessData, null, 2))
+    }
+  }, [businessId, businessData])
+
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -499,12 +504,7 @@ export default function CustomAutomationRequestPage() {
           {businessId && <CustomerJourneyForm businessId={businessId} />}
           {businessId && <FeatureSelection businessId={businessId} />}
           <PreviewFlow />
-          {businessId && businessData && (
-            <>
-              {console.log("Rendering SubmissionSummary with data:", JSON.stringify(businessData, null, 2))}
-              <SubmissionSummary businessId={businessId} businessData={businessData} />
-            </>
-          )}
+          {businessId && businessData && <SubmissionSummary businessId={businessId} businessData={businessData} />}
         </div>
       </div>
     </div>
