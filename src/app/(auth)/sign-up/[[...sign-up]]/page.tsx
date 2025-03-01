@@ -18,10 +18,10 @@ type Props = {}
 
 const Page = (props: Props) => {
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Get Started</h1>
-        <p className="text-white/70 text-sm">Create your account to automate Instagram DMs</p>
+    <div className="space-y-6 py-2">
+      <div className="text-center space-y-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white">Get Started</h1>
+        <p className="text-white/70 text-sm mx-auto max-w-sm">Create your account to automate Instagram DMs</p>
       </div>
 
       <SignUp
@@ -55,16 +55,9 @@ const Page = (props: Props) => {
         }}
       />
 
-      <div className="space-y-6">
-        <div className="flex items-center justify-center space-x-2 group">
-          <Link href="/sign-in" className="text-white/70 text-sm group-hover:text-white transition-colors">
-            Already using DM Automation? <span className="text-[#3352CC] group-hover:text-[#4365E5]">Sign in</span>
-          </Link>
-          <ArrowRight className="w-4 h-4 text-[#3352CC] group-hover:text-[#4365E5] group-hover:translate-x-1 transition-all" />
-        </div>
-
-        <div className="text-center">
-          <p className="text-xs text-white/50">
+      <div className="space-y-4">
+        <div className="text-center px-4">
+          <p className="text-xs text-white/50 max-w-sm mx-auto">
             By signing up, you agree to our{" "}
             <Link href="/terms" className="text-[#3352CC] hover:text-[#4365E5] underline transition-colors">
               Terms

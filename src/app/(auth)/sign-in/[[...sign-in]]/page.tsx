@@ -18,10 +18,10 @@ type Props = {}
 
 const Page = (props: Props) => {
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Welcome Back</h1>
-        <p className="text-white/70 text-sm">Sign in to manage your Instagram automation</p>
+    <div className="space-y-6 py-2">
+      <div className="text-center space-y-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white">Welcome Back!</h1>
+        <p className="text-white/70 text-sm mx-auto max-w-sm">Sign in to manage your Instagram automation</p>
       </div>
 
       <SignIn
@@ -54,13 +54,6 @@ const Page = (props: Props) => {
           },
         }}
       />
-
-      <div className="flex items-center justify-center space-x-2 group">
-        <Link href="/sign-up" className="text-white/70 text-sm group-hover:text-white transition-colors">
-          New to DM Automation? <span className="text-[#3352CC] group-hover:text-[#4365E5]">Create an account</span>
-        </Link>
-        <ArrowRight className="w-4 h-4 text-[#3352CC] group-hover:text-[#4365E5] group-hover:translate-x-1 transition-all" />
-      </div>
     </div>
   )
 }
