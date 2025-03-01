@@ -354,6 +354,7 @@ import BusinessTypeSelector from "@/components/global/customize/business-type-se
 import { onCurrentUser } from "@/actions/user"
 import { getAllBusinesses } from "@/actions/businfo"
 import { getBusinessAutomationData } from "@/actions/businfo/queries"
+import { getBusinessAutomationDatum } from "@/actions/businfo/queries"
 import SubmissionSummary from "@/components/global/customize/submission-summary"
 
 // Define the shape of the incoming data
@@ -422,10 +423,12 @@ export default function CustomAutomationRequestPage() {
     const fetchBusinessData = async () => {
       try {
         const user = await onCurrentUser()
-        const data: AutomationData = await getBusinessAutomationData(user.id)
+        const data: AutomationData = await getBusinessAutomationDatum(user.id)
+
+        console.log("Raw data from getBusinessAutomationData:", JSON.stringify(data, null, 2))
 
         if (data) {
-          setBusinessData({
+          const processedData: BusinessData = {
             name: data.name || "Not specified",
             industry: data.industry || "Not specified",
             primaryGoal: data.automationGoals?.primaryGoal || "Not specified",
@@ -433,10 +436,33 @@ export default function CustomAutomationRequestPage() {
             selectedFeatures:
               data.features?.features.filter((feature) => feature.enabled).map((feature) => feature.name) || [],
             journeySteps: data.customerJourney?.journeySteps || [],
-          })
+          }
+
+          console.log("Processed business data:", JSON.stringify(processedData, null, 2))
+
+          // Check for non-serializable data
+          const serializedData = JSON.parse(JSON.stringify(processedData))
+          if (JSON.stringify(processedData) !== JSON.stringify(serializedData)) {
+            console.error(
+              "Non-serializable data detected:",
+              JSON.stringify(processedData, (key, value) =>
+                typeof value === "object" && value !== null ? "[Object]" : value,
+              ),
+            )
+            throw new Error("Non-serializable data detected in business data")
+          }
+
+          setBusinessData(processedData)
+        } else {
+          console.warn("No data returned from getBusinessAutomationData")
         }
       } catch (error) {
-        console.error("Error fetching business data:", error)
+        console.error("Error in fetchBusinessData:", error)
+        if (error instanceof Error) {
+          console.error("Error name:", error.name)
+          console.error("Error message:", error.message)
+          console.error("Error stack:", error.stack)
+        }
         toast({
           title: "Error",
           description: "An unexpected error occurred while fetching business data.",
@@ -457,7 +483,7 @@ export default function CustomAutomationRequestPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100">
       <div className="container mx-auto px-4 py-12">
-        <h1 className="text-4xl font-bold text-center mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600">
+        <h1 className="text-4xl font-bold text-center mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
           Custom Automation Request
         </h1>
         <p className="text-center text-gray-400 mb-12 max-w-2xl mx-auto">
@@ -473,7 +499,12 @@ export default function CustomAutomationRequestPage() {
           {businessId && <CustomerJourneyForm businessId={businessId} />}
           {businessId && <FeatureSelection businessId={businessId} />}
           <PreviewFlow />
-          {businessId && businessData && <SubmissionSummary businessId={businessId} businessData={businessData} />}
+          {businessId && businessData && (
+            <>
+              {console.log("Rendering SubmissionSummary with data:", JSON.stringify(businessData, null, 2))}
+              <SubmissionSummary businessId={businessId} businessData={businessData} />
+            </>
+          )}
         </div>
       </div>
     </div>

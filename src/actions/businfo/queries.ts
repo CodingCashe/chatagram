@@ -256,7 +256,56 @@ export async function saveBusinessInfo(
 
 //----testing for submissionsummary
 
+// export const getBusinessAutomationDatum = async (clerkId: string) => {
+//   const business = await client.business.findUnique({
+//     where: {
+//       id: clerkId,
+//     },
+//     select: {
+//       id: true,
+//       name: true,
+//       instagramHandle: true,
+//       website: true,
+//       industry: true,
+//       targetAudience: true,
+//       businessDescription: true,
+//       autoReplyEnabled: true,
+//       automationGoals: true,
+//       customerJourney: true,
+//       features: true,
+//       businessTypeData: true,
+//       websiteAnalysis: true,
+//       automationSetupComplete: true,
+//       automationSetupDate: true,
+//       automationAdditionalNotes: true,
+//     },
+//   })
+
+//   if (!business) return null
+
+//   // Parse JSON fields and return only serializable data
+//   return {
+//     id: business.id,
+//     name: business.name,
+//     instagramHandle: business.instagramHandle,
+//     website: business.website,
+//     industry: business.industry,
+//     targetAudience: business.targetAudience,
+//     businessDescription: business.businessDescription,
+//     autoReplyEnabled: business.autoReplyEnabled,
+//     automationGoals: business.automationGoals ? JSON.parse(business.automationGoals as string) : null,
+//     customerJourney: business.customerJourney ? JSON.parse(business.customerJourney as string) : null,
+//     features: business.features ? JSON.parse(business.features as string) : null,
+//     businessTypeData: business.businessTypeData ? JSON.parse(business.businessTypeData as string) : null,
+//     websiteAnalysis: business.websiteAnalysis ? JSON.parse(business.websiteAnalysis as string) : null,
+//     automationSetupComplete: business.automationSetupComplete,
+//     automationSetupDate: business.automationSetupDate ? business.automationSetupDate.toISOString() : null,
+//     automationAdditionalNotes: business.automationAdditionalNotes,
+//   }
+// }
+
 export const getBusinessAutomationDatum = async (clerkId: string) => {
+  console.log("Fetching business data for clerkId:", clerkId)
   const business = await client.business.findUnique({
     where: {
       id: clerkId,
@@ -281,10 +330,15 @@ export const getBusinessAutomationDatum = async (clerkId: string) => {
     },
   })
 
-  if (!business) return null
+  console.log("Raw business data:", JSON.stringify(business, null, 2))
+
+  if (!business) {
+    console.log("No business found for clerkId:", clerkId)
+    return null
+  }
 
   // Parse JSON fields and return only serializable data
-  return {
+  const processedData = {
     id: business.id,
     name: business.name,
     instagramHandle: business.instagramHandle,
@@ -302,5 +356,9 @@ export const getBusinessAutomationDatum = async (clerkId: string) => {
     automationSetupDate: business.automationSetupDate ? business.automationSetupDate.toISOString() : null,
     automationAdditionalNotes: business.automationAdditionalNotes,
   }
+
+  console.log("Processed business data:", JSON.stringify(processedData, null, 2))
+
+  return processedData
 }
 
