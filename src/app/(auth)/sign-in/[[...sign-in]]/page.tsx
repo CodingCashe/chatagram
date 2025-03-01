@@ -42,7 +42,7 @@ const Page = (props: Props) => {
 
       <div className="text-center mt-4">
         <p className="text-white/70 text-sm">
-          Don't have an account?{" "}
+          Dont have an account?{" "}
           <Link href="/sign-up" className="text-blue-300 hover:text-blue-200 transition-colors">
             Sign up
           </Link>
