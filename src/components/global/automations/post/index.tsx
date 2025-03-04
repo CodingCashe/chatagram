@@ -72,17 +72,96 @@
 
 // export default PostButton
 
-import { useAutomationPosts } from '@/hooks/use-automations'
-import { useQueryAutomationPosts } from '@/hooks/user-queries'
-import React from 'react'
-import TriggerButton from '../trigger-button'
-import { InstagramPostProps } from '@/types/posts.type'
-import { CheckCircle } from 'lucide-react'
-import Image from 'next/image'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import Loader from '../../loader'
-import { motion } from 'framer-motion'
+// import { useAutomationPosts } from '@/hooks/use-automations'
+// import { useQueryAutomationPosts } from '@/hooks/user-queries'
+// import React from 'react'
+// import TriggerButton from '../trigger-button'
+// import { InstagramPostProps } from '@/types/posts.type'
+// import { CheckCircle } from 'lucide-react'
+// import Image from 'next/image'
+// import { cn } from '@/lib/utils'
+// import { Button } from '@/components/ui/button'
+// import Loader from '../../loader'
+// import { motion } from 'framer-motion'
+
+// type Props = {
+//   id: string
+// }
+
+// const PostButton = ({ id }: Props) => {
+//   const { data } = useQueryAutomationPosts()
+//   const { posts, onSelectPost, mutate, isPending } = useAutomationPosts(id)
+
+//   return (
+//     <TriggerButton label="Attach a post">
+//       {data?.status === 200 ? (
+//         <div className="flex flex-col gap-y-4 w-full bg-background-90 p-6 rounded-2xl shadow-xl">
+//           <div className="grid grid-cols-3 gap-3 w-full">
+//             {data.data.data.map((post: InstagramPostProps) => (
+//               <motion.div
+//                 whileHover={{ scale: 1.05 }}
+//                 className="relative aspect-square rounded-lg cursor-pointer overflow-hidden shadow-md"
+//                 key={post.id}
+//                 onClick={() =>
+//                   onSelectPost({
+//                     postid: post.id,
+//                     media: post.media_url,
+//                     mediaType: post.media_type,
+//                     caption: post.caption,
+//                   })
+//                 }
+//               >
+//                 {posts.find((p) => p.postid === post.id) && (
+//                   <div className="absolute inset-0 bg-blue-500 bg-opacity-50 flex items-center justify-center z-10">
+//                     <CheckCircle
+//                       fill="white"
+//                       stroke="black"
+//                       className="w-10 h-10"
+//                     />
+//                   </div>
+//                 )}
+//                 <Image
+//                   fill
+//                   sizes="100vw"
+//                   src={post.media_url}
+//                   alt="post image"
+//                   className={cn(
+//                     'object-cover transition-all duration-300',
+//                     posts.find((p) => p.postid === post.id) && 'opacity-75'
+//                   )}
+//                 />
+//               </motion.div>
+//             ))}
+//           </div>
+//           <Button
+//             onClick={mutate}
+//             disabled={posts.length === 0}
+//             className="bg-gradient-to-r from-green-400 to-blue-500 w-full font-medium text-white hover:from-green-500 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 shadow-lg mt-4"
+//           >
+//             <Loader state={isPending}>Attach Post</Loader>
+//           </Button>
+//         </div>
+//       ) : (
+//         <p className="text-text-secondary text-center p-4 bg-background-90 rounded-xl">We do not see any posts!</p>
+//       )}
+//     </TriggerButton>
+//   )
+// }
+
+// export default PostButton
+
+"use client"
+
+import { useAutomationPosts } from "@/hooks/use-automations"
+import { useQueryAutomationPosts } from "@/hooks/user-queries"
+import TriggerButton from "../trigger-button"
+import type { InstagramPostProps } from "@/types/posts.type"
+import { CheckCircle, Instagram } from "lucide-react"
+import Image from "next/image"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import Loader from "../../loader"
+import { motion } from "framer-motion"
 
 type Props = {
   id: string
@@ -95,12 +174,20 @@ const PostButton = ({ id }: Props) => {
   return (
     <TriggerButton label="Attach a post">
       {data?.status === 200 ? (
-        <div className="flex flex-col gap-y-4 w-full bg-background-90 p-6 rounded-2xl shadow-xl">
-          <div className="grid grid-cols-3 gap-3 w-full">
+        <div className="flex flex-col gap-5">
+          <div className="flex items-center gap-3 mb-1">
+            <div className="p-2 bg-emerald-500/10 rounded-lg">
+              <Instagram className="h-5 w-5 text-emerald-400" />
+            </div>
+            <p className="text-lg font-medium text-white">Select posts to monitor</p>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
             {data.data.data.map((post: InstagramPostProps) => (
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="relative aspect-square rounded-lg cursor-pointer overflow-hidden shadow-md"
+                whileTap={{ scale: 0.95 }}
+                className="relative aspect-square rounded-lg cursor-pointer overflow-hidden group"
                 key={post.id}
                 onClick={() =>
                   onSelectPost({
@@ -111,38 +198,51 @@ const PostButton = ({ id }: Props) => {
                   })
                 }
               >
+                <div
+                  className={cn(
+                    "absolute inset-0 bg-gradient-to-t from-emerald-900/80 to-transparent opacity-0 transition-opacity duration-300",
+                    posts.find((p) => p.postid === post.id) && "opacity-100",
+                  )}
+                />
+
                 {posts.find((p) => p.postid === post.id) && (
-                  <div className="absolute inset-0 bg-blue-500 bg-opacity-50 flex items-center justify-center z-10">
-                    <CheckCircle
-                      fill="white"
-                      stroke="black"
-                      className="w-10 h-10"
-                    />
+                  <div className="absolute inset-0 flex items-center justify-center z-10">
+                    <CheckCircle className="h-10 w-10 text-emerald-400" />
                   </div>
                 )}
+
                 <Image
                   fill
                   sizes="100vw"
-                  src={post.media_url}
+                  src={post.media_url || "/placeholder.svg"}
                   alt="post image"
-                  className={cn(
-                    'object-cover transition-all duration-300',
-                    posts.find((p) => p.postid === post.id) && 'opacity-75'
-                  )}
+                  className="object-cover transition-all duration-300 group-hover:scale-110"
                 />
               </motion.div>
             ))}
           </div>
+
           <Button
             onClick={mutate}
             disabled={posts.length === 0}
-            className="bg-gradient-to-r from-green-400 to-blue-500 w-full font-medium text-white hover:from-green-500 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 shadow-lg mt-4"
+            className={cn(
+              "w-full py-6 text-white font-medium transition-all duration-300 mt-2",
+              posts.length === 0
+                ? "bg-slate-700"
+                : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-lg shadow-emerald-700/20",
+            )}
           >
-            <Loader state={isPending}>Attach Post</Loader>
+            <Loader state={isPending}>
+              Attach {posts.length} Post{posts.length !== 1 && "s"}
+            </Loader>
           </Button>
         </div>
       ) : (
-        <p className="text-text-secondary text-center p-4 bg-background-90 rounded-xl">We do not see any posts!</p>
+        <div className="flex flex-col items-center justify-center p-8 text-center">
+          <Instagram className="h-12 w-12 text-slate-600 mb-3" />
+          <p className="text-slate-400">No posts found</p>
+          <p className="text-sm text-slate-600 mt-1">Connect your Instagram account to see posts</p>
+        </div>
       )}
     </TriggerButton>
   )
