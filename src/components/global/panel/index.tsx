@@ -39,7 +39,7 @@ const FloatingPanel = ({ trigger, children, title, className = "" }: FloatingPan
                 damping: 25,
                 stiffness: 300,
               }}
-              className={`w-[95vw] max-w-[650px] bg-background-90 rounded-xl overflow-hidden shadow-2xl floatingPanelContent ${className}`}
+              className={`w-[100vw] max-w-[850px] bg-background-90 rounded-xl overflow-hidden shadow-2xl floatingPanelContent ${className}`}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Fancy gradient header */}
