@@ -32,7 +32,7 @@ export const SimulationTab = ({
   // Default message if none provided
   const defaultMessage =
     responseType === "SMARTAI"
-      ? "Thanks for your interest! Based on what you're asking about, our product might be a good fit for your needs. Would you like me to tell you more about our features and pricing options?"
+      ? "Thanks for your interest! Based on what youre asking about, our product might be a good fit for your needs. Would you like me to tell you more about our features and pricing options?"
       : "Thanks for your message! We appreciate your interest in our products. How can I help you today?"
 
   const finalResponseMessage = responseMessage || defaultMessage
@@ -313,7 +313,7 @@ export const SimulationTab = ({
                   </div>
                   <div>
                     <div className="bg-background-80 rounded-2xl px-3 py-2">
-                      <span className="font-medium text-sm mr-1">user456</span>
+                      <span className="font-medium text-sm mr-1">user</span>
                       <span className="text-sm">This looks amazing! Cant wait to try it.</span>
                     </div>
                     <div className="flex items-center mt-1 text-xs text-text-secondary">
@@ -493,7 +493,7 @@ export const SimulationTab = ({
                     <div className="flex items-center justify-center">
                       <div className="bg-light-blue/10 text-light-blue text-xs px-3 py-1 rounded-full flex items-center">
                         <Sparkles className="h-3 w-3 mr-1" />
-                        Keyword detected: "{detectedKeyword}"
+                        Keyword detected: {detectedKeyword}
                       </div>
                     </div>
                   )}
