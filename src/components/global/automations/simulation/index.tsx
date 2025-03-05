@@ -360,7 +360,7 @@ export const SimulationTab = ({
                       <div className="flex items-center justify-center">
                         <div className="bg-light-blue/10 text-light-blue text-xs px-3 py-1 rounded-full flex items-center">
                           <Sparkles className="h-3 w-3 mr-1" />
-                          Keyword detected: "{detectedKeyword}"
+                          Keyword detected: {detectedKeyword}
                         </div>
                       </div>
                     )}
