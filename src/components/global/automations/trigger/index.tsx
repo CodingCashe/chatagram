@@ -181,7 +181,6 @@ import { useState } from "react"
 import ActiveTrigger from "./active"
 import { Separator } from "@/components/ui/separator"
 import ThenAction from "../then/then-action"
-import TriggerButton from "../trigger-button"
 import { AUTOMATION_TRIGGERS } from "@/constants/automation"
 import { useTriggers } from "@/hooks/use-automations"
 import { cn } from "@/lib/utils"
@@ -190,8 +189,9 @@ import { Button } from "@/components/ui/button"
 import Loader from "../../loader"
 import { useQueryAutomation } from "@/hooks/user-queries"
 import { motion } from "framer-motion"
-import { Palette, Sliders } from "lucide-react"
+import { Palette, Sliders, PlusCircle } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import FloatingPanel from "../../panel"
 
 type Props = {
   id: string
@@ -235,7 +235,28 @@ const Trigger = ({ id }: Props) => {
   }
 
   return (
-    <TriggerButton label="Add a Trigger">
+    <FloatingPanel
+      title="Add a Trigger"
+      trigger={
+        <motion.div
+          className="group relative overflow-hidden rounded-xl mt-4 w-full"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          {/* Border with animation */}
+          <div className="absolute inset-0 bg-light-blue opacity-20 rounded-xl"></div>
+          <div className="absolute inset-0 rounded-xl shimmerBorder"></div>
+
+          {/* Inner content */}
+          <div className="relative m-[2px] bg-background-90 rounded-lg p-5">
+            <div className="flex items-center justify-center gap-3">
+              <PlusCircle className="h-5 w-5 text-[#768BDD]" />
+              <p className="text-[#768BDD] font-bold">Add a Trigger</p>
+            </div>
+          </div>
+        </motion.div>
+      }
+    >
       <div className="flex flex-col gap-4">
         <Tabs defaultValue="triggers" className="w-full">
           <TabsList className="grid grid-cols-2 mb-4">
@@ -338,7 +359,7 @@ const Trigger = ({ id }: Props) => {
           </TabsContent>
         </Tabs>
       </div>
-    </TriggerButton>
+    </FloatingPanel>
   )
 }
 

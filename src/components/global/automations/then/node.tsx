@@ -187,7 +187,7 @@ const ThenNode = ({ id, theme = { id: "blue", name: "Blue", primary: "light-blue
         <p className="font-light text-text-secondary">{data.data.listener.prompt}</p>
       </div>
 
-      {data.data.posts.length > 0 ? <></> : commentTrigger ? <PostButton id={id} /> : <></>}
+      {data.data.posts.length > 0 ? <></> : commentTrigger ? <PostButton id={id} theme={theme} /> : <></>}
     </motion.div>
   )
 }

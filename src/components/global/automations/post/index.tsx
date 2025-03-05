@@ -154,36 +154,112 @@
 
 import { useAutomationPosts } from "@/hooks/use-automations"
 import { useQueryAutomationPosts } from "@/hooks/user-queries"
-import TriggerButton from "../trigger-button"
+import { useState } from "react"
+import FloatingPanel from "../../panel"
 import type { InstagramPostProps } from "@/types/posts.type"
-import { CheckCircle, Instagram } from "lucide-react"
+import { CheckCircle, Search, Filter, SlidersHorizontal, PlusCircle } from "lucide-react"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import Loader from "../../loader"
 import { motion } from "framer-motion"
+import { InstagramBlue } from "@/icons"
+import { Input } from "@/components/ui/input"
 
 type Props = {
   id: string
+  theme?: {
+    id: string
+    name: string
+    primary: string
+    secondary: string
+  }
 }
 
-const PostButton = ({ id }: Props) => {
+const PostButton = ({
+  id,
+  theme = { id: "blue", name: "Blue", primary: "light-blue", secondary: "#768BDD" },
+}: Props) => {
   const { data } = useQueryAutomationPosts()
   const { posts, onSelectPost, mutate, isPending } = useAutomationPosts(id)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [sortBy, setSortBy] = useState<"recent" | "popular">("recent")
+
+  // Filter and sort posts
+  const filteredPosts =
+    data?.status === 200
+      ? data.data.data
+          .filter(
+            (post: InstagramPostProps) =>
+              post.caption?.toLowerCase().includes(searchTerm.toLowerCase()) || searchTerm === "",
+          )
+          .sort((a: InstagramPostProps, b: InstagramPostProps) => {
+            if (sortBy === "recent") {
+              return new Date(b.timestamp || 0).getTime() - new Date(a.timestamp || 0).getTime()
+            } else {
+              return (0) - (3)
+            }
+          })
+      : []
 
   return (
-    <TriggerButton label="Attach a post">
+    <FloatingPanel
+      title="Select posts to monitor"
+      trigger={
+        <Button className="bg-gradient-to-r from-[#3352CC] to-[#1C2D70] text-white font-medium">
+          <PlusCircle className="mr-2 h-4 w-4" />
+          Attach a post
+        </Button>
+      }
+    >
       {data?.status === 200 ? (
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-y-4 w-full">
           <div className="flex items-center gap-3 mb-1">
-            <div className="p-2 bg-emerald-500/10 rounded-lg">
-              <Instagram className="h-5 w-5 text-emerald-400" />
-            </div>
+            <InstagramBlue />
             <p className="text-lg font-medium text-white">Select posts to monitor</p>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
-            {data.data.data.map((post: InstagramPostProps) => (
+          <div className="bg-background-80 p-3 rounded-xl">
+            <div className="flex flex-col md:flex-row gap-3">
+              <div className="relative flex-grow">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-text-secondary" />
+                <Input
+                  placeholder="Search posts..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-9 bg-background-90 border-none"
+                />
+              </div>
+
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSortBy("recent")}
+                  className={cn(
+                    "border-background-90 bg-background-90",
+                    sortBy === "recent" && "border-light-blue text-light-blue",
+                  )}
+                >
+                  <Filter className="h-4 w-4 mr-1" /> Recent
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSortBy("popular")}
+                  className={cn(
+                    "border-background-90 bg-background-90",
+                    sortBy === "popular" && "border-light-blue text-light-blue",
+                  )}
+                >
+                  <SlidersHorizontal className="h-4 w-4 mr-1" /> Popular
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {filteredPosts.map((post: InstagramPostProps) => (
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -200,14 +276,14 @@ const PostButton = ({ id }: Props) => {
               >
                 <div
                   className={cn(
-                    "absolute inset-0 bg-gradient-to-t from-emerald-900/80 to-transparent opacity-0 transition-opacity duration-300",
+                    "absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100",
                     posts.find((p) => p.postid === post.id) && "opacity-100",
                   )}
                 />
 
                 {posts.find((p) => p.postid === post.id) && (
                   <div className="absolute inset-0 flex items-center justify-center z-10">
-                    <CheckCircle className="h-10 w-10 text-emerald-400" />
+                    <CheckCircle className="h-10 w-10 text-light-blue" />
                   </div>
                 )}
 
@@ -218,6 +294,10 @@ const PostButton = ({ id }: Props) => {
                   alt="post image"
                   className="object-cover transition-all duration-300 group-hover:scale-110"
                 />
+
+                <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <p className="text-white text-xs line-clamp-2">{post.caption}</p>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -225,12 +305,7 @@ const PostButton = ({ id }: Props) => {
           <Button
             onClick={mutate}
             disabled={posts.length === 0}
-            className={cn(
-              "w-full py-6 text-white font-medium transition-all duration-300 mt-2",
-              posts.length === 0
-                ? "bg-slate-700"
-                : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-lg shadow-emerald-700/20",
-            )}
+            className="bg-gradient-to-br w-full from-[#3352CC] font-medium text-white to-[#1C2D70]"
           >
             <Loader state={isPending}>
               Attach {posts.length} Post{posts.length !== 1 && "s"}
@@ -239,12 +314,22 @@ const PostButton = ({ id }: Props) => {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center p-8 text-center">
-          <Instagram className="h-12 w-12 text-slate-600 mb-3" />
-          <p className="text-slate-400">No posts found</p>
-          <p className="text-sm text-slate-600 mt-1">Connect your Instagram account to see posts</p>
+          <div className="p-4 rounded-full bg-background-80 mb-4">
+            <InstagramBlue />
+          </div>
+          <p className="text-white font-medium">No posts found</p>
+          <p className="text-sm text-text-secondary mt-1 max-w-xs">
+            Connect your Instagram account to see posts or create new content to monitor
+          </p>
+          <Button
+            className="bg-gradient-to-br from-[#3352CC] to-[#1C2D70] mt-4"
+            onClick={() => window.open("https://instagram.com", "_blank")}
+          >
+            Connect Instagram
+          </Button>
         </div>
       )}
-    </TriggerButton>
+    </FloatingPanel>
   )
 }
 
