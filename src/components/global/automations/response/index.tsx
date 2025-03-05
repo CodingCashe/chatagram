@@ -32,28 +32,28 @@ const SAMPLE_TEMPLATES: ResponseTemplate[] = [
     category: "Pricing",
     title: "Discount Offer",
     content:
-      "Thanks for asking about our pricing! We're currently running a special promotion - use code WELCOME20 for 20% off your first month. Would you like to know more?",
+      "Thanks for asking about our pricing! We are currently running a special promotion - use code WELCOME20 for 20% off your first month. Would you like to know more?",
   },
   {
     id: "3",
     category: "Support",
     title: "General Support",
     content:
-      "I'd be happy to help you with that issue. Could you please provide more details about what you're experiencing?",
+      "I'd be happy to help you with that issue. Could you please provide more details about what you are experiencing?",
   },
   {
     id: "4",
     category: "Support",
     title: "Technical Issue",
     content:
-      "Sorry to hear you're having technical difficulties. Have you tried clearing your cache and cookies? If that doesn't work, our support team is available at support@example.com.",
+      "Sorry to hear you're having technical difficulties. Have you tried clearing your cache and cookies? If that does not work, our support team is available at support@chatal.com.",
   },
   {
     id: "5",
     category: "Welcome",
     title: "New Follower",
     content:
-      "Thanks for following us! We're excited to have you as part of our community. Feel free to reach out if you have any questions!",
+      "Thanks for following us! We are excited to have you as part of our community. Feel free to reach out if you have any questions!",
   },
   {
     id: "6",
@@ -171,7 +171,7 @@ export const ResponseLibrary = ({ onSelectTemplate }: ResponseLibraryProps) => {
             </ScrollArea>
 
             <div className="mt-3 pt-2 border-t border-background-80 text-center">
-              <p className="text-xs text-text-secondary">Drag templates to use them or click "Use template"</p>
+              <p className="text-xs text-text-secondary">Drag templates to use them or click Use template</p>
             </div>
           </div>
         </motion.div>
