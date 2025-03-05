@@ -137,7 +137,13 @@ export const useKeywords = (id: string) => {
     'automation-info'
   );
 
-  return { keyword, onValueChange, onKeyPress, deleteMutation };
+  const addKeyword = (newKeyword: string) => {
+    if (newKeyword.trim()) {
+      mutate({ keyword: newKeyword })
+    }
+  }
+
+  return { keyword, onValueChange, onKeyPress, deleteMutation, addKeyword };
 };
 
 export const useAutomationPosts = (id: string) => {
@@ -378,3 +384,4 @@ export const useAutomationPosts = (id: string) => {
 
 //   return { posts, onSelectPost, mutate, isPending,deleteMutation ,isDeleting}
 // }
+
