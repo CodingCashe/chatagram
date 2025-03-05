@@ -314,7 +314,7 @@ export const SimulationTab = ({
                   <div>
                     <div className="bg-background-80 rounded-2xl px-3 py-2">
                       <span className="font-medium text-sm mr-1">user456</span>
-                      <span className="text-sm">This looks amazing! Can't wait to try it.</span>
+                      <span className="text-sm">This looks amazing! Cant wait to try it.</span>
                     </div>
                     <div className="flex items-center mt-1 text-xs text-text-secondary">
                       <span>1h</span>
@@ -474,7 +474,7 @@ export const SimulationTab = ({
 
               <div className="flex justify-center">
                 <div className="bg-background-90 text-text-secondary text-xs px-3 py-1 rounded-full">
-                  You're now connected on Instagram
+                  Youre now connected on Instagram
                 </div>
               </div>
 
@@ -591,7 +591,7 @@ export const SimulationTab = ({
         </h4>
         <ul className="text-sm text-text-secondary space-y-2 list-disc pl-5">
           <li>Type a message containing one of your keywords to see how the automation responds</li>
-          <li>Use the "Generate Sample Message" button to create a message with one of your keywords</li>
+          <li>Use the Generate Sample Message button to create a message with one of your keywords</li>
           <li>
             Switch between Comment and Direct Message views to see how your automation works in different contexts
           </li>
