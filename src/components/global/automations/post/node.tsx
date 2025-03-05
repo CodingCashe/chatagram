@@ -301,7 +301,7 @@ import { InstagramBlue, Warning } from "@/icons"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { Heart, MessageCircle } from "lucide-react"
-import { FancyConnector } from "../components/fancy-connector"
+import { FancyConnector } from "../connector"
 
 type Props = {
   id: string
