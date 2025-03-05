@@ -442,7 +442,7 @@ export const ResponseLibrary = ({ onSelectTemplate }: ResponseLibraryProps) => {
               </ScrollArea>
 
               <div className="mt-3 pt-2 border-t border-background-80 text-center">
-                <p className="text-xs text-text-secondary">Drag templates to use them or click "Use template"</p>
+                <p className="text-xs text-text-secondary">Drag templates to use them or click Use template</p>
               </div>
             </div>
           </motion.div>
