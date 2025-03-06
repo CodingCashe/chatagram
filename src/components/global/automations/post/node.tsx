@@ -295,6 +295,97 @@
 
 // export default PostNode
 
+// "use client"
+// import { useQueryAutomation } from "@/hooks/user-queries"
+// import { InstagramBlue, Warning } from "@/icons"
+// import Image from "next/image"
+// import { motion } from "framer-motion"
+// import { Heart, MessageCircle } from "lucide-react"
+// import { FancyConnector } from "../connector"
+
+// type Props = {
+//   id: string
+//   theme?: {
+//     id: string
+//     name: string
+//     primary: string
+//     secondary: string
+//   }
+// }
+
+// const PostNode = ({ id, theme = { id: "blue", name: "Blue", primary: "light-blue", secondary: "#768BDD" } }: Props) => {
+//   const { data } = useQueryAutomation(id)
+
+//   if (!data?.data || data.data.posts.length === 0) {
+//     return null
+//   }
+
+//   return (
+//     <motion.div
+//       initial={{ opacity: 0, y: 20 }}
+//       animate={{ opacity: 1, y: 0 }}
+//       className="w-10/12 lg:w-8/12 relative xl:w-4/12 p-5 rounded-xl flex flex-col bg-[#1D1D1D] gap-y-3"
+//     >
+//       <div className="absolute h-20 left-1/2 bottom-full flex flex-col items-center z-50">
+//         <FancyConnector direction="vertical" style="pulse" length={80} color={theme.secondary} />
+//       </div>
+
+//       <div className="flex gap-x-2">
+//         <Warning />
+//         If they comment on...
+//       </div>
+
+//       <div className="bg-background-80 p-3 rounded-xl flex flex-col gap-y-2">
+//         <div className="flex gap-x-2 items-center">
+//           <InstagramBlue />
+//           <p className="font-bold text-lg">These posts</p>
+//         </div>
+
+//         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3">
+//           {data.data.posts.map((post, index) => (
+//             <motion.div
+//               key={post.id}
+//               initial={{ opacity: 0, scale: 0.9 }}
+//               animate={{
+//                 opacity: 1,
+//                 scale: 1,
+//                 transition: { delay: index * 0.1 },
+//               }}
+//               whileHover={{ scale: 1.05 }}
+//               className="relative aspect-square rounded-lg overflow-hidden shadow-md group"
+//             >
+//               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+//               <Image
+//                 fill
+//                 sizes="100vw"
+//                 src={post.media || "/placeholder.svg"}
+//                 alt="post image"
+//                 className="object-cover transition-all duration-300 group-hover:scale-110"
+//               />
+
+//               <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+//                 <div className="flex items-center gap-3">
+//                   <div className="flex items-center gap-1">
+//                     <Heart className="h-3 w-3 text-keyword-red" />
+//                     <span className="text-white text-xs">1.2k</span>
+//                   </div>
+//                   <div className="flex items-center gap-1">
+//                     <MessageCircle className="h-3 w-3 text-light-blue" />
+//                     <span className="text-white text-xs">48</span>
+//                   </div>
+//                 </div>
+//               </div>
+//             </motion.div>
+//           ))}
+//         </div>
+//       </div>
+//     </motion.div>
+//   )
+// }
+
+// export default PostNode
+
 "use client"
 import { useQueryAutomation } from "@/hooks/user-queries"
 import { InstagramBlue, Warning } from "@/icons"
@@ -302,6 +393,8 @@ import Image from "next/image"
 import { motion } from "framer-motion"
 import { Heart, MessageCircle } from "lucide-react"
 import { FancyConnector } from "../connector"
+import PostButton from "../post"
+import { ScheduledPostsSelector } from "../scheduled"
 
 type Props = {
   id: string
@@ -378,6 +471,19 @@ const PostNode = ({ id, theme = { id: "blue", name: "Blue", primary: "light-blue
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* Add post buttons here */}
+        <div className="mt-4 flex flex-col sm:flex-row gap-3">
+          <PostButton id={id} theme={theme} />
+          <ScheduledPostsSelector
+            userId={id}
+            onSelectPost={(post) => {
+              console.log("Selected scheduled post:", post)
+              // Handle adding the post to the automation
+            }}
+            selectedPosts={[]}
+          />
         </div>
       </div>
     </motion.div>
