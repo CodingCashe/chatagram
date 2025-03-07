@@ -645,7 +645,7 @@ const PostButton = ({
                   </div>
                   <p className="text-white font-medium">No scheduled posts found</p>
                   <p className="text-sm text-text-secondary mt-1 max-w-xs">
-                    Schedule posts to monitor them when they're published
+                    Schedule posts to monitor them when they are published
                   </p>
                 </div>
               )}
