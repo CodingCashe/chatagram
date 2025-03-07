@@ -47,6 +47,7 @@ export const findAutomation = async (id: string) => {
       trigger: true,
       posts: true,
       listener: true,
+      scheduledPosts:true,
       User: {
         select: {
           subscription: true,
@@ -230,4 +231,19 @@ export async function getConversationState(userId: string) {
   })
 }
 
-
+// Add this function to queries.ts
+export const addScheduledPosts = async (
+  automationId: string,
+  scheduledPostIds: string[]
+) => {
+  return await client.automation.update({
+    where: {
+      id: automationId,
+    },
+    data: {
+      scheduledPosts: {
+        connect: scheduledPostIds.map(id => ({ id })),
+      },
+    },
+  })
+}

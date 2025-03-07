@@ -13,6 +13,7 @@ import {
   getAutomations,
   updateAutomation,
   deleteAutomationQuery,
+  addScheduledPosts,
 } from './queries'
 
 export const createAutomations = async (id?: string) => {
@@ -188,6 +189,23 @@ export const activateAutomation = async (id: string, state: boolean) => {
         status: 200,
         data: `Automation ${state ? 'activated' : 'disabled'}`,
       }
+    return { status: 404, data: 'Automation not found' }
+  } catch (error) {
+    return { status: 500, data: 'Oops! something went wrong' }
+  }
+}
+
+// Added
+export const saveScheduledPosts = async (
+  automationId: string,
+  scheduledPostIds: string[]
+) => {
+  await onCurrentUser()
+  try {
+    const create = await addScheduledPosts(automationId, scheduledPostIds)
+
+    if (create) return { status: 200, data: 'Scheduled posts attached' }
+
     return { status: 404, data: 'Automation not found' }
   } catch (error) {
     return { status: 500, data: 'Oops! something went wrong' }

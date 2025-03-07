@@ -45,11 +45,13 @@ model ScheduledContent {
   scheduledDate     DateTime
   publishedDate     DateTime?
   mediaProductType  String?
-  status            String   @default("scheduled")
-  User              User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            String?  @db.Uuid
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  automation        Automation? @relation(fields: [automationId], references: [id], onDelete: Cascade)
+  automationId      String?     @db.Uuid
+  status            String      @default("scheduled")
+  User              User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String?     @db.Uuid
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
 }
 
 model MarketingInfo {
@@ -127,7 +129,7 @@ model Integrations {
 
 model Automation {
   id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name      String    @default("Untitled")
+  name      String    @default("New Automation")
   createdAt DateTime  @default(now())
   active    Boolean   @default(false)
   trigger   Trigger[]
@@ -139,6 +141,7 @@ model Automation {
   User      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String?   @db.Uuid
   keywords  Keyword[]
+  scheduledPosts ScheduledContent[] 
 }
 
 model Message {
@@ -241,4 +244,3 @@ enum LISTENERS {
   SMARTAI
   MESSAGE
 }
-

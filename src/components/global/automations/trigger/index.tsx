@@ -1231,7 +1231,7 @@ const Trigger = ({ id }: Props) => {
                 types?.length === 0 ? "bg-in-active" : `bg-gradient-to-br from-[#3352CC] to-[#1C2D70]`,
               )}
             >
-              <Loader state={isPending}>Continue to Configure</Loader>
+              <Loader state={isPending}>Configure</Loader>
             </Button>
           </TabsContent>
 
@@ -1242,7 +1242,7 @@ const Trigger = ({ id }: Props) => {
                 <Keywords id={id} />
               </div>
 
-              <div>
+              {/* <div>
                 <h3 className="text-lg font-medium mb-3">Select Posts to Monitor</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <PostButton id={id} />
@@ -1255,9 +1255,9 @@ const Trigger = ({ id }: Props) => {
                     selectedPosts={[]}
                   />
                 </div>
-              </div>
+              </div> */}
 
-              {responseType === "SMARTAI" && (
+              {responseType === "SMARTAI" || 50>20 && (
                 <div>
                   <h3 className="text-lg font-medium mb-3">Analyze Your Business</h3>
                   <WebsiteAnalyzer

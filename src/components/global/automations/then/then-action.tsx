@@ -598,7 +598,7 @@ import Loader from "../../loader"
 import { motion } from "framer-motion"
 import { Lightbulb, PlusCircle, MessageSquare } from "lucide-react"
 import FloatingPanel from "../../panel"
-import { ResponseLibrary } from "../response"
+import  ResponseLibrary from "../response"
 import { ContextCard } from "../context"
 import { useState } from "react"
 
