@@ -8,25 +8,25 @@ const benefits = [
     emoji: "⚡",
     title: "Boost Efficiency",
     description: "Streamline your workflow, reducing manual tasks and boosting overall productivity.",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/customers.png",
   },
   {
     emoji: "🎯",
     title: "Trigger-based Actions",
     description: "Set up automations to respond to specific keywords or events, ensuring timely and relevant actions.",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/customers.png",
   },
   {
     emoji: "⏱️",
     title: "Save Time",
     description: "Handle repetitive tasks automatically, freeing up your time for more important work.",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/customers.png",
   },
   {
     emoji: "🔄",
     title: "Ensure Consistency",
     description: "Perform tasks consistently every time, reducing human error and variability.",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/Ig-creators.png?height=200&width=300",
   },
 ]
 
@@ -36,7 +36,7 @@ export default function AutomationBenefits() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % benefits.length)
-    }, 5000) // Change every 5 seconds
+    }, 8000) // Change every 8 seconds
 
     return () => clearInterval(timer)
   }, [])
