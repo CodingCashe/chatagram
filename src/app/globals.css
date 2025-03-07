@@ -387,6 +387,9 @@
   .animate-spin-slow {
     animation: spin 10s linear infinite;
   }
+  .animate-fade {
+    animation: fade 0.5s ease-in-out;
+  }
 }
 
 @keyframes spin {
@@ -398,16 +401,11 @@
   }
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
+@keyframes fade {
+  from {
+    opacity: 0;
   }
-  50% {
-    transform: translateY(-10px);
+  to {
+    opacity: 1;
   }
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
 }
