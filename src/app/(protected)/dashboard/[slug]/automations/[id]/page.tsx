@@ -49,8 +49,6 @@
 
 // export default Page
 
-"use client"
-
 import { getAutomationInfo } from "@/actions/automations"
 import PostNode from "@/components/global/automations/post/node"
 import ThenNode from "@/components/global/automations/then/node"
