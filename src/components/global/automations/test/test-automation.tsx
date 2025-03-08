@@ -160,7 +160,7 @@ const TestAutomation = ({
                     <div className="h-5 w-5 flex-shrink-0 rounded-full bg-[#3352CC]/20 flex items-center justify-center mt-0.5">
                       <span className="text-xs">2</span>
                     </div>
-                    <span>Click "Test" to simulate the trigger</span>
+                    <span>Click Test to simulate the trigger</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <div className="h-5 w-5 flex-shrink-0 rounded-full bg-[#3352CC]/20 flex items-center justify-center mt-0.5">
@@ -256,7 +256,7 @@ const TestAutomation = ({
                     </div>
                     <p className="text-white font-medium">No test results yet</p>
                     <p className="text-sm text-text-secondary mt-1 max-w-xs">
-                      Enter a test message and click "Test" to see how your automation would respond
+                      Enter a test message and click Test to see how your automation would respond
                     </p>
                   </div>
                 )}
