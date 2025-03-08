@@ -221,18 +221,18 @@ const ActiveTrigger = ({
                   <div className="flex items-center gap-2 mt-3">
                     <Badge variant="outline" className="bg-background-90/50 text-xs flex items-center gap-1">
                       <Clock className="h-3 w-3" />
-                      Auto-response
+                      Response
                     </Badge>
                     <Badge variant="outline" className="bg-background-90/50 text-xs flex items-center gap-1">
                       <Users className="h-3 w-3" />
-                      {type === "COMMENT" ? "Public" : "Private"}
+                      {type === "COMMENT" ? "Private" : "Private"}
                     </Badge>
                   </div>
                 </div>
               </div>
 
               {/* Stats section */}
-              <div className="grid grid-cols-2 gap-3 mt-6">
+              {/* <div className="grid grid-cols-2 gap-3 mt-6">
                 <div className="bg-background-90 p-3 rounded-lg">
                   <div className="flex items-center gap-2 text-text-secondary text-sm mb-1">
                     <MessageCircle className="h-4 w-4" />
@@ -247,7 +247,7 @@ const ActiveTrigger = ({
                   </div>
                   <p className="text-xl font-bold">87%</p>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* Right section - Keywords */}
@@ -283,15 +283,15 @@ const ActiveTrigger = ({
 
               {/* Activity timeline */}
               <div className="mt-4">
-                <h5 className="text-sm font-medium mb-2">Recent Activity</h5>
+                <h5 className="text-sm font-medium mb-2">Note</h5>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-xs text-text-secondary">
                     <div className="h-2 w-2 rounded-full bg-green-500"></div>
-                    <span>Responded to @user123 • 2 hours ago</span>
+                    <span>The messages will be sent to their dms</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-text-secondary">
                     <div className="h-2 w-2 rounded-full bg-green-500"></div>
-                    <span>Responded to @client456 • 5 hours ago</span>
+                    <span>The responses will be in the language of the client</span>
                   </div>
                 </div>
               </div>

@@ -10,8 +10,8 @@ type Props = {
 
 export const FancyConnector = ({
   direction = "vertical",
-  style = "solid",
-  length = 25,
+  style = "dashed",
+  length = 10,
   width = 2,
   color = "#768BDD",
 }: Props) => {

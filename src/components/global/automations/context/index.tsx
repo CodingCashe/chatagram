@@ -23,6 +23,12 @@ const AUTOMATION_TIPS: Tip[] = [
     content: "Adding 3-5 keywords works best for most automations. Too many can trigger unwanted responses.",
   },
   {
+    id: "keywords-count",
+    context: "keywords",
+    title: "Keyword Best Practices",
+    content: "Make sure the keywords are short memorable and common words",
+  },
+  {
     id: "response-length",
     context: "response",
     title: "Keep Responses Concise",
