@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#ffffff"/>
+  
+  <!-- Central system hub -->
+  <circle cx="200" cy="150" r="40" fill="#1e90ff"/>
+  <circle cx="200" cy="150" r="30" fill="#ffffff"/>
+  <circle cx="200" cy="150" r="20" fill="#1e90ff"/>
+  
+  <!-- Person silhouettes connected to the hub -->
+  <circle cx="80" cy="80" r="20" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M70,85 C70,100 90,100 90,85" fill="none" stroke="#1e90ff" stroke-width="2"/>
+  <circle cx="80" cy="70" r="3" fill="#1e90ff"/>
+  <circle cx="80" cy="70" r="3" fill="#1e90ff"/>
+  
+  <circle cx="320" cy="80" r="20" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M310,85 C310,100 330,100 330,85" fill="none" stroke="#1e90ff" stroke-width="2"/>
+  <circle cx="320" cy="70" r="3" fill="#1e90ff"/>
+  <circle cx="320" cy="70" r="3" fill="#1e90ff"/>
+  
+  <circle cx="80" cy="220" r="20" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M70,225 C70,240 90,240 90,225" fill="none" stroke="#1e90ff" stroke-width="2"/>
+  <circle cx="80" cy="210" r="3" fill="#1e90ff"/>
+  <circle cx="80" cy="210" r="3" fill="#1e90ff"/>
+  
+  <circle cx="320" cy="220" r="20" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M310,225 C310,240 330,240 330,225" fill="none" stroke="#1e90ff" stroke-width="2"/>
+  <circle cx="320" cy="210" r="3" fill="#1e90ff"/>
+  <circle cx="320" cy="210" r="3" fill="#1e90ff"/>
+  
+  <!-- Personalized message bubbles -->
+  <path d="M115,80 L160,110" stroke="#1e90ff" stroke-width="2" stroke-dasharray="5,3"/>
+  <circle cx="175" cy="120" r="15" fill="#1e90ff"/>
+  <text x="175" y="125" font-size="20" text-anchor="middle" fill="#ffffff">A</text>
+  
+  <path d="M285,80 L240,110" stroke="#1e90ff" stroke-width="2" stroke-dasharray="5,3"/>
+  <circle cx="225" cy="120" r="15" fill="#1e90ff"/>
+  <text x="225" y="125" font-size="20" text-anchor="middle" fill="#ffffff">B</text>
+  
+  <path d="M115,220 L160,190" stroke="#1e90ff" stroke-width="2" stroke-dasharray="5,3"/>
+  <circle cx="175" cy="180" r="15" fill="#1e90ff"/>
+  <text x="175" y="185" font-size="20" text-anchor="middle" fill="#ffffff">C</text>
+  
+  <path d="M285,220 L240,190" stroke="#1e90ff" stroke-width="2" stroke-dasharray="5,3"/>
+  <circle cx="225" cy="180" r="15" fill="#1e90ff"/>
+  <text x="225" y="185" font-size="20" text-anchor="middle" fill="#ffffff">D</text>
+</svg>

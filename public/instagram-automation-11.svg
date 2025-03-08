@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#ffffff"/>
+  
+  <!-- Central automation hub -->
+  <circle cx="200" cy="150" r="30" fill="#1e90ff"/>
+  <path d="M185,145 L195,155 L215,135" stroke="#ffffff" stroke-width="3" fill="none"/>
+  
+  <!-- Different channel platforms -->
+  <!-- Top platform (Instagram) -->
+  <rect x="170" y="50" width="60" height="40" rx="5" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <circle cx="200" cy="70" r="15" fill="#1e90ff"/>
+  
+  <!-- Right platform (website) -->
+  <rect x="300" y="130" width="60" height="40" rx="5" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M310,150 L350,150 M330,140 L330,160" stroke="#1e90ff" stroke-width="2"/>
+  
+  <!-- Bottom platform (email) -->
+  <rect x="170" y="210" width="60" height="40" rx="5" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M175,215 L225,215 L200,235 Z" fill="#1e90ff"/>
+  
+  <!-- Left platform (messaging) -->
+  <rect x="40" y="130" width="60" height="40" rx="5" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <circle cx="55" cy="150" r="8" fill="#1e90ff"/>
+  <circle cx="70" cy="150" r="8" fill="#1e90ff"/>
+  <circle cx="85" cy="150" r="8" fill="#1e90ff"/>
+  
+  <!-- Connection lines with identical message shapes -->
+  <line x1="200" y1="90" x2="200" y2="120" stroke="#1e90ff" stroke-width="2" stroke-dasharray="5,3"/>
+  <circle cx="200" cy="105" r="8" fill="#1e90ff"/>
+  
+  <line x1="270" y1="150" x2="300" y2="150" stroke="#1e90ff" stroke-width="2" stroke-dasharray="5,3"/>
+  <circle cx="285" cy="150" r="8" fill="#1e90ff"/>
+  
+  <line x1="200" y1="180" x2="200" y2="210" stroke="#1e90ff" stroke-width="2" stroke-dasharray="5,3"/>
+  <circle cx="200" cy="195" r="8" fill="#1e90ff"/>
+  
+  <line x1="100" y1="150" x2="130" y2="150" stroke="#1e90ff" stroke-width="2" stroke-dasharray="5,3"/>
+  <circle cx="115" cy="150" r="8" fill="#1e90ff"/>
+</svg>

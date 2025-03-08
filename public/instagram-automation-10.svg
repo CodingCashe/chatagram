@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#ffffff"/>
+  
+  <!-- Split view comparison -->
+  <line x1="200" y1="60" x2="200" y2="240" stroke="#1e90ff" stroke-width="2" stroke-dasharray="10,5"/>
+  
+  <!-- Manual side (left) -->
+  <circle cx="100" cy="100" r="20" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M90,105 C90,115 110,115 110,105" fill="none" stroke="#1e90ff" stroke-width="2"/>
+  <circle cx="100" cy="90" r="3" fill="#1e90ff"/>
+  <circle cx="100" cy="90" r="3" fill="#1e90ff"/>
+  
+  <!-- Message bubbles on manual side with long path -->
+  <circle cx="100" cy="150" r="15" fill="#1e90ff"/>
+  <path d="M100,120 C100,135 100,135 100,150" stroke="#1e90ff" stroke-width="2" fill="none" stroke-dasharray="2,2"/>
+  
+  <!-- Clock on manual side -->
+  <circle cx="100" cy="200" r="25" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <line x1="100" y1="200" x2="100" y2="180" stroke="#1e90ff" stroke-width="2"/>
+  <line x1="100" y1="200" x2="115" y2="200" stroke="#1e90ff" stroke-width="2"/>
+  
+  <!-- Automated side (right) -->
+  <circle cx="300" cy="100" r="20" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M290,105 C290,115 310,115 310,105" fill="none" stroke="#1e90ff" stroke-width="2"/>
+  <circle cx="300" cy="90" r="3" fill="#1e90ff"/>
+  <circle cx="300" cy="90" r="3" fill="#1e90ff"/>
+  
+  <!-- Message bubbles on automated side with short direct path -->
+  <circle cx="300" cy="150" r="15" fill="#1e90ff"/>
+  <path d="M300,120 L300,150" stroke="#1e90ff" stroke-width="2" fill="none"/>
+  
+  <!-- Clock on automated side showing less time -->
+  <circle cx="300" cy="200" r="25" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <line x1="300" y1="200" x2="300" y2="185" stroke="#1e90ff" stroke-width="2"/>
+  <line x1="300" y1="200" x2="310" y2="195" stroke="#1e90ff" stroke-width="2"/>
+  
+  <!-- Speed indicators -->
+  <path d="M85,240 L115,240" stroke="#1e90ff" stroke-width="2" stroke-linecap="round"/>
+  <path d="M285,240 L315,240" stroke="#1e90ff" stroke-width="4" stroke-linecap="round"/>
+</svg>

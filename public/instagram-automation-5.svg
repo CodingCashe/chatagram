@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#ffffff"/>
+  
+  <!-- Path representing customer journey -->
+  <path d="M50,150 C100,100 150,200 200,150 C250,100 300,200 350,150" fill="none" stroke="#1e90ff" stroke-width="4" stroke-linecap="round" stroke-dasharray="0"/>
+  
+  <!-- Stages along the journey (message bubbles) -->
+  <circle cx="50" cy="150" r="15" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <circle cx="125" cy="125" r="15" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <circle cx="200" cy="150" r="15" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <circle cx="275" cy="125" r="15" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <circle cx="350" cy="150" r="15" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  
+  <!-- Icons inside bubbles -->
+  <circle cx="50" cy="150" r="8" fill="#1e90ff"/>
+  <polygon points="125,120 120,130 130,130" fill="#1e90ff"/>
+  <rect x="195" y="145" width="10" height="10" fill="#1e90ff"/>
+  <path d="M270,125 L275,130 L280,125" stroke="#1e90ff" stroke-width="2" fill="none"/>
+  <path d="M345,150 L350,155 L355,150" stroke="#1e90ff" stroke-width="2" fill="none"/>
+  
+  <!-- Automation gears -->
+  <circle cx="200" cy="80" r="25" fill="#f0f8ff" stroke="#1e90ff" stroke-width="3"/>
+  <circle cx="200" cy="80" r="15" fill="#ffffff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M200,55 L200,65 M185,60 L190,68 M175,80 L185,80 M185,100 L190,92 M200,105 L200,95 M215,100 L210,92 M225,80 L215,80 M215,60 L210,68" stroke="#1e90ff" stroke-width="3"/>
+</svg>

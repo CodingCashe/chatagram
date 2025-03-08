@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#ffffff"/>
+  
+  <!-- Split comparison view -->
+  <line x1="200" y1="50" x2="200" y2="250" stroke="#1e90ff" stroke-width="2" stroke-dasharray="10,5"/>
+  
+  <!-- Manual side (left) with errors -->
+  <circle cx="100" cy="100" r="25" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M85,90 L115,110 M115,90 L85,110" stroke="#1e90ff" stroke-width="2"/>
+  
+  <circle cx="100" cy="160" r="25" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M85,150 L115,170 M115,150 L85,170" stroke="#1e90ff" stroke-width="2"/>
+  
+  <circle cx="100" cy="220" r="25" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M85,210 L115,230 M115,210 L85,230" stroke="#1e90ff" stroke-width="2"/>
+  
+  <!-- Human figure on left -->
+  <circle cx="40" cy="150" r="15" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M30,155 C30,165 50,165 50,155" fill="none" stroke="#1e90ff" stroke-width="2"/>
+  <circle cx="40" cy="140" r="3" fill="#1e90ff"/>
+  <line x1="40" y1="165" x2="40" y2="185" stroke="#1e90ff" stroke-width="2"/>
+  <line x1="40" y1="170" x2="25" y2="180" stroke="#1e90ff" stroke-width="2"/>
+  <line x1="40" y1="170" x2="55" y2="180" stroke="#1e90ff" stroke-width="2"/>
+  
+  <!-- Automated side (right) with correct responses -->
+  <circle cx="300" cy="100" r="25" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M285,100 L295,110 L315,90" stroke="#1e90ff" stroke-width="3" fill="none"/>
+  
+  <circle cx="300" cy="160" r="25" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M285,160 L295,170 L315,150" stroke="#1e90ff" stroke-width="3" fill="none"/>
+  
+  <circle cx="300" cy="220" r="25" fill="#f0f8ff" stroke="#1e90ff" stroke-width="2"/>
+  <path d="M285,220 L295,230 L315,210" stroke="#1e90ff" stroke-width="3" fill="none"/>
+  
+  <!-- Robot/automation icon on right -->
+  <rect x="340" y="135" width="30" height="30" rx="5" fill="#1e90ff"/>
+  <circle cx="350" cy="145" r="3" fill="#ffffff"/>
+  <circle cx="360" cy="145" r="3" fill="#ffffff"/>
+  <path d="M345,155 C345,160 365,160 365,155" stroke="#ffffff" stroke-width="2" fill="none"/>
+</svg>

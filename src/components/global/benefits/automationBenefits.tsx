@@ -5,28 +5,28 @@ import Image from "next/image"
 
 const benefits = [
   {
-    emoji: "⚡",
-    title: "Boost Efficiency",
-    description: "Streamline your workflow, reducing manual tasks and boosting overall productivity.",
-    image: "/customers.png",
+    emoji: "",
+    title: "Enhanced customer Journey",
+    description: "Let AI deal with the task of converting potential customers",
+    image: "/instagram-automation-5.svg",
   },
   {
-    emoji: "🎯",
-    title: "Trigger-based Actions",
-    description: "Set up automations to respond to specific keywords or events, ensuring timely and relevant actions.",
-    image: "/customers.png",
+    emoji: "",
+    title: "Analyze",
+    description: "Get sentiment analysis in real time",
+    image: "/instagram-automation-4.svg",
   },
   {
-    emoji: "⏱️",
+    emoji: "",
     title: "Save Time",
     description: "Handle repetitive tasks automatically, freeing up your time for more important work.",
-    image: "/customers.png",
+    image: "/instagram-automation-1.svg",
   },
   {
-    emoji: "🔄",
+    emoji: "",
     title: "Ensure Consistency",
     description: "Perform tasks consistently every time, reducing human error and variability.",
-    image: "/Ig-creators.png?height=200&width=300",
+    image: "/instagram-automation-3.svg",
   },
 ]
 

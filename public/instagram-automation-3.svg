@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#ffffff"/>
+  
+  <!-- Three identical phone outlines representing consistency -->
+  <rect x="80" y="100" width="60" height="100" rx="10" fill="#f0f8ff" stroke="#1e90ff" stroke-width="3"/>
+  <rect x="170" y="100" width="60" height="100" rx="10" fill="#f0f8ff" stroke="#1e90ff" stroke-width="3"/>
+  <rect x="260" y="100" width="60" height="100" rx="10" fill="#f0f8ff" stroke="#1e90ff" stroke-width="3"/>
+  
+  <!-- Identical message bubbles on each phone -->
+  <circle cx="110" cy="125" r="10" fill="#1e90ff"/>
+  <circle cx="110" cy="155" r="10" fill="#1e90ff"/>
+  <circle cx="110" cy="185" r="10" fill="#1e90ff"/>
+  
+  <circle cx="200" cy="125" r="10" fill="#1e90ff"/>
+  <circle cx="200" cy="155" r="10" fill="#1e90ff"/>
+  <circle cx="200" cy="185" r="10" fill="#1e90ff"/>
+  
+  <circle cx="290" cy="125" r="10" fill="#1e90ff"/>
+  <circle cx="290" cy="155" r="10" fill="#1e90ff"/>
+  <circle cx="290" cy="185" r="10" fill="#1e90ff"/>
+  
+  <!-- Checkmarks indicating completion -->
+  <path d="M130,100 L140,110 L155,90" fill="none" stroke="#1e90ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M220,100 L230,110 L245,90" fill="none" stroke="#1e90ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M310,100 L320,110 L335,90" fill="none" stroke="#1e90ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
