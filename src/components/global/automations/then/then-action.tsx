@@ -1074,7 +1074,7 @@ const ThenAction = ({
 
   // Handle AI selection with subscription check
   const handleAISelection = (type: "SMARTAI" | "MESSAGE") => {
-    if (type === "SMARTAI" && userSubscription !== "PRO") {
+    if (userSubscription !== "PRO") {
       toast({
         title: "Pro Feature",
         description: "Upgrade to PRO to use AI-powered responses",
