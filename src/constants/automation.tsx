@@ -45,7 +45,7 @@ export const AUTOMATION_LISTENERS: AutomationListenerProps[] = [
     id: v4(),
     label: 'Let Smart AI take over',
     icon: <SmartAi />,
-    description: 'Tell AI about your project. (Upgrade to use this feature)',
+    description: 'Tell AI about your project.',
     type: 'SMARTAI',
   },
 ]
