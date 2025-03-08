@@ -500,9 +500,9 @@ const Page = async ({ params }: Props) => {
         </div>
 
         {/* Fancy Connector between Trigger and Then */}
-        <div className="flex justify-center w-full">
+        {/* <div className="flex justify-center w-full">
           <FancyConnector direction="vertical" style="gradient" length={80} color="#768BDD" />
-        </div>
+        </div> */}
 
         {/* Then section */}
         <div className="w-full max-w-4xl">
@@ -515,9 +515,9 @@ const Page = async ({ params }: Props) => {
         </div>
 
         {/* Configure Response section */}
-        <div className="w-full max-w-4xl">
+        {/* <div className="w-full max-w-4xl">
           <Configure id={params.id} />
-        </div>
+        </div> */}
 
         {/* Fancy Connector between Configure and Post */}
         <div className="flex justify-center w-full">
@@ -530,9 +530,9 @@ const Page = async ({ params }: Props) => {
         </div>
 
         {/* Fancy Connector between Post and Test */}
-        <div className="flex justify-center w-full">
+        {/* <div className="flex justify-center w-full">
           <FancyConnector direction="vertical" style="gradient" length={80} color="#768BDD" />
-        </div>
+        </div> */}
 
         {/* Test Automation section */}
         <div className="w-full max-w-4xl mb-10">
