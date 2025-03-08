@@ -299,7 +299,7 @@ const ThenNode = ({ id, theme = { id: "blue", name: "Blue", primary: "light-blue
       className="w-full max-w-5xl relative px-4 sm:px-0"
     >
       <div className="absolute h-20 left-1/2 -top-20 flex flex-col items-center z-10">
-        <FancyConnector direction="vertical" style="gradient" length={80} color={theme.secondary} />
+        <FancyConnector direction="vertical" style="gradient" length={15} color={theme.secondary} />
       </div>
 
       <div className="bg-gradient-to-r from-background-80 to-background-90 rounded-xl w-full overflow-hidden shadow-lg border border-background-80/50">
@@ -411,7 +411,7 @@ const ThenNode = ({ id, theme = { id: "blue", name: "Blue", primary: "light-blue
                         <Clock className="h-4 w-4 text-[#768BDD]" />
                         <span>Delay</span>
                       </div>
-                      <span className="font-medium">Instant</span>
+                      <span className="font-medium">5 seconds</span>
                     </div>
                   </div>
 
