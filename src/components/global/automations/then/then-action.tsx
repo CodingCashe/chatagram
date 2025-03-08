@@ -1075,7 +1075,7 @@ const ThenAction = ({
 
   // Handle AI selection with subscription check
   const handleAISelection = (type: "SMARTAI" | "MESSAGE") => {
-    if (userSubscription !== "SMARTAI") {
+    if (Listener !== "SMARTAI") {
       toast({
         title: "Pro Feature",
         description: "Upgrade to PRO to use AI-powered responses",
@@ -1125,11 +1125,11 @@ const ThenAction = ({
                   className={cn(
                     Listener === listener.type ? "bg-gradient-to-br from-[#7C21D6] to-[#4A1480]" : "bg-background-80",
                     "p-3 rounded-xl flex flex-col gap-y-2 cursor-pointer hover:opacity-80 transition duration-100 h-full",
-                    userSubscription !== "SMARTAI" && "opacity-70", // Dim if not PRO
+                    Listener !== "SMARTAI" && "opacity-70", // Dim if not PRO
                   )}
                 >
                   <div className="flex gap-x-2 items-center">
-                    {userSubscription !== "SMARTAI" && (
+                    {Listener !== "SMARTAI" && (
                       <div className="absolute top-2 right-2">
                         <Lock className="h-4 w-4 text-purple-400" />
                       </div>
