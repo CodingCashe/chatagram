@@ -298,8 +298,8 @@ const ThenNode = ({ id, theme = { id: "blue", name: "Blue", primary: "light-blue
       animate={{ opacity: 1, y: 0 }}
       className="w-full max-w-5xl relative px-4 sm:px-0"
     >
-      <div className="absolute h-20 left-1/2 -top-20 flex flex-col items-center z-10">
-        <FancyConnector direction="vertical" style="gradient" length={15} color={theme.secondary} />
+      <div className="absolute h-40 left-1/2 -top-20 flex flex-col items-center z-1">
+        <FancyConnector direction="vertical" style="gradient" length={35} color={theme.secondary} />
       </div>
 
       <div className="bg-gradient-to-r from-background-80 to-background-90 rounded-xl w-full overflow-hidden shadow-lg border border-background-80/50">
