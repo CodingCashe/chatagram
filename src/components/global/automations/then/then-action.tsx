@@ -928,8 +928,8 @@ const ThenAction = ({
                 <h3 className="text-white font-medium flex items-center">
                   {Listener === "SMARTAI" ? (
                     <>
-                      <Lightbulb className="h-5 w-5 mr-2 text-keyword-purple" />
-                      AI Suggestions
+                      {/* <Lightbulb className="h-5 w-5 mr-2 text-keyword-purple" />
+                      AI Suggestions */}
                     </>
                   ) : (
                     <>
@@ -942,6 +942,7 @@ const ThenAction = ({
                   isAI={Listener === "SMARTAI"}
                   onSelectTemplate={handleSelectTemplate}
                   selectedTemplate={selectedTemplate}
+                  userSubscription={Listener}
                 />
               </div>
 

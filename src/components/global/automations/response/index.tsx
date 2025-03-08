@@ -2314,10 +2314,10 @@ type Props = {
   isAI: boolean
   onSelectTemplate: (template: string) => void
   selectedTemplate?: string
-  userSubscription?: "FREE" | "PRO" // Add subscription prop
+  userSubscription?: "SMARTAI" | "MESSAGE" // Add subscription prop
 }
 
-const ResponseLibrary = ({ isAI, onSelectTemplate, selectedTemplate, userSubscription = "FREE" }: Props) => {
+const ResponseLibrary = ({ isAI, onSelectTemplate, selectedTemplate, userSubscription = "MESSAGE" }: Props) => {
   const { toast } = useToast()
   const [searchTerm, setSearchTerm] = useState("")
   const [activeCategory, setActiveCategory] = useState<string>("all")
@@ -2326,7 +2326,7 @@ const ResponseLibrary = ({ isAI, onSelectTemplate, selectedTemplate, userSubscri
   const [customTemplate, setCustomTemplate] = useState("")
   const [isEditing, setIsEditing] = useState(false)
   const [editingTemplate, setEditingTemplate] = useState<Template | null>(null)
-  const [activeTab, setActiveTab] = useState<string>(isAI && userSubscription === "PRO" ? "ai" : "standard")
+  const [activeTab, setActiveTab] = useState<string>(isAI && userSubscription === "SMARTAI" ? "ai" : "standard")
   const [showUpgradeMessage, setShowUpgradeMessage] = useState(false)
 
   // Standard templates
@@ -2481,7 +2481,7 @@ const ResponseLibrary = ({ isAI, onSelectTemplate, selectedTemplate, userSubscri
   // Handle template selection
   const handleSelectTemplate = (template: Template) => {
     // Check subscription for AI templates
-    if (template.isAI && userSubscription !== "PRO") {
+    if (template.isAI && userSubscription !== "SMARTAI") {
       setShowUpgradeMessage(true)
       setTimeout(() => setShowUpgradeMessage(false), 3000)
 
@@ -2538,7 +2538,7 @@ const ResponseLibrary = ({ isAI, onSelectTemplate, selectedTemplate, userSubscri
   // Start editing a template
   const startEditing = (template: Template) => {
     // Check subscription for AI templates
-    if (template.isAI && userSubscription !== "PRO") {
+    if (template.isAI && userSubscription !== "SMARTAI") {
       setShowUpgradeMessage(true)
       setTimeout(() => setShowUpgradeMessage(false), 3000)
 
@@ -2565,7 +2565,7 @@ const ResponseLibrary = ({ isAI, onSelectTemplate, selectedTemplate, userSubscri
 
   // Handle tab change with subscription check
   const handleTabChange = (value: string) => {
-    if (value === "ai" && userSubscription !== "PRO") {
+    if (value === "ai" && userSubscription !== "SMARTAI") {
       setShowUpgradeMessage(true)
       setTimeout(() => setShowUpgradeMessage(false), 3000)
 
@@ -2583,7 +2583,7 @@ const ResponseLibrary = ({ isAI, onSelectTemplate, selectedTemplate, userSubscri
 
   // Update active tab when isAI prop changes
   useEffect(() => {
-    if (isAI && userSubscription === "PRO") {
+    if (isAI && userSubscription === "SMARTAI") {
       setActiveTab("ai")
     } else {
       setActiveTab("standard")
@@ -2603,7 +2603,7 @@ const ResponseLibrary = ({ isAI, onSelectTemplate, selectedTemplate, userSubscri
               Standard
             </TabsTrigger>
 
-            {userSubscription === "PRO" ? (
+            {userSubscription === "SMARTAI" ? (
               <TabsTrigger value="ai" className="text-sm">
                 <Sparkles className="h-3.5 w-3.5 mr-1.5 text-purple-400" />
                 AI-Powered
@@ -2800,7 +2800,7 @@ const ResponseLibrary = ({ isAI, onSelectTemplate, selectedTemplate, userSubscri
         </TabsContent>
 
         <TabsContent value="ai" className="mt-0">
-          {userSubscription === "PRO" ? (
+          {userSubscription === "SMARTAI" ? (
             <>
               <div className="bg-gradient-to-br from-purple-900/20 to-blue-900/20 p-4 rounded-lg mb-4 border border-purple-500/20">
                 <div className="flex items-start gap-3">
