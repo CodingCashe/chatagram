@@ -541,8 +541,8 @@ const Page = async ({ params }: Props) => {
 
         {/* Status indicator */}
         <div className="fixed bottom-6 right-6 bg-[#1D1D1D] p-3 rounded-full shadow-lg border border-[#333333] flex items-center gap-x-2">
-          <div className="w-3 h-3 rounded-full bg-grey-800"></div>
-          <span className="text-white/80 text-sm">SMARTAI off</span>
+          <div className="w-3 h-3 rounded-full bg-green-500"></div>
+          <span className="text-white/80 text-sm">Automated</span>
         </div>
       </div>
     </HydrationBoundary>
