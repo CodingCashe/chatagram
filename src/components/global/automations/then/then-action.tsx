@@ -933,8 +933,8 @@ const ThenAction = ({
                     </>
                   ) : (
                     <>
-                      <MessageSquare className="h-5 w-5 mr-2 text-light-blue" />
-                      Quick Responses
+                      {/* <MessageSquare className="h-5 w-5 mr-2 text-light-blue" />
+                      Quick Responses */}
                     </>
                   )}
                 </h3>
