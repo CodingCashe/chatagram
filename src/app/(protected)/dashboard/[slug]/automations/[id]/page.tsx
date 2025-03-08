@@ -510,9 +510,9 @@ const Page = async ({ params }: Props) => {
         </div>
 
         {/* Fancy Connector between Then and Configure */}
-        <div className="flex justify-center w-full">
+        {/* <div className="flex justify-center w-full">
           <FancyConnector direction="vertical" style="gradient" length={80} color="#768BDD" />
-        </div>
+        </div> */}
 
         {/* Configure Response section */}
         {/* <div className="w-full max-w-4xl">
@@ -520,9 +520,9 @@ const Page = async ({ params }: Props) => {
         </div> */}
 
         {/* Fancy Connector between Configure and Post */}
-        <div className="flex justify-center w-full">
+        {/* <div className="flex justify-center w-full">
           <FancyConnector direction="vertical" style="gradient" length={80} color="#768BDD" />
-        </div>
+        </div> */}
 
         {/* Post section */}
         <div className="w-full max-w-4xl">
