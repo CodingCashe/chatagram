@@ -428,7 +428,6 @@
 // export default Page
 
 import { getAutomationInfo } from "@/actions/automations"
-import {SubscriptionPlan} from '@/components/global/subscription-plan'
 import PostNode from "@/components/global/automations/post/node"
 import ThenNode from "@/components/global/automations/then/node"
 import Configure from "@/components/global/automations/then/configure"
@@ -541,18 +540,10 @@ const Page = async ({ params }: Props) => {
         </div>
 
         {/* Status indicator */}
-        <SubscriptionPlan type="PRO">
-        <div className="fixed bottom-6 right-6 bg-[#1D1D1D] p-3 rounded-full shadow-lg border border-[#333333] flex items-center gap-x-2">
-          <div className="w-3 h-3 rounded-full bg-green-500"></div>
-          <span className="text-white/80 text-sm">SMARTAI On</span>
-        </div>
-        </SubscriptionPlan>
-        <SubscriptionPlan type="FREE">
         <div className="fixed bottom-6 right-6 bg-[#1D1D1D] p-3 rounded-full shadow-lg border border-[#333333] flex items-center gap-x-2">
           <div className="w-3 h-3 rounded-full bg-grey-800"></div>
           <span className="text-white/80 text-sm">SMARTAI off</span>
         </div>
-        </SubscriptionPlan>
       </div>
     </HydrationBoundary>
   )
