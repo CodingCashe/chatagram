@@ -55,6 +55,7 @@ export async function getScheduledPosts(
     }
 
     const scheduledPosts = await client.scheduledContent.findMany({
+      where: { userId: user.id },
       orderBy: { scheduledDate: "asc" },
       select: {
         id: true,
