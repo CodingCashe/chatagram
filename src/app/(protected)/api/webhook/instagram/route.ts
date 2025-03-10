@@ -688,224 +688,224 @@
 
 //WORKING BUT NO HUB CHALLENGE
 
-import { type NextRequest, NextResponse } from "next/server"
-import { findAutomation } from "@/actions/automations/queries"
-import {
-  createChatHistory,
-  getChatHistory,
-  getKeywordAutomation,
-  matchKeyword,
-  trackResponses,
-} from "@/actions/webhook/queries"
-import { sendDM, sendPrivateMessage } from "@/lib/fetch"
-import { client } from "@/lib/prisma"
-import { getVoiceflowResponse, processVoiceflowResponse, createVoiceflowUser } from "@/lib/voiceflow"
-import { storeConversationMessage } from "@/actions/chats/queries"
-import { createMarketingInfoAction } from "@/actions/details"
-import type { VoiceflowVariables } from "@/types/voiceflow"
+// import { type NextRequest, NextResponse } from "next/server"
+// import { findAutomation } from "@/actions/automations/queries"
+// import {
+//   createChatHistory,
+//   getChatHistory,
+//   getKeywordAutomation,
+//   matchKeyword,
+//   trackResponses,
+// } from "@/actions/webhook/queries"
+// import { sendDM, sendPrivateMessage } from "@/lib/fetch"
+// import { client } from "@/lib/prisma"
+// import { getVoiceflowResponse, processVoiceflowResponse, createVoiceflowUser } from "@/lib/voiceflow"
+// import { storeConversationMessage } from "@/actions/chats/queries"
+// import { createMarketingInfoAction } from "@/actions/details"
+// import type { VoiceflowVariables } from "@/types/voiceflow"
 
-export async function GET(req: NextRequest) {
-  const hub = req.nextUrl.searchParams.get('hub.challenge')
-  return new NextResponse(hub)
-}
+// export async function GET(req: NextRequest) {
+//   const hub = req.nextUrl.searchParams.get('hub.challenge')
+//   return new NextResponse(hub)
+// }
 
-export async function POST(req: NextRequest) {
-  console.log("POST request received")
-  let webhook_payload, matcher, userId, userMessage, pageId, senderId, recipientId
+// export async function POST(req: NextRequest) {
+//   console.log("POST request received")
+//   let webhook_payload, matcher, userId, userMessage, pageId, senderId, recipientId
 
-  try {
-    webhook_payload = await req.json()
-    console.log("Received webhook payload:", JSON.stringify(webhook_payload, null, 2))
+//   try {
+//     webhook_payload = await req.json()
+//     console.log("Received webhook payload:", JSON.stringify(webhook_payload, null, 2))
 
-    if (webhook_payload.entry[0].messaging) {
-      pageId = webhook_payload.entry[0].id
-      senderId = webhook_payload.entry[0].messaging[0].sender.id
-      recipientId = webhook_payload.entry[0].messaging[0].recipient.id
-      userMessage = webhook_payload.entry[0].messaging[0].message.text
-      userId = `${pageId}_${senderId}`
-    } else if (webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === "comments") {
-      pageId = webhook_payload.entry[0].id
-      senderId = webhook_payload.entry[0].changes[0].value.from.id
-      userMessage = webhook_payload.entry[0].changes[0].value.text
-      userId = `${pageId}_${senderId}`
-    } else {
-      return NextResponse.json({ message: "Unsupported webhook payload" }, { status: 400 })
-    }
+//     if (webhook_payload.entry[0].messaging) {
+//       pageId = webhook_payload.entry[0].id
+//       senderId = webhook_payload.entry[0].messaging[0].sender.id
+//       recipientId = webhook_payload.entry[0].messaging[0].recipient.id
+//       userMessage = webhook_payload.entry[0].messaging[0].message.text
+//       userId = `${pageId}_${senderId}`
+//     } else if (webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === "comments") {
+//       pageId = webhook_payload.entry[0].id
+//       senderId = webhook_payload.entry[0].changes[0].value.from.id
+//       userMessage = webhook_payload.entry[0].changes[0].value.text
+//       userId = `${pageId}_${senderId}`
+//     } else {
+//       return NextResponse.json({ message: "Unsupported webhook payload" }, { status: 400 })
+//     }
 
-    // Check if the conversation is already active
-    const conversationState = await client.conversationState.findUnique({
-      where: { userId },
-    })
+//     // Check if the conversation is already active
+//     const conversationState = await client.conversationState.findUnique({
+//       where: { userId },
+//     })
 
-    let isConversationActive = conversationState?.isActive || false
+//     let isConversationActive = conversationState?.isActive || false
 
-    if (!isConversationActive) {
-      // If the conversation is not active, check for keyword match
-      matcher = await matchKeyword(userMessage)
+//     if (!isConversationActive) {
+//       // If the conversation is not active, check for keyword match
+//       matcher = await matchKeyword(userMessage)
 
-      if (!matcher || !matcher.automationId) {
-        // No keyword match and conversation not active, don't respond
-        return NextResponse.json({ message: "No keyword match" }, { status: 200 })
-      }
+//       if (!matcher || !matcher.automationId) {
+//         // No keyword match and conversation not active, don't respond
+//         return NextResponse.json({ message: "No keyword match" }, { status: 200 })
+//       }
 
-      // Keyword matched, set the conversation as active
-      await client.conversationState.upsert({
-        where: { userId },
-        update: { isActive: true, updatedAt: new Date() },
-        create: { userId, isActive: true },
-      })
-      isConversationActive = true
-    }
+//       // Keyword matched, set the conversation as active
+//       await client.conversationState.upsert({
+//         where: { userId },
+//         update: { isActive: true, updatedAt: new Date() },
+//         create: { userId, isActive: true },
+//       })
+//       isConversationActive = true
+//     }
 
-    console.log("Attempting to create Voiceflow user:", userId)
-    const userCreated = await createVoiceflowUser(userId)
-    if (!userCreated) {
-      console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
-    }
+//     console.log("Attempting to create Voiceflow user:", userId)
+//     const userCreated = await createVoiceflowUser(userId)
+//     if (!userCreated) {
+//       console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
+//     }
 
-    let automation
-    if (matcher && matcher.automationId) {
-      automation = await getKeywordAutomation(matcher.automationId, webhook_payload.entry[0].messaging ? true : false)
-    } else {
-      const customer_history = await getChatHistory(pageId, senderId)
-      if (customer_history.history.length > 0) {
-        automation = await findAutomation(customer_history.automationId!)
-      }
-    }
+//     let automation
+//     if (matcher && matcher.automationId) {
+//       automation = await getKeywordAutomation(matcher.automationId, webhook_payload.entry[0].messaging ? true : false)
+//     } else {
+//       const customer_history = await getChatHistory(pageId, senderId)
+//       if (customer_history.history.length > 0) {
+//         automation = await findAutomation(customer_history.automationId!)
+//       }
+//     }
 
-    let businessVariables = {}
-    if (automation?.userId) {
-      console.log("Fetching business for automation userId:", automation.userId)
-      try {
-        const business = await client.business.findFirst({
-          where: { userId: automation.userId },
-        })
-        console.log("Fetched business:", business)
+//     let businessVariables = {}
+//     if (automation?.userId) {
+//       console.log("Fetching business for automation userId:", automation.userId)
+//       try {
+//         const business = await client.business.findFirst({
+//           where: { userId: automation.userId },
+//         })
+//         console.log("Fetched business:", business)
 
-        if (business) {
-          businessVariables = {
-            business_name: business.businessName,
-            welcome_message: business.welcomeMessage,
-            business_industry: business.industry,
-          }
-          console.log("Set business variables:", businessVariables)
-        }
-      } catch (error) {
-        console.error("Error fetching business:", error)
-      }
-    }
+//         if (business) {
+//           businessVariables = {
+//             business_name: business.businessName,
+//             welcome_message: business.welcomeMessage,
+//             business_industry: business.industry,
+//           }
+//           console.log("Set business variables:", businessVariables)
+//         }
+//       } catch (error) {
+//         console.error("Error fetching business:", error)
+//       }
+//     }
 
-    let voiceflowResponse =
-      "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists."
-    let voiceflowVariables: VoiceflowVariables = {}
+//     let voiceflowResponse =
+//       "I'm sorry, but I'm having trouble processing your request right now. Please try again later or contact support if the issue persists."
+//     let voiceflowVariables: VoiceflowVariables = {}
 
-    try {
-      const { response, variables } = await getVoiceflowResponse(userMessage, userId, businessVariables)
-      voiceflowResponse = processVoiceflowResponse(response)
-      voiceflowVariables = variables
-    } catch (error) {
-      console.error("Error getting or processing Voiceflow response:", error)
-    }
+//     try {
+//       const { response, variables } = await getVoiceflowResponse(userMessage, userId, businessVariables)
+//       voiceflowResponse = processVoiceflowResponse(response)
+//       voiceflowVariables = variables
+//     } catch (error) {
+//       console.error("Error getting or processing Voiceflow response:", error)
+//     }
 
-    console.log("Processed Voiceflow response:", voiceflowResponse)
-    console.log("Voiceflow variables:", voiceflowVariables)
+//     console.log("Processed Voiceflow response:", voiceflowResponse)
+//     console.log("Voiceflow variables:", voiceflowVariables)
 
-    // Store marketing info if available
-    if (voiceflowVariables.clientname || voiceflowVariables.clientemail || voiceflowVariables.clientphone) {
-      try {
-        const marketingInfo = {
-          name: voiceflowVariables.clientname,
-          email: voiceflowVariables.clientemail,
-          phone: voiceflowVariables.clientphone,
-        }
-        await createMarketingInfoAction(marketingInfo)
-        console.log("Marketing info stored successfully")
-      } catch (error) {
-        console.error("Error storing marketing info:", error)
-      }
-    }
+//     // Store marketing info if available
+//     if (voiceflowVariables.clientname || voiceflowVariables.clientemail || voiceflowVariables.clientphone) {
+//       try {
+//         const marketingInfo = {
+//           name: voiceflowVariables.clientname,
+//           email: voiceflowVariables.clientemail,
+//           phone: voiceflowVariables.clientphone,
+//         }
+//         await createMarketingInfoAction(marketingInfo)
+//         console.log("Marketing info stored successfully")
+//       } catch (error) {
+//         console.error("Error storing marketing info:", error)
+//       }
+//     }
 
-    const automationId = automation?.id || null
+//     const automationId = automation?.id || null
 
-    // Store the user message
-    try {
-      await storeConversationMessage(pageId, senderId, userMessage, false, automationId)
-      console.log("User message stored successfully")
-    } catch (error) {
-      console.error("Error storing user message:", error)
-    }
+//     // Store the user message
+//     try {
+//       await storeConversationMessage(pageId, senderId, userMessage, false, automationId)
+//       console.log("User message stored successfully")
+//     } catch (error) {
+//       console.error("Error storing user message:", error)
+//     }
 
-    // Store the bot response
-    try {
-      await storeConversationMessage(pageId, "bot", voiceflowResponse, true, automationId)
-      console.log("Bot response stored successfully")
-    } catch (error) {
-      console.error("Error storing bot response:", error)
-    }
+//     // Store the bot response
+//     try {
+//       await storeConversationMessage(pageId, "bot", voiceflowResponse, true, automationId)
+//       console.log("Bot response stored successfully")
+//     } catch (error) {
+//       console.error("Error storing bot response:", error)
+//     }
 
-    if (webhook_payload.entry[0].messaging) {
-      const direct_message = await sendDM(
-        pageId,
-        senderId,
-        voiceflowResponse,
-        automation?.User?.integrations[0].token || process.env.DEFAULT_PAGE_TOKEN!,
-      )
+//     if (webhook_payload.entry[0].messaging) {
+//       const direct_message = await sendDM(
+//         pageId,
+//         senderId,
+//         voiceflowResponse,
+//         automation?.User?.integrations[0].token || process.env.DEFAULT_PAGE_TOKEN!,
+//       )
 
-      if (direct_message.status === 200) {
-        if (automation) {
-          await trackResponses(automationId!, "DM")
-        }
-        await createChatHistory(automationId || "default", pageId, senderId, userMessage)
-        await createChatHistory(automationId || "default", pageId, senderId, voiceflowResponse)
-        return NextResponse.json({ message: "Message sent" }, { status: 200 })
-      }
-    } else if (webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === "comments") {
-      if (automation && automation.listener) {
-        if (
-          automation.listener.listener === "MESSAGE" ||
-          (automation.listener.listener === "SMARTAI" && automation.User?.subscription?.plan === "PRO")
-        ) {
-          const comment = await sendPrivateMessage(
-            pageId,
-            webhook_payload.entry[0].changes[0].value.id,
-            voiceflowResponse,
-            automation.User?.integrations[0].token!,
-          )
+//       if (direct_message.status === 200) {
+//         if (automation) {
+//           await trackResponses(automationId!, "DM")
+//         }
+//         await createChatHistory(automationId || "default", pageId, senderId, userMessage)
+//         await createChatHistory(automationId || "default", pageId, senderId, voiceflowResponse)
+//         return NextResponse.json({ message: "Message sent" }, { status: 200 })
+//       }
+//     } else if (webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === "comments") {
+//       if (automation && automation.listener) {
+//         if (
+//           automation.listener.listener === "MESSAGE" ||
+//           (automation.listener.listener === "SMARTAI" && automation.User?.subscription?.plan === "PRO")
+//         ) {
+//           const comment = await sendPrivateMessage(
+//             pageId,
+//             webhook_payload.entry[0].changes[0].value.id,
+//             voiceflowResponse,
+//             automation.User?.integrations[0].token!,
+//           )
 
-          console.log("Private message sent:", comment.data)
-          if (comment.status === 200) {
-            await trackResponses(automationId!, "COMMENT")
-            return NextResponse.json({ message: "Message sent" }, { status: 200 })
-          }
-        }
-      } else {
-        // No automation or listener, use default token
-        const comment = await sendPrivateMessage(
-          pageId,
-          webhook_payload.entry[0].changes[0].value.id,
-          voiceflowResponse,
-          process.env.DEFAULT_PAGE_TOKEN!,
-        )
+//           console.log("Private message sent:", comment.data)
+//           if (comment.status === 200) {
+//             await trackResponses(automationId!, "COMMENT")
+//             return NextResponse.json({ message: "Message sent" }, { status: 200 })
+//           }
+//         }
+//       } else {
+//         // No automation or listener, use default token
+//         const comment = await sendPrivateMessage(
+//           pageId,
+//           webhook_payload.entry[0].changes[0].value.id,
+//           voiceflowResponse,
+//           process.env.DEFAULT_PAGE_TOKEN!,
+//         )
 
-        if (comment.status === 200) {
-          return NextResponse.json({ message: "Message sent" }, { status: 200 })
-        }
-      }
-    }
+//         if (comment.status === 200) {
+//           return NextResponse.json({ message: "Message sent" }, { status: 200 })
+//         }
+//       }
+//     }
 
-    return NextResponse.json({ message: "Request processed" }, { status: 200 })
-  } catch (error) {
-    console.error("Unhandled error in POST function:", error)
-    return NextResponse.json(
-      {
-        message: "Error processing request",
-        error: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined,
-      },
-      { status: 500 },
-    )
-  }
-}
+//     return NextResponse.json({ message: "Request processed" }, { status: 200 })
+//   } catch (error) {
+//     console.error("Unhandled error in POST function:", error)
+//     return NextResponse.json(
+//       {
+//         message: "Error processing request",
+//         error: error instanceof Error ? error.message : String(error),
+//         stack: error instanceof Error ? error.stack : undefined,
+//       },
+//       { status: 500 },
+//     )
+//   }
+// }
 
 
 //COMPLETE TOKEN VERIFICATION/HUB CHALLENGE TO BE USED WHEN RESETTING META WEBHOOK
@@ -1319,395 +1319,395 @@ export async function POST(req: NextRequest) {
 // }
 
 //WORKING MOST RECENT
-// import { type NextRequest, NextResponse } from "next/server"
-// import { findAutomation } from "@/actions/automations/queries"
-// import {
-//   createChatHistory,
-//   getChatHistory,
-//   getKeywordAutomation,
-//   getKeywordPost,
-//   matchKeyword,
-//   trackResponses,
-// } from "@/actions/webhook/queries"
-// import { sendDM, sendPrivateMessage } from "@/lib/fetch"
-// import { openai } from "@/lib/openai"
-// import { client } from "@/lib/prisma"
-// import { getVoiceflowResponse, processVoiceflowResponse, createVoiceflowUser } from "@/lib/voiceflow"
-// import { storeConversationMessage } from "@/actions/chats/queries"
-// import { createMarketingInfoAction } from "@/actions/details"
-// import type { VoiceflowVariables } from "@/types/voiceflow"
+import { type NextRequest, NextResponse } from "next/server"
+import { findAutomation } from "@/actions/automations/queries"
+import {
+  createChatHistory,
+  getChatHistory,
+  getKeywordAutomation,
+  getKeywordPost,
+  matchKeyword,
+  trackResponses,
+} from "@/actions/webhook/queries"
+import { sendDM, sendPrivateMessage } from "@/lib/fetch"
+import { openai } from "@/lib/openai"
+import { client } from "@/lib/prisma"
+import { getVoiceflowResponse, processVoiceflowResponse, createVoiceflowUser } from "@/lib/voiceflow"
+import { storeConversationMessage } from "@/actions/chats/queries"
+import { createMarketingInfoAction } from "@/actions/details"
+import type { VoiceflowVariables } from "@/types/voiceflow"
 
-// export async function GET(req: NextRequest) {
-//   const hub = req.nextUrl.searchParams.get('hub.challenge')
-//   return new NextResponse(hub)
-// }
+export async function GET(req: NextRequest) {
+  const hub = req.nextUrl.searchParams.get('hub.challenge')
+  return new NextResponse(hub)
+}
 
-// export async function POST(req: NextRequest) {
-//   console.log("POST request received")
-//   let webhook_payload, matcher, userId, userMessage, pageId, senderId, recipientId
+export async function POST(req: NextRequest) {
+  console.log("POST request received")
+  let webhook_payload, matcher, userId, userMessage, pageId, senderId, recipientId
 
-//   try {
-//     webhook_payload = await req.json()
-//     console.log("Received webhook payload:", JSON.stringify(webhook_payload, null, 2))
+  try {
+    webhook_payload = await req.json()
+    console.log("Received webhook payload:", JSON.stringify(webhook_payload, null, 2))
 
-//     // Extract common information from webhook payload
-//     if (webhook_payload.entry[0].messaging) {
-//       pageId = webhook_payload.entry[0].id
-//       senderId = webhook_payload.entry[0].messaging[0].sender.id
-//       recipientId = webhook_payload.entry[0].messaging[0].recipient.id
-//       userMessage = webhook_payload.entry[0].messaging[0].message.text
-//       userId = `${pageId}_${senderId}`
-//       matcher = await matchKeyword(userMessage)
-//     } else if (webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === "comments") {
-//       pageId = webhook_payload.entry[0].id
-//       senderId = webhook_payload.entry[0].changes[0].value.from.id
-//       userMessage = webhook_payload.entry[0].changes[0].value.text
-//       userId = `${pageId}_${senderId}`
-//       matcher = await matchKeyword(userMessage)
-//     } else {
-//       return NextResponse.json({ message: "Unsupported webhook payload" }, { status: 400 })
-//     }
+    // Extract common information from webhook payload
+    if (webhook_payload.entry[0].messaging) {
+      pageId = webhook_payload.entry[0].id
+      senderId = webhook_payload.entry[0].messaging[0].sender.id
+      recipientId = webhook_payload.entry[0].messaging[0].recipient.id
+      userMessage = webhook_payload.entry[0].messaging[0].message.text
+      userId = `${pageId}_${senderId}`
+      matcher = await matchKeyword(userMessage)
+    } else if (webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === "comments") {
+      pageId = webhook_payload.entry[0].id
+      senderId = webhook_payload.entry[0].changes[0].value.from.id
+      userMessage = webhook_payload.entry[0].changes[0].value.text
+      userId = `${pageId}_${senderId}`
+      matcher = await matchKeyword(userMessage)
+    } else {
+      return NextResponse.json({ message: "Unsupported webhook payload" }, { status: 400 })
+    }
 
-//     // Check if the conversation is already active
-//     const conversationState = await client.conversationState.findUnique({
-//       where: { userId },
-//     })
+    // Check if the conversation is already active
+    const conversationState = await client.conversationState.findUnique({
+      where: { userId },
+    })
 
-//     let isConversationActive = conversationState?.isActive || false
+    let isConversationActive = conversationState?.isActive || false
 
-//     if (!isConversationActive && !matcher?.automationId) {
-//       // No keyword match and conversation not active, don't respond
-//       return NextResponse.json({ message: "No keyword match" }, { status: 200 })
-//     }
+    if (!isConversationActive && !matcher?.automationId) {
+      // No keyword match and conversation not active, don't respond
+      return NextResponse.json({ message: "No keyword match" }, { status: 200 })
+    }
 
-//     // Set conversation as active if keyword matched
-//     if (matcher?.automationId) {
-//       await client.conversationState.upsert({
-//         where: { userId },
-//         update: { isActive: true, updatedAt: new Date() },
-//         create: { userId, isActive: true },
-//       })
-//       isConversationActive = true
-//     }
+    // Set conversation as active if keyword matched
+    if (matcher?.automationId) {
+      await client.conversationState.upsert({
+        where: { userId },
+        update: { isActive: true, updatedAt: new Date() },
+        create: { userId, isActive: true },
+      })
+      isConversationActive = true
+    }
 
-//     // Get automation details
-//     let automation
-//     if (matcher && matcher.automationId) {
-//       automation = await getKeywordAutomation(
-//         matcher.automationId,
-//         webhook_payload.entry[0].messaging ? true : false
-//       )
-//     } else {
-//       const customer_history = await getChatHistory(pageId, senderId)
-//       if (customer_history.history.length > 0) {
-//         automation = await findAutomation(customer_history.automationId!)
-//       }
-//     }
+    // Get automation details
+    let automation
+    if (matcher && matcher.automationId) {
+      automation = await getKeywordAutomation(
+        matcher.automationId,
+        webhook_payload.entry[0].messaging ? true : false
+      )
+    } else {
+      const customer_history = await getChatHistory(pageId, senderId)
+      if (customer_history.history.length > 0) {
+        automation = await findAutomation(customer_history.automationId!)
+      }
+    }
 
-//     // Handle based on subscription plan
-//     if (automation?.User?.subscription?.plan === "PRO") {
-//       // PRO users get Voiceflow
-//       console.log("Using Voiceflow for PRO user")
+    // Handle based on subscription plan
+    if (automation?.User?.subscription?.plan === "PRO") {
+      // PRO users get Voiceflow
+      console.log("Using Voiceflow for PRO user")
       
-//       // Create Voiceflow user
-//       console.log("Attempting to create Voiceflow user:", userId)
-//       const userCreated = await createVoiceflowUser(userId)
-//       if (!userCreated) {
-//         console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
-//       }
+      // Create Voiceflow user
+      console.log("Attempting to create Voiceflow user:", userId)
+      const userCreated = await createVoiceflowUser(userId)
+      if (!userCreated) {
+        console.warn(`Failed to create Voiceflow user: ${userId}. Proceeding with the request.`)
+      }
 
-//       // Get business context
-//       let businessVariables = {}
-//       if (automation?.userId) {
-//         try {
-//           const business = await client.business.findFirst({
-//             where: { userId: automation.userId },
-//           })
-//           if (business) {
-//             businessVariables = {
-//               business_name: business.businessName,
-//               welcome_message: business.welcomeMessage,
-//               business_industry: business.industry,
-//             }
-//           }
-//         } catch (error) {
-//           console.error("Error fetching business:", error)
-//         }
-//       }
+      // Get business context
+      let businessVariables = {}
+      if (automation?.userId) {
+        try {
+          const business = await client.business.findFirst({
+            where: { userId: automation.userId },
+          })
+          if (business) {
+            businessVariables = {
+              business_name: business.businessName,
+              welcome_message: business.welcomeMessage,
+              business_industry: business.industry,
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching business:", error)
+        }
+      }
 
-//       // Get Voiceflow response
-//       let voiceflowResponse = "I'm sorry, but I'm having trouble processing your request right now. Please try again later."
-//       let voiceflowVariables: VoiceflowVariables = {}
+      // Get Voiceflow response
+      let voiceflowResponse = "I'm sorry, but I'm having trouble processing your request right now. Please try again later."
+      let voiceflowVariables: VoiceflowVariables = {}
 
-//       try {
-//         const { response, variables } = await getVoiceflowResponse(userMessage, userId, businessVariables)
-//         voiceflowResponse = processVoiceflowResponse(response)
-//         voiceflowVariables = variables
+      try {
+        const { response, variables } = await getVoiceflowResponse(userMessage, userId, businessVariables)
+        voiceflowResponse = processVoiceflowResponse(response)
+        voiceflowVariables = variables
 
-//         // Store marketing info if available
-//         if (voiceflowVariables.clientname || voiceflowVariables.clientemail || voiceflowVariables.clientphone) {
-//           try {
-//             const marketingInfo = {
-//               name: voiceflowVariables.clientname,
-//               email: voiceflowVariables.clientemail,
-//               phone: voiceflowVariables.clientphone,
-//             }
-//             await createMarketingInfoAction(marketingInfo)
-//           } catch (error) {
-//             console.error("Error storing marketing info:", error)
-//           }
-//         }
+        // Store marketing info if available
+        if (voiceflowVariables.clientname || voiceflowVariables.clientemail || voiceflowVariables.clientphone) {
+          try {
+            const marketingInfo = {
+              name: voiceflowVariables.clientname,
+              email: voiceflowVariables.clientemail,
+              phone: voiceflowVariables.clientphone,
+            }
+            await createMarketingInfoAction(marketingInfo)
+          } catch (error) {
+            console.error("Error storing marketing info:", error)
+          }
+        }
 
-//         // Store conversation
-//         await storeConversationMessage(pageId, senderId, userMessage, false, automation?.id || null)
-//         await storeConversationMessage(pageId, "bot", voiceflowResponse, true, automation?.id || null)
+        // Store conversation
+        await storeConversationMessage(pageId, senderId, userMessage, false, automation?.id || null)
+        await storeConversationMessage(pageId, "bot", voiceflowResponse, true, automation?.id || null)
 
-//         // Send response
-//         if (webhook_payload.entry[0].messaging) {
-//           const direct_message = await sendDM(
-//             pageId,
-//             senderId,
-//             voiceflowResponse,
-//             automation?.User?.integrations[0].token || process.env.DEFAULT_PAGE_TOKEN!
-//           )
+        // Send response
+        if (webhook_payload.entry[0].messaging) {
+          const direct_message = await sendDM(
+            pageId,
+            senderId,
+            voiceflowResponse,
+            automation?.User?.integrations[0].token || process.env.DEFAULT_PAGE_TOKEN!
+          )
 
-//           if (direct_message.status === 200) {
-//             if (automation) {
-//               await trackResponses(automation.id, "DM")
-//             }
-//             await createChatHistory(automation?.id || "default", pageId, senderId, userMessage)
-//             await createChatHistory(automation?.id || "default", pageId, senderId, voiceflowResponse)
-//             return NextResponse.json({ message: "Message sent" }, { status: 200 })
-//           }
-//         } else if (webhook_payload.entry[0].changes) {
-//           const comment = await sendPrivateMessage(
-//             pageId,
-//             webhook_payload.entry[0].changes[0].value.id,
-//             voiceflowResponse,
-//             automation?.User?.integrations[0].token || process.env.DEFAULT_PAGE_TOKEN!
-//           )
+          if (direct_message.status === 200) {
+            if (automation) {
+              await trackResponses(automation.id, "DM")
+            }
+            await createChatHistory(automation?.id || "default", pageId, senderId, userMessage)
+            await createChatHistory(automation?.id || "default", pageId, senderId, voiceflowResponse)
+            return NextResponse.json({ message: "Message sent" }, { status: 200 })
+          }
+        } else if (webhook_payload.entry[0].changes) {
+          const comment = await sendPrivateMessage(
+            pageId,
+            webhook_payload.entry[0].changes[0].value.id,
+            voiceflowResponse,
+            automation?.User?.integrations[0].token || process.env.DEFAULT_PAGE_TOKEN!
+          )
 
-//           if (comment.status === 200) {
-//             if (automation) {
-//               await trackResponses(automation.id, "COMMENT")
-//             }
-//             return NextResponse.json({ message: "Message sent" }, { status: 200 })
-//           }
-//         }
-//       } catch (error) {
-//         console.error("Error in Voiceflow processing:", error)
-//       }
-//     } else {
-//       // Free users get OpenAI
-//       console.log("Using OpenAI for free user")
+          if (comment.status === 200) {
+            if (automation) {
+              await trackResponses(automation.id, "COMMENT")
+            }
+            return NextResponse.json({ message: "Message sent" }, { status: 200 })
+          }
+        }
+      } catch (error) {
+        console.error("Error in Voiceflow processing:", error)
+      }
+    } else {
+      // Free users get OpenAI
+      console.log("Using OpenAI for free user")
 
-//       if (webhook_payload.entry[0].messaging) {
-//         if (automation && automation.trigger) {
-//           if (automation.listener && automation.listener.listener === "MESSAGE") {
-//             const direct_message = await sendDM(
-//               webhook_payload.entry[0].id,
-//               webhook_payload.entry[0].messaging[0].sender.id,
-//               automation.listener?.prompt,
-//               automation.User?.integrations[0].token!
-//             )
+      if (webhook_payload.entry[0].messaging) {
+        if (automation && automation.trigger) {
+          if (automation.listener && automation.listener.listener === "MESSAGE") {
+            const direct_message = await sendDM(
+              webhook_payload.entry[0].id,
+              webhook_payload.entry[0].messaging[0].sender.id,
+              automation.listener?.prompt,
+              automation.User?.integrations[0].token!
+            )
 
-//             if (direct_message.status === 200) {
-//               const tracked = await trackResponses(automation.id, "DM")
-//               if (tracked) {
-//                 return NextResponse.json({ message: "Message sent" }, { status: 200 })
-//               }
-//             }
-//           }
+            if (direct_message.status === 200) {
+              const tracked = await trackResponses(automation.id, "DM")
+              if (tracked) {
+                return NextResponse.json({ message: "Message sent" }, { status: 200 })
+              }
+            }
+          }
 
-//           if (automation.listener && automation.listener.listener === "SMARTAI") {
-//             const smart_ai_message = await openai.chat.completions.create({
-//               model: "gpt-4o",
-//               messages: [
-//                 {
-//                   role: "assistant",
-//                   content: `${automation.listener?.prompt}: Keep responses under 2 sentences`,
-//                 },
-//               ],
-//             })
+          if (automation.listener && automation.listener.listener === "SMARTAI") {
+            const smart_ai_message = await openai.chat.completions.create({
+              model: "gpt-4o",
+              messages: [
+                {
+                  role: "assistant",
+                  content: `${automation.listener?.prompt}: Keep responses under 2 sentences`,
+                },
+              ],
+            })
 
-//             if (smart_ai_message.choices[0].message.content) {
-//               const reciever = createChatHistory(
-//                 automation.id,
-//                 webhook_payload.entry[0].id,
-//                 webhook_payload.entry[0].messaging[0].sender.id,
-//                 webhook_payload.entry[0].messaging[0].message.text
-//               )
+            if (smart_ai_message.choices[0].message.content) {
+              const reciever = createChatHistory(
+                automation.id,
+                webhook_payload.entry[0].id,
+                webhook_payload.entry[0].messaging[0].sender.id,
+                webhook_payload.entry[0].messaging[0].message.text
+              )
 
-//               const sender = createChatHistory(
-//                 automation.id,
-//                 webhook_payload.entry[0].id,
-//                 webhook_payload.entry[0].messaging[0].sender.id,
-//                 smart_ai_message.choices[0].message.content
-//               )
+              const sender = createChatHistory(
+                automation.id,
+                webhook_payload.entry[0].id,
+                webhook_payload.entry[0].messaging[0].sender.id,
+                smart_ai_message.choices[0].message.content
+              )
 
-//               await client.$transaction([reciever, sender])
+              await client.$transaction([reciever, sender])
 
-//               const direct_message = await sendDM(
-//                 webhook_payload.entry[0].id,
-//                 webhook_payload.entry[0].messaging[0].sender.id,
-//                 smart_ai_message.choices[0].message.content,
-//                 automation.User?.integrations[0].token!
-//               )
+              const direct_message = await sendDM(
+                webhook_payload.entry[0].id,
+                webhook_payload.entry[0].messaging[0].sender.id,
+                smart_ai_message.choices[0].message.content,
+                automation.User?.integrations[0].token!
+              )
 
-//               if (direct_message.status === 200) {
-//                 const tracked = await trackResponses(automation.id, "DM")
-//                 if (tracked) {
-//                   return NextResponse.json({ message: "Message sent" }, { status: 200 })
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
+              if (direct_message.status === 200) {
+                const tracked = await trackResponses(automation.id, "DM")
+                if (tracked) {
+                  return NextResponse.json({ message: "Message sent" }, { status: 200 })
+                }
+              }
+            }
+          }
+        }
+      }
 
-//       if (webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === "comments") {
-//         const automations_post = await getKeywordPost(
-//           webhook_payload.entry[0].changes[0].value.media.id,
-//           automation?.id!
-//         )
+      if (webhook_payload.entry[0].changes && webhook_payload.entry[0].changes[0].field === "comments") {
+        const automations_post = await getKeywordPost(
+          webhook_payload.entry[0].changes[0].value.media.id,
+          automation?.id!
+        )
 
-//         if (automation && automations_post && automation.trigger) {
-//           if (automation.listener) {
-//             if (automation.listener.listener === "MESSAGE") {
-//               const direct_message = await sendPrivateMessage(
-//                 webhook_payload.entry[0].id,
-//                 webhook_payload.entry[0].changes[0].value.id,
-//                 automation.listener?.prompt,
-//                 automation.User?.integrations[0].token!
-//               )
+        if (automation && automations_post && automation.trigger) {
+          if (automation.listener) {
+            if (automation.listener.listener === "MESSAGE") {
+              const direct_message = await sendPrivateMessage(
+                webhook_payload.entry[0].id,
+                webhook_payload.entry[0].changes[0].value.id,
+                automation.listener?.prompt,
+                automation.User?.integrations[0].token!
+              )
 
-//               if (direct_message.status === 200) {
-//                 const tracked = await trackResponses(automation.id, "COMMENT")
-//                 if (tracked) {
-//                   return NextResponse.json({ message: "Message sent" }, { status: 200 })
-//                 }
-//               }
-//             }
+              if (direct_message.status === 200) {
+                const tracked = await trackResponses(automation.id, "COMMENT")
+                if (tracked) {
+                  return NextResponse.json({ message: "Message sent" }, { status: 200 })
+                }
+              }
+            }
 
-//             if (automation.listener.listener === "SMARTAI") {
-//               const smart_ai_message = await openai.chat.completions.create({
-//                 model: "gpt-4o",
-//                 messages: [
-//                   {
-//                     role: "assistant",
-//                     content: `${automation.listener?.prompt}: keep responses under 2 sentences`,
-//                   },
-//                 ],
-//               })
+            if (automation.listener.listener === "SMARTAI") {
+              const smart_ai_message = await openai.chat.completions.create({
+                model: "gpt-4o",
+                messages: [
+                  {
+                    role: "assistant",
+                    content: `${automation.listener?.prompt}: keep responses under 2 sentences`,
+                  },
+                ],
+              })
 
-//               if (smart_ai_message.choices[0].message.content) {
-//                 const reciever = createChatHistory(
-//                   automation.id,
-//                   webhook_payload.entry[0].id,
-//                   webhook_payload.entry[0].changes[0].value.from.id,
-//                   webhook_payload.entry[0].changes[0].value.text
-//                 )
+              if (smart_ai_message.choices[0].message.content) {
+                const reciever = createChatHistory(
+                  automation.id,
+                  webhook_payload.entry[0].id,
+                  webhook_payload.entry[0].changes[0].value.from.id,
+                  webhook_payload.entry[0].changes[0].value.text
+                )
 
-//                 const sender = createChatHistory(
-//                   automation.id,
-//                   webhook_payload.entry[0].id,
-//                   webhook_payload.entry[0].changes[0].value.from.id,
-//                   smart_ai_message.choices[0].message.content
-//                 )
+                const sender = createChatHistory(
+                  automation.id,
+                  webhook_payload.entry[0].id,
+                  webhook_payload.entry[0].changes[0].value.from.id,
+                  smart_ai_message.choices[0].message.content
+                )
 
-//                 await client.$transaction([reciever, sender])
+                await client.$transaction([reciever, sender])
 
-//                 const direct_message = await sendPrivateMessage(
-//                   webhook_payload.entry[0].id,
-//                   webhook_payload.entry[0].changes[0].value.id,
-//                   smart_ai_message.choices[0].message.content,
-//                   automation.User?.integrations[0].token!
-//                 )
+                const direct_message = await sendPrivateMessage(
+                  webhook_payload.entry[0].id,
+                  webhook_payload.entry[0].changes[0].value.id,
+                  smart_ai_message.choices[0].message.content,
+                  automation.User?.integrations[0].token!
+                )
 
-//                 if (direct_message.status === 200) {
-//                   const tracked = await trackResponses(automation.id, "COMMENT")
-//                   if (tracked) {
-//                     return NextResponse.json({ message: "Message sent" }, { status: 200 })
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
+                if (direct_message.status === 200) {
+                  const tracked = await trackResponses(automation.id, "COMMENT")
+                  if (tracked) {
+                    return NextResponse.json({ message: "Message sent" }, { status: 200 })
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
 
-//       // Handle continued conversations for free users
-//       if (!matcher) {
-//         const customer_history = await getChatHistory(
-//           webhook_payload.entry[0].messaging[0].recipient.id,
-//           webhook_payload.entry[0].messaging[0].sender.id
-//         )
+      // Handle continued conversations for free users
+      if (!matcher) {
+        const customer_history = await getChatHistory(
+          webhook_payload.entry[0].messaging[0].recipient.id,
+          webhook_payload.entry[0].messaging[0].sender.id
+        )
 
-//         if (customer_history.history.length > 0) {
-//           const automation = await findAutomation(customer_history.automationId!)
+        if (customer_history.history.length > 0) {
+          const automation = await findAutomation(customer_history.automationId!)
 
-//           if (automation?.listener?.listener === "SMARTAI") {
-//             const smart_ai_message = await openai.chat.completions.create({
-//               model: "gpt-4o",
-//               messages: [
-//                 {
-//                   role: "assistant",
-//                   content: `${automation.listener?.prompt}: keep responses under 2 sentences`,
-//                 },
-//                 ...customer_history.history,
-//                 {
-//                   role: "user",
-//                   content: webhook_payload.entry[0].messaging[0].message.text,
-//                 },
-//               ],
-//             })
+          if (automation?.listener?.listener === "SMARTAI") {
+            const smart_ai_message = await openai.chat.completions.create({
+              model: "gpt-4o",
+              messages: [
+                {
+                  role: "assistant",
+                  content: `${automation.listener?.prompt}: keep responses under 2 sentences`,
+                },
+                ...customer_history.history,
+                {
+                  role: "user",
+                  content: webhook_payload.entry[0].messaging[0].message.text,
+                },
+              ],
+            })
 
-//             if (smart_ai_message.choices[0].message.content) {
-//               const reciever = createChatHistory(
-//                 automation.id,
-//                 webhook_payload.entry[0].id,
-//                 webhook_payload.entry[0].messaging[0].sender.id,
-//                 webhook_payload.entry[0].messaging[0].message.text
-//               )
+            if (smart_ai_message.choices[0].message.content) {
+              const reciever = createChatHistory(
+                automation.id,
+                webhook_payload.entry[0].id,
+                webhook_payload.entry[0].messaging[0].sender.id,
+                webhook_payload.entry[0].messaging[0].message.text
+              )
 
-//               const sender = createChatHistory(
-//                 automation.id,
-//                 webhook_payload.entry[0].id,
-//                 webhook_payload.entry[0].messaging[0].sender.id,
-//                 smart_ai_message.choices[0].message.content
-//               )
+              const sender = createChatHistory(
+                automation.id,
+                webhook_payload.entry[0].id,
+                webhook_payload.entry[0].messaging[0].sender.id,
+                smart_ai_message.choices[0].message.content
+              )
 
-//               await client.$transaction([reciever, sender])
+              await client.$transaction([reciever, sender])
 
-//               const direct_message = await sendDM(
-//                 webhook_payload.entry[0].id,
-//                 webhook_payload.entry[0].messaging[0].sender.id,
-//                 smart_ai_message.choices[0].message.content,
-//                 automation.User?.integrations[0].token!
-//               )
+              const direct_message = await sendDM(
+                webhook_payload.entry[0].id,
+                webhook_payload.entry[0].messaging[0].sender.id,
+                smart_ai_message.choices[0].message.content,
+                automation.User?.integrations[0].token!
+              )
 
-//               if (direct_message.status === 200) {
-//                 return NextResponse.json({ message: "Message sent" }, { status: 200 })
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
+              if (direct_message.status === 200) {
+                return NextResponse.json({ message: "Message sent" }, { status: 200 })
+              }
+            }
+          }
+        }
+      }
+    }
 
-//     return NextResponse.json({ message: "Request processed" }, { status: 200 })
-//   } catch (error) {
-//     console.error("Unhandled error in POST function:", error)
-//     return NextResponse.json(
-//       {
-//         message: "Error processing request",
-//         error: error instanceof Error ? error.message : String(error),
-//         stack: error instanceof Error ? error.stack : undefined,
-//       },
-//       { status: 500 },
-//     )
-//   }
-// }
+    return NextResponse.json({ message: "Request processed" }, { status: 200 })
+  } catch (error) {
+    console.error("Unhandled error in POST function:", error)
+    return NextResponse.json(
+      {
+        message: "Error processing request",
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      },
+      { status: 500 },
+    )
+  }
+}
 
 // import { type NextRequest, NextResponse } from "next/server"
 // import { findAutomation } from "@/actions/automations/queries"
