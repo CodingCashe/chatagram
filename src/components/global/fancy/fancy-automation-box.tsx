@@ -1829,7 +1829,7 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ActiveIndicator } from "../indicators/active-indicator"
 import { InactiveIndicator } from "../indicators/inactive-indicator"
-import { Trash2, Settings, MessageSquare, ChevronDown, ChevronUp, Hash } from "lucide-react"
+import { Trash2, Settings, MessageSquare, ChevronDown, ChevronUp, Hash, Clock, MessageCircle } from "lucide-react"
 import AutomationStats from "./automation-stats"
 import AutomationChats from "./automationChats"
 import { motion, AnimatePresence } from "framer-motion"
@@ -1869,12 +1869,21 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
   const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false)
   const [showChats, setShowChats] = React.useState(false)
 
-  // Function to get a subset of keywords for the spotlight
-  const getSpotlightKeywords = (keywords: Keyword[], count: number) => {
-    return keywords.slice(0, count)
-  }
-
-  const spotlightKeywords = getSpotlightKeywords(automation.keywords, 3)
+  const QuickStatCard = ({
+    icon: Icon,
+    label,
+    value,
+  }: { icon: React.ElementType; label: string; value: string | number }) => (
+    <Card className="bg-[#1D1D1D]/30 border-[#545454]/50 p-3 flex items-center">
+      <div className="mr-3 w-8 h-8 rounded-full border border-[#545454] flex items-center justify-center bg-gradient-to-br from-[#2A2A2A] to-[#1D1D1D]">
+        <Icon size={16} className="text-blue-400" />
+      </div>
+      <div>
+        <p className="text-xs text-[#9B9CA0]">{label}</p>
+        <p className="text-lg font-semibold text-white">{value}</p>
+      </div>
+    </Card>
+  )
 
   return (
     <Card className="bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-xl overflow-hidden border-[#545454]">
@@ -1891,31 +1900,13 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
           </div>
         </div>
 
-        {/* Keyword Spotlight */}
-        <Card className="bg-[#1D1D1D]/30 border-[#545454]/50 p-3 mb-4">
-          <h3 className="text-sm font-semibold text-white mb-2 flex items-center">
-            <Hash size={16} className="mr-2 text-blue-400" />
-            Keyword Spotlight
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {spotlightKeywords.map((keyword, index) => (
-              <div
-                key={keyword.id}
-                className={cn(
-                  "px-3 py-1 rounded-full text-sm font-medium",
-                  index === 0 && "bg-blue-500/20 text-blue-300 border border-blue-500/30",
-                  index === 1 && "bg-purple-500/20 text-purple-300 border border-purple-500/30",
-                  index === 2 && "bg-green-500/20 text-green-300 border border-green-500/30",
-                )}
-              >
-                {keyword.word}
-              </div>
-            ))}
-          </div>
-          {automation.keywords.length > 3 && (
-            <p className="text-xs text-[#9B9CA0] mt-2">+{automation.keywords.length - 3} more keywords</p>
-          )}
-        </Card>
+        {/* Quick Stats Section */}
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <QuickStatCard icon={Hash} label="Keywords" value={automation.keywords.length} />
+          <QuickStatCard icon={MessageCircle} label="Total Messages" value={automation.listener?.dmCount || 0} />
+          <QuickStatCard icon={Clock} label="Active Since" value={getRelativeTime(automation.createdAt)} />
+          <QuickStatCard icon={MessageSquare} label="Comments" value={automation.listener?.commentCount || 0} />
+        </div>
 
         <div className="flex flex-wrap gap-2 mb-4">
           {automation.keywords.map((keyword, key) => (
@@ -1940,8 +1931,6 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
         )}
 
         <AutomationStats automation={automation} />
-
-        <p className="text-sm font-light text-[#9B9CA0] mt-4">Created {getRelativeTime(automation.createdAt)}</p>
 
         <div className="flex flex-col sm:flex-row gap-2 mt-4">
           {showDeleteConfirm ? (
