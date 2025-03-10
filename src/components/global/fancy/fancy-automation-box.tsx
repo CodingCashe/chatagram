@@ -1831,18 +1831,7 @@ import { Badge } from "@/components/ui/badge"
 import GradientButton from "../gradient-button"
 import { ActiveIndicator } from "../indicators/active-indicator"
 import { InactiveIndicator } from "../indicators/inactive-indicator"
-import {
-  Sparkles,
-  Zap,
-  Trash2,
-  Settings,
-  MessageSquare,
-  ChevronDown,
-  ChevronUp,
-  Clock,
-  Hash,
-  BarChart2,
-} from "lucide-react"
+import { Sparkles, Zap, Trash2, Settings, MessageSquare, ChevronDown, ChevronUp } from "lucide-react"
 import AutomationStats from "./automation-stats"
 import AutomationChats from "./automationChats"
 import NoKeywordsAnimation from "./no-keywords-animation"
@@ -1865,11 +1854,6 @@ type Listener = {
   commentCount: number
 }
 
-type LastActivity = {
-  type: "message" | "keyword" | "sentiment" | "config"
-  timestamp: Date
-}
-
 interface Automation {
   id: string
   name: string
@@ -1877,7 +1861,6 @@ interface Automation {
   keywords: Keyword[]
   createdAt: Date
   listener: Listener | null
-  lastActivity: LastActivity // Add this line
 }
 
 interface FancyAutomationBoxProps {
@@ -1909,25 +1892,10 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
     { name: "Sun", positive: 70, negative: 30 },
   ]
 
-  const getActivityIcon = (type: LastActivity["type"]) => {
-    switch (type) {
-      case "message":
-        return <MessageSquare size={12} />
-      case "keyword":
-        return <Hash size={12} />
-      case "sentiment":
-        return <BarChart2 size={12} />
-      case "config":
-        return <Settings size={12} />
-      default:
-        return <Clock size={12} />
-    }
-  }
-
   return (
     <div
       ref={boxRef}
-      className="relative bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-xl transition-all duration-300 hover:shadow-lg group"
+      className="relative bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-xl transition-all duration-300 hover:shadow-lg group overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -1966,14 +1934,6 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
               <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
                 {automation.name}
               </h2>
-              <div className="flex items-center mb-2 text-xs text-[#9B9CA0]">
-                <Clock size={12} className="mr-1" />
-                <span>Last activity:</span>
-                <div className="flex items-center ml-2 bg-[#2A2A2A] rounded-full px-2 py-0.5">
-                  {getActivityIcon(automation.lastActivity.type)}
-                  <span className="ml-1">{getRelativeTime(automation.lastActivity.timestamp)}</span>
-                </div>
-              </div>
               <div className="flex flex-wrap gap-2 mb-4">
                 {automation.keywords.map((keyword, key) => (
                   <div
