@@ -1821,21 +1821,17 @@
 
 "use client"
 
-import type React from "react"
-import { useState, useEffect, useRef } from "react"
+import React from "react"
 import { cn, getRelativeTime } from "@/lib/utils"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import GradientButton from "../gradient-button"
 import { ActiveIndicator } from "../indicators/active-indicator"
 import { InactiveIndicator } from "../indicators/inactive-indicator"
-import { Sparkles, Zap, Trash2, Settings, MessageSquare, ChevronDown, ChevronUp } from "lucide-react"
+import { Trash2, Settings, MessageSquare, ChevronDown, ChevronUp, Hash } from "lucide-react"
 import AutomationStats from "./automation-stats"
 import AutomationChats from "./automationChats"
-import NoKeywordsAnimation from "./no-keywords-animation"
-import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts"
 import { motion, AnimatePresence } from "framer-motion"
 
 type Keyword = {
@@ -1870,232 +1866,122 @@ interface FancyAutomationBoxProps {
 }
 
 export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automation, onDelete, pathname }) => {
-  const [isHovered, setIsHovered] = useState(false)
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-  const [showChats, setShowChats] = useState(false)
-  const boxRef = useRef<HTMLDivElement>(null)
+  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false)
+  const [showChats, setShowChats] = React.useState(false)
 
-  useEffect(() => {
-    if (!isHovered) {
-      setShowDeleteConfirm(false)
-    }
-  }, [isHovered])
+  // Function to get a subset of keywords for the spotlight
+  const getSpotlightKeywords = (keywords: Keyword[], count: number) => {
+    return keywords.slice(0, count)
+  }
 
-  // Generate mock sentiment analysis data - simple version
-  const sentimentData = [
-    { name: "Mon", positive: 65, negative: 35 },
-    { name: "Tue", positive: 72, negative: 28 },
-    { name: "Wed", positive: 58, negative: 42 },
-    { name: "Thu", positive: 80, negative: 20 },
-    { name: "Fri", positive: 74, negative: 26 },
-    { name: "Sat", positive: 62, negative: 38 },
-    { name: "Sun", positive: 70, negative: 30 },
-  ]
+  const spotlightKeywords = getSpotlightKeywords(automation.keywords, 3)
 
   return (
-    <div
-      ref={boxRef}
-      className="relative bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-xl transition-all duration-300 hover:shadow-lg group overflow-hidden"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="absolute inset-0 rounded-xl border border-[#545454] opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-10 transition-opacity duration-7000 rounded-xl overflow-hidden"></div>
-      <div className="absolute -top-px left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
-      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 flex items-center justify-center z-10">
-        <div className="bg-[#1D1D1D] px-1 rounded-full border border-[#545454] shadow-sm">
-          {automation.listener?.listener === "SMARTAI" ? (
-            <GradientButton
-              type="BUTTON"
-              className="text-xs bg-background-80 text-white hover:bg-background-80 px-4 py-1 -my-[3px] flex items-center gap-2"
+    <Card className="bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-xl overflow-hidden border-[#545454]">
+      <div className="p-6">
+        <div className="flex justify-between items-start mb-4">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+            {automation.name}
+          </h2>
+          <div className="flex items-center space-x-2">
+            {automation.active ? <ActiveIndicator /> : <InactiveIndicator />}
+            <Badge variant="outline" className="border-blue-400/50 text-blue-400">
+              {automation.listener?.listener === "SMARTAI" ? "Smart AI" : "FREE"}
+            </Badge>
+          </div>
+        </div>
+
+        {/* Keyword Spotlight */}
+        <Card className="bg-[#1D1D1D]/30 border-[#545454]/50 p-3 mb-4">
+          <h3 className="text-sm font-semibold text-white mb-2 flex items-center">
+            <Hash size={16} className="mr-2 text-blue-400" />
+            Keyword Spotlight
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {spotlightKeywords.map((keyword, index) => (
+              <div
+                key={keyword.id}
+                className={cn(
+                  "px-3 py-1 rounded-full text-sm font-medium",
+                  index === 0 && "bg-blue-500/20 text-blue-300 border border-blue-500/30",
+                  index === 1 && "bg-purple-500/20 text-purple-300 border border-purple-500/30",
+                  index === 2 && "bg-green-500/20 text-green-300 border border-green-500/30",
+                )}
+              >
+                {keyword.word}
+              </div>
+            ))}
+          </div>
+          {automation.keywords.length > 3 && (
+            <p className="text-xs text-[#9B9CA0] mt-2">+{automation.keywords.length - 3} more keywords</p>
+          )}
+        </Card>
+
+        <div className="flex flex-wrap gap-2 mb-4">
+          {automation.keywords.map((keyword, key) => (
+            <div
+              key={keyword.id}
+              className={cn(
+                "rounded-full px-3 py-1 text-xs capitalize backdrop-blur-sm",
+                (key + 1) % 1 === 0 && "bg-keyword-green/30 border border-keyword-green/50",
+                (key + 1) % 2 === 0 && "bg-keyword-purple/30 border border-keyword-purple/50",
+                (key + 1) % 3 === 0 && "bg-keyword-yellow/30 border border-keyword-yellow/50",
+                (key + 1) % 4 === 0 && "bg-keyword-red/30 border border-keyword-red/50",
+              )}
             >
-              <Sparkles size={14} />
-              Smart AI
-            </GradientButton>
+              {keyword.word}
+            </div>
+          ))}
+        </div>
+        {automation.keywords.length === 0 && (
+          <div className="rounded-full border border-dashed border-white/30 px-3 py-1 inline-block mb-4">
+            <p className="text-sm text-[#bfc0c3]">No Keywords</p>
+          </div>
+        )}
+
+        <AutomationStats automation={automation} />
+
+        <p className="text-sm font-light text-[#9B9CA0] mt-4">Created {getRelativeTime(automation.createdAt)}</p>
+
+        <div className="flex flex-col sm:flex-row gap-2 mt-4">
+          {showDeleteConfirm ? (
+            <>
+              <Button
+                className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 transition-colors duration-300"
+                onClick={onDelete}
+              >
+                Confirm Delete
+              </Button>
+              <Button
+                className="bg-transparent border-2 border-gray-500 text-gray-500 px-4 hover:bg-gray-500 hover:text-white flex-1 transition-colors duration-300"
+                onClick={() => setShowDeleteConfirm(false)}
+              >
+                Cancel
+              </Button>
+            </>
           ) : (
-            <GradientButton
-              type="BUTTON"
-              className="text-xs bg-background-80 text-white hover:bg-background-80 px-4 py-1 -my-[3px] flex items-center gap-2"
-            >
-              <Zap size={14} />
-              FREE
-            </GradientButton>
+            <>
+              <Button
+                className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300"
+                onClick={() => setShowDeleteConfirm(true)}
+              >
+                <Trash2 size={18} className="mr-2" />
+                Delete
+              </Button>
+              <Button className="bg-transparent border-2 border-blue-500 text-blue-500 px-4 hover:bg-blue-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300">
+                <Link href={`${pathname}/${automation.id}`} className="flex items-center">
+                  <Settings size={18} className="mr-2" />
+                  Configure
+                </Link>
+              </Button>
+            </>
           )}
         </div>
-      </div>
 
-      <div className="relative z-10 p-6 flex flex-col">
-        <div className="w-full mb-6">
-          <div className="absolute top-2 right-2 z-10">
-            {automation.active ? <ActiveIndicator /> : <InactiveIndicator />}
-          </div>
-          <div className="mt-4 flex flex-col md:flex-row">
-            <div className="md:w-1/2 md:pr-4">
-              <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                {automation.name}
-              </h2>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {automation.keywords.map((keyword, key) => (
-                  <div
-                    key={keyword.id}
-                    className={cn(
-                      "rounded-full px-3 py-1 text-xs capitalize backdrop-blur-sm",
-                      (key + 1) % 1 === 0 && "bg-keyword-green/30 border border-keyword-green/50",
-                      (key + 1) % 2 === 0 && "bg-keyword-purple/30 border border-keyword-purple/50",
-                      (key + 1) % 3 === 0 && "bg-keyword-yellow/30 border border-keyword-yellow/50",
-                      (key + 1) % 4 === 0 && "bg-keyword-red/30 border border-keyword-red/50",
-                    )}
-                  >
-                    {keyword.word}
-                  </div>
-                ))}
-              </div>
-              {automation.keywords.length === 0 && (
-                <div className="rounded-full border border-dashed border-white/30 px-3 py-1 inline-block mb-4">
-                  <p className="text-sm text-[#bfc0c3]">No Keywords</p>
-                </div>
-              )}
-              <AutomationStats automation={automation} />
-              <p className="text-sm font-light text-[#9B9CA0] mb-4">Created {getRelativeTime(automation.createdAt)}</p>
-              <div className="flex flex-col sm:flex-row gap-2">
-                {showDeleteConfirm ? (
-                  <>
-                    <Button
-                      className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 transition-colors duration-300"
-                      onClick={onDelete}
-                    >
-                      Confirm Delete
-                    </Button>
-                    <Button
-                      className="bg-transparent border-2 border-gray-500 text-gray-500 px-4 hover:bg-gray-500 hover:text-white flex-1 transition-colors duration-300"
-                      onClick={() => setShowDeleteConfirm(false)}
-                    >
-                      Cancel
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300"
-                      onClick={() => setShowDeleteConfirm(true)}
-                    >
-                      <Trash2 size={18} className="mr-2" />
-                      Delete
-                    </Button>
-                    <Button className="bg-transparent border-2 border-blue-500 text-blue-500 px-4 hover:bg-blue-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300">
-                      <Link href={`${pathname}/${automation.id}`} className="flex items-center">
-                        <Settings size={18} className="mr-2" />
-                        Configure
-                      </Link>
-                    </Button>
-                  </>
-                )}
-              </div>
-            </div>
-            <div className="md:w-1/2 md:pl-4 mt-6 md:mt-0 border-t md:border-t-0 md:border-l border-[#545454] pt-6 md:pt-0 md:pl-6">
-              <h3 className="text-xl font-semibold mb-4 text-white flex items-center">
-                <span className="mr-2">Sentiment Analysis</span>
-                <Badge variant="outline" className="border-blue-400/50 text-blue-400 text-xs">
-                  PREVIEW
-                </Badge>
-              </h3>
-              {automation.keywords.length > 0 ? (
-                <div className="relative">
-                  {/* Small Bar Chart for Sentiment Analysis */}
-                  <Card className="border border-[#545454]/50 bg-[#1D1D1D]/30 p-2">
-                    <ResponsiveContainer width="100%" height={120}>
-                      <BarChart
-                        data={sentimentData}
-                        margin={{ top: 5, right: 5, left: -20, bottom: 5 }}
-                        barGap={0}
-                        barCategoryGap={4}
-                      >
-                        <XAxis
-                          dataKey="name"
-                          tick={{ fill: "#9B9CA0", fontSize: 10 }}
-                          tickLine={false}
-                          axisLine={false}
-                        />
-                        <YAxis hide={true} />
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#545454" opacity={0.2} />
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: "rgba(30, 30, 30, 0.9)",
-                            borderColor: "#545454",
-                            borderRadius: "8px",
-                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
-                          }}
-                          itemStyle={{ color: "#fff" }}
-                          labelStyle={{ color: "#aaa" }}
-                        />
-                        <Bar
-                          dataKey="positive"
-                          name="Positive"
-                          fill="transparent"
-                          stroke="#4ade80"
-                          strokeWidth={2}
-                          radius={[4, 4, 0, 0]}
-                        />
-                        <Bar
-                          dataKey="negative"
-                          name="Negative"
-                          fill="transparent"
-                          stroke="#f87171"
-                          strokeWidth={2}
-                          radius={[4, 4, 0, 0]}
-                        />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </Card>
-
-                  {/* Legend Indicators */}
-                  <div className="flex justify-center gap-4 mt-2">
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-3 rounded-full border-2 border-[#4ade80]"></div>
-                      <span className="text-xs text-[#9B9CA0]">Positive</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-3 rounded-full border-2 border-[#f87171]"></div>
-                      <span className="text-xs text-[#9B9CA0]">Negative</span>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <NoKeywordsAnimation />
-              )}
-
-              {/* Sentiment summary */}
-              <div className="flex justify-between mt-4">
-                <Card className="bg-transparent border border-[#545454]/50 p-2 flex-1 mr-2">
-                  <div className="text-center">
-                    <div className="text-xs text-[#9B9CA0]">Overall Sentiment</div>
-                    <div className="text-lg font-bold text-white">Positive</div>
-                  </div>
-                </Card>
-                <Card className="bg-transparent border border-[#545454]/50 p-2 flex-1">
-                  <div className="text-center">
-                    <div className="text-xs text-[#9B9CA0]">Confidence</div>
-                    <div className="text-lg font-bold text-white">72%</div>
-                  </div>
-                </Card>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Chat toggle button - more obvious */}
-        <motion.div
-          className="w-full border-t border-[#545454] pt-4 mt-2"
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 1 }}
-        >
-          <motion.button
-            className="w-full flex items-center justify-between p-2 rounded-lg border border-[#545454]/50 hover:border-blue-400/50 bg-transparent transition-all duration-300"
+        <div className="mt-6 border-t border-[#545454] pt-4">
+          <button
+            className="w-full flex items-center justify-between p-2 rounded-lg border border-[#545454]/50 bg-transparent transition-colors duration-300"
             onClick={() => setShowChats(!showChats)}
-            whileHover={{
-              backgroundColor: "rgba(59, 130, 246, 0.05)",
-              borderColor: "rgba(96, 165, 250, 0.5)",
-            }}
           >
             <div className="flex items-center">
               <div className="mr-3 w-8 h-8 rounded-full border border-[#545454] flex items-center justify-center bg-gradient-to-br from-[#2A2A2A] to-[#1D1D1D]">
@@ -2115,10 +2001,9 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
                 <ChevronDown size={20} className="text-[#9B9CA0]" />
               )}
             </div>
-          </motion.button>
-        </motion.div>
+          </button>
+        </div>
 
-        {/* Chat content with slide animation */}
         <AnimatePresence>
           {showChats && (
             <motion.div
@@ -2147,7 +2032,7 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
           )}
         </AnimatePresence>
       </div>
-    </div>
+    </Card>
   )
 }
 
