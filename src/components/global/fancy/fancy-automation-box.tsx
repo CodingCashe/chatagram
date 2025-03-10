@@ -1819,9 +1819,218 @@
 
 // export default FancyAutomationBox
 
+// "use client"
+
+// import React from "react"
+// import { cn, getRelativeTime } from "@/lib/utils"
+// import Link from "next/link"
+// import { Button } from "@/components/ui/button"
+// import { Card } from "@/components/ui/card"
+// import { Badge } from "@/components/ui/badge"
+// import { ActiveIndicator } from "../indicators/active-indicator"
+// import { InactiveIndicator } from "../indicators/inactive-indicator"
+// import { Trash2, Settings, MessageSquare, ChevronDown, ChevronUp, Hash, Clock, MessageCircle } from "lucide-react"
+// import AutomationStats from "./automation-stats"
+// import AutomationChats from "./automationChats"
+// import { motion, AnimatePresence } from "framer-motion"
+
+// type Keyword = {
+//   id: string
+//   automationId: string | null
+//   word: string
+// }
+
+// type Listener = {
+//   id: string
+//   listener: string
+//   automationId: string
+//   prompt: string
+//   commentReply: string | null
+//   dmCount: number
+//   commentCount: number
+// }
+
+// interface Automation {
+//   id: string
+//   name: string
+//   active: boolean
+//   keywords: Keyword[]
+//   createdAt: Date
+//   listener: Listener | null
+// }
+
+// interface FancyAutomationBoxProps {
+//   automation: Automation
+//   onDelete: () => void
+//   pathname: string
+// }
+
+// export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automation, onDelete, pathname }) => {
+//   const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false)
+//   const [showChats, setShowChats] = React.useState(false)
+
+//   const QuickStatCard = ({
+//     icon: Icon,
+//     label,
+//     value,
+//   }: { icon: React.ElementType; label: string; value: string | number }) => (
+//     <Card className="bg-[#1D1D1D]/30 border-[#545454]/50 p-3 flex items-center">
+//       <div className="mr-3 w-8 h-8 rounded-full border border-[#545454] flex items-center justify-center bg-gradient-to-br from-[#2A2A2A] to-[#1D1D1D]">
+//         <Icon size={16} className="text-blue-400" />
+//       </div>
+//       <div>
+//         <p className="text-xs text-[#9B9CA0]">{label}</p>
+//         <p className="text-lg font-semibold text-white">{value}</p>
+//       </div>
+//     </Card>
+//   )
+
+//   return (
+//     <Card className="bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-xl overflow-hidden border-[#545454]">
+//       <div className="p-6">
+//         <div className="flex justify-between items-start mb-4">
+//           <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+//             {automation.name}
+//           </h2>
+//           <div className="flex items-center space-x-2">
+//             {automation.active ? <ActiveIndicator /> : <InactiveIndicator />}
+//             <Badge variant="outline" className="border-blue-400/50 text-blue-400">
+//               {automation.listener?.listener === "SMARTAI" ? "Smart AI" : "FREE"}
+//             </Badge>
+//           </div>
+//         </div>
+
+//         {/* Quick Stats Section */}
+//         <div className="grid grid-cols-2 gap-3 mb-4">
+//           <QuickStatCard icon={Hash} label="Keywords" value={automation.keywords.length} />
+//           <QuickStatCard icon={MessageCircle} label="Total Messages" value={automation.listener?.dmCount || 0} />
+//           <QuickStatCard icon={Clock} label="Active Since" value={getRelativeTime(automation.createdAt)} />
+//           <QuickStatCard icon={MessageSquare} label="Comments" value={automation.listener?.commentCount || 0} />
+//         </div>
+
+//         <div className="flex flex-wrap gap-2 mb-4">
+//           {automation.keywords.map((keyword, key) => (
+//             <div
+//               key={keyword.id}
+//               className={cn(
+//                 "rounded-full px-3 py-1 text-xs capitalize backdrop-blur-sm",
+//                 (key + 1) % 1 === 0 && "bg-keyword-green/30 border border-keyword-green/50",
+//                 (key + 1) % 2 === 0 && "bg-keyword-purple/30 border border-keyword-purple/50",
+//                 (key + 1) % 3 === 0 && "bg-keyword-yellow/30 border border-keyword-yellow/50",
+//                 (key + 1) % 4 === 0 && "bg-keyword-red/30 border border-keyword-red/50",
+//               )}
+//             >
+//               {keyword.word}
+//             </div>
+//           ))}
+//         </div>
+//         {automation.keywords.length === 0 && (
+//           <div className="rounded-full border border-dashed border-white/30 px-3 py-1 inline-block mb-4">
+//             <p className="text-sm text-[#bfc0c3]">No Keywords</p>
+//           </div>
+//         )}
+
+//         <AutomationStats automation={automation} />
+
+//         <div className="flex flex-col sm:flex-row gap-2 mt-4">
+//           {showDeleteConfirm ? (
+//             <>
+//               <Button
+//                 className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 transition-colors duration-300"
+//                 onClick={onDelete}
+//               >
+//                 Confirm Delete
+//               </Button>
+//               <Button
+//                 className="bg-transparent border-2 border-gray-500 text-gray-500 px-4 hover:bg-gray-500 hover:text-white flex-1 transition-colors duration-300"
+//                 onClick={() => setShowDeleteConfirm(false)}
+//               >
+//                 Cancel
+//               </Button>
+//             </>
+//           ) : (
+//             <>
+//               <Button
+//                 className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300"
+//                 onClick={() => setShowDeleteConfirm(true)}
+//               >
+//                 <Trash2 size={18} className="mr-2" />
+//                 Delete
+//               </Button>
+//               <Button className="bg-transparent border-2 border-blue-500 text-blue-500 px-4 hover:bg-blue-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300">
+//                 <Link href={`${pathname}/${automation.id}`} className="flex items-center">
+//                   <Settings size={18} className="mr-2" />
+//                   Configure
+//                 </Link>
+//               </Button>
+//             </>
+//           )}
+//         </div>
+
+//         <div className="mt-6 border-t border-[#545454] pt-4">
+//           <button
+//             className="w-full flex items-center justify-between p-2 rounded-lg border border-[#545454]/50 bg-transparent transition-colors duration-300"
+//             onClick={() => setShowChats(!showChats)}
+//           >
+//             <div className="flex items-center">
+//               <div className="mr-3 w-8 h-8 rounded-full border border-[#545454] flex items-center justify-center bg-gradient-to-br from-[#2A2A2A] to-[#1D1D1D]">
+//                 <MessageSquare size={16} className="text-blue-400" />
+//               </div>
+//               <span className="font-medium">View Conversation History</span>
+//               {automation.listener?.dmCount && automation.listener.dmCount > 0 && (
+//                 <Badge className="ml-2 bg-blue-500/20 text-blue-400 border border-blue-500/30">
+//                   {automation.listener.dmCount} messages
+//                 </Badge>
+//               )}
+//             </div>
+//             <div>
+//               {showChats ? (
+//                 <ChevronUp size={20} className="text-[#9B9CA0]" />
+//               ) : (
+//                 <ChevronDown size={20} className="text-[#9B9CA0]" />
+//               )}
+//             </div>
+//           </button>
+//         </div>
+
+//         <AnimatePresence>
+//           {showChats && (
+//             <motion.div
+//               initial={{ height: 0, opacity: 0 }}
+//               animate={{
+//                 height: "auto",
+//                 opacity: 1,
+//                 transition: { duration: 0.3, ease: "easeOut" },
+//               }}
+//               exit={{
+//                 height: 0,
+//                 opacity: 0,
+//                 transition: { duration: 0.2, ease: "easeIn" },
+//               }}
+//               className="w-full overflow-hidden"
+//             >
+//               <motion.div
+//                 initial={{ y: 20, opacity: 0 }}
+//                 animate={{ y: 0, opacity: 1 }}
+//                 transition={{ delay: 0.1, duration: 0.3 }}
+//                 className="border border-[#545454]/50 rounded-lg p-4 mt-3 bg-[#1D1D1D]/30"
+//               >
+//                 <AutomationChats automationId={automation.id} />
+//               </motion.div>
+//             </motion.div>
+//           )}
+//         </AnimatePresence>
+//       </div>
+//     </Card>
+//   )
+// }
+
+// export default FancyAutomationBox
+
 "use client"
 
-import React from "react"
+import type React from "react"
+import { useState } from "react"
 import { cn, getRelativeTime } from "@/lib/utils"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -1829,10 +2038,10 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ActiveIndicator } from "../indicators/active-indicator"
 import { InactiveIndicator } from "../indicators/inactive-indicator"
-import { Trash2, Settings, MessageSquare, ChevronDown, ChevronUp, Hash, Clock, MessageCircle } from "lucide-react"
+import { Sparkles, Zap, Trash2, Settings, MessageSquareText } from "lucide-react"
 import AutomationStats from "./automation-stats"
 import AutomationChats from "./automationChats"
-import { motion, AnimatePresence } from "framer-motion"
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
 
 type Keyword = {
   id: string
@@ -1866,160 +2075,141 @@ interface FancyAutomationBoxProps {
 }
 
 export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automation, onDelete, pathname }) => {
-  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false)
-  const [showChats, setShowChats] = React.useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [showChats, setShowChats] = useState(false)
 
-  const QuickStatCard = ({
-    icon: Icon,
-    label,
-    value,
-  }: { icon: React.ElementType; label: string; value: string | number }) => (
-    <Card className="bg-[#1D1D1D]/30 border-[#545454]/50 p-3 flex items-center">
-      <div className="mr-3 w-8 h-8 rounded-full border border-[#545454] flex items-center justify-center bg-gradient-to-br from-[#2A2A2A] to-[#1D1D1D]">
-        <Icon size={16} className="text-blue-400" />
-      </div>
-      <div>
-        <p className="text-xs text-[#9B9CA0]">{label}</p>
-        <p className="text-lg font-semibold text-white">{value}</p>
-      </div>
-    </Card>
-  )
+  // Mock data for current sentiment
+  const sentimentData = [
+    { name: "Positive", value: 65 },
+    { name: "Neutral", value: 25 },
+    { name: "Negative", value: 10 },
+  ]
 
   return (
-    <Card className="bg-gradient-to-br from-[#2A2A2A] via-[#252525] to-[#1D1D1D] rounded-xl overflow-hidden border-[#545454]">
+    <Card className="bg-background border-2 border-border hover:border-primary/50 transition-colors duration-300">
       <div className="p-6">
         <div className="flex justify-between items-start mb-4">
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-            {automation.name}
-          </h2>
+          <h2 className="text-2xl font-bold text-foreground">{automation.name}</h2>
           <div className="flex items-center space-x-2">
             {automation.active ? <ActiveIndicator /> : <InactiveIndicator />}
-            <Badge variant="outline" className="border-blue-400/50 text-blue-400">
-              {automation.listener?.listener === "SMARTAI" ? "Smart AI" : "FREE"}
-            </Badge>
+            {automation.listener?.listener === "SMARTAI" ? (
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
+                <Sparkles size={14} className="mr-1" />
+                Smart AI
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="bg-secondary/10 text-secondary border-secondary/30">
+                <Zap size={14} className="mr-1" />
+                FREE
+              </Badge>
+            )}
           </div>
-        </div>
-
-        {/* Quick Stats Section */}
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          <QuickStatCard icon={Hash} label="Keywords" value={automation.keywords.length} />
-          <QuickStatCard icon={MessageCircle} label="Total Messages" value={automation.listener?.dmCount || 0} />
-          <QuickStatCard icon={Clock} label="Active Since" value={getRelativeTime(automation.createdAt)} />
-          <QuickStatCard icon={MessageSquare} label="Comments" value={automation.listener?.commentCount || 0} />
         </div>
 
         <div className="flex flex-wrap gap-2 mb-4">
           {automation.keywords.map((keyword, key) => (
-            <div
+            <Badge
               key={keyword.id}
+              variant="outline"
               className={cn(
-                "rounded-full px-3 py-1 text-xs capitalize backdrop-blur-sm",
-                (key + 1) % 1 === 0 && "bg-keyword-green/30 border border-keyword-green/50",
-                (key + 1) % 2 === 0 && "bg-keyword-purple/30 border border-keyword-purple/50",
-                (key + 1) % 3 === 0 && "bg-keyword-yellow/30 border border-keyword-yellow/50",
-                (key + 1) % 4 === 0 && "bg-keyword-red/30 border border-keyword-red/50",
+                "capitalize",
+                key % 4 === 0 && "border-green-500/30 text-green-500",
+                key % 4 === 1 && "border-purple-500/30 text-purple-500",
+                key % 4 === 2 && "border-yellow-500/30 text-yellow-500",
+                key % 4 === 3 && "border-red-500/30 text-red-500",
               )}
             >
               {keyword.word}
-            </div>
+            </Badge>
           ))}
         </div>
+
         {automation.keywords.length === 0 && (
-          <div className="rounded-full border border-dashed border-white/30 px-3 py-1 inline-block mb-4">
-            <p className="text-sm text-[#bfc0c3]">No Keywords</p>
-          </div>
+          <Badge variant="outline" className="border-muted-foreground/30 text-muted-foreground">
+            No Keywords
+          </Badge>
         )}
 
         <AutomationStats automation={automation} />
 
-        <div className="flex flex-col sm:flex-row gap-2 mt-4">
-          {showDeleteConfirm ? (
-            <>
-              <Button
-                className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 transition-colors duration-300"
-                onClick={onDelete}
-              >
+        <div className="mt-4 flex justify-between items-end">
+          <p className="text-sm text-muted-foreground">Created {getRelativeTime(automation.createdAt)}</p>
+          <div className="flex space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-destructive/30 text-destructive hover:bg-destructive/10"
+              onClick={() => setShowDeleteConfirm(true)}
+            >
+              <Trash2 size={16} className="mr-2" />
+              Delete
+            </Button>
+            <Button variant="outline" size="sm" className="border-primary/30 text-primary hover:bg-primary/10">
+              <Link href={`${pathname}/${automation.id}`} className="flex items-center">
+                <Settings size={16} className="mr-2" />
+                Configure
+              </Link>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-secondary/30 text-secondary hover:bg-secondary/10"
+              onClick={() => setShowChats(!showChats)}
+            >
+              <MessageSquareText size={16} className="mr-2" />
+              Chats
+            </Button>
+          </div>
+        </div>
+
+        {showDeleteConfirm && (
+          <div className="mt-4 p-4 border border-destructive/30 rounded-md bg-destructive/10">
+            <p className="text-sm text-destructive mb-2">Are you sure you want to delete this automation?</p>
+            <div className="flex space-x-2">
+              <Button variant="destructive" size="sm" onClick={onDelete}>
                 Confirm Delete
               </Button>
-              <Button
-                className="bg-transparent border-2 border-gray-500 text-gray-500 px-4 hover:bg-gray-500 hover:text-white flex-1 transition-colors duration-300"
-                onClick={() => setShowDeleteConfirm(false)}
-              >
+              <Button variant="outline" size="sm" onClick={() => setShowDeleteConfirm(false)}>
                 Cancel
               </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                className="bg-transparent border-2 border-red-500 text-red-500 px-4 hover:bg-red-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300"
-                onClick={() => setShowDeleteConfirm(true)}
-              >
-                <Trash2 size={18} className="mr-2" />
-                Delete
-              </Button>
-              <Button className="bg-transparent border-2 border-blue-500 text-blue-500 px-4 hover:bg-blue-500 hover:text-white flex-1 sm:flex-none transition-colors duration-300">
-                <Link href={`${pathname}/${automation.id}`} className="flex items-center">
-                  <Settings size={18} className="mr-2" />
-                  Configure
-                </Link>
-              </Button>
-            </>
-          )}
-        </div>
+            </div>
+          </div>
+        )}
 
-        <div className="mt-6 border-t border-[#545454] pt-4">
-          <button
-            className="w-full flex items-center justify-between p-2 rounded-lg border border-[#545454]/50 bg-transparent transition-colors duration-300"
-            onClick={() => setShowChats(!showChats)}
-          >
-            <div className="flex items-center">
-              <div className="mr-3 w-8 h-8 rounded-full border border-[#545454] flex items-center justify-center bg-gradient-to-br from-[#2A2A2A] to-[#1D1D1D]">
-                <MessageSquare size={16} className="text-blue-400" />
+        <div className="mt-6">
+          <h3 className="text-lg font-semibold mb-2 text-foreground">Current Sentiment</h3>
+          <div className="h-24">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={sentimentData} layout="vertical">
+                <XAxis type="number" hide />
+                <YAxis dataKey="name" type="category" hide />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--background))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "0.5rem",
+                  }}
+                />
+                <Bar dataKey="value" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="flex justify-between mt-2">
+            {sentimentData.map((item) => (
+              <div key={item.name} className="text-center">
+                <p className="text-sm font-medium text-muted-foreground">{item.name}</p>
+                <p className="text-lg font-bold text-foreground">{item.value}%</p>
               </div>
-              <span className="font-medium">View Conversation History</span>
-              {automation.listener?.dmCount && automation.listener.dmCount > 0 && (
-                <Badge className="ml-2 bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                  {automation.listener.dmCount} messages
-                </Badge>
-              )}
-            </div>
-            <div>
-              {showChats ? (
-                <ChevronUp size={20} className="text-[#9B9CA0]" />
-              ) : (
-                <ChevronDown size={20} className="text-[#9B9CA0]" />
-              )}
-            </div>
-          </button>
+            ))}
+          </div>
         </div>
 
-        <AnimatePresence>
-          {showChats && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{
-                height: "auto",
-                opacity: 1,
-                transition: { duration: 0.3, ease: "easeOut" },
-              }}
-              exit={{
-                height: 0,
-                opacity: 0,
-                transition: { duration: 0.2, ease: "easeIn" },
-              }}
-              className="w-full overflow-hidden"
-            >
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.1, duration: 0.3 }}
-                className="border border-[#545454]/50 rounded-lg p-4 mt-3 bg-[#1D1D1D]/30"
-              >
-                <AutomationChats automationId={automation.id} />
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {showChats && (
+          <div className="mt-6 border-t border-border pt-4">
+            <h3 className="text-lg font-semibold mb-2 text-foreground">Automation Chats</h3>
+            <AutomationChats automationId={automation.id} />
+          </div>
+        )}
       </div>
     </Card>
   )
