@@ -1740,7 +1740,7 @@ export async function POST(req: NextRequest) {
     webhook_payload = await req.json()
     console.log("Received webhook payload:", JSON.stringify(webhook_payload, null, 2))
 
-    // Extract   common information from webhook payload
+    // Extractcommon information from webhook payload
     if (webhook_payload.entry[0].messaging) {
       pageId = webhook_payload.entry[0].id
       senderId = webhook_payload.entry[0].messaging[0].sender.id
