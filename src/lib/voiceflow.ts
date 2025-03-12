@@ -2500,7 +2500,7 @@ interface BusinessData {
 }
 
 export async function fetchBusinessVariables(businessId: string): Promise<Record<string, string>> {
-  console.log("Entering fetchBusinessVariables function")
+  console.log("Entering fetchBusinessVariables functione")
   try {
     console.log("Attempting to call getBusinessForWebhook")
     const businessResponse = await getBusinessForWebhook(businessId)
