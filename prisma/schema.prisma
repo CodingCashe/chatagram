@@ -35,7 +35,7 @@ model User {
 }
 
 model ScheduledContent {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   instagramPostId   String?  @unique
   caption           String
   mediaType         String
@@ -151,7 +151,7 @@ model Message {
   message      String
   isFromBot    Boolean
   createdAt    DateTime    @default(now())
-  Automation   Automation? @relation(fields: [automationId], references: [id])
+  Automation   Automation? @relation(fields: [automationId], references: [id], onDelete: Cascade)
   automationId String?      @db.Uuid
 }
 
@@ -162,7 +162,7 @@ model Conversation {
   messages     Json[]    // This will store an array of message objects
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
-  Automation   Automation? @relation(fields: [automationId], references: [id])
+  Automation   Automation? @relation(fields: [automationId], references: [id], onDelete: Cascade)
   automationId String?    @db.Uuid
 }
 
@@ -170,7 +170,7 @@ model Conversation {
 
 model Dms {
   id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  Automation   Automation? @relation(fields: [automationId], references: [id])
+  Automation   Automation? @relation(fields: [automationId], references: [id], onDelete: Cascade)
   automationId String?     @db.Uuid
   createdAt    DateTime    @default(now())
   senderId     String?

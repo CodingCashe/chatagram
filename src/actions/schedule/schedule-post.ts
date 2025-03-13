@@ -12,6 +12,7 @@ export interface ScheduledPost {
   scheduledDate: string
   publishedDate: string | null
   status: string
+  automationId?: string | null
 }
 
 export async function schedulePost(formData: FormData) {
@@ -66,6 +67,7 @@ export async function getScheduledPosts(
         scheduledDate: true,
         publishedDate: true,
         status: true,
+        automationId: true,
       },
     })
 
