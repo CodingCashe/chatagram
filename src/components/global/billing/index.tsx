@@ -3645,6 +3645,7 @@
 //     )
 //   }
 
+
 "use client"
 
 import React from "react"
@@ -4433,11 +4434,6 @@ export default function PricingSection() {
                               <X className="h-5 w-5 text-gray-500" />
                             )
                           ) : (
-                            <span className="text-gray-200">{feature.pro}</span>\
-                            ) : (
-                              <X className="h-5 w-5 text-gray-500" />
-                            )
-                          ) : (
                             <span className="text-gray-200">{feature.pro}</span>
                           )}
                         </td>
@@ -4548,8 +4544,8 @@ export default function PricingSection() {
               <CardDescription className="text-gray-300">
                 Answer a few questions and we will recommend the best plan for your needs.
               </CardDescription>
-            </div>
-          </CardHeader>
+              </div>
+            </CardHeader>
           <CardContent>
             <div className="space-y-6">
               <div className="space-y-2">
