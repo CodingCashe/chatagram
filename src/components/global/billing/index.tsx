@@ -721,7 +721,7 @@ export default function PricingSection() {
                         </div>
 
                         <div className="mb-4">
-                          <p className="text-gray-300 italic">"{testimonial.quote}"</p>
+                          <p className="text-gray-300 italic">{testimonial.quote}</p>
                         </div>
 
                         {plan && (
@@ -749,7 +749,7 @@ export default function PricingSection() {
             <div className="relative z-10">
               <CardTitle className="text-2xl font-bold text-white">Not sure which plan is right for you?</CardTitle>
               <CardDescription className="text-gray-300">
-                Answer a few questions and we'll recommend the best plan for your needs.
+                Answer a few questions and we will recommend the best plan for your needs.
               </CardDescription>
             </div>
           </CardHeader>
@@ -871,7 +871,7 @@ export default function PricingSection() {
               <CardHeader>
                 <CardTitle className="text-white">Compare Plan Features</CardTitle>
                 <CardDescription className="text-gray-300">
-                  Detailed breakdown of what's included in each plan
+                  Detailed breakdown of what is included in each plan
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -972,7 +972,7 @@ export default function PricingSection() {
                     <AccordionContent className="text-gray-300 pb-4">
                       Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately, and
                       we will prorate your billing. When upgrading, you will get immediate access to all the new features.
-                      When downgrading, you'll keep access to your current plan until the end of your billing cycle.
+                      When downgrading, you will keep access to your current plan until the end of your billing cycle.
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="item-2" className="border-gray-800">
