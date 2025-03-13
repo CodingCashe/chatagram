@@ -2029,7 +2029,7 @@ const PaymentPage = () => {
               </div>
               <h3 className="text-xl font-semibold">Pay with PayPal</h3>
               <p className="text-muted-foreground mt-2 max-w-md mx-auto">
-                You'll be redirected to PayPal to complete your payment securely. You'll have a chance to review your
+                You will be redirected to PayPal to complete your payment securely. You will have a chance to review your
                 order before the payment is finalized.
               </p>
             </div>
@@ -2039,7 +2039,7 @@ const PaymentPage = () => {
                 <Info className="h-5 w-5 text-blue-500 mr-2 shrink-0" />
                 <span>
                   PayPal protects your payment information with industry-leading security and fraud prevention systems.
-                  You're always protected if the item doesn't arrive or is significantly different than described.
+                  You are always protected if the item doesnt arrive or is significantly different than described.
                 </span>
               </div>
             </div>
@@ -2136,7 +2136,7 @@ const PaymentPage = () => {
               <div className="flex">
                 <AlertCircle className="h-5 w-5 text-amber-600 mr-2 shrink-0" />
                 <span>
-                  Please ensure you're sending the exact amount required. Cryptocurrency transactions cannot be
+                  Please ensure you are sending the exact amount required. Cryptocurrency transactions cannot be
                   reversed. Payment will be confirmed after 1-3 network confirmations.
                 </span>
               </div>
@@ -2725,7 +2725,7 @@ const PaymentPage = () => {
                       </motion.div>
                       <h2 className="text-2xl font-bold mb-2">Payment Successful!</h2>
                       <p className="text-muted-foreground max-w-md mx-auto mb-6">
-                        Your payment has been processed successfully. You'll receive a confirmation email shortly.
+                        Your payment has been processed successfully. You will receive a confirmation email shortly.
                       </p>
                       <div className="border rounded-lg p-4 max-w-md mx-auto bg-gray-50 dark:bg-gray-900">
                         <div className="flex justify-between mb-2">
