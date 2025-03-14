@@ -588,23 +588,23 @@ export default function IntegrationsPage() {
     )
   }
 
-  if (error) {
-    console.error("Error fetching user data:", error)
-    return (
-      <div className="container max-w-5xl py-20">
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>Failed to load your integration data. Please try refreshing the page.</AlertDescription>
-        </Alert>
-        <div className="mt-4 flex justify-center">
-          <Button onClick={() => queryClient.invalidateQueries({ queryKey: ["user-profile"] })} variant="outline">
-            Retry
-          </Button>
-        </div>
-      </div>
-    )
-  }
+  // if (error) {
+  //   console.error("Error fetching user data:", error)
+  //   return (
+  //     <div className="container max-w-5xl py-20">
+  //       <Alert variant="destructive">
+  //         <AlertCircle className="h-4 w-4" />
+  //         <AlertTitle>Error</AlertTitle>
+  //         <AlertDescription>Failed to load your integration data. Please try refreshing the page.</AlertDescription>
+  //       </Alert>
+  //       <div className="mt-4 flex justify-center">
+  //         <Button onClick={() => queryClient.invalidateQueries({ queryKey: ["user-profile"] })} variant="outline">
+  //           Retry
+  //         </Button>
+  //       </div>
+  //     </div>
+  //   )
+  // }
 
   return (
     <div className="container max-w-5xl py-10 space-y-8">
