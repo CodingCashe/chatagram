@@ -30,7 +30,7 @@ export default function IntegrationCard({ title, description, icon, strategy }: 
   const integrated = data?.data?.integrations?.find((integration: any) => integration.name === strategy)
 
   const connectedCount = integrated ? 1 : 0
-  const activeCount = integrated?.isActive ? 1 : 0
+  const activeCount = integrated ? 1 : 0
 
   const handleConnect = async () => {
     setIsConnecting(true)
