@@ -1,0 +1,59 @@
+/* Custom styles for payment page */
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.rotateY-180 {
+  transform: rotateY(180deg);
+}
+
+/* Custom animations */
+@keyframes pulse-border {
+  0% {
+    box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(124, 58, 237, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(124, 58, 237, 0);
+  }
+}
+
+.animate-pulse-border {
+  animation: pulse-border 1.5s infinite;
+}
+
+/* Custom styling for card elements */
+.card-element {
+  border-radius: 4px;
+  padding: 12px;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.card-element:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+  border-color: #7c3aed;
+}
+
+/* Ensure dark mode compatibility */
+.dark .card-element {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+.dark .card-element:focus {
+  box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.2);
+  border-color: #a78bfa;
+}
