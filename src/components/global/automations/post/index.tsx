@@ -752,7 +752,7 @@
 // export default PostButton
 
 "use client"
-
+import {onCurrentUser} from '@/actions/user'
 import { useAutomationPosts } from "@/hooks/use-automations"
 import { useQueryAutomationPosts } from "@/hooks/user-queries"
 import { useState, useEffect } from "react"
@@ -824,7 +824,9 @@ const PostButton = ({
   const loadScheduledPosts = async () => {
     setIsLoadingScheduled(true)
     try {
-      const response = await getScheduledPosts(id)
+      const user = await onCurrentUser()
+      const response = await getScheduledPosts(user.id)
+      
       if (response.success && response.data) {
         // Get all scheduled posts
         const allScheduledPosts = response.data

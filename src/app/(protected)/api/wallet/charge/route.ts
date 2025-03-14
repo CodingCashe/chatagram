@@ -1,15 +1,15 @@
 // import { type NextRequest, NextResponse } from "next/server"
-// import { db } from "@/lib/db" // Your database connection
+// import {client} from "@/lib/prisma" // Your database connection
 // import { nanoid } from "nanoid"
-// import { auth } from "@clerk/nextjs"
+// import { onCurrentUser } from "@/actions/user"
 
 // export async function POST(req: NextRequest) {
 //   try {
 //     // Get the authenticated user
-//     const { userId } = auth()
+//     const user = await onCurrentUser()
 
 //     // If no authenticated user, return unauthorized
-//     if (!userId) {
+//     if (!user) {
 //       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 //     }
 
@@ -21,10 +21,10 @@
 //     }
 
 //     // Start a database transaction to ensure atomicity
-//     const result = await db.$transaction(async (tx) => {
+//     const result = await client.$transaction(async (tx) => {
 //       // Get the user's wallet
 //       const wallet = await tx.wallet.findUnique({
-//         where: { userId },
+//         where: { userId:user.id },
 //       })
 
 //       if (!wallet) {
@@ -58,7 +58,7 @@
 
 //       return {
 //         transactionId: transaction.id,
-//         userId,
+//         userId:user.id,
 //         amount,
 //         new_balance: updatedWallet.balance,
 //         currency: wallet.currency,
@@ -80,16 +80,16 @@
 // export async function GET(req: NextRequest) {
 //   try {
 //     // Get the authenticated user
-//     const { userId } = auth()
+//     const user = onCurrentUser()
 
 //     // If no authenticated user, return unauthorized
-//     if (!userId) {
+//     if (!user) {
 //       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 //     }
 
 //     // Get the user's wallet
-//     const wallet = await db.wallet.findUnique({
-//       where: { userId },
+//     const wallet = await client.wallet.findUnique({
+//       where: { userId:(await user).id },
 //       include: {
 //         transactions: {
 //           orderBy: {
@@ -123,61 +123,152 @@
 //   }
 // }
 
-///JUST FOR TESTING
+import { NextResponse } from "next/server"
+import { client } from "@/lib/prisma"
 
-import { type NextRequest, NextResponse } from "next/server"
-import Stripe from "stripe"
-import { onCurrentUser } from "@/actions/user"
+export const runtime = "nodejs"
 
-// Initialize Stripe with your secret key
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2024-11-20.acacia",
-})
+function getBaseUrl(): string {
+  // For production deployments
+  if (process.env.NEXT_PUBLIC_APP_URL) {
+    return process.env.NEXT_PUBLIC_APP_URL.startsWith("http")
+      ? process.env.NEXT_PUBLIC_APP_URL
+      : `https://${process.env.NEXT_PUBLIC_APP_URL}`
+  }
 
-export async function POST(req: NextRequest) {
+  // For preview deployments
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
+  }
+
+  // For local development
+  return "http://localhost:3000"
+}
+
+function validateAndFormatUrl(baseUrl: string, path: string): string {
   try {
-    // Get the authenticated user
-    const user = await onCurrentUser()
+    // Remove any trailing slashes from base URL
+    const cleanBaseUrl = baseUrl.replace(/\/+$/, "")
+    // Remove any leading slashes from path
+    const cleanPath = path.replace(/^\/+/, "")
+    // Combine and validate the full URL
+    const fullUrl = `${cleanBaseUrl}/${cleanPath}`
 
-    // If no authenticated user, return unauthorized
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
+    // This will throw if the URL is invalid
+    new URL(fullUrl)
 
-    const body = await req.json()
-    const { amount, currency = "usd", payment_method_types = ["card"], metadata = {} } = body
-
-    // Validate the amount
-    if (!amount || typeof amount !== "number" || amount <= 0) {
-      return NextResponse.json({ error: "Invalid amount provided" }, { status: 400 })
-    }
-
-    // Create a PaymentIntent with the order amount and currency
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount,
-      currency,
-      payment_method_types,
-      metadata: {
-        ...metadata,
-        // Use the authenticated user ID
-        user_id: user.id,
-      },
-      // Enable automatic payment methods for maximum compatibility
-      automatic_payment_methods: {
-        enabled: true,
-      },
-    })
-
-    return NextResponse.json({
-      clientSecret: paymentIntent.client_secret,
-      id: paymentIntent.id,
-    })
+    return fullUrl
   } catch (error) {
-    console.error("Error creating payment intent:", error)
-
-    return NextResponse.json({ error: "Error creating payment intent" }, { status: 500 })
+    throw new Error(`Invalid URL formation: ${baseUrl}/${path}`)
   }
 }
 
+export async function GET(request: Request) {
+  try {
+    // Find all scheduled posts that are due
+    const scheduledPosts = await client.scheduledContent.findMany({
+      where: {
+        status: "scheduled",
+        scheduledDate: {
+          lte: new Date(),
+        },
+      },
+      include: {
+        User: {
+          include: {
+            integrations: {
+              where: {
+                name: "INSTAGRAM",
+              },
+            },
+          },
+        },
+      },
+    })
 
+    const baseUrl = getBaseUrl()
+    console.log("Using base URL:", baseUrl) // Debug log
+
+    // Process each post
+    const results = await Promise.all(
+      scheduledPosts.map(async (post) => {
+        try {
+          const apiUrl = validateAndFormatUrl(baseUrl, "api/post-to-instagram")
+          console.log("Making request to:", apiUrl) // Debug log
+
+          const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: post.User?.clerkId,
+              caption: post.caption,
+              mediaUrls: post.mediaUrl.split(","),
+              mediaType: post.mediaType,
+            }),
+          })
+
+          if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`Failed to post to Instagram: ${response.status} ${response.statusText} - ${errorText}`)
+          }
+
+          // Update post status
+          await client.scheduledContent.update({
+            where: { id: post.id },
+            data: {
+              status: "published",
+              publishedDate: new Date(),
+            },
+          })
+
+          return {
+            postId: post.id,
+            status: "success",
+          }
+        } catch (error) {
+          console.error(`Failed to process post ${post.id}:`, error)
+
+          // Update post status to failed
+          await client.scheduledContent.update({
+            where: { id: post.id },
+            data: {
+              status: "failed",
+              // errorMessage: error instanceof Error ? error.message : "Unknown error occurred",
+            },
+          })
+
+          return {
+            postId: post.id,
+            status: "failed",
+            error: error instanceof Error ? error.message : "Unknown error occurred",
+          }
+        }
+      }),
+    )
+
+    const successCount = results.filter((r) => r.status === "success").length
+    const failedCount = results.filter((r) => r.status === "failed").length
+
+    return NextResponse.json({
+      success: true,
+      processed: scheduledPosts.length,
+      results: {
+        success: successCount,
+        failed: failedCount,
+        details: results,
+      },
+    })
+  } catch (error) {
+    console.error("Cron job error:", error)
+    return NextResponse.json(
+      {
+        error: "Failed to process scheduled posts",
+        details: error instanceof Error ? error.message : "Unknown error occurred",
+      },
+      { status: 500 },
+    )
+  }
+}
 
