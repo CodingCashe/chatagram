@@ -67,13 +67,9 @@ export default function StatsTicker() {
 
   return (
     <div className="bg-blue-950/30 border-y border-blue-900/30 py-3 overflow-hidden">
-      <div
-        ref={scrollRef}
-        className="flex items-center space-x-12 overflow-x-hidden whitespace-nowrap"
-        style={{ width: "200%" }}
-      >
+      <div ref={scrollRef} className="flex items-center space-x-12 overflow-x-hidden whitespace-nowrap w-full">
         {[...stats, ...stats].map((stat, index) => (
-          <div key={index} className="flex items-center space-x-2">
+          <div key={index} className="flex items-center space-x-2 flex-shrink-0">
             <div className="w-6 h-6 rounded-full bg-blue-900/50 flex items-center justify-center">{stat.icon}</div>
             <span className="text-blue-400 font-medium">{stat.value}</span>
             <span className="text-slate-400">{stat.label}</span>
