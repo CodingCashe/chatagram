@@ -32,7 +32,7 @@ export default function Navbar() {
             <div className="absolute inset-0 rounded-full bg-blue-500 blur-sm -z-10 opacity-50"></div>
           </div>
           <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600">
-            DM Pilot
+            Yazil
           </span>
         </Link>
 
@@ -66,9 +66,9 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center space-x-4">
           <Button variant="ghost" className="text-slate-300 hover:text-blue-400 hover:bg-blue-900/20">
-            Log in
+          <Link href="/dashboard">Log in</Link>
           </Button>
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white">Get Started</Button>
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white"><Link href="/dashboard">Get Started</Link></Button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -149,9 +149,9 @@ export default function Navbar() {
                   variant="ghost"
                   className="justify-center text-slate-300 hover:text-blue-400 hover:bg-blue-900/20"
                 >
-                  Log in
+                  <Link href="/dashboard">Log in</Link>
                 </Button>
-                <Button className="justify-center bg-blue-600 hover:bg-blue-700 text-white">Get Started</Button>
+                <Button className="justify-center bg-blue-600 hover:bg-blue-700 text-white"><Link href="/dashboard">Get Started</Link></Button>
               </div>
             </div>
           </motion.div>

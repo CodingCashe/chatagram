@@ -28,7 +28,7 @@ export default function ContentFeatures() {
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Complete Instagram Management</h2>
             <p className="text-slate-300">
-              DM Pilot offers a comprehensive suite of tools to manage all aspects of your Instagram presence from a
+              Yazil offers a comprehensive suite of tools to manage all aspects of your Instagram presence from a
               single dashboard.
             </p>
           </motion.div>
@@ -427,7 +427,7 @@ export default function ContentFeatures() {
                 </div>
                 <p className="text-slate-300 mb-6">
                   Plan and schedule your Instagram content in advance. Our intelligent scheduling tool recommends the
-                  best times to post based on your audience's activity patterns.
+                  best times to post based on your audience activity patterns.
                 </p>
                 <ul className="space-y-3 mb-8">
                   <li className="flex items-start">

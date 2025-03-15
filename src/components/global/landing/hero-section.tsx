@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Instagram, MessageCircle, Bot, Sparkles } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import Link from 'next/link'
 
 export default function HeroSection() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -85,7 +86,7 @@ export default function HeroSection() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
-                  Get Started Free
+                  <Link href="/dashboard">Get Started Free</Link>
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
                 <Button size="lg" variant="outline" className="border-blue-700 text-blue-400 hover:bg-blue-900/20">
@@ -160,7 +161,7 @@ export default function HeroSection() {
                       <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 mr-2"></div>
                       <div className="bg-slate-800 rounded-2xl rounded-bl-none px-4 py-2 max-w-[70%]">
                         <p className="text-sm text-white">
-                          Hi! I am interested in your products. Do you ship internationally?
+                          Hi! can I customize my replies?
                         </p>
                       </div>
                     </div>
@@ -174,7 +175,7 @@ export default function HeroSection() {
 
                     <div className="flex items-end justify-end">
                       <div className="bg-blue-600 rounded-2xl rounded-br-none px-4 py-2 max-w-[70%]">
-                        <p className="text-sm text-white">Yes, we do ship internationally to over 50 countries!</p>
+                        <p className="text-sm text-white">Yes, you make a request and consider it done!</p>
                       </div>
                     </div>
 

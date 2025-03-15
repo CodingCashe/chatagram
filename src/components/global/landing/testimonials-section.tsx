@@ -12,7 +12,7 @@ const testimonials = [
     role: "Fashion Influencer",
     avatar: "/placeholder.svg?height=80&width=80&text=SJ",
     content:
-      "DM Pilot has completely transformed how I engage with my followers. I'm now able to respond to every message, even when I'm asleep or creating content. My engagement rate has increased by 40% and I've seen a significant boost in conversions from my product recommendations.",
+      "Yazil has completely transformed how I engage with my followers. I'm now able to respond to every message, even when I'm asleep or creating content. My engagement rate has increased by 40% and I've seen a significant boost in conversions from my product recommendations.",
     rating: 5,
     platform: "Instagram",
   },
@@ -21,7 +21,7 @@ const testimonials = [
     role: "E-commerce Owner",
     avatar: "/placeholder.svg?height=80&width=80&text=MW",
     content:
-      "As a small business owner, I couldn't keep up with all the DMs asking about products. DM Pilot now handles all inquiries 24/7, answers questions about pricing and availability, and even helps customers complete purchases. It's like having a full-time customer service team at a fraction of the cost.",
+      "As a small business owner, I couldn't keep up with all the DMs asking about products. Yazil now handles all inquiries 24/7, answers questions about pricing and availability, and even helps customers complete purchases. It's like having a full-time customer service team at a fraction of the cost.",
     rating: 5,
     platform: "Instagram",
   },
@@ -30,7 +30,7 @@ const testimonials = [
     role: "Marketing Agency Director",
     avatar: "/placeholder.svg?height=80&width=80&text=JC",
     content:
-      "We manage Instagram accounts for over 20 clients, and DM Pilot has been a game-changer for our agency. The multi-account support and detailed analytics help us demonstrate clear ROI to our clients. The AI responses are so natural that most followers don't realize they're not talking to a human.",
+      "We manage Instagram accounts for over 20 clients, and Yazil has been a game-changer for our agency. The multi-account support and detailed analytics help us demonstrate clear ROI to our clients. The AI responses are so natural that most followers don't realize they're not talking to a human.",
     rating: 5,
     platform: "Instagram",
   },
@@ -39,7 +39,7 @@ const testimonials = [
     role: "Fitness Coach",
     avatar: "/placeholder.svg?height=80&width=80&text=DR",
     content:
-      "I was skeptical about using AI for my coaching business, but DM Pilot exceeded my expectations. It handles initial inquiries, qualifies leads, and books consultations directly into my calendar. My client acquisition has increased by 35% while I focus on creating quality content and coaching.",
+      "I was skeptical about using AI for my coaching business, but Yazil exceeded my expectations. It handles initial inquiries, qualifies leads, and books consultations directly into my calendar. My client acquisition has increased by 35% while I focus on creating quality content and coaching.",
     rating: 4,
     platform: "Instagram",
   },
@@ -77,7 +77,7 @@ export default function TestimonialsSection() {
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">What Our Customers Say</h2>
             <p className="text-slate-300">
-              Join thousands of businesses and creators who have transformed their Instagram engagement with DM Pilot.
+              Join thousands of businesses and creators who have transformed their Instagram engagement with Yazil.
             </p>
           </motion.div>
         </div>

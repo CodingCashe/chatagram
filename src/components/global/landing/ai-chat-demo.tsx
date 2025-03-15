@@ -66,7 +66,7 @@ export default function AiChatDemo() {
           <Bot className="h-4 w-4 text-blue-400" />
         </div>
         <div>
-          <div className="font-medium text-white">DM Pilot Assistant</div>
+          <div className="font-medium text-white">Yazil Assistant</div>
           <div className="text-xs text-slate-400 flex items-center">
             <span className="w-2 h-2 rounded-full bg-green-500 mr-1.5"></span>
             Online

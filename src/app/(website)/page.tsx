@@ -277,7 +277,7 @@ import AiChatDemo from "@/components/global/landing/ai-chat-demo"
 import ContentFeatures from "@/components/global/landing/content-features"
 
 export const metadata: Metadata = {
-  title: "Yazi - Instagram DM Automation Platform",
+  title: "Yazil - Instagram DM Automation Platform",
   description:
     "Automate your Instagram DMs, increase engagement, and grow your business with our powerful AI-driven platform.",
 }

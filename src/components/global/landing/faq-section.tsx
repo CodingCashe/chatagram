@@ -7,9 +7,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 const faqs = [
   {
-    question: "How does DM Pilots AI work?",
+    question: "How does Yazil AI work?",
     answer:
-      "DM Pilot uses advanced natural language processing to understand and respond to Instagram DMs. You can train it with your brand voice, product information, and common responses. The AI learns from interactions over time to provide increasingly accurate and personalized responses.",
+      "Yazil uses advanced natural language processing to understand and respond to Instagram DMs. You can train it with your brand voice, product information, and common responses. The AI learns from interactions over time to provide increasingly accurate and personalized responses.",
   },
   {
     question: "Will my followers know they're talking to an AI?",
@@ -19,7 +19,7 @@ const faqs = [
   {
     question: "How do I connect my Instagram account?",
     answer:
-      "Connecting your Instagram account is simple and secure. After signing up, you'll be guided through our OAuth process which requires you to log in to Instagram and grant DM Pilot permission to access your messages. We never store your Instagram password.",
+      "Connecting your Instagram account is simple and secure. After signing up, you'll be guided through our OAuth process which requires you to log in to Instagram and grant Yazil permission to access your messages. We never store your Instagram password.",
   },
   {
     question: "Can I customize the AI responses?",
@@ -37,7 +37,7 @@ const faqs = [
       "Yes, security is our top priority. We use industry-standard encryption, secure OAuth for authentication, and never store Instagram passwords. We only access the data necessary to provide our service, and you can revoke access at any time.",
   },
   {
-    question: "Can I use DM Pilot for multiple Instagram accounts?",
+    question: "Can I use Yazil for multiple Instagram accounts?",
     answer:
       "Yes, our Professional and Enterprise plans support multiple Instagram accounts. You can manage all your accounts from a single dashboard with unified analytics and customized settings for each account.",
   },
@@ -70,7 +70,7 @@ export default function FaqSection() {
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Frequently Asked Questions</h2>
             <p className="text-slate-300">
-              Everything you need to know about DM Pilot. Cant find the answer youre looking for? Contact our support
+              Everything you need to know about Yazil. Cant find the answer youre looking for? Contact our support
               team.
             </p>
           </motion.div>

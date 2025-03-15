@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef } from "react"
+import Link from 'next/link'
 import { motion, useInView } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, MessageCircle, Bot, BarChart3 } from "lucide-react"
@@ -55,7 +56,7 @@ export default function CtaSection() {
 
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
-              Start Your Free Trial
+              <Link href="/dashboard">Start Your Free Trial</Link>
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
             <Button size="lg" variant="outline" className="border-blue-700 text-blue-400 hover:bg-blue-900/20">

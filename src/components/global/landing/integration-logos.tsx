@@ -82,7 +82,7 @@ export default function IntegrationLogos() {
             </div>
             <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Connect With Your Favorite Tools</h2>
             <p className="text-slate-300">
-              DM Pilot integrates with the tools you already use to streamline your workflow and maximize efficiency.
+              Yazil integrates with the tools you already use to streamline your workflow and maximize efficiency.
             </p>
           </motion.div>
         </div>

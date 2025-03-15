@@ -110,7 +110,7 @@ export default function WorkflowSection() {
                     <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-blue-400 flex items-center justify-center">
                       <MessageCircle className="h-4 w-4 text-white" />
                     </div>
-                    <span className="ml-2 font-medium text-white">DM Pilot Dashboard</span>
+                    <span className="ml-2 font-medium text-white">Yazil Dashboard</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
