@@ -7,7 +7,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 const faqs = [
   {
-    question: "How does DM Pilot's AI work?",
+    question: "How does DM Pilots AI work?",
     answer:
       "DM Pilot uses advanced natural language processing to understand and respond to Instagram DMs. You can train it with your brand voice, product information, and common responses. The AI learns from interactions over time to provide increasingly accurate and personalized responses.",
   },
@@ -27,7 +27,7 @@ const faqs = [
       "You can train the AI with your brand voice, create custom response templates, and set up specific rules for different types of inquiries. You can also review and refine responses over time to improve accuracy.",
   },
   {
-    question: "What happens if the AI can't answer a question?",
+    question: "What happens if the AI cant answer a question?",
     answer:
       "You can set up escalation rules for complex inquiries. When the AI encounters a question it can't confidently answer, it can notify you, flag the conversation for human review, or politely inform the user that a team member will follow up shortly.",
   },
@@ -70,7 +70,7 @@ export default function FaqSection() {
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Frequently Asked Questions</h2>
             <p className="text-slate-300">
-              Everything you need to know about DM Pilot. Can't find the answer youre looking for? Contact our support
+              Everything you need to know about DM Pilot. Cant find the answer youre looking for? Contact our support
               team.
             </p>
           </motion.div>

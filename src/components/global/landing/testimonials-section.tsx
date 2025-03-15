@@ -150,7 +150,7 @@ export default function TestimonialsSection() {
                         <h3 className="text-xl font-semibold text-white">{testimonial.name}</h3>
                         <p className="text-sm text-blue-400 mb-4">{testimonial.role}</p>
 
-                        <p className="text-slate-300 italic">"{testimonial.content}"</p>
+                        <p className="text-slate-300 italic">{testimonial.content}</p>
 
                         <div className="mt-4 flex items-center">
                           <Instagram className="h-4 w-4 text-blue-400 mr-1.5" />
