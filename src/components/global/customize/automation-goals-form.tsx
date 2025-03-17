@@ -201,7 +201,7 @@ export default function AutomationGoalsForm({ businessId }: { businessId: string
     <Card className="border border-gray-700 bg-gray-800/50 backdrop-blur-sm shadow-xl">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-2xl">
-          <Target className="h-6 w-6 text-purple-400" />
+          <Target className="h-6 w-6 text-blue-400" />
           Automation Goals
         </CardTitle>
         <CardDescription className="text-gray-400">
@@ -238,14 +238,14 @@ export default function AutomationGoalsForm({ businessId }: { businessId: string
               htmlFor="customer-support"
               className={`flex items-start p-4 gap-3 rounded-lg border ${
                 primaryGoal === "customer-support"
-                  ? "border-purple-500 bg-purple-900/20"
+                  ? "border-blue-500 bg-blue-900/20"
                   : "border-gray-700 bg-gray-900/50 hover:bg-gray-900"
               } cursor-pointer transition-colors`}
             >
               <RadioGroupItem value="customer-support" id="customer-support" className="mt-1" />
               <div className="space-y-1">
                 <div className="font-medium flex items-center gap-2">
-                  <HelpCircle className="h-4 w-4 text-purple-400" />
+                  <HelpCircle className="h-4 w-4 text-blue-400" />
                   Customer Support
                 </div>
                 <div className="text-sm text-gray-400">Answer common questions and resolve simple issues</div>
@@ -256,14 +256,14 @@ export default function AutomationGoalsForm({ businessId }: { businessId: string
               htmlFor="sales"
               className={`flex items-start p-4 gap-3 rounded-lg border ${
                 primaryGoal === "sales"
-                  ? "border-purple-500 bg-purple-900/20"
+                  ? "border-blue-500 bg-blue-900/20"
                   : "border-gray-700 bg-gray-900/50 hover:bg-gray-900"
               } cursor-pointer transition-colors`}
             >
               <RadioGroupItem value="sales" id="sales" className="mt-1" />
               <div className="space-y-1">
                 <div className="font-medium flex items-center gap-2">
-                  <ShoppingCart className="h-4 w-4 text-purple-400" />
+                  <ShoppingCart className="h-4 w-4 text-blue-400" />
                   Sales Automation
                 </div>
                 <div className="text-sm text-gray-400">Guide customers through the purchase process</div>
@@ -274,14 +274,14 @@ export default function AutomationGoalsForm({ businessId }: { businessId: string
               htmlFor="appointment"
               className={`flex items-start p-4 gap-3 rounded-lg border ${
                 primaryGoal === "appointment"
-                  ? "border-purple-500 bg-purple-900/20"
+                  ? "border-blue-500 bg-blue-900/20"
                   : "border-gray-700 bg-gray-900/50 hover:bg-gray-900"
               } cursor-pointer transition-colors`}
             >
               <RadioGroupItem value="appointment" id="appointment" className="mt-1" />
               <div className="space-y-1">
                 <div className="font-medium flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-purple-400" />
+                  <Calendar className="h-4 w-4 text-blue-400" />
                   Appointment Booking
                 </div>
                 <div className="text-sm text-gray-400">Schedule meetings, consultations, or service appointments</div>
@@ -293,10 +293,10 @@ export default function AutomationGoalsForm({ businessId }: { businessId: string
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <Label className="text-gray-300">
-              <MessageCircle className="h-4 w-4 inline mr-2 text-purple-400" />
+              <MessageCircle className="h-4 w-4 inline mr-2 text-blue-400" />
               Response Time Expectation
             </Label>
-            <span className="text-sm font-medium text-purple-400">{responseTime[0]} minutes</span>
+            <span className="text-sm font-medium text-blue-400">{responseTime[0]} minutes</span>
           </div>
           <Slider value={responseTime} onValueChange={setResponseTime} min={5} max={120} step={5} className="py-4" />
           <div className="flex justify-between text-xs text-gray-500">
@@ -330,7 +330,7 @@ export default function AutomationGoalsForm({ businessId }: { businessId: string
           <Button
             onClick={handleSave}
             disabled={isSaving}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+            className="bg-gradient-to-r from-blue-600 to-blue-900 hover:from-blue-700 hover:to-blue-800 text-white"
           >
             {isSaving ? "Saving..." : "Save Goals"}
           </Button>

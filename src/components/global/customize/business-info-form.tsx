@@ -383,7 +383,7 @@ import { saveBusinessInfo, getBusinessInfo } from "@/actions/businfo/queries"
 
         <div className="space-y-2">
           <Label htmlFor="targetAudience" className="text-gray-300 flex items-center gap-2">
-            <Users className="h-4 w-4 text-purple-400" />
+            <Users className="h-4 w-4 text-blue-400" />
             Target Audience
           </Label>
           <Textarea
@@ -412,7 +412,7 @@ import { saveBusinessInfo, getBusinessInfo } from "@/actions/businfo/queries"
         <Button
           onClick={handleSubmit}
           disabled={isLoading}
-          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-700 text-white"
         >
           {isLoading ? "Saving..." : "Save Business Information"}
         </Button>

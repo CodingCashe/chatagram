@@ -2443,10 +2443,12 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ActiveIndicator } from "../indicators/active-indicator"
 import { InactiveIndicator } from "../indicators/inactive-indicator"
-import { Sparkles, Zap, Trash2, Settings, MessageSquareText, Clock, ChevronDown } from "lucide-react"
+import { Sparkles, Zap, Trash2, Settings, MessageSquareText,MessageSquare, ChevronDown, ChevronUp,Clock } from "lucide-react"
 import AutomationStats from "./automation-stats"
 import AutomationChats from "./automationChats"
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip as RechartsTooltip, Cell } from "recharts"
+import { motion, AnimatePresence } from "framer-motion"
+
 
 type Keyword = {
   id: string
@@ -2634,12 +2636,60 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
           </div>
         </div>
 
-        {showChats && (
-          <div className="mt-6 border-t border-border pt-4">
-            <h3 className="text-lg font-semibold mb-2 text-foreground">Automation Chats</h3>
-            <AutomationChats automationId={automation.id} />
-          </div>
-        )}
+        {/*  */}
+        <div className="mt-6 border-t border-[#545454] pt-4">
+          <button
+            className="w-full flex items-center justify-between p-2 rounded-lg border border-[#545454]/50 bg-transparent transition-colors duration-300"
+            onClick={() => setShowChats(!showChats)}
+          >
+            <div className="flex items-center">
+              <div className="mr-3 w-8 h-8 rounded-full border border-[#545454] flex items-center justify-center bg-gradient-to-br from-[#2A2A2A] to-[#1D1D1D]">
+                <MessageSquare size={16} className="text-blue-400" />
+              </div>
+              <span className="font-medium">View Conversation History</span>
+              {automation.listener?.dmCount && automation.listener.dmCount > 0 && (
+                <Badge className="ml-2 bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                  {automation.listener.dmCount} messages
+                </Badge>
+              )}
+            </div>
+            <div>
+              {showChats ? (
+                <ChevronUp size={20} className="text-[#9B9CA0]" />
+              ) : (
+                <ChevronDown size={20} className="text-[#9B9CA0]" />
+              )}
+            </div>
+          </button>
+        </div>
+
+        <AnimatePresence>
+          {showChats && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{
+                height: "auto",
+                opacity: 1,
+                transition: { duration: 0.3, ease: "easeOut" },
+              }}
+              exit={{
+                height: 0,
+                opacity: 0,
+                transition: { duration: 0.2, ease: "easeIn" },
+              }}
+              className="w-full overflow-hidden"
+            >
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.1, duration: 0.3 }}
+                className="border border-[#545454]/50 rounded-lg p-4 mt-3 bg-[#1D1D1D]/30"
+              >
+                <AutomationChats automationId={automation.id} />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Decorative element */}
@@ -2650,3 +2700,11 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
 
 export default FancyAutomationBox
 
+
+
+      // {showChats && (
+      //   <div className="mt-6 border-t border-border pt-4">
+      //     <h3 className="text-lg font-semibold mb-2 text-foreground">Automation Chats</h3>
+      //     <AutomationChats automationId={automation.id} />
+      //   </div>
+      // )}

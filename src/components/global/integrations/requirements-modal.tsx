@@ -188,7 +188,7 @@ export default function RequirementsModal({ platform, onClose }: RequirementsMod
               Cancel
             </Button>
           ) : (
-            <div></div> // Empty div to maintain layout
+            <div></div> // Empty div to maintain layout 
           )}
           <Button
             onClick={handleContinue}
