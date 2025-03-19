@@ -76,7 +76,7 @@ model Business {
   websiteAnalysis          Json?
   targetAudience           String
   website                  String
-  instagramHandle          String?   // Made optional
+  instagramHandle          String   // Made optional
   facebookHandle           String?   // Added for Facebook
   whatsappNumber           String?   // Added for WhatsApp
   welcomeMessage           String
