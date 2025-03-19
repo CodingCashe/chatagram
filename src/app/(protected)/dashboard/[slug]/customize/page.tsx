@@ -431,7 +431,7 @@ export default function CustomAutomationRequestPage() {
             name: data.name || "Not specified",
             industry: data.industry || "Not specified",
             primaryGoal: data.automationGoals?.primaryGoal || "Not specified",
-            responseTime: data.automationGoals?.responseTime || 0,
+            responseTime: data.automationGoals?.responseTime || 5,
             selectedFeatures:
               data.features?.features.filter((feature) => feature.enabled).map((feature) => feature.name) || [],
             journeySteps: data.customerJourney?.journeySteps || [],
@@ -488,7 +488,7 @@ export default function CustomAutomationRequestPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100">
       <div className="container mx-auto px-4 py-12">
-        <h1 className="text-4xl font-bold text-center mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+        <h1 className="text-4xl font-bold text-center mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600">
           Custom Automation Request
         </h1>
         <p className="text-center text-gray-400 mb-12 max-w-2xl mx-auto">

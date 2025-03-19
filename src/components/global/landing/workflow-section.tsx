@@ -42,7 +42,7 @@ export default function WorkflowSection() {
       {/* Background elements */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-blue-950/20 to-slate-950"></div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-10">\
         <div className="flex flex-col lg:flex-row items-center gap-12">
           {/* Left content */}
           <motion.div

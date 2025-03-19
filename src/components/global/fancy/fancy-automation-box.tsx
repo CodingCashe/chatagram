@@ -2699,12 +2699,3 @@ export const FancyAutomationBox: React.FC<FancyAutomationBoxProps> = ({ automati
 }
 
 export default FancyAutomationBox
-
-
-
-      // {showChats && (
-      //   <div className="mt-6 border-t border-border pt-4">
-      //     <h3 className="text-lg font-semibold mb-2 text-foreground">Automation Chats</h3>
-      //     <AutomationChats automationId={automation.id} />
-      //   </div>
-      // )}
