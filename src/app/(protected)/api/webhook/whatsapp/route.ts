@@ -418,7 +418,7 @@ export async function POST(req: NextRequest) {
     webhook_payload = await req.json()
     console.log("Received WhatsApp webhook payload:", JSON.stringify(webhook_payload, null, 2))
 
-    // Extract information from WhatsApp webhook payload
+    // Extractinformation from WhatsApp webhook payload
     if (
       webhook_payload.object === "whatsapp_business_account" &&
       webhook_payload.entry &&
