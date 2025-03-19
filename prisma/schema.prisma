@@ -1,6 +1,15 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -26,26 +35,23 @@ model User {
 }
 
 model ScheduledContent {
-  id                String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  instagramPostId   String?     @unique
-  facebookPostId    String?     // Added for Facebook posts
-  caption           String
-  mediaType         String
-  mediaUrl          String
-  thumbnailUrl      String?
-  permalink         String?
-  scheduledDate     DateTime
-  publishedDate     DateTime?
-  mediaProductType  String?
-  automation        Automation? @relation(fields: [automationId], references: [id], onDelete: Cascade)
-  automationId      String?     @db.Uuid
-  status            String      @default("scheduled")
-  User              User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            String?     @db.Uuid
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-  integration       Integrations? @relation(fields: [integrationId], references: [id]) // Link to specific integration
-  integrationId     String?     @db.Uuid
+  id               String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  instagramPostId  String?     @unique
+  caption          String
+  mediaType        String
+  mediaUrl         String
+  thumbnailUrl     String?
+  permalink        String?
+  scheduledDate    DateTime
+  publishedDate    DateTime?
+  mediaProductType String?
+  automation       Automation? @relation(fields: [automationId], references: [id], onDelete: Cascade)
+  automationId     String?     @db.Uuid
+  status           String      @default("scheduled")
+  User             User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String?     @db.Uuid
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
 }
 
 model MarketingInfo {
@@ -60,34 +66,32 @@ model MarketingInfo {
 }
 
 model Business {
-  id                       String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name                     String?
-  businessName             String
-  businessType             String
-  businessDescription      String
-  industry                 String
-  automationSetupComplete  Boolean   @default(false)
-  automationSetupDate      DateTime?
+  id                        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                      String?
+  businessName              String
+  businessType              String
+  businessDescription       String
+  industry                  String
+  automationSetupComplete   Boolean   @default(false)
+  automationSetupDate       DateTime?
   automationAdditionalNotes String?
-  automationGoals          Json?
-  customerJourney          Json?
-  features                 Json?
-  businessTypeData         Json?
-  websiteAnalysis          Json?
-  targetAudience           String
-  website                  String
-  instagramHandle          String   // Made optional
-  facebookHandle           String?   // Added for Facebook
-  whatsappNumber           String?   // Added for WhatsApp
-  welcomeMessage           String
-  responseLanguage         String
-  businessHours            String
-  autoReplyEnabled         Boolean
-  promotionMessage         String
-  createdAt                DateTime  @default(now())
-  updatedAt                DateTime  @updatedAt
-  User                     User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId                   String?   @db.Uuid
+  automationGoals           Json?
+  customerJourney           Json?
+  features                  Json?
+  businessTypeData          Json?
+  websiteAnalysis           Json?
+  targetAudience            String
+  website                   String
+  instagramHandle           String
+  welcomeMessage            String
+  responseLanguage          String
+  businessHours             String
+  autoReplyEnabled          Boolean
+  promotionMessage          String
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
+  User                      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                    String?   @db.Uuid
 }
 
 model Subscription {
@@ -106,11 +110,9 @@ model Integrations {
   createdAt      DateTime     @default(now())
   User           User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String?      @db.Uuid
-  token          String       // Removed @unique to allow multiple accounts
+  token          String       @unique
   expiresAt      DateTime?
-  
-  // Common fields
-  accountId      String       @default("123456")// Platform-specific ID (Instagram ID, Facebook Page ID, WhatsApp Phone Number ID)
+  instagramId    String?      @unique
   username       String?
   fullName       String?
   profilePicture String?
@@ -118,41 +120,23 @@ model Integrations {
   followingCount Int?
   postsCount     Int?
   lastUpdated    DateTime     @default(now())
-  
-  // Instagram-specific fields
-  instagramId    String?      // Kept for backward compatibility
-  
-  // Facebook-specific fields
-  pageId         String?      // For Facebook Pages
-  pageAccessToken String?     // For Facebook Pages
-  
-  // WhatsApp-specific fields
-  phoneNumber    String?      // For WhatsApp Business
-  
-  // Scheduled content for this integration
-  scheduledContent ScheduledContent[]
-  
-  // Make the combination of userId, name, and accountId unique
-  // This allows a user to have multiple accounts for each platform
-  @@unique([userId, name, accountId])
 }
 
 model Automation {
-  id              String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name            String            @default("New Automation")
-  createdAt       DateTime          @default(now())
-  active          Boolean           @default(false)
-  trigger         Trigger[]
-  listener        Listener?
-  posts           Post[]
-  dms             Dms[]
-  messages        Message[]
-  conversations   Conversation[]
-  User            User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId          String?           @db.Uuid
-  keywords        Keyword[]
-  scheduledPosts  ScheduledContent[]
-  platform        INTEGRATIONS      @default(INSTAGRAM) // Added to specify which platform this automation is for
+  id             String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String             @default("New Automation")
+  createdAt      DateTime           @default(now())
+  active         Boolean            @default(false)
+  trigger        Trigger[]
+  listener       Listener?
+  posts          Post[]
+  dms            Dms[]
+  messages       Message[]
+  conversations  Conversation[]
+  User           User?              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String?            @db.Uuid
+  keywords       Keyword[]
+  scheduledPosts ScheduledContent[]
 }
 
 model Message {
@@ -164,18 +148,16 @@ model Message {
   createdAt    DateTime    @default(now())
   Automation   Automation? @relation(fields: [automationId], references: [id], onDelete: Cascade)
   automationId String?     @db.Uuid
-  platform     INTEGRATIONS @default(INSTAGRAM) // Added to specify which platform this message is from
 }
 
 model Conversation {
   id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   pageId       String      @unique
-  messages     Json[]      // This will store an array of message objects
+  messages     Json[] // This will store an array of message objects
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
   Automation   Automation? @relation(fields: [automationId], references: [id], onDelete: Cascade)
   automationId String?     @db.Uuid
-  platform     INTEGRATIONS @default(INSTAGRAM) // Added to specify which platform this conversation is from
 }
 
 model Dms {
@@ -186,7 +168,6 @@ model Dms {
   senderId     String?
   reciever     String?
   message      String?
-  platform     INTEGRATIONS @default(INSTAGRAM) // Added to specify which platform this DM is from
 }
 
 model Post {
@@ -197,7 +178,6 @@ model Post {
   mediaType    MEDIATYPE   @default(IMAGE)
   Automation   Automation? @relation(fields: [automationId], references: [id], onDelete: Cascade)
   automationId String?     @db.Uuid
-  platform     INTEGRATIONS @default(INSTAGRAM) // Added to specify which platform this post is from
 }
 
 model ConversationState {
@@ -215,11 +195,10 @@ model Listener {
   listener     LISTENERS  @default(MESSAGE)
   prompt       String
   commentReply String?
-  lastComment  String?  
+  lastComment  String?
   lastDm       String?
   dmCount      Int        @default(0)
   commentCount Int        @default(0)
-  platform     INTEGRATIONS @default(INSTAGRAM) // Added to specify which platform this listener is for
 }
 
 model Trigger {
@@ -227,7 +206,6 @@ model Trigger {
   type         String
   Automation   Automation? @relation(fields: [automationId], references: [id], onDelete: Cascade)
   automationId String?     @db.Uuid
-  platform     INTEGRATIONS @default(INSTAGRAM) // Added to specify which platform this trigger is for
 }
 
 model Keyword {
@@ -246,8 +224,6 @@ enum SUBSCRIPTION_PLAN {
 
 enum INTEGRATIONS {
   INSTAGRAM
-  FACEBOOK
-  WHATSAPP
 }
 
 enum MEDIATYPE {
