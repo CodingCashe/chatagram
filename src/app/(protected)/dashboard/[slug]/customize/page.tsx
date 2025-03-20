@@ -484,9 +484,9 @@ export default function CustomAutomationRequestPage() {
   if (isLoading) {
     return <div>Loading...</div>
   }
-
+ /**bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 */
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100">
+    <div className="min-h-screen text-gray-100">
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-4xl font-bold text-center mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600">
           Custom Automation Request

@@ -13,10 +13,10 @@ import InteractiveContentCreator from "@/components/global/audience/InteractiveC
 import HashtagGenerator from "@/components/global/audience/HashtagGenerator"
 import EngagementMetrics from "@/components/global/audience/EngagementMetrics"
 import ContentCalendar from "@/components/global/audience/ContentCalendar"
-
+/**bg-gradient-to-br from-gray-900 to-gray-950 */
 export default function EnhancedMarketingDashboard() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-950 text-white p-4 md:p-8 overflow-hidden">
+    <div className="min-h-screen text-white p-4 md:p-8 overflow-hidden">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         <Header />
       </motion.div>

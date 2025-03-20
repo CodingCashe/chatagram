@@ -2409,7 +2409,7 @@ export default function PricingSection() {
   const [showAllFeatures, setShowAllFeatures] = useState(false)
   // Add a new state to track the active plan
   const { data } = useQueryUser()
-  const activePlan = data?.data?.subscription?.plan || "PRO"
+  const activePlan = data?.data?.subscription?.plan || "FREE"
 
   const [teamSize, setTeamSize] = useState<string | null>(null)
   const [useCase, setUseCase] = useState<string | null>(null)
@@ -2418,8 +2418,8 @@ export default function PricingSection() {
 
   const pricingPlans: PricingPlan[] = [
     {
-      id: "free",
-      name: "Free",
+      id: "FREE",
+      name: "FREE",
       description: "Basic features for personal projects",
       price: {
         monthly: 0,
@@ -2544,8 +2544,8 @@ export default function PricingSection() {
       idealFor: ["Freelancers", "Side projects", "Personal use"],
     },
     {
-      id: "pro",
-      name: "Professional",
+      id: "PRO",
+      name: "PRO",
       description: "Ideal for growing businesses and teams",
       price: {
         monthly: 29,
