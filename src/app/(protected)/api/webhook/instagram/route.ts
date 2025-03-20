@@ -1865,8 +1865,12 @@ export async function POST(req: NextRequest) {
       }
 
       // Get Voiceflow response
-      let voiceflowResponse =
-        "I'm sorry, but I'm having trouble processing your request right now. Please try again later."
+      // let voiceflowResponse =
+      //   "I'm sorry, but I'm having trouble processing your request right now. Please try again later."
+      // let voiceflowVariables: VoiceflowVariables = {}
+      let voiceflowResponse: { text: string; buttons?: { name: string; payload: string }[] } = {
+        text: "I'm sorry, but I'm having trouble processing your request right now. Please try again later.",
+      };
       let voiceflowVariables: VoiceflowVariables = {}
 
       try {
@@ -1890,32 +1894,48 @@ export async function POST(req: NextRequest) {
 
         // Store conversation
         await storeConversationMessage(pageId, senderId, userMessage, false, automation?.id || null)
-        await storeConversationMessage(pageId, "bot", voiceflowResponse, true, automation?.id || null)
+        // await storeConversationMessage(pageId, "bot", voiceflowResponse, true, automation?.id || null)
+        await storeConversationMessage(pageId, "bot", voiceflowResponse.text, true, automation?.id || null);
 
         // Send response
         if (webhook_payload.entry[0].messaging) {
+          // const direct_message = await sendDM(
+          //   pageId,
+          //   senderId,
+          //   voiceflowResponse,
+          //   automation?.User?.integrations[0].token || process.env.DEFAULT_PAGE_TOKEN!,
+          // )
           const direct_message = await sendDM(
             pageId,
             senderId,
-            voiceflowResponse,
+            voiceflowResponse.text, // Use the text property
             automation?.User?.integrations[0].token || process.env.DEFAULT_PAGE_TOKEN!,
-          )
+            voiceflowResponse.buttons // Pass the buttons
+          );
 
           if (direct_message.status === 200) {
             if (automation) {
               await trackResponses(automation.id, "DM")
             }
             await createChatHistory(automation?.id || "default", pageId, senderId, userMessage)
-            await createChatHistory(automation?.id || "default", pageId, senderId, voiceflowResponse)
+            // await createChatHistory(automation?.id || "default", pageId, senderId, voiceflowResponse)
+            await createChatHistory(automation?.id || "default", pageId, senderId, voiceflowResponse.text); // Use voiceflowResponse.text
             return NextResponse.json({ message: "Message sent" }, { status: 200 })
           }
         } else if (webhook_payload.entry[0].changes) {
+          // const comment = await sendPrivateMessage(
+          //   pageId,
+          //   webhook_payload.entry[0].changes[0].value.id,
+          //   voiceflowResponse,
+          //   automation?.User?.integrations[0].token || process.env.DEFAULT_PAGE_TOKEN!,
+          // )
           const comment = await sendPrivateMessage(
             pageId,
             webhook_payload.entry[0].changes[0].value.id,
-            voiceflowResponse,
+            voiceflowResponse.text, // Use voiceflowResponse.text instead of voiceflowResponse
             automation?.User?.integrations[0].token || process.env.DEFAULT_PAGE_TOKEN!,
-          )
+            voiceflowResponse.buttons // Pass the buttons if needed
+          );
 
           if (comment.status === 200) {
             if (automation) {
