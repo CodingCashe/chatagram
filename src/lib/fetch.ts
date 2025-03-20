@@ -34,16 +34,54 @@ export const refreshToken = async (token: string) => {
 //   )
 // }
 
+// export const sendDM = async (
+//   userId: string,
+//   recieverId: string,
+//   prompt: string,
+//   token: string,
+//   buttons?: { name: string; payload: string }[] // Add buttons as an optional parameter
+// ) => {
+//   console.log('sending message....')
+
+//   // Construct the message payload
+//   const messagePayload: any = {
+//     recipient: {
+//       id: recieverId,
+//     },
+//     message: {
+//       text: prompt,
+//     },
+//   }
+
+//   // Add quick replies if buttons are provided
+//   if (buttons && buttons.length > 0) {
+//     messagePayload.message.quick_replies = buttons.map((button) => ({
+//       content_type: 'text',
+//       title: button.name,
+//       payload: button.payload,
+//     }))
+//   }
+
+//   // Send the request to Instagram's API
+//   return await axios.post(
+//     `${process.env.INSTAGRAM_BASE_URL}/v21.0/${userId}/messages`,
+//     messagePayload,
+//     {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         'Content-Type': 'application/json',
+//       },
+//     }
+//   )
+// }
+
 export const sendDM = async (
   userId: string,
   recieverId: string,
   prompt: string,
   token: string,
-  buttons?: { name: string; payload: string }[] // Add buttons as an optional parameter
+  buttons?: { name: string; payload: string }[]
 ) => {
-  console.log('sending message....')
-
-  // Construct the message payload
   const messagePayload: any = {
     recipient: {
       id: recieverId,
@@ -51,30 +89,29 @@ export const sendDM = async (
     message: {
       text: prompt,
     },
-  }
+  };
 
-  // Add quick replies if buttons are provided
   if (buttons && buttons.length > 0) {
     messagePayload.message.quick_replies = buttons.map((button) => ({
-      content_type: 'text',
+      content_type: "text",
       title: button.name,
       payload: button.payload,
-    }))
+    }));
   }
 
-  // Send the request to Instagram's API
+  console.log("Sending payload to Instagram:", JSON.stringify(messagePayload, null, 2)); // Log payload
+
   return await axios.post(
     `${process.env.INSTAGRAM_BASE_URL}/v21.0/${userId}/messages`,
     messagePayload,
     {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     }
-  )
-}
-
+  );
+};
 
 // export const sendPrivateMessage = async (
 //   userId: string,

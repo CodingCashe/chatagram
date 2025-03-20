@@ -2694,41 +2694,61 @@ async function fetchVoiceflowVariables(userId: string): Promise<VoiceflowVariabl
 //   return result
 // }
 
+// export function processVoiceflowResponse(traces: VoiceflowResponse[]): { text: string; buttons?: { name: string; payload: string }[] } {
+//   console.log("Entering processVoiceflowResponse function")
+//   console.log("Input traces:", JSON.stringify(traces, null, 2))
+
+//   let result = ""
+//   let buttons: { name: string; payload: string }[] = []
+
+//   try {
+//     for (const trace of traces) {
+//       console.log("Processing trace:", JSON.stringify(trace, null, 2))
+//       if (trace.type === "text") {
+//         result += trace.payload.message + "\n"
+//       } else if (trace.type === "choice") {
+//         result += "\nOptions:\n"
+//         for (const button of trace.payload.buttons) {
+//           buttons.push({ name: button.name, payload: button.name })
+//         }
+//       }
+//     }
+//     result = result.trim()
+//     console.log("Processed result:", result)
+//   } catch (error) {
+//     console.error("Error in processVoiceflowResponse:")
+//     if (error instanceof Error) {
+//       console.error("Error name:", error.name)
+//       console.error("Error message:", error.message)
+//       console.error("Error stack:", error.stack)
+//     }
+//     console.error("Full error object:", JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
+//     throw error
+//   } finally {
+//     console.log("Exiting processVoiceflowResponse function")
+//   }
+
+//   return { text: result, buttons: buttons.length > 0 ? buttons : undefined }
+// }
+
+
 export function processVoiceflowResponse(traces: VoiceflowResponse[]): { text: string; buttons?: { name: string; payload: string }[] } {
-  console.log("Entering processVoiceflowResponse function")
-  console.log("Input traces:", JSON.stringify(traces, null, 2))
+  let result = "";
+  let buttons: { name: string; payload: string }[] = [];
 
-  let result = ""
-  let buttons: { name: string; payload: string }[] = []
-
-  try {
-    for (const trace of traces) {
-      console.log("Processing trace:", JSON.stringify(trace, null, 2))
-      if (trace.type === "text") {
-        result += trace.payload.message + "\n"
-      } else if (trace.type === "choice") {
-        result += "\nOptions:\n"
-        for (const button of trace.payload.buttons) {
-          buttons.push({ name: button.name, payload: button.name })
-        }
+  for (const trace of traces) {
+    if (trace.type === "text") {
+      result += trace.payload.message + "\n";
+    } else if (trace.type === "choice") {
+      result += "\nSelect one:\n";
+      for (const button of trace.payload.buttons) {
+        buttons.push({ name: button.name, payload: button.name }); // Use button.name as payload
       }
     }
-    result = result.trim()
-    console.log("Processed result:", result)
-  } catch (error) {
-    console.error("Error in processVoiceflowResponse:")
-    if (error instanceof Error) {
-      console.error("Error name:", error.name)
-      console.error("Error message:", error.message)
-      console.error("Error stack:", error.stack)
-    }
-    console.error("Full error object:", JSON.stringify(error, Object.getOwnPropertyNames(error), 2))
-    throw error
-  } finally {
-    console.log("Exiting processVoiceflowResponse function")
   }
 
-  return { text: result, buttons: buttons.length > 0 ? buttons : undefined }
+  console.log("Your Extracted buttons,cashe:", buttons); // Log extracted buttons
+  return { text: result.trim(), buttons: buttons.length > 0 ? buttons : undefined };
 }
 
 
