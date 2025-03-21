@@ -9118,7 +9118,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { ScrollArea } from "@/components/ui/scroll"
+import { ScrollArea } from "@/components/ui/scroll-area" // Fixed import
 import type { Conversation, Message } from "@/types/dashboard"
 import data from "@emoji-mart/data"
 import Picker from "@emoji-mart/react"
@@ -9187,7 +9187,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
   const [newMessage, setNewMessage] = useState("")
   const [isTyping, setIsTyping] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true) // Start with loading true
   const [error, setError] = useState<string | null>(null)
   const [isRecording, setIsRecording] = useState(false)
   const [unreadChats, setUnreadChats] = useState<Set<string>>(new Set())
@@ -9206,17 +9206,9 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [displayedMessages, setDisplayedMessages] = useState<Message[]>([])
   const [unreadSeparatorIndex, setUnreadSeparatorIndex] = useState<number | null>(null)
-  //const [hasMoreMessages, setHasMoreMessages] = useState(false) // Removed
-  const [newMessageSound] = useState(() => {
-    try {
-      return typeof window !== "undefined" ? new Audio("/message-notification.mp3") : null
-    } catch (e) {
-      console.error("Error creating audio:", e)
-      return null
-    }
-  })
   const [hasNewMessages, setHasNewMessages] = useState(false)
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const fetchAttemptsRef = useRef(0) // Track fetch attempts
 
   const getAvatarUrl = () => {
     return `https://source.unsplash.com/random/100x100?portrait&${Math.random()}`
@@ -9224,18 +9216,35 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 
   const fetchChats = useCallback(
     async (preserveReadStatus = false) => {
-      setIsLoading(true)
+      if (!automationId) {
+        setError("Missing automation ID")
+        setIsLoading(false)
+        return
+      }
+
       setError(null)
+
       try {
+        // Increment fetch attempts
+        fetchAttemptsRef.current += 1
+
+        console.log(`Fetching chats for automation ID: ${automationId}, attempt: ${fetchAttemptsRef.current}`)
+
         const result = await fetchChatsAndBusinessVariables(automationId)
+
+        // Reset fetch attempts on success
+        fetchAttemptsRef.current = 0
+
         if (!result || typeof result !== "object") {
           throw new Error("Invalid response from server")
         }
+
         const { conversations, token, businessVariables } = result as {
           conversations: RawConversation[]
           token: string
           businessVariables: BusinessVariables
         }
+
         if (!Array.isArray(conversations)) {
           throw new Error("Conversations data is not in the expected format")
         }
@@ -9303,7 +9312,10 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
             setHasNewMessages(true)
             // Play sound for new message
             try {
-              newMessageSound?.play().catch((e) => console.error("Failed to play sound:", e))
+              if (typeof window !== "undefined" && window.Audio) {
+                const sound = new Audio("/message-notification.mp3")
+                sound.play().catch((e) => console.error("Failed to play sound:", e))
+              }
             } catch (e) {
               console.error("Error playing sound:", e)
             }
@@ -9343,18 +9355,27 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
             }
           }
         }
+
+        // Set loading to false after successful fetch
+        setIsLoading(false)
       } catch (error) {
-        console.error("Please wait", error)
-        setError(`Getting things ready...`)
-        // Retry after 5 seconds
+        console.error("Error fetching chats:", error)
+
+        // Only show error after multiple attempts
+        if (fetchAttemptsRef.current > 3) {
+          setError(`Getting things ready... (Attempt ${fetchAttemptsRef.current})`)
+        }
+
+        // Exponential backoff for retries (max 10 seconds)
+        const retryDelay = Math.min(2000 * Math.pow(1.5, fetchAttemptsRef.current - 1), 10000)
+
+        // Retry after delay
         setTimeout(() => {
           fetchChats(preserveReadStatus)
-        }, 10000)
-      } finally {
-        setIsLoading(false)
+        }, retryDelay)
       }
     },
-    [automationId, selectedConversation, newMessageSound],
+    [automationId, selectedConversation],
   )
 
   useEffect(() => {
@@ -9363,7 +9384,10 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 
     // Set up polling for real-time updates
     pollingIntervalRef.current = setInterval(() => {
-      fetchChats(true) // preserve read status when polling
+      // Only poll if not in loading state
+      if (!isLoading) {
+        fetchChats(true) // preserve read status when polling
+      }
     }, 5000) // Poll every 5 seconds
 
     // Clean up interval on unmount
@@ -9372,13 +9396,13 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
         clearInterval(pollingIntervalRef.current)
       }
     }
-  }, [fetchChats])
+  }, [fetchChats, isLoading])
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [scrollRef, displayedMessages]) //Corrected useEffect dependency
+  }, [displayedMessages])
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
@@ -9537,7 +9561,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     </span>
   )
 
-  const generateAiSuggestion = () => {
+  const generateAiSuggestion = useCallback(() => {
     const suggestions = [
       "Would you like to know more about our products?",
       "Can I assist you with anything specific today?",
@@ -9545,7 +9569,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
       "Is there anything else I can help you with?",
     ]
     setAiSuggestion(suggestions[Math.floor(Math.random() * suggestions.length)])
-  }
+  }, [])
 
   useEffect(() => {
     if (selectedConversation && selectedConversation.messages.length > 0) {
@@ -9554,7 +9578,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
         generateAiSuggestion()
       }
     }
-  }, [selectedConversation, generateAiSuggestion]) //Corrected useEffect dependency
+  }, [selectedConversation, generateAiSuggestion])
 
   const FancyErrorMessage: React.FC<{ message: string }> = ({ message }) => {
     return (
@@ -9584,14 +9608,14 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
       )
       setDisplayedMessages((prevMessages) => [...newMessages, ...prevMessages])
     }
-  }, [selectedConversation, setDisplayedMessages])
+  }, [selectedConversation, displayedMessages])
 
   useEffect(() => {
     if (selectedConversation) {
       const lastMessages = selectedConversation.messages.slice(-10)
       setDisplayedMessages(lastMessages)
     }
-  }, [selectedConversation, setDisplayedMessages])
+  }, [selectedConversation])
 
   useEffect(() => {
     const scrollArea = scrollRef.current
@@ -9605,7 +9629,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 
     scrollArea.addEventListener("scroll", handleScroll)
     return () => scrollArea.removeEventListener("scroll", handleScroll)
-  }, [loadMoreMessages, scrollRef])
+  }, [loadMoreMessages])
 
   useEffect(() => {
     // Update document title with unread count
@@ -9667,11 +9691,11 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                           </div>
                         )}
                         <motion.div
-                          key={index}
+                          key={`msg-${index}`}
                           initial={{ opacity: 0, y: 20, scale: 0.9 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           transition={{ duration: 0.3, delay: index * 0.1 }}
-                          className={`flex items-end mb-4 ${message.role === "assistant" ? "justify-end" : "justify-start"}`}
+                          className={`flex items-end mb-4 ${message.role === "assistant" ? "justify-start" : "justify-end"}`}
                         >
                           {message.role === "assistant" ? (
                             <Avatar className="w-8 h-8 mr-2 border-2 border-primary">
