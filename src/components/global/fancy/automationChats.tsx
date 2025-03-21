@@ -9206,7 +9206,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [displayedMessages, setDisplayedMessages] = useState<Message[]>([])
   const [unreadSeparatorIndex, setUnreadSeparatorIndex] = useState<number | null>(null)
-  const [isMobile, setIsMobile] = useState(false)
+  //const [hasMoreMessages, setHasMoreMessages] = useState(false) // Removed
   const [newMessageSound] = useState(() => {
     try {
       return typeof window !== "undefined" ? new Audio("/message-notification.mp3") : null
@@ -9217,22 +9217,6 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   })
   const [hasNewMessages, setHasNewMessages] = useState(false)
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null)
-
-  // Check for mobile device
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-
-    // Initial check
-    checkMobile()
-
-    // Add event listener
-    window.addEventListener("resize", checkMobile)
-
-    // Cleanup
-    return () => window.removeEventListener("resize", checkMobile)
-  }, [])
 
   const getAvatarUrl = () => {
     return `https://source.unsplash.com/random/100x100?portrait&${Math.random()}`
@@ -9365,7 +9349,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
         // Retry after 5 seconds
         setTimeout(() => {
           fetchChats(preserveReadStatus)
-        }, 5000)
+        }, 10000)
       } finally {
         setIsLoading(false)
       }
@@ -9394,7 +9378,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [scrollRef, displayedMessages])
+  }, [scrollRef, displayedMessages]) //Corrected useEffect dependency
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || !token || !pageId) return
@@ -9547,13 +9531,13 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   }
 
   const ActiveNowIndicator = () => (
-    <span className="relative flex h-2 w-2 md:h-3 md:w-3 ml-2">
+    <span className="relative flex h-3 w-3 ml-2">
       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-      <span className="relative inline-flex rounded-full h-2 w-2 md:h-3 md:w-3 bg-green-500"></span>
+      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
     </span>
   )
 
-  const generateAiSuggestion = useCallback(() => {
+  const generateAiSuggestion = () => {
     const suggestions = [
       "Would you like to know more about our products?",
       "Can I assist you with anything specific today?",
@@ -9561,7 +9545,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
       "Is there anything else I can help you with?",
     ]
     setAiSuggestion(suggestions[Math.floor(Math.random() * suggestions.length)])
-  }, [])
+  }
 
   useEffect(() => {
     if (selectedConversation && selectedConversation.messages.length > 0) {
@@ -9570,7 +9554,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
         generateAiSuggestion()
       }
     }
-  }, [selectedConversation, generateAiSuggestion])
+  }, [selectedConversation, generateAiSuggestion]) //Corrected useEffect dependency
 
   const FancyErrorMessage: React.FC<{ message: string }> = ({ message }) => {
     return (
@@ -9580,12 +9564,12 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
           animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
         >
-          <Zap className="w-12 h-12 md:w-16 md:h-16 text-yellow-400 mb-4" />
+          <Zap className="w-16 h-16 text-yellow-400 mb-4" />
         </motion.div>
-        <h3 className="text-lg md:text-xl font-semibold mb-2">Hang tight!</h3>
-        <p className="text-sm md:text-base text-muted-foreground mb-4">{message}</p>
+        <h3 className="text-xl font-semibold mb-2">Hang tight!</h3>
+        <p className="text-muted-foreground mb-4">{message}</p>
         <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}>
-          <Loader2 className="w-5 h-5 md:w-6 md:h-6 text-primary animate-spin" />
+          <Loader2 className="w-6 h-6 text-primary animate-spin" />
         </motion.div>
       </div>
     )
@@ -9600,14 +9584,14 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
       )
       setDisplayedMessages((prevMessages) => [...newMessages, ...prevMessages])
     }
-  }, [selectedConversation, displayedMessages.length])
+  }, [selectedConversation, setDisplayedMessages])
 
   useEffect(() => {
     if (selectedConversation) {
       const lastMessages = selectedConversation.messages.slice(-10)
       setDisplayedMessages(lastMessages)
     }
-  }, [selectedConversation])
+  }, [selectedConversation, setDisplayedMessages])
 
   useEffect(() => {
     const scrollArea = scrollRef.current
@@ -9621,7 +9605,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 
     scrollArea.addEventListener("scroll", handleScroll)
     return () => scrollArea.removeEventListener("scroll", handleScroll)
-  }, [loadMoreMessages])
+  }, [loadMoreMessages, scrollRef])
 
   useEffect(() => {
     // Update document title with unread count
@@ -9636,25 +9620,9 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
     }
   }, [totalUnreadMessages])
 
-  // Quick reply options based on screen size
-  const quickReplies = isMobile
-    ? ["Hello!", "Hi there", "How can I help?", "Thank you!"]
-    : [
-        "Hello!",
-        "Hi there",
-        "How can I help?",
-        "Thank you!",
-        "I'll get back to you soon.",
-        "You are welcome",
-        "Awesome",
-        "Torever",
-      ]
-
   return (
     <ShimmeringBorder>
-      <div
-        className={`flex flex-col ${fancyBackground} text-foreground rounded-lg overflow-hidden h-[calc(100vh-2rem)] max-h-[900px] w-full`}
-      >
+      <div className={`flex flex-col ${fancyBackground} text-foreground rounded-lg overflow-hidden h-full`}>
         {isLoading ? (
           <FancyLoader />
         ) : error ? (
@@ -9663,22 +9631,18 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
           <>
             {selectedConversation ? (
               <>
-                <div className="p-2 sm:p-3 md:p-4 bg-background border-b border-primary/10 flex items-center">
-                  <Button
-                    variant="ghost"
-                    className="mr-2 sm:mr-3 p-1 sm:p-2"
-                    onClick={() => setSelectedConversation(null)}
-                  >
-                    <ArrowLeft size={18} className="sm:w-5 sm:h-5" />
+                <div className="p-2 sm:p-4 bg-background border-b border-primary/10 flex items-center">
+                  <Button variant="ghost" className="mr-4 p-2" onClick={() => setSelectedConversation(null)}>
+                    <ArrowLeft size={20} />
                   </Button>
-                  <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
+                  <Avatar className="w-10 h-10">
                     <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${selectedConversation.id}`} />
                     <AvatarFallback>{getFancyName(selectedConversation.id).slice(0, 2)}</AvatarFallback>
                   </Avatar>
-                  <div className="ml-2 sm:ml-3 flex-grow">
-                    <h4 className="font-medium text-base sm:text-lg">{getFancyName(selectedConversation.id)}</h4>
+                  <div className="ml-3 flex-grow">
+                    <h4 className="font-medium text-lg">{getFancyName(selectedConversation.id)}</h4>
                     {selectedConversation && selectedConversation.messages.length > 0 && (
-                      <p className="text-xs sm:text-sm text-muted-foreground flex items-center">
+                      <p className="text-sm text-muted-foreground flex items-center">
                         {getActivityStatus(
                           new Date(selectedConversation.messages[selectedConversation.messages.length - 1].createdAt),
                         )}
@@ -9689,8 +9653,8 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                     )}
                   </div>
                 </div>
-                <ScrollArea className="flex-grow h-[calc(100vh-200px)] sm:h-[calc(100vh-220px)] md:h-[calc(100vh-240px)] overflow-hidden">
-                  <div className="p-3 sm:p-4 space-y-3 sm:space-y-4" ref={scrollRef}>
+                <ScrollArea className="flex-grow h-[calc(100vh-300px)] overflow-hidden">
+                  <div className="p-4 space-y-4" ref={scrollRef}>
                     {displayedMessages.map((message, index) => (
                       <React.Fragment key={index}>
                         {index === unreadSeparatorIndex && (
@@ -9707,22 +9671,22 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                           initial={{ opacity: 0, y: 20, scale: 0.9 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           transition={{ duration: 0.3, delay: index * 0.1 }}
-                          className={`flex items-end mb-3 sm:mb-4 ${message.role === "assistant" ? "justify-end" : "justify-start"}`}
+                          className={`flex items-end mb-4 ${message.role === "assistant" ? "justify-end" : "justify-start"}`}
                         >
                           {message.role === "assistant" ? (
-                            <Avatar className="w-6 h-6 sm:w-8 sm:h-8 mr-2 border-2 border-primary">
+                            <Avatar className="w-8 h-8 mr-2 border-2 border-primary">
                               <AvatarImage src={BOT_AVATAR} />
                               <AvatarFallback>{BOT_NAME.slice(0, 2)}</AvatarFallback>
                             </Avatar>
                           ) : (
-                            <Avatar className="w-6 h-6 sm:w-8 sm:h-8 ml-2 order-last border-2 border-primary">
+                            <Avatar className="w-8 h-8 ml-2 order-last border-2 border-primary">
                               <AvatarImage src={`https://i.pravatar.cc/150?u=${message.senderId}`} />
                               <AvatarFallback>{getFancyName("123456789").slice(0, 2)}</AvatarFallback>
                             </Avatar>
                           )}
                           <div
                             className={cn(
-                              "max-w-[80%] sm:max-w-[75%] md:max-w-[70%] p-2 sm:p-3 rounded-3xl text-xs sm:text-sm relative",
+                              "max-w-[85%] sm:max-w-[75%] p-2 sm:p-3 rounded-3xl text-sm relative",
                               message.role === "assistant"
                                 ? "bg-gradient-to-br from-blue-400/30 to-blue-600/30 border-2 border-blue-500/50 text-white"
                                 : "bg-gradient-to-br from-purple-400/30 to-purple-600/30 border-2 border-purple-500/50 text-white",
@@ -9734,7 +9698,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                           >
                             <p className="break-words relative z-10">{message.content}</p>
                             <div className="flex justify-between items-center mt-1 text-xs text-gray-300">
-                              <p className="text-[10px] sm:text-xs">{new Date(message.createdAt).toLocaleString()}</p>
+                              <p>{new Date(message.createdAt).toLocaleString()}</p>
                               {message.role === "assistant" && (
                                 <div
                                   className={`flex items-center ${
@@ -9743,11 +9707,11 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                                 >
                                   {message.status === "sent" || true ? (
                                     <>
-                                      <Check size={10} className="mr-1 sm:w-3 sm:h-3" />
-                                      <span className="text-[10px] sm:text-xs">Sent</span>
+                                      <Check size={12} className="mr-1" />
+                                      <span>Sent</span>
                                     </>
                                   ) : (
-                                    <span className="text-[10px] sm:text-xs">Failed</span>
+                                    <span>Failed</span>
                                   )}
                                 </div>
                               )}
@@ -9766,14 +9730,23 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                     ))}
                   </div>
                 </ScrollArea>
-                <div className="p-2 sm:p-3 md:p-4 bg-background border-t border-primary/10">
-                  <div className="flex flex-wrap gap-2 mb-2 overflow-x-auto pb-2">
-                    {quickReplies.map((response, index) => (
+                <div className="p-2 sm:p-4 bg-background border-t border-primary/10">
+                  <div className="flex space-x-2 mb-2 overflow-x-auto pb-2 -mx-2 px-2 sm:mx-0 sm:px-0">
+                    {[
+                      "Hello!",
+                      "Torever",
+                      "Hi there",
+                      "Awesome",
+                      "How can I help?",
+                      "Thank you!",
+                      "I'll get back to you soon.",
+                      "You are welcome",
+                    ].map((response, index) => (
                       <motion.button
                         key={index}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="bg-primary/20 text-primary px-3 py-1 rounded-full text-xs sm:text-sm whitespace-nowrap mb-1"
+                        className="bg-primary/20 text-primary px-3 py-1 rounded-full text-sm whitespace-nowrap"
                         onClick={() => setNewMessage(response)}
                       >
                         {response}
@@ -9787,14 +9760,14 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                       exit={{ opacity: 0, y: 10 }}
                       className="flex items-center space-x-2 p-2 bg-muted rounded-lg mb-2"
                     >
-                      <span className="text-xs sm:text-sm text-muted-foreground">AiAssist is typing</span>
+                      <span className="text-sm text-muted-foreground">AiAssist is typing</span>
                       <motion.div
                         animate={{
                           scale: [1, 1.2, 1],
                           transition: { repeat: Number.POSITIVE_INFINITY, duration: 1 },
                         }}
                       >
-                        <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                        <Sparkles className="h-4 w-4 text-primary" />
                       </motion.div>
                     </motion.div>
                   )}
@@ -9802,7 +9775,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full flex-shrink-0">
-                          <Smile className="h-4 w-4 sm:h-5 sm:w-5" />
+                          <Smile className="h-5 w-5" />
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-40 p-0">
@@ -9815,12 +9788,12 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                         onKeyPress={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
-                        className="flex-grow text-xs sm:text-sm bg-muted border-primary/20 text-foreground placeholder-muted-foreground min-h-[36px] max-h-[80px] sm:max-h-[96px] py-2 px-2 rounded-lg resize-none overflow-hidden w-full"
+                        className="flex-grow text-sm bg-muted border-primary/20 text-foreground placeholder-muted-foreground min-h-[36px] max-h-[96px] py-2 px-2 rounded-lg resize-none overflow-hidden w-full"
                         style={{ height: "36px", transition: "height 0.1s ease" }}
                         onInput={(e) => {
                           const target = e.target as HTMLTextAreaElement
                           target.style.height = "36px"
-                          target.style.height = `${Math.min(target.scrollHeight, isMobile ? 80 : 96)}px`
+                          target.style.height = `${Math.min(target.scrollHeight, 96)}px`
                         }}
                       />
                     </div>
@@ -9832,9 +9805,9 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
                               onClick={handleSendMessage}
-                              className="bg-primary hover:bg-green text-primary-foreground h-6 w-6 sm:h-7 sm:w-7 rounded-full flex-shrink-0 flex items-center justify-center"
+                              className="bg-primary hover:bg-green text-primary-foreground h-7 w-7 rounded-full flex-shrink-0 flex items-center justify-center"
                             >
-                              <Send className="h-4 w-4 sm:h-5 sm:w-5" />
+                              <Send className="h-5 w-5" />
                             </motion.button>
                           </TooltipTrigger>
                           <TooltipContent>
@@ -9851,7 +9824,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                               className={`h-6 w-6 rounded-full ${isRecording ? "text-red-500" : ""}`}
                               onClick={handleVoiceMessage}
                             >
-                              <Mic className="h-4 w-4 sm:h-5 sm:w-5" />
+                              <Mic className="h-5 w-5" />
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent>
@@ -9864,7 +9837,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                           <TooltipTrigger asChild>
                             <label htmlFor="file-upload">
                               <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full">
-                                <Paperclip className="h-4 w-4 sm:h-5 sm:w-5" />
+                                <Paperclip className="h-5 w-5" />
                               </Button>
                             </label>
                           </TooltipTrigger>
@@ -9883,10 +9856,10 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                       exit={{ opacity: 0, y: 10 }}
                       className="mt-2 p-2 bg-blue-500/20 rounded-lg flex items-center space-x-2"
                     >
-                      <Zap className="h-3 w-3 sm:h-4 sm:w-4 text-blue-500" />
-                      <p className="text-xs sm:text-sm text-blue-500">{aiSuggestion}</p>
+                      <Zap className="h-4 w-4 text-blue-500" />
+                      <p className="text-sm text-blue-500">{aiSuggestion}</p>
                       <button
-                        className="text-[10px] sm:text-xs text-blue-700 hover:underline"
+                        className="text-xs text-blue-700 hover:underline"
                         onClick={() => setNewMessage(aiSuggestion)}
                       >
                         Use
@@ -9897,7 +9870,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
               </>
             ) : (
               <>
-                <h3 className="text-base sm:text-lg font-semibold p-3 sm:p-4 bg-background flex justify-between items-center">
+                <h3 className="text-lg font-semibold p-4 bg-background flex justify-between items-center">
                   <div className="flex items-center">
                     <span>Recent Chats</span>
                     {hasNewMessages && (
@@ -9914,27 +9887,27 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                     </span>
                   )}
                 </h3>
-                <div className="flex flex-1 overflow-hidden">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 p-3 w-full overflow-y-auto">
+                <div className="flex flex-1">
+                  <div className="flex flex-wrap gap-4 p-4">
                     {!token ? (
-                      <div className="col-span-full sm:col-span-2 lg:col-span-3 xl:col-span-4 p-3 sm:p-4 bg-background rounded-lg shadow-md">
+                      <div className="w-3/4 md:w-3/4 lg:w-2/3 p-4 bg-background rounded-lg shadow-md">
                         <ExampleConversations onSelectConversation={handleSelectConversation} className="mb-4" />
                         <div className="text-center">
-                          <p className="text-muted-foreground mb-4 text-xs sm:text-sm">
+                          <p className="text-muted-foreground mb-4 text-sm sm:text-base">
                             Connect your Instagram account to start receiving real messages.
                           </p>
                           <Button
                             onClick={() => {
                               console.log("Navigate to integration page")
                             }}
-                            className="bg-[#3352CC] hover:bg-[#3352CC]/90 text-white font-bold py-2 px-4 rounded-full transition-all duration-200 transform hover:scale-105 w-full max-w-md mx-auto"
+                            className="bg-[#3352CC] hover:bg-[#3352CC]/90 text-white font-bold py-2 px-4 rounded-full transition-all duration-200 transform hover:scale-105 w-full"
                           >
                             Connect Instagram
                           </Button>
                         </div>
                       </div>
                     ) : conversations.length === 0 ? (
-                      <div className="col-span-full sm:col-span-2 lg:col-span-3 xl:col-span-4 p-3 sm:p-4 bg-background rounded-lg shadow-md">
+                      <div className="col-span-full p-4 bg-background rounded-lg shadow-md">
                         <ExampleConversations onSelectConversation={handleSelectConversation} />
                       </div>
                     ) : (
@@ -9945,30 +9918,28 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.2 }}
-                            className={`p-3 bg-background rounded-lg shadow-md hover:bg-muted cursor-pointer transition-colors duration-200 flex items-center ${isMobile ? "h-[80px]" : "h-[90px]"}`}
+                            className="p-4 bg-background rounded-lg shadow-md hover:bg-muted cursor-pointer transition-colors duration-200 flex items-center"
                             onClick={() => handleSelectConversation(conversation)}
                           >
                             <div className="flex-grow mr-2">
                               <div className="flex items-center mb-2">
-                                <Avatar
-                                  className={`${isMobile ? "w-8 h-8" : "w-10 h-10"} relative border-2 border-primary`}
-                                >
+                                <Avatar className="w-10 h-10 relative border-2 border-primary">
                                   <AvatarImage src={getAvatarUrl()} />
                                   <AvatarFallback>{getFancyName(conversation.id).slice(0, 2)}</AvatarFallback>
                                   {unreadChats.has(conversation.id) && (
-                                    <span className="absolute top-0 right-0 block h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-primary transform translate-x-1/2 -translate-y-1/2"></span>
+                                    <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-primary transform translate-x-1/2 -translate-y-1/2"></span>
                                   )}
                                 </Avatar>
-                                <div className="ml-2 sm:ml-3 overflow-hidden">
-                                  <p className="font-medium text-xs sm:text-sm text-foreground truncate">
+                                <div className="ml-3 overflow-hidden">
+                                  <p className="font-medium text-sm text-foreground truncate">
                                     {getFancyName(conversation.id)}
                                   </p>
-                                  <p className="text-[10px] sm:text-xs text-muted-foreground truncate">
+                                  <p className="text-xs text-muted-foreground truncate">
                                     {getActivityStatus(conversation.updatedAt)}
                                   </p>
                                 </div>
                               </div>
-                              <p className="text-[10px] sm:text-xs text-muted-foreground truncate">
+                              <p className="text-xs text-muted-foreground truncate">
                                 {conversation.messages.length > 0
                                   ? conversation.messages[conversation.messages.length - 1].content
                                   : "No messages"}
@@ -9984,9 +9955,9 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                                       e.stopPropagation()
                                       handleDeleteConversation(conversation)
                                     }}
-                                    className="text-muted-foreground hover:text-red-500 h-6 w-6 p-0"
+                                    className="text-muted-foreground hover:text-red-500"
                                   >
-                                    <Trash2 size={16} className="sm:w-[18px] sm:h-[18px]" />
+                                    <Trash2 size={18} />
                                   </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>
