@@ -10760,7 +10760,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
 
         // Update conversations state without affecting the selected conversation
         setConversations((prevConversations) => {
-          // If we're preserving read status and have a selected conversation,
+          // If were preserving read status and have a selected conversation,
           // make sure we don't reset its read status
           if (preserveReadStatus && selectedConversation) {
             const updatedConversations = [...filteredConversations]
@@ -11927,7 +11927,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                               <Search className="h-16 w-16 text-muted-foreground mb-4 opacity-50" />
                               <h3 className="text-lg font-medium mb-2">No results found</h3>
                               <p className="text-muted-foreground max-w-md">
-                                We couldn't find any conversations matching "{searchQuery}".
+                                We couldnt find any conversations matching {searchQuery}.
                               </p>
                               <Button variant="outline" className="mt-4" onClick={() => setSearchQuery("")}>
                                 Clear search
