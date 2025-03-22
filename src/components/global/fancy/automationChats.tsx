@@ -13998,20 +13998,42 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const [readConversations, setReadConversations] = useState<Set<string>>(new Set())
 
   // Load read conversations from localStorage on component mount
-  const savedReadConversations = localStorage.getItem("readConversations")
-  if (savedReadConversations) {
-    try {
-      const parsedData = JSON.parse(savedReadConversations)
-      setReadConversations(new Set(parsedData))
-    } catch (e) {
-      console.error("Error parsing saved read conversations:", e)
+  // Remove these lines:
+  // const savedReadConversations = localStorage.getItem("readConversations")
+  // if (savedReadConversations) {
+  //   try {
+  //     const parsedData = JSON.parse(savedReadConversations)
+  //     setReadConversations(new Set(parsedData))
+  //   } catch (e) {
+  //     console.error("Error parsing saved read conversations:", e)
+  //   }
+  // }
+
+  // And add this useEffect hook after the state declarations:
+  useEffect(() => {
+    // Only run on client-side
+    if (typeof window !== "undefined") {
+      try {
+        const savedReadConversations = localStorage.getItem("readConversations")
+        if (savedReadConversations) {
+          const parsedData = JSON.parse(savedReadConversations)
+          setReadConversations(new Set(parsedData))
+        }
+      } catch (e) {
+        console.error("Error loading read conversations from localStorage:", e)
+      }
     }
-  }
+  }, [])
 
   // Save read conversations to localStorage whenever it changes
+  // Also update the localStorage saving effect to include better error handling:
   useEffect(() => {
-    if (readConversations.size > 0) {
-      localStorage.setItem("readConversations", JSON.stringify(Array.from(readConversations)))
+    if (typeof window !== "undefined" && readConversations.size > 0) {
+      try {
+        localStorage.setItem("readConversations", JSON.stringify(Array.from(readConversations)))
+      } catch (e) {
+        console.error("Error saving read conversations to localStorage:", e)
+      }
     }
   }, [readConversations])
 
