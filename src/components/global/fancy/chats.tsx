@@ -4,30 +4,7 @@ import React from "react"
 import { useEffect, useState, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useSpring, animated } from "react-spring"
-import {
-  Send,
-  ArrowLeft,
-  Smile,
-  Paperclip,
-  Mic,
-  Trash2,
-  Check,
-  Sparkles,
-  Zap,
-  Loader2,
-  Search,
-  X,
-  Bell,
-  BellOff,
-  Filter,
-  MessageSquare,
-  Pin,
-  Star,
-  MoreHorizontal,
-  Phone,
-  Video,
-  Info,
-} from "lucide-react"
+import { Send, ArrowLeft, Smile, Paperclip, Mic, Trash2, Check, Sparkles, Zap, Loader2, Search, X, Bell, BellOff, Filter, MessageSquare, Pin, Star, MoreHorizontal, Phone, Video, Info } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
@@ -721,45 +698,46 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
         setTimeout(() => {
           fetchChats(preserveReadStatus)
         }, retryDelay)
+        
+        // Use mock data as fallback if loading takes too long
+        if (isLoading && fetchAttemptsRef.current > 3) {
+          console.log("Using mock data as fallback")
+          const mockConversations: Conversation[] = [
+            {
+              id: "mock_conv_1",
+              userId: "user123",
+              pageId: "page123",
+              messages: [
+                {
+                  id: "msg1",
+                  role: "user",
+                  content: "Hi, I'm interested in your services",
+                  senderId: "user123",
+                  createdAt: new Date(Date.now() - 3600000),
+                  read: true,
+                },
+                {
+                  id: "msg2",
+                  role: "assistant",
+                  content: "Hello! Thank you for your interest. How can I help you today?",
+                  senderId: "bot",
+                  createdAt: new Date(Date.now() - 3500000),
+                  read: true,
+                },
+              ],
+              createdAt: new Date(Date.now() - 3600000),
+              updatedAt: new Date(Date.now() - 3500000),
+              unreadCount: 0,
+              Automation: null,
+            },
+          ]
+          setConversations(mockConversations)
+          setFilteredConversations(mockConversations)
+          setIsLoading(false)
+        }
+      } finally {
+        clearTimeout(fetchTimeout)
       }
-      if (isLoading && fetchAttemptsRef.current > 3) {
-        console.log("Using mock data as fallback")
-        const mockConversations: Conversation[] = [
-          {
-            id: "mock_conv_1",
-            userId: "user123",
-            pageId: "page123",
-            messages: [
-              {
-                id: "msg1",
-                role: "user",
-                content: "Hi, I'm interested in your services",
-                senderId: "user123",
-                createdAt: new Date(Date.now() - 3600000),
-                read: true,
-              },
-              {
-                id: "msg2",
-                role: "assistant",
-                content: "Hello! Thank you for your interest. How can I help you today?",
-                senderId: "bot",
-                createdAt: new Date(Date.now() - 3500000),
-                read: true,
-              },
-            ],
-            createdAt: new Date(Date.now() - 3600000),
-            updatedAt: new Date(Date.now() - 3500000),
-            unreadCount: 0,
-            Automation: null,
-          },
-        ]
-        setConversations(mockConversations)
-        setFilteredConversations(mockConversations)
-        setIsLoading(false)
-      }
-    
-    //   finally
-    //   clearTimeout(fetchTimeout)
     },
     [automationId, selectedConversation, playNotificationSound, pageId, readConversations, isLoading],
   )
@@ -1812,7 +1790,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                               <Search className="h-16 w-16 text-muted-foreground mb-4 opacity-50" />
                               <h3 className="text-lg font-medium mb-2">No results found</h3>
                               <p className="text-muted-foreground max-w-md">
-                                We couldnt find any conversations matching {searchQuery}.
+                                We couldn't find any conversations matching "{searchQuery}".
                               </p>
                               <Button variant="outline" className="mt-4" onClick={() => setSearchQuery("")}>
                                 Clear search
