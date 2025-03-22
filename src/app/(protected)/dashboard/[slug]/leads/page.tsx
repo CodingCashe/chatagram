@@ -148,7 +148,7 @@ const StageIndicator = ({ stage }: { stage: string }) => {
 // Main dashboard component
 export default function CustomerEngagementPage() {
   const [activeTab, setActiveTab] = useState("overview")
-  const [automationId, setAutomationId] = useState("123456789")
+  const [automationId, setAutomationId] = useState("a4589d5e-921a-4806-a6a2-57d26159ee7a")
   const [searchQuery, setSearchQuery] = useState("")
   const [filteredLeads, setFilteredLeads] = useState(mockLeadData)
   const [timeframe, setTimeframe] = useState("week")
