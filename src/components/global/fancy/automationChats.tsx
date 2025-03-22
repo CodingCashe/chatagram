@@ -15891,7 +15891,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
   const [newMessage, setNewMessage] = useState("")
-  const [isTyping, setIsTyping] = useState(isTyping)
+  const [isTyping, setIsTyping] = useState(false)
   const [isLoading, setIsLoading] = useState(true) // Start with loading true
   const [error, setError] = useState<string | null>(null)
   const [isRecording, setIsRecording] = useState(false)
