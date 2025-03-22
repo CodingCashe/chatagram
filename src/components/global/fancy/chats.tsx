@@ -1812,7 +1812,7 @@ const AutomationChats: React.FC<AutomationChatsProps> = ({ automationId }) => {
                               <Search className="h-16 w-16 text-muted-foreground mb-4 opacity-50" />
                               <h3 className="text-lg font-medium mb-2">No results found</h3>
                               <p className="text-muted-foreground max-w-md">
-                                We couldnt find any conversations matching &quot{searchQuery}&quot.
+                                We couldnt find any conversations matching {searchQuery}.
                               </p>
                               <Button variant="outline" className="mt-4" onClick={() => setSearchQuery("")}>
                                 Clear search
