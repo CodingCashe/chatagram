@@ -9,7 +9,7 @@ import {
   MegaPhoneDuoToneWhite,
   PencilDuoToneBlack
 } from '@/icons'
-import { MessageCircle,Send, BarChart2, Users, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone, Clock, TargetIcon } from 'lucide-react'
+import { MessageCircle,Send, BarChart2, Users, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone, Clock, TargetIcon, PersonStanding } from 'lucide-react'
 
 export const PAGE_BREAD_CRUMBS: string[] = [
   'contacts',
@@ -21,6 +21,7 @@ export const PAGE_BREAD_CRUMBS: string[] = [
   'information',
   'schedule',
   'posting',
+  'leads'
 
 ]
 
@@ -39,7 +40,8 @@ export const PAGE_ICON: Props = {
   POSTING: <InstagramDuoToneBlue />,
   SCHEDULE: <Clock />,
   INFORMATION:<PencilDuoToneBlack/>,
-  CUSTOMIZE:<TargetIcon/>
+  CUSTOMIZE:<TargetIcon/>,
+  LEADS:<PersonStanding/>
 }
 
 export const PLANS = [
