@@ -15694,7 +15694,7 @@ const OfflineStatusBanner = ({ isOffline, onReconnect }: { isOffline: boolean; o
         </motion.div>
       </AlertTitle>
       <AlertDescription className="flex justify-between items-center mt-2">
-        <span className="text-sm">Showing cached messages. New messages can't be sent.</span>
+        <span className="text-sm">Showing cached messages. New messages cant be sent.</span>
         <Button size="sm" variant="outline" className="ml-2" onClick={onReconnect}>
           <Wifi className="h-4 w-4 mr-2" />
           Try reconnecting
@@ -15712,7 +15712,7 @@ const ConnectionRestoredBanner = ({ show, onDismiss }: { show: boolean; onDismis
     <Alert className="mb-4 border-green-500 bg-green-500/10">
       <Wifi className="h-4 w-4 mr-2 text-green-500" />
       <AlertTitle className="flex items-center text-green-500">
-        You're back online
+        Youre back online
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -17342,7 +17342,7 @@ return (
                               </motion.button>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>{isOffline ? "Can't send while offline" : "Send Message"}</p>
+                              <p>{isOffline ? "Cant send while offline" : "Send Message"}</p>
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
@@ -17585,7 +17585,7 @@ return (
                               <Search className="h-16 w-16 text-muted-foreground mb-4 opacity-50" />
                               <h3 className="text-lg font-medium mb-2">No results found</h3>
                               <p className="text-muted-foreground max-w-md">
-                                We couldn't find any conversations matching "{searchQuery}".
+                                We couldnt find any conversations matching {searchQuery}.
                               </p>
                               <Button variant="outline" className="mt-4" onClick={() => setSearchQuery("")}>
                                 Clear search
