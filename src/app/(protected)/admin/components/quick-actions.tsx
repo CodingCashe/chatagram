@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { UserPlus, MessageSquare, Bell, Zap, X, CheckCircle } from "lucide-react"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "@/hooks/use-toast"
 import { makeUserAdmin, sendSystemNotification } from "../actions"
 
 export function QuickActions() {
