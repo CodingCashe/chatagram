@@ -25,6 +25,7 @@ model User {
   email            String             @unique
   firstname        String?            @unique
   lastname         String?            @unique
+  isAdmin          Boolean            @default(false)  // Add this line
   createdAt        DateTime           @default(now())
   subscription     Subscription?
   integrations     Integrations[]
