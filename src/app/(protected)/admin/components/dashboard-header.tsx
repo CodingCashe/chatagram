@@ -156,7 +156,7 @@ export function DashboardHeader({ adminName }: DashboardHeaderProps) {
         <h1 className="text-3xl font-bold tracking-tight">
           {greeting}, {adminName}
         </h1>
-        <p className="text-muted-foreground">Here's what's happening with your platform today.</p>
+        <p className="text-muted-foreground">Heres whats happening with your platform today.</p>
       </div>
       <div className="flex flex-col sm:flex-row items-center gap-3">
         <div className="relative w-full md:w-auto">
