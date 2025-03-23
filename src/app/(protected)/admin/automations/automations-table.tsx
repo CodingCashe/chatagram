@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal, Search, Filter, Download, Bot, MessageSquare, Brain } from "lucide-react"
 import { getAllAutomations, updateAutomationStatus } from "../actions"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "@/hooks/use-toast"
 
 type Automation = {
   id: string
@@ -183,7 +183,7 @@ export function AutomationsTable() {
                             checked={auto.status === "active"}
                             onCheckedChange={() => handleToggleStatus(auto.id, auto.status)}
                           />
-                          <Badge variant={auto.status === "active" ? "success" : "secondary"}>
+                          <Badge variant={auto.status === "active" ? "default" : "destructive"}>
                             {auto.status === "active" ? "Active" : "Inactive"}
                           </Badge>
                         </div>
