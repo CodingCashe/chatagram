@@ -74,6 +74,8 @@ import { Toaster } from "@/components/ui/toaster"
 import { redirect } from "next/navigation"
 import { requireAdmin } from "./utils"
 import { headers } from "next/headers"
+import { ClerkProvider} from '@clerk/nextjs'
+
 
 export default async function AdminLayout({
   children,
@@ -92,6 +94,7 @@ export default async function AdminLayout({
   }
 
   return (
+    <ClerkProvider>
     <SidebarProvider>
       <div className="flex h-screen bg-muted/20">
         <AdminSidebar />
@@ -99,6 +102,11 @@ export default async function AdminLayout({
       </div>
       <Toaster />
     </SidebarProvider>
+    </ClerkProvider>
   )
 }
 
+
+
+
+    
