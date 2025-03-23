@@ -27,7 +27,7 @@ export function DashboardHeader() {
     <div className="flex flex-col md:flex-row md:items-center md:justify-between">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{greeting}, Admin</h1>
-        <p className="text-muted-foreground">Here's what's happening with your platform today.</p>
+        <p className="text-muted-foreground">Here is whats happening with your platform today.</p>
       </div>
       <Card className="mt-4 md:mt-0">
         <CardContent className="flex items-center p-4">
