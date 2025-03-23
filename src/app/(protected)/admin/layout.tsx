@@ -37,22 +37,57 @@
 //   }
 // }
 
+// import type React from "react"
+// import { AdminSidebar } from "./components/admin-sidebar"
+// import { SidebarProvider } from "@/components/ui/sidebar"
+// import { Toaster } from "@/components/ui/toaster"
+// import { redirect } from "next/navigation"
+// import { isUserAdmin } from "./utils"
+
+// export default async function AdminLayout({
+//   children,
+// }: {
+//   children: React.ReactNode
+// }) {
+//   // Check if user is admin using the utility function
+//   const isAdmin = await isUserAdmin()
+
+//   if (!isAdmin) {
+//     redirect("/dashboard")
+//   }
+
+//   return (
+//     <SidebarProvider>
+//       <div className="flex h-screen bg-muted/20">
+//         <AdminSidebar />
+//         <div className="flex-1 overflow-auto">{children}</div>
+//       </div>
+//       <Toaster />
+//     </SidebarProvider>
+//   )
+// }
+
 import type React from "react"
 import { AdminSidebar } from "./components/admin-sidebar"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { Toaster } from "@/components/ui/toaster"
 import { redirect } from "next/navigation"
-import { isUserAdmin } from "./utils"
+import { requireAdmin } from "./utils"
+import { headers } from "next/headers"
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  // Check if user is admin using the utility function
-  const isAdmin = await isUserAdmin()
+  // Store the current path in headers for logging purposes
+  headers().set("x-pathname", headers().get("x-pathname") || "/admin")
 
-  if (!isAdmin) {
+  // Check if user is admin using the enhanced security function
+  try {
+    await requireAdmin()
+  } catch (error) {
+    console.error("Admin access denied:", error)
     redirect("/dashboard")
   }
 

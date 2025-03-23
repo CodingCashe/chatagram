@@ -33,6 +33,7 @@ model User {
   businesses       Business[]
   marketingInfo    MarketingInfo[]
   scheduledContent ScheduledContent[]
+  auditLogs        AuditLog[]         // Add this line
 }
 
 model ScheduledContent {
@@ -237,3 +238,34 @@ enum LISTENERS {
   SMARTAI
   MESSAGE
 }
+
+model Notification {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title     String
+  message   String
+  type      String   // "user", "subscription", "automation", "system", etc.
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String   @db.Uuid
+  user       User     @relation(fields: [userId], references: [id])
+  action     String
+  target     String
+  details    String?
+  ipAddress  String?
+  userAgent  String?
+  timestamp  DateTime @default(now())
+}
+
+model Incident {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  description String
+  severity    String    // "low", "medium", "high", "critical"
+  createdAt   DateTime  @default(now())
+  resolvedAt  DateTime?
+}
+
