@@ -125,7 +125,7 @@ export default async function AdminLayout({
   // headers().set("x-pathname", headers().get("x-pathname") || "/admin")
   // Get headers asynchronously
   const headersList = await headers();
-  const pathname = headersList.get("x-pathname") || "/admin";
+  const pathname = headersList.get("x-pathname");
   
   // Log the pathname if needed
   console.log("Current admin path:", pathname);
