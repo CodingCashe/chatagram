@@ -1,4 +1,7 @@
+// Add this line at the top of your file
+export const dynamic = 'force-dynamic'
 
+// Rest of your page component
 import { Suspense } from "react"
 import  InstagramDashboard  from "./_components/insta/profile"
 import { getDashboardData } from "@/actions/dashboard"
