@@ -29,7 +29,10 @@
 // }
 
 "use server"
+// Add this line at the top of your file
+export const dynamic = 'force-dynamic'
 
+// Rest of your page component
 import { client } from "@/lib/prisma"
 import { onCurrentUser } from "@/actions/user"
 import { headers } from "next/headers"

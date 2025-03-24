@@ -106,6 +106,10 @@
 //   )
 // }
 
+// Add this line at the top of your file
+export const dynamic = 'force-dynamic'
+
+// Rest of your page component
 import type React from "react"
 import { AdminSidebar } from "./components/admin-sidebar"
 import { SidebarProvider } from "@/components/ui/sidebar"
