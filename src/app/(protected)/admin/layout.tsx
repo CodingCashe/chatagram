@@ -119,6 +119,7 @@ import { requireAdmin } from "./utils"
 import { headers } from "next/headers"
 import { ThemeProvider } from "@/providers/theme-provider"
 import { NotificationListener } from "./components/notification-listener"
+import { onBoardUser } from "@/actions/user"
 
 export default async function AdminLayout({
   children,
@@ -130,7 +131,8 @@ export default async function AdminLayout({
   // Get headers asynchronously
   const headersList = headers();
   const pathname = headersList.get("x-pathname") || "/admin";
-  
+
+  const user = await onBoardUser()
   // Log the pathname if needed
   console.log("Current admin path:", pathname);
 
@@ -140,7 +142,7 @@ export default async function AdminLayout({
     admin = await requireAdmin()
   } catch (error) {
     console.error("Admin access denied:", error)
-    redirect("/dashboard")
+    return redirect(`/dashboard/${user.data?.firstname}-${user.data?.lastname}`)
   }
 
   return (
