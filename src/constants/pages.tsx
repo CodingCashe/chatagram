@@ -41,7 +41,8 @@ export const PAGE_ICON: Props = {
   SCHEDULE: <Clock />,
   INFORMATION:<PencilDuoToneBlack/>,
   CUSTOMIZE:<TargetIcon/>,
-  LEADS:<PersonStanding/>
+  LEADS:<PersonStanding/>,
+  CHAT:<PersonStanding/>
 }
 
 export const PLANS = [

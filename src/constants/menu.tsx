@@ -294,6 +294,11 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
         label: 'Posting',
         icon: <Clock />,
       },
+      {
+        id: uuid(),
+        label: 'Chat',
+        icon: <Clock />,
+      },
     ]
   },
 ]
