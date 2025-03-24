@@ -1,15 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -25,7 +16,7 @@ model User {
   email            String             @unique
   firstname        String?            @unique
   lastname         String?            @unique
-  isAdmin          Boolean            @default(false)  // Add this line
+  isAdmin          Boolean            @default(false)
   createdAt        DateTime           @default(now())
   subscription     Subscription?
   integrations     Integrations[]
@@ -33,7 +24,10 @@ model User {
   businesses       Business[]
   marketingInfo    MarketingInfo[]
   scheduledContent ScheduledContent[]
-  auditLogs        AuditLog[]         // Add this line
+  auditLogs        AuditLog[]
+  sentMessages     ChatMessage[]      @relation("SentMessages")
+  receivedMessages ChatMessage[]      @relation("ReceivedMessages")
+  notifications    UserNotification[]
 }
 
 model ScheduledContent {
@@ -85,6 +79,12 @@ model Business {
   targetAudience            String
   website                   String
   instagramHandle           String
+  whatsappNumber            String?   // Added for WhatsApp
+  pinterestHandle           String?   // Added for Pinterest
+  twitterHandle             String?   // Added for Twitter
+  facebookPageId            String?   // Added for Facebook
+  linkedinProfileId         String?   // Added for LinkedIn
+  tiktokHandle              String?   // Added for TikTok
   welcomeMessage            String
   responseLanguage          String
   businessHours             String
@@ -113,7 +113,9 @@ model Integrations {
   User           User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String?      @db.Uuid
   token          String       @unique
-  expiresAt      DateTime?
+  expiresAt      DateTime?    
+  
+  // Instagram-specific fields
   instagramId    String?      @unique
   username       String?
   fullName       String?
@@ -121,6 +123,29 @@ model Integrations {
   followersCount Int?
   followingCount Int?
   postsCount     Int?
+  
+  // WhatsApp-specific fields
+  phoneNumberId  String?      @unique
+  phoneNumber    String?
+  
+  // Facebook-specific fields
+  pageId         String?      @unique
+  pageName       String?
+  
+  // Pinterest-specific fields
+  pinterestId    String?      @unique
+  boardCount     Int?
+  
+  // Twitter-specific fields
+  twitterId      String?      @unique
+  tweetCount     Int?
+  
+  // LinkedIn-specific fields
+  linkedinId     String?      @unique
+  
+  // TikTok-specific fields
+  tiktokId       String?      @unique
+  
   lastUpdated    DateTime     @default(now())
 }
 
@@ -129,6 +154,7 @@ model Automation {
   name           String             @default("New Automation")
   createdAt      DateTime           @default(now())
   active         Boolean            @default(false)
+  platform       INTEGRATIONS       @default(INSTAGRAM) // Added to specify which platform this automation is for
   trigger        Trigger[]
   listener       Listener?
   posts          Post[]
@@ -226,6 +252,12 @@ enum SUBSCRIPTION_PLAN {
 
 enum INTEGRATIONS {
   INSTAGRAM
+  WHATSAPP
+  FACEBOOK
+  PINTEREST
+  TWITTER
+  LINKEDIN
+  TIKTOK
 }
 
 enum MEDIATYPE {
@@ -267,5 +299,36 @@ model Incident {
   severity    String    // "low", "medium", "high", "critical"
   createdAt   DateTime  @default(now())
   resolvedAt  DateTime?
+}
+
+
+
+// Additional models for chat and real-time notifications
+
+model ChatMessage {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content     String
+  senderId    String   @db.Uuid
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiverId  String?  @db.Uuid
+  receiver    User?    @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  isFromAdmin Boolean  @default(false)
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+
+// Enhanced notification system
+model UserNotification {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  type      String   // "chat", "automation", "subscription", etc.
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 

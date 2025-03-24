@@ -67,55 +67,25 @@
 //   )
 // }
 
-import type React from "react"
-import { AdminSidebar } from "./components/admin-sidebar"
-import { SidebarProvider } from "@/components/ui/sidebar"
-import { Toaster } from "@/components/ui/toaster"
-import { redirect } from "next/navigation"
-import { requireAdmin } from "./utils"
-import { headers } from "next/headers"
-
-export default async function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  // Get headers asynchronously
-  const headersList = await headers();
-  const pathname = headersList.get("x-pathname") || "/admin";
-  
-  // Log the pathname if needed
-  console.log("Current admin path:", pathname);
-
-  // Check if user is admin using the enhanced security function
-  try {
-    await requireAdmin()
-  } catch (error) {
-    console.error("Admin access denied:", error)
-    redirect("/dashboard")
-  }
-
-  return (
-    <SidebarProvider>
-      <div className="flex h-screen bg-muted/20">
-        <AdminSidebar />
-        <div className="flex-1 overflow-auto">{children}</div>
-      </div>
-      <Toaster />
-    </SidebarProvider>
-  )
-}
+// import type React from "react"
+// import { AdminSidebar } from "./components/admin-sidebar"
+// import { SidebarProvider } from "@/components/ui/sidebar"
+// import { Toaster } from "@/components/ui/toaster"
+// import { redirect } from "next/navigation"
+// import { requireAdmin } from "./utils"
+// import { headers } from "next/headers"
 
 // export default async function AdminLayout({
 //   children,
 // }: {
 //   children: React.ReactNode
 // }) {
-//   // Store the current path in headers for logging purposes
-//   // headers().set("x-pathname", headers().get("x-pathname") || "/admin")
-//   // Read the pathname for logging purposes
-//   const pathname = headers().get("x-pathname") || "/admin"
-//   console.log("Current admin path:", pathname)
+//   // Get headers asynchronously
+//   const headersList = await headers();
+//   const pathname = headersList.get("x-pathname") || "/admin";
+  
+//   // Log the pathname if needed
+//   console.log("Current admin path:", pathname);
 
 //   // Check if user is admin using the enhanced security function
 //   try {
@@ -126,7 +96,6 @@ export default async function AdminLayout({
 //   }
 
 //   return (
-  
 //     <SidebarProvider>
 //       <div className="flex h-screen bg-muted/20">
 //         <AdminSidebar />
@@ -134,11 +103,55 @@ export default async function AdminLayout({
 //       </div>
 //       <Toaster />
 //     </SidebarProvider>
-
 //   )
 // }
 
+import type React from "react"
+import { AdminSidebar } from "./components/admin-sidebar"
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { Toaster } from "@/components/ui/toaster"
+import { redirect } from "next/navigation"
+import { requireAdmin } from "./utils"
+import { headers } from "next/headers"
+import { ThemeProvider } from "@/providers/theme-provider"
+import { NotificationListener } from "./components/notification-listener"
 
+export default async function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  // Store the current path in headers for logging purposes
+  // headers().set("x-pathname", headers().get("x-pathname") || "/admin")
+  // Get headers asynchronously
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") || "/admin";
+  
+  // Log the pathname if needed
+  console.log("Current admin path:", pathname);
 
+  // Check if user is admin using the enhanced security function
+  let admin
+  try {
+    admin = await requireAdmin()
+  } catch (error) {
+    console.error("Admin access denied:", error)
+    redirect("/dashboard")
+  }
 
-    
+  return (
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <SidebarProvider>
+        <div className="flex h-screen bg-background">
+          <AdminSidebar />
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 overflow-auto">{children}</div>
+          </div>
+        </div>
+        <NotificationListener userId={admin.id} />
+        <Toaster />
+      </SidebarProvider>
+    </ThemeProvider>
+  )
+}
+
