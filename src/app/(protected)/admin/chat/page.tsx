@@ -12,6 +12,10 @@
 //     </div>
 //   )
 // }
+// Add this line at the top of your file
+export const dynamic = 'force-dynamic'
+
+// Rest of your page component
 
 import { ChatInterface } from "./chat-interface"
 import { getCurrentAdmin } from "../actions"

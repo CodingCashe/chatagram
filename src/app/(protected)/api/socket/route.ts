@@ -200,6 +200,10 @@
 //   res.status(200).json({ success: true })
 // }
 
+// Add this line at the top of your file
+export const dynamic = 'force-dynamic'
+
+// Rest of your page component
 import { Server } from "socket.io"
 import { NextRequest } from "next/server"
 import { client } from "@/lib/prisma"
@@ -209,7 +213,7 @@ let io: Server
 
 export async function GET(req: NextRequest) {
   // Get the response and socket from the Next.js server
-  const res = await fetch('http://localhost')
+  const res = await fetch('https://yazil.vercel.app')
   const cRes = new Response(res.body)
   
   // @ts-ignore - we need to access the socket

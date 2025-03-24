@@ -1,3 +1,7 @@
+// Add this line at the top of your file
+export const dynamic = 'force-dynamic'
+
+// Rest of your page component
 import { NextResponse } from "next/server"
 import { client } from "@/lib/prisma"
 import { currentUser } from "@clerk/nextjs/server"
