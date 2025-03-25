@@ -28,9 +28,11 @@ const Page = async (props: Props) => {
     const clerkUser = await onCurrentUser()
 
     // If no user is signed in, redirect to sign-in
-    if (!clerkUser) {
-      return redirect("/sign-in")
-    }
+
+    //commented out
+    // if (!clerkUser) {
+    //   return redirect("/sign-in")
+    // }
 
     // Check if user is an admin directly from the database
     const dbUser = await client.user.findUnique({
@@ -53,8 +55,8 @@ const Page = async (props: Props) => {
         return redirect("/admin")
       }
 
-      // Redirect regular users to their dashboard
-      return redirect(`/dashboard/${dbUser.firstname}-${dbUser.lastname}`)
+      // // Redirect regular users to their dashboard
+      // return redirect(`/dashboard/${dbUser.firstname}-${dbUser.lastname}`)
     }
 
     // If user is authenticated with Clerk but not in our database yet,
