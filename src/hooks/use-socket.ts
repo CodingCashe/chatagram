@@ -163,7 +163,7 @@ import { useToast } from "@/hooks/use-toast"
 let socketInstance: Socket | null = null
 
 // Socket.io server URL - use environment variable
-const SOCKET_SERVER_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "https://your-app-socket-server.onrender.com"
+const SOCKET_SERVER_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "https://yazil.onrender.com"
 
 export function useSocket(userId: string | undefined) {
   const [isConnected, setIsConnected] = useState(false)

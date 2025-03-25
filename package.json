@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "start:socket": "node socket-server.js",
     "start": "next start",
     "postinstall": "prisma generate",
     "lint": "next lint",
