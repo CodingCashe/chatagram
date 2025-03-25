@@ -1980,7 +1980,7 @@ export function MessageTemplates() {
                                   <DialogHeader>
                                     <DialogTitle>Confirm Deletion</DialogTitle>
                                     <DialogDescription>
-                                      Are you sure you want to delete the template "{template.name}"? This action cannot
+                                      Are you sure you want to delete the template {template.name}? This action cannot
                                       be undone.
                                     </DialogDescription>
                                   </DialogHeader>

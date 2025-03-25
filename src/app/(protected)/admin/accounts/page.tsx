@@ -206,7 +206,7 @@ export default function InstagramAccountsPage() {
                   <div className="py-6 flex flex-col items-center justify-center space-y-4">
                     <Instagram className="h-16 w-16 text-pink-500" />
                     <p className="text-center">
-                      You'll be redirected to Instagram to authorize access to your account. We only request the minimum
+                      You will be redirected to Instagram to authorize access to your account. We only request the minimum
                       permissions needed for DM automation.
                     </p>
                     <div className="flex items-center justify-center p-2 bg-muted rounded-md w-full">

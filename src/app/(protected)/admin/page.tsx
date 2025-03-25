@@ -199,7 +199,7 @@ export default async function AdminDashboard() {
       <div className="flex-1 container p-4 md:p-6 space-y-8">
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground">Here's what's happening with your platform today.</p>
+          <p className="text-muted-foreground">Monitor Account activities</p>
         </div>
 
         {/* New Dashboard Overview Component */}
