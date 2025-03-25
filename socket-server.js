@@ -18,7 +18,7 @@ app.get('/health', (req, res) => {
 // Configure Socket.IO
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL || "*",
+    origin: process.env.CLIENT_URL || "https://yazil.vercel.app",
     methods: ["GET", "POST"],
     credentials: true
   }
@@ -157,7 +157,7 @@ io.on('connection', async (socket) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 10000;
 httpServer.listen(PORT, () => {
   console.log(`Socket.io server running on port ${PORT}`);
 });
