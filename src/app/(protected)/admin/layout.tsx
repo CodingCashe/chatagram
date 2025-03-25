@@ -107,11 +107,64 @@
 // }
 
 // Add this line at the top of your file
+// export const dynamic = 'force-dynamic'
+
+// // Rest of your page component
+// import type React from "react"
+// import { AdminSidebar } from "./components/admin-sidebar"
+// import { SidebarProvider } from "@/components/ui/sidebar"
+// import { Toaster } from "@/components/ui/toaster"
+// import { redirect } from "next/navigation"
+// import { requireAdmin } from "./utils"
+// import { headers } from "next/headers"
+// import { ThemeProvider } from "@/providers/theme-provider"
+// import { NotificationListener } from "./components/notification-listener"
+// import { onBoardUser } from "@/actions/user"
+
+// export default async function AdminLayout({
+//   children,
+// }: {
+//   children: React.ReactNode
+// }) {
+//   // Store the current path in headers for logging purposes
+//   // headers().set("x-pathname", headers().get("x-pathname") || "/admin")
+//   // Get headers asynchronously
+//   const headersList = headers();
+//   const pathname = headersList.get("x-pathname") || "/admin";
+
+//   const user = await onBoardUser()
+//   // Log the pathname if needed
+//   console.log("Current admin path:", pathname);
+
+//   // Check if user is admin using the enhanced security function
+//   let admin
+//   try {
+//     admin = await requireAdmin()
+//   } catch (error) {
+//     console.error("Admin access denied:", error)
+//     return redirect(`/dashboard/${user.data?.firstname}-${user.data?.lastname}`)
+//   }
+
+//   return (
+//     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+//       <SidebarProvider>
+//         <div className="flex h-screen bg-background">
+//           <AdminSidebar />
+//           <div className="flex-1 flex flex-col overflow-hidden">
+//             <div className="flex-1 overflow-auto">{children}</div>
+//           </div>
+//         </div>
+//         <NotificationListener userId={admin.id} />
+//         <Toaster />
+//       </SidebarProvider>
+//     </ThemeProvider>
+//   )
+// }
+
 export const dynamic = 'force-dynamic'
 
-// Rest of your page component
 import type React from "react"
-import { AdminSidebar } from "./components/admin-sidebar"
+import { EnhancedSidebar } from "./components/enhanced-sidebar"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { Toaster } from "@/components/ui/toaster"
 import { redirect } from "next/navigation"
@@ -119,7 +172,6 @@ import { requireAdmin } from "./utils"
 import { headers } from "next/headers"
 import { ThemeProvider } from "@/providers/theme-provider"
 import { NotificationListener } from "./components/notification-listener"
-import { onBoardUser } from "@/actions/user"
 
 export default async function AdminLayout({
   children,
@@ -127,14 +179,7 @@ export default async function AdminLayout({
   children: React.ReactNode
 }) {
   // Store the current path in headers for logging purposes
-  // headers().set("x-pathname", headers().get("x-pathname") || "/admin")
-  // Get headers asynchronously
-  const headersList = headers();
-  const pathname = headersList.get("x-pathname") || "/admin";
-
-  const user = await onBoardUser()
-  // Log the pathname if needed
-  console.log("Current admin path:", pathname);
+  headers().set("x-pathname", headers().get("x-pathname") || "/admin")
 
   // Check if user is admin using the enhanced security function
   let admin
@@ -142,14 +187,14 @@ export default async function AdminLayout({
     admin = await requireAdmin()
   } catch (error) {
     console.error("Admin access denied:", error)
-    return redirect(`/dashboard/${user.data?.firstname}-${user.data?.lastname}`)
+    redirect("/dashboard")
   }
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <SidebarProvider>
         <div className="flex h-screen bg-background">
-          <AdminSidebar />
+          <EnhancedSidebar />
           <div className="flex-1 flex flex-col overflow-hidden">
             <div className="flex-1 overflow-auto">{children}</div>
           </div>

@@ -332,3 +332,14 @@ model UserNotification {
   updatedAt DateTime @updatedAt
 }
 
+model MessageTemplate {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  content     String
+  category    String?
+  tags        String[]
+  usageCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
