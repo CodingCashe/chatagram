@@ -56,6 +56,23 @@ const nextConfig = {
   // Enable React strict mode and SWC minification
   reactStrictMode: true,
   swcMinify: true,
+  
+  // Environment variables
+  env: {
+    NEXT_PUBLIC_APP_URL: process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : 'http://localhost:3000',
+  },
+  
+  // Ensure that Socket.io WebSocket transport works with Next.js
+  webpack: (config) => {
+    config.externals.push({
+      bufferutil: 'bufferutil',
+      'utf-8-validate': 'utf-8-validate',
+    })
+    return config
+  },
 };
 
-export default nextConfig;`1`
+export default nextConfig;
+
