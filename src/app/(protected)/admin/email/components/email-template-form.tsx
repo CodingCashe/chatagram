@@ -711,16 +711,16 @@ function getDefaultTemplate() {
       <p>Thank you for signing up! We're excited to have you on board.</p>
       <p>With our platform, you can:</p>
       <ul>
-        <li>Feature one</li>
-        <li>Feature two</li>
-        <li>Feature three</li>
+        <li>Automate Insta Dms</li>
+        <li>Schedule IG posts</li>
+        <li>Create content</li>
       </ul>
       <p>If you have any questions, feel free to reply to this email.</p>
       <a href="#" class="button">Get Started</a>
     </div>
     <div class="footer">
-      <p>© 2023 Your Company. All rights reserved.</p>
-      <p>123 Main St, City, Country</p>
+      <p>© 2025 Yazil. All rights reserved.</p>
+      <p>00100 Main St, Nairobae, Kenya</p>
     </div>
   </div>
 </body>
