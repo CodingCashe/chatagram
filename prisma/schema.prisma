@@ -28,6 +28,7 @@ model User {
   sentMessages     ChatMessage[]      @relation("SentMessages")
   receivedMessages ChatMessage[]      @relation("ReceivedMessages")
   notifications    UserNotification[]
+  emails           Email[]
 }
 
 model ScheduledContent {
@@ -302,9 +303,6 @@ model Incident {
 }
 
 
-
-// Additional models for chat and real-time notifications
-
 model ChatMessage {
   id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   content     String
@@ -341,5 +339,69 @@ model MessageTemplate {
   usageCount  Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+
+model EmailTemplate {
+  id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  subject     String
+  content     String         @db.Text
+  description String?
+  category    String         @default("general")
+  isDefault   Boolean        @default(false)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  emails      Email[]
+  campaigns   EmailCampaign[]
+}
+
+model Email {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  subject      String
+  content      String        @db.Text
+  recipientId  String        @db.Uuid
+  recipient    User          @relation(fields: [recipientId], references: [id])
+  templateId   String?       @db.Uuid
+  template     EmailTemplate? @relation(fields: [templateId], references: [id])
+  campaignId   String?       @db.Uuid
+  campaign     EmailCampaign? @relation(fields: [campaignId], references: [id])
+  status       EmailStatus   @default(SCHEDULED)
+  scheduledFor DateTime?
+  sentAt       DateTime?
+  openedAt     DateTime?
+  clickedAt    DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model EmailCampaign {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  description String?
+  templateId  String        @db.Uuid
+  template    EmailTemplate @relation(fields: [templateId], references: [id])
+  status      CampaignStatus @default(DRAFT)
+  scheduledFor DateTime?
+  sentAt      DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  emails      Email[]
+}
+
+enum EmailStatus {
+  SCHEDULED
+  SENT
+  FAILED
+  OPENED
+  CLICKED
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  SENDING
+  COMPLETED
+  CANCELLED
 }
 
