@@ -409,3 +409,29 @@
     opacity: 1;
   }
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.sidebar-transition {
+  transition: all 0.3s ease;
+}
+
+/* Improve sidebar transition */
+[data-sidebar-state="collapsed"] [data-sidebar-menu-button] span,
+[data-sidebar-state="collapsed"] [data-sidebar-menu-button] .ml-auto {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+[data-sidebar-state="expanded"] [data-sidebar-menu-button] span,
+[data-sidebar-state="expanded"] [data-sidebar-menu-button] .ml-auto {
+  opacity: 1;
+  transition: opacity 0.3s ease 0.1s;
+}

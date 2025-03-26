@@ -1266,6 +1266,306 @@
 //   )
 // }
 
+// "use client"
+
+// import { useState, useEffect } from "react"
+// import { usePathname } from "next/navigation"
+// import Link from "next/link"
+// import {
+//   Users,
+//   CreditCard,
+//   Settings,
+//   LogOut,
+//   MessageSquare,
+//   Zap,
+//   Calendar,
+//   Home,
+//   Mail,
+//   FileText,
+//   Send,
+//   BarChart2,
+//   Instagram,
+//   Bot,
+// } from "lucide-react"
+// import { cn } from "@/lib/utils"
+// import { Button } from "@/components/ui/button"
+// import {
+//   Sidebar,
+//   SidebarContent,
+//   SidebarFooter,
+//   SidebarHeader,
+//   SidebarMenu,
+//   SidebarMenuButton,
+//   SidebarMenuItem,
+//   SidebarMenuSub,
+//   SidebarMenuSubButton,
+//   SidebarMenuSubItem,
+//   SidebarGroup,
+//   SidebarGroupContent,
+//   SidebarGroupLabel,
+//   SidebarTrigger,
+//   SidebarMenuBadge,
+//   useSidebar,
+// } from "@/components/ui/sidebar"
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+// import { Badge } from "@/components/ui/badge"
+// import { NotificationDropdown } from "./notification-dropdown"
+// import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+
+// export function EnhancedSidebar() {
+//   const pathname = usePathname()
+//   const [systemStatus, setSystemStatus] = useState<"healthy" | "warning" | "error">("healthy")
+//   const { state } = useSidebar()
+//   const isCollapsed = state === "collapsed"
+
+//   // Simulate system status check
+//   useEffect(() => {
+//     const interval = setInterval(() => {
+//       // Randomly set system status for demo purposes
+//       const statuses = ["healthy", "warning", "error"] as const
+//       const randomStatus = statuses[Math.floor(Math.random() * 10) % 3]
+//       setSystemStatus(randomStatus)
+//     }, 30000)
+
+//     return () => clearInterval(interval)
+//   }, [])
+
+//   const getStatusColor = (status: "healthy" | "warning" | "error") => {
+//     switch (status) {
+//       case "healthy":
+//         return "bg-green-500"
+//       case "warning":
+//         return "bg-yellow-500"
+//       case "error":
+//         return "bg-red-500"
+//       default:
+//         return "bg-gray-500"
+//     }
+//   }
+
+//   return (
+//     <Sidebar collapsible="icon" className="border-r">
+//       <SidebarHeader className="border-b py-4">
+//         <div className="flex items-center px-2">
+//           <div className="flex items-center gap-2">
+//             <Avatar className="h-8 w-8">
+//               <AvatarImage src="/placeholder.svg" alt="Logo" />
+//               <AvatarFallback>AD</AvatarFallback>
+//             </Avatar>
+//             {!isCollapsed && <div className="font-semibold">Admin Dashboard</div>}
+//           </div>
+//           <div className="ml-auto flex items-center gap-2">
+//             <div className={cn("transition-all", isCollapsed ? "absolute right-4 top-4 z-50" : "")}>
+//               <NotificationDropdown />
+//             </div>
+//             <div className={cn("transition-all", isCollapsed ? "absolute right-4 top-14 z-50" : "")}>
+//               <SidebarTrigger />
+//             </div>
+//           </div>
+//         </div>
+//       </SidebarHeader>
+
+//       <SidebarContent>
+//         <SidebarGroup>
+//           <SidebarGroupLabel>Overview</SidebarGroupLabel>
+//           <SidebarGroupContent>
+//             <SidebarMenu>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin"}>
+//                   <Link href="/admin">
+//                     <Home className="h-4 w-4" />
+//                     <span>Dashboard</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/users"}>
+//                   <Link href="/admin/users">
+//                     <Users className="h-4 w-4" />
+//                     <span>Users</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/subscriptions"}>
+//                   <Link href="/admin/subscriptions">
+//                     <CreditCard className="h-4 w-4" />
+//                     <span>Subscriptions</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//             </SidebarMenu>
+//           </SidebarGroupContent>
+//         </SidebarGroup>
+
+//         <SidebarGroup>
+//           <SidebarGroupLabel>Communication</SidebarGroupLabel>
+//           <SidebarGroupContent>
+//             <SidebarMenu>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/chat"}>
+//                   <Link href="/admin/chat">
+//                     <MessageSquare className="h-4 w-4" />
+//                     <span>Chat</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//                 <SidebarMenuBadge>3</SidebarMenuBadge>
+//               </SidebarMenuItem>
+
+//               <Collapsible>
+//                 <SidebarMenuItem>
+//                   <CollapsibleTrigger asChild>
+//                     <SidebarMenuButton>
+//                       <Mail className="h-4 w-4" />
+//                       <span>Email</span>
+//                     </SidebarMenuButton>
+//                   </CollapsibleTrigger>
+//                 </SidebarMenuItem>
+//                 <CollapsibleContent>
+//                   <SidebarMenuSub>
+//                     <SidebarMenuSubItem>
+//                       <SidebarMenuSubButton asChild isActive={pathname === "/admin/email/templates"}>
+//                         <Link href="/admin/email/templates">
+//                           <FileText className="h-4 w-4" />
+//                           <span>Templates</span>
+//                         </Link>
+//                       </SidebarMenuSubButton>
+//                     </SidebarMenuSubItem>
+//                     <SidebarMenuSubItem>
+//                       <SidebarMenuSubButton asChild isActive={pathname === "/admin/email/campaigns"}>
+//                         <Link href="/admin/email/campaigns">
+//                           <Send className="h-4 w-4" />
+//                           <span>Campaigns</span>
+//                         </Link>
+//                       </SidebarMenuSubButton>
+//                     </SidebarMenuSubItem>
+//                     <SidebarMenuSubItem>
+//                       <SidebarMenuSubButton asChild isActive={pathname === "/admin/email/analytics"}>
+//                         <Link href="/admin/email/analytics">
+//                           <BarChart2 className="h-4 w-4" />
+//                           <span>Analytics</span>
+//                         </Link>
+//                       </SidebarMenuSubButton>
+//                     </SidebarMenuSubItem>
+//                   </SidebarMenuSub>
+//                 </CollapsibleContent>
+//               </Collapsible>
+//             </SidebarMenu>
+//           </SidebarGroupContent>
+//         </SidebarGroup>
+
+//         <SidebarGroup>
+//           <SidebarGroupLabel>Automation</SidebarGroupLabel>
+//           <SidebarGroupContent>
+//             <SidebarMenu>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/automations"}>
+//                   <Link href="/admin/automations">
+//                     <Zap className="h-4 w-4" />
+//                     <span>Automations</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/scheduled-content"}>
+//                   <Link href="/admin/scheduled-content">
+//                     <Calendar className="h-4 w-4" />
+//                     <span>Scheduled Content</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/templates"}>
+//                   <Link href="/admin/templates">
+//                     <FileText className="h-4 w-4" />
+//                     <span>Message Templates</span>
+//                     <Badge className="ml-auto" variant="outline">
+//                       New
+//                     </Badge>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//             </SidebarMenu>
+//           </SidebarGroupContent>
+//         </SidebarGroup>
+
+//         <SidebarGroup>
+//           <SidebarGroupLabel>Integrations</SidebarGroupLabel>
+//           <SidebarGroupContent>
+//             <SidebarMenu>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/instagram-accounts"}>
+//                   <Link href="/admin/instagram-accounts">
+//                     <Instagram className="h-4 w-4" />
+//                     <span>Instagram Accounts</span>
+//                     <Badge className="ml-auto" variant="outline">
+//                       New
+//                     </Badge>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/ai-assistant"}>
+//                   <Link href="/admin/ai-assistant">
+//                     <Bot className="h-4 w-4" />
+//                     <span>AI Assistant</span>
+//                     <Badge className="ml-auto" variant="outline">
+//                       New
+//                     </Badge>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//             </SidebarMenu>
+//           </SidebarGroupContent>
+//         </SidebarGroup>
+
+//         <SidebarGroup>
+//           <SidebarGroupLabel>System</SidebarGroupLabel>
+//           <SidebarGroupContent>
+//             <SidebarMenu>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/settings"}>
+//                   <Link href="/admin/settings">
+//                     <Settings className="h-4 w-4" />
+//                     <span>Settings</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton tooltip={isCollapsed ? `System: ${systemStatus}` : undefined}>
+//                   <div className="flex items-center gap-2">
+//                     <div className={cn("h-2 w-2 rounded-full", getStatusColor(systemStatus))} />
+//                     <span>System Status</span>
+//                     {!isCollapsed && <span className="ml-auto capitalize text-xs">{systemStatus}</span>}
+//                   </div>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//             </SidebarMenu>
+//           </SidebarGroupContent>
+//         </SidebarGroup>
+//       </SidebarContent>
+
+//       <SidebarFooter className="border-t p-4">
+//         <div className="flex items-center gap-2">
+//           <Avatar className="h-8 w-8">
+//             <AvatarImage src="/placeholder.svg" alt="Avatar" />
+//             <AvatarFallback>AD</AvatarFallback>
+//           </Avatar>
+//           {!isCollapsed && (
+//             <div className="flex flex-col">
+//               <span className="text-sm font-medium">Admin User</span>
+//               <span className="text-xs text-muted-foreground">admin@example.com</span>
+//             </div>
+//           )}
+//           <Button variant="ghost" size="icon" className={cn("ml-auto", isCollapsed ? "mx-auto" : "")}>
+//             <LogOut className="h-4 w-4" />
+//           </Button>
+//         </div>
+//       </SidebarFooter>
+//     </Sidebar>
+//   )
+// }
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -1346,21 +1646,17 @@ export function EnhancedSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r">
       <SidebarHeader className="border-b py-4">
-        <div className="flex items-center px-2">
+        <div className="flex items-center justify-between px-2">
           <div className="flex items-center gap-2">
             <Avatar className="h-8 w-8">
               <AvatarImage src="/placeholder.svg" alt="Logo" />
               <AvatarFallback>AD</AvatarFallback>
             </Avatar>
-            {!isCollapsed && <div className="font-semibold">Admin Dashboard</div>}
+            {!isCollapsed && <div className="font-semibold">Admin</div>}
           </div>
-          <div className="ml-auto flex items-center gap-2">
-            <div className={cn("transition-all", isCollapsed ? "absolute right-4 top-4 z-50" : "")}>
-              <NotificationDropdown />
-            </div>
-            <div className={cn("transition-all", isCollapsed ? "absolute right-4 top-14 z-50" : "")}>
-              <SidebarTrigger />
-            </div>
+          <div className="flex items-center gap-2">
+            <NotificationDropdown />
+            <SidebarTrigger className="transition-transform duration-300" />
           </div>
         </div>
       </SidebarHeader>
@@ -1479,9 +1775,11 @@ export function EnhancedSidebar() {
                   <Link href="/admin/templates">
                     <FileText className="h-4 w-4" />
                     <span>Message Templates</span>
-                    <Badge className="ml-auto" variant="outline">
-                      New
-                    </Badge>
+                    {!isCollapsed && (
+                      <Badge className="ml-auto" variant="outline">
+                        New
+                      </Badge>
+                    )}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -1498,9 +1796,11 @@ export function EnhancedSidebar() {
                   <Link href="/admin/instagram-accounts">
                     <Instagram className="h-4 w-4" />
                     <span>Instagram Accounts</span>
-                    <Badge className="ml-auto" variant="outline">
-                      New
-                    </Badge>
+                    {!isCollapsed && (
+                      <Badge className="ml-auto" variant="outline">
+                        New
+                      </Badge>
+                    )}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -1509,9 +1809,11 @@ export function EnhancedSidebar() {
                   <Link href="/admin/ai-assistant">
                     <Bot className="h-4 w-4" />
                     <span>AI Assistant</span>
-                    <Badge className="ml-auto" variant="outline">
-                      New
-                    </Badge>
+                    {!isCollapsed && (
+                      <Badge className="ml-auto" variant="outline">
+                        New
+                      </Badge>
+                    )}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -1553,11 +1855,15 @@ export function EnhancedSidebar() {
           </Avatar>
           {!isCollapsed && (
             <div className="flex flex-col">
-              <span className="text-sm font-medium">Admin User</span>
-              <span className="text-xs text-muted-foreground">admin@example.com</span>
+              <span className="text-sm font-medium">King Cashe</span>
+              <span className="text-xs text-muted-foreground">Cashe@yazil.ai</span>
             </div>
           )}
-          <Button variant="ghost" size="icon" className={cn("ml-auto", isCollapsed ? "mx-auto" : "")}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn("transition-all duration-300", isCollapsed ? "ml-0" : "ml-auto")}
+          >
             <LogOut className="h-4 w-4" />
           </Button>
         </div>
