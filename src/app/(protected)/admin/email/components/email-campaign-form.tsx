@@ -1519,7 +1519,7 @@ export function EmailCampaignForm({
               {form.watch("sendingStrategy") === "immediate" && (
                 <li className="flex items-start gap-2 text-sm">
                   <Clock className="h-4 w-4 text-blue-500 mt-0.5" />
-                  <span>Consider using "Optimal Time" sending to improve open rates by 15-23%.</span>
+                  <span>Consider using &ldquot;Optimal&ldquot; Time sending to improve open rates by 15-23%.</span>
                 </li>
               )}
               {!form.watch("enableABTesting") && (
