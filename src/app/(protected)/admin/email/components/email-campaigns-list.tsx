@@ -576,7 +576,7 @@ export function EmailCampaignsList() {
       <Card>
         <CardHeader>
           <CardTitle>No Campaigns</CardTitle>
-          <CardDescription>You haven't created any email campaigns yet.</CardDescription>
+          <CardDescription>You haven not created any email campaigns yet.</CardDescription>
         </CardHeader>
         <CardContent className="flex justify-center py-6">
           <Link href="/admin/email/campaigns/new">

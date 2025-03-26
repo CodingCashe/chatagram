@@ -664,7 +664,7 @@ export function EmailTemplatesList({ category }: { category?: string }) {
       <Card>
         <CardHeader>
           <CardTitle>No Templates</CardTitle>
-          <CardDescription>You haven't created any email templates yet.</CardDescription>
+          <CardDescription>You haven not created any email templates yet.</CardDescription>
         </CardHeader>
         <CardContent className="flex justify-center py-6">
           <Link href="/admin/email/templates/new">
