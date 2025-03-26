@@ -967,7 +967,7 @@ export function EmailTemplatesList({ category }: EmailTemplatesListProps) {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This will permanently delete the "{template.name}" template. This action cannot be undone.
+                        This will permanently delete the &ldquo;{template.name}&rdquo; template. This action cannot be undone.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

@@ -962,7 +962,7 @@ export function EmailCampaignsList() {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This will permanently delete the "{campaign.name}" campaign. This action cannot be undone.
+                        This will permanently delete the &quot;{campaign.name}&quot; campaign. This action cannot be undone.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

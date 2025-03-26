@@ -202,7 +202,7 @@ export function EmailCampaignForm({
                 <Input placeholder="Check out our summer deals!" {...field} />
               </FormControl>
               <FormDescription>
-                The subject line of the email. This will override the template's subject.
+                The subject line of the email. This will override the template&quote;s subject.
               </FormDescription>
               <FormMessage />
             </FormItem>
