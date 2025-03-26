@@ -1,4 +1,6 @@
 import { PrismaClient } from "@prisma/client"
+// const { PrismaClient } = require("@prisma/client");
+
 import { welcomeEmailTemplate } from "../app/(protected)/admin/email/welcome-template"
 
 const prisma = new PrismaClient()
