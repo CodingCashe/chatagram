@@ -777,6 +777,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 interface EmailTemplatesListProps {
   category?: string
+  
 }
 
 export function EmailTemplatesList({ category }: EmailTemplatesListProps) {
