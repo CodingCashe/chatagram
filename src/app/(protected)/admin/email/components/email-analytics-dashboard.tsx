@@ -94,7 +94,7 @@ export function EmailAnalyticsDashboard() {
       <div className="text-center py-12">
         <h3 className="text-lg font-medium">Enhanced Analytics Coming Soon</h3>
         <p className="text-muted-foreground mt-2">
-          We're working on adding detailed charts and analytics for your email campaigns.
+          We are working on adding detailed charts and analytics for your email campaigns.
         </p>
       </div>
     </div>

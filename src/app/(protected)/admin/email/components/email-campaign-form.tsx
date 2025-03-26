@@ -14,7 +14,7 @@ export function EmailCampaignForm({
       <div>
         <h2 className="text-lg font-medium">{campaign ? "Edit Campaign" : "Create New Campaign"}</h2>
         <p className="text-sm text-muted-foreground">
-          This feature is coming soon. You'll be able to create and manage email campaigns.
+          This feature is coming soon. You will be able to create and manage email campaigns.
         </p>
       </div>
 
