@@ -10,6 +10,7 @@ export type ChatMessage = {
   isRead: boolean
   createdAt: string
   updatedAt: string
+  isPending?:boolean
 }
 
 export type ChatUser = {

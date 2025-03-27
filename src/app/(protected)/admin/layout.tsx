@@ -108,7 +108,7 @@
 
 
 export const dynamic = 'force-dynamic'
-import { DashboardHeader } from "./components/dashboard-header"
+// import { DashboardHeader } from "./components/dashboard-header"
 import "./components/sidebar-styles.css"
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import type React from "react"
@@ -153,7 +153,7 @@ export default async function AdminLayout({
           <EnhancedSidebar />
            <SidebarInset className="bg-background">
           <div className="flex h-full flex-col">
-            <DashboardHeader adminName="Cashe" />
+            {/* <DashboardHeader adminName="Cashe" /> */}
             <div className="flex-1 overflow-auto p-4">{children}</div>
           </div>
         </SidebarInset>

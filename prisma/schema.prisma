@@ -29,6 +29,10 @@ model User {
   receivedMessages ChatMessage[]      @relation("ReceivedMessages")
   notifications    UserNotification[]
   emails           Email[]
+  uploadedAttachments  ChatAttachment[]   @relation("UploadedAttachments")
+  receivedAttachments  ChatAttachment[]   @relation("ReceivedAttachments")
+  invoices             Invoice[]          @relation("UserInvoices")
+  payments             Payment[]          @relation("UserPayments")
 }
 
 model ScheduledContent {
@@ -311,10 +315,12 @@ model ChatMessage {
   receiverId  String?  @db.Uuid
   receiver    User?    @relation("ReceivedMessages", fields: [receiverId], references: [id])
   isFromAdmin Boolean  @default(false)
+  isPending   Boolean  @default(false)
   isRead      Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
 
 
 // Enhanced notification system
@@ -340,6 +346,7 @@ model MessageTemplate {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
 
 
 model EmailTemplate {
@@ -375,6 +382,7 @@ model Email {
   updatedAt    DateTime      @updatedAt
 }
 
+
 model EmailCampaign {
   id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String
@@ -388,6 +396,7 @@ model EmailCampaign {
   updatedAt   DateTime      @updatedAt
   emails      Email[]
 }
+
 
 enum EmailStatus {
   SCHEDULED
@@ -403,5 +412,92 @@ enum CampaignStatus {
   SENDING
   COMPLETED
   CANCELLED
+}
+
+
+model ChatAttachment {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  filename    String
+  filePath    String
+  fileType    String
+  fileSize    Int
+  uploadedBy  String    @db.Uuid
+  uploader    User      @relation("UploadedAttachments", fields: [uploadedBy], references: [id])
+  receiverId  String?   @db.Uuid
+  receiver    User?     @relation("ReceivedAttachments", fields: [receiverId], references: [id])
+  createdAt   DateTime  @default(now())
+}
+
+
+model Invoice {
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  invoiceNumber   String          @unique
+  userId          String          @db.Uuid
+  user            User            @relation("UserInvoices", fields: [userId], references: [id])
+  amount          Float
+  tax             Float           @default(0)
+  total           Float
+  currency        String          @default("USD")
+  status          InvoiceStatus   @default(DRAFT)
+  dueDate         DateTime
+  issueDate       DateTime        @default(now())
+  paidDate        DateTime?
+  notes           String?
+  items           InvoiceItem[]
+  payments        Payment[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+model InvoiceItem {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  invoiceId   String    @db.Uuid
+  invoice     Invoice   @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description String
+  quantity    Int
+  unitPrice   Float
+  amount      Float
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Payment {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  invoiceId       String        @db.Uuid
+  invoice         Invoice       @relation(fields: [invoiceId], references: [id])
+  userId          String        @db.Uuid
+  user            User          @relation("UserPayments", fields: [userId], references: [id])
+  amount          Float
+  currency        String        @default("USD")
+  paymentMethod   PaymentMethod
+  transactionId   String?
+  status          PaymentStatus @default(PENDING)
+  paymentDate     DateTime      @default(now())
+  notes           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  BANK_TRANSFER
+  PAYPAL
+  STRIPE
+  OTHER
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
 }
 
