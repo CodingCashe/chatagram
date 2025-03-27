@@ -135,7 +135,7 @@ export function EmailAnalyticsDashboard() {
     async function loadAnalytics() {
       setLoading(true)
       try {
-        const result = await getEmailAnalyticse()
+        const result = await getEmailAnalyticse(timeframe)
         if (result.success) {
           setAnalytics(result.analytics || [])
         } else {

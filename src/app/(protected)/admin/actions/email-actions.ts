@@ -860,240 +860,240 @@ export async function deleteEmailCampaign(id: string) {
   }
 }
 
-// Get email analytics
-// export async function getEmailAnalytics(timeframe = "7days") {
-//   try {
-//     const currentUser = await onCurrentUser()
 
-//     const  userId  = currentUser.id
+export async function getEmailAnalyticse(timeframe = "7days") {
+  try {
+    const currentUser = await onCurrentUser()
 
-//     if (!userId) {
-//       return { success: false, error: "Unauthorized" }
-//     }
+    const  userId  = currentUser.id
 
-//     // Check if user is admin
-//     const isAdmin = await client.user.findUnique({
-//       where: { clerkId: userId },
-//       select: { isAdmin: true },
-//     })
+    if (!userId) {
+      return { success: false, error: "Unauthorized" }
+    }
 
-//     if (!isAdmin?.isAdmin) {
-//       return { success: false, error: "Unauthorized" }
-//     }
+    // Check if user is admin
+    const isAdmin = await client.user.findUnique({
+      where: { clerkId: userId },
+      select: { isAdmin: true },
+    })
 
-//     // Calculate date range based on timeframe
-//     const now = new Date()
-//     const startDate = new Date()
+    if (!isAdmin?.isAdmin) {
+      return { success: false, error: "Unauthorized" }
+    }
 
-//     switch (timeframe) {
-//       case "7days":
-//         startDate.setDate(now.getDate() - 7)
-//         break
-//       case "30days":
-//         startDate.setDate(now.getDate() - 30)
-//         break
-//       case "90days":
-//         startDate.setDate(now.getDate() - 90)
-//         break
-//       case "year":
-//         startDate.setFullYear(now.getFullYear() - 1)
-//         break
-//       default:
-//         startDate.setDate(now.getDate() - 7)
-//     }
+    // Calculate date range based on timeframe
+    const now = new Date()
+    const startDate = new Date()
 
-//     // Get email counts
-//     const [totalEmails, deliveredEmails, openedEmails, clickedEmails, bouncedEmails] = await Promise.all([
-//       client.email.count(),
-//       client.email.count({
-//         where: {
-//           status: {
-//             in: ["SENT", "OPENED", "CLICKED"],
-//           },
-//         },
-//       }),
-//       client.email.count({
-//         where: {
-//           status: {
-//             in: ["OPENED", "CLICKED"],
-//           },
-//         },
-//       }),
-//       client.email.count({
-//         where: {
-//           status: "CLICKED",
-//         },
-//       }),
-//       client.email.count({
-//         where: {
-//           status: "FAILED",
-//         },
-//       }),
-//     ])
+    switch (timeframe) {
+      case "7days":
+        startDate.setDate(now.getDate() - 7)
+        break
+      case "30days":
+        startDate.setDate(now.getDate() - 30)
+        break
+      case "90days":
+        startDate.setDate(now.getDate() - 90)
+        break
+      case "year":
+        startDate.setFullYear(now.getFullYear() - 1)
+        break
+      default:
+        startDate.setDate(now.getDate() - 7)
+    }
 
-//     // Get previous period counts for growth calculation
-//     const previousPeriodStartDate = new Date(startDate)
-//     const previousPeriodEndDate = new Date(startDate)
+    // Get email counts
+    const [totalEmails, deliveredEmails, openedEmails, clickedEmails, bouncedEmails] = await Promise.all([
+      client.email.count(),
+      client.email.count({
+        where: {
+          status: {
+            in: ["SENT", "OPENED", "CLICKED"],
+          },
+        },
+      }),
+      client.email.count({
+        where: {
+          status: {
+            in: ["OPENED", "CLICKED"],
+          },
+        },
+      }),
+      client.email.count({
+        where: {
+          status: "CLICKED",
+        },
+      }),
+      client.email.count({
+        where: {
+          status: "FAILED",
+        },
+      }),
+    ])
 
-//     switch (timeframe) {
-//       case "7days":
-//         previousPeriodStartDate.setDate(previousPeriodStartDate.getDate() - 7)
-//         break
-//       case "30days":
-//         previousPeriodStartDate.setDate(previousPeriodStartDate.getDate() - 30)
-//         break
-//       case "90days":
-//         previousPeriodStartDate.setDate(previousPeriodStartDate.getDate() - 90)
-//         break
-//       case "year":
-//         previousPeriodStartDate.setFullYear(previousPeriodStartDate.getFullYear() - 1)
-//         break
-//     }
+    // Get previous period counts for growth calculation
+    const previousPeriodStartDate = new Date(startDate)
+    const previousPeriodEndDate = new Date(startDate)
 
-//     const previousPeriodEmails = await client.email.count({
-//       where: {
-//         createdAt: {
-//           gte: previousPeriodStartDate,
-//           lt: startDate,
-//         },
-//       },
-//     })
+    switch (timeframe) {
+      case "7days":
+        previousPeriodStartDate.setDate(previousPeriodStartDate.getDate() - 7)
+        break
+      case "30days":
+        previousPeriodStartDate.setDate(previousPeriodStartDate.getDate() - 30)
+        break
+      case "90days":
+        previousPeriodStartDate.setDate(previousPeriodStartDate.getDate() - 90)
+        break
+      case "year":
+        previousPeriodStartDate.setFullYear(previousPeriodStartDate.getFullYear() - 1)
+        break
+    }
 
-//     // Calculate growth percentage
-//     const emailsGrowth =
-//       previousPeriodEmails > 0 ? Math.round(((totalEmails - previousPeriodEmails) / previousPeriodEmails) * 100) : 100
+    const previousPeriodEmails = await client.email.count({
+      where: {
+        createdAt: {
+          gte: previousPeriodStartDate,
+          lt: startDate,
+        },
+      },
+    })
 
-//     // Calculate rates
-//     const deliveryRate = totalEmails > 0 ? Math.round((deliveredEmails / totalEmails) * 100 * 10) / 10 : 0
-//     const openRate = deliveredEmails > 0 ? Math.round((openedEmails / deliveredEmails) * 100 * 10) / 10 : 0
-//     const clickRate = deliveredEmails > 0 ? Math.round((clickedEmails / deliveredEmails) * 100 * 10) / 10 : 0
-//     const bounceRate = totalEmails > 0 ? Math.round((bouncedEmails / totalEmails) * 100 * 10) / 10 : 0
+    // Calculate growth percentage
+    const emailsGrowth =
+      previousPeriodEmails > 0 ? Math.round(((totalEmails - previousPeriodEmails) / previousPeriodEmails) * 100) : 100
 
-//     // Get time-based data
-//     const timeLabels = []
-//     const sentData = []
-//     const openedData = []
-//     const clickedData = []
+    // Calculate rates
+    const deliveryRate = totalEmails > 0 ? Math.round((deliveredEmails / totalEmails) * 100 * 10) / 10 : 0
+    const openRate = deliveredEmails > 0 ? Math.round((openedEmails / deliveredEmails) * 100 * 10) / 10 : 0
+    const clickRate = deliveredEmails > 0 ? Math.round((clickedEmails / deliveredEmails) * 100 * 10) / 10 : 0
+    const bounceRate = totalEmails > 0 ? Math.round((bouncedEmails / totalEmails) * 100 * 10) / 10 : 0
 
-//     // Generate time labels and fetch data for each point
-//     let currentDate = new Date(startDate)
-//     const dateFormat = timeframe === "year" ? { month: "short", year: "numeric" } : { month: "short", day: "numeric" }
-//     const incrementDays = timeframe === "year" ? 30 : timeframe === "90days" ? 7 : 1
+    // Get time-based data
+    const timeLabels = []
+    const sentData = []
+    const openedData = []
+    const clickedData = []
 
-//     while (currentDate <= now) {
-//       const endOfPeriod = new Date(currentDate)
-//       endOfPeriod.setDate(endOfPeriod.getDate() + incrementDays)
+    // Generate time labels and fetch data for each point
+    let currentDate = new Date(startDate)
+    const dateFormat = timeframe === "year" ? { month: "short", year: "numeric" } : { month: "short", day: "numeric" }
+    const incrementDays = timeframe === "year" ? 30 : timeframe === "90days" ? 7 : 1
 
-//       // Format the date for display
-//       timeLabels.push(currentDate.toLocaleDateString("en-US", dateFormat as any))
+    while (currentDate <= now) {
+      const endOfPeriod = new Date(currentDate)
+      endOfPeriod.setDate(endOfPeriod.getDate() + incrementDays)
 
-//       // Get counts for this period
-//       const [periodSent, periodOpened, periodClicked] = await Promise.all([
-//         client.email.count({
-//           where: {
-//             sentAt: {
-//               gte: currentDate,
-//               lt: endOfPeriod,
-//             },
-//             status: {
-//               in: ["SENT", "OPENED", "CLICKED"],
-//             },
-//           },
-//         }),
-//         client.email.count({
-//           where: {
-//             openedAt: {
-//               gte: currentDate,
-//               lt: endOfPeriod,
-//             },
-//             status: {
-//               in: ["OPENED", "CLICKED"],
-//             },
-//           },
-//         }),
-//         client.email.count({
-//           where: {
-//             clickedAt: {
-//               gte: currentDate,
-//               lt: endOfPeriod,
-//             },
-//             status: "CLICKED",
-//           },
-//         }),
-//       ])
+      // Format the date for display
+      timeLabels.push(currentDate.toLocaleDateString("en-US", dateFormat as any))
 
-//       sentData.push(periodSent)
-//       openedData.push(periodOpened)
-//       clickedData.push(periodClicked)
+      // Get counts for this period
+      const [periodSent, periodOpened, periodClicked] = await Promise.all([
+        client.email.count({
+          where: {
+            sentAt: {
+              gte: currentDate,
+              lt: endOfPeriod,
+            },
+            status: {
+              in: ["SENT", "OPENED", "CLICKED"],
+            },
+          },
+        }),
+        client.email.count({
+          where: {
+            openedAt: {
+              gte: currentDate,
+              lt: endOfPeriod,
+            },
+            status: {
+              in: ["OPENED", "CLICKED"],
+            },
+          },
+        }),
+        client.email.count({
+          where: {
+            clickedAt: {
+              gte: currentDate,
+              lt: endOfPeriod,
+            },
+            status: "CLICKED",
+          },
+        }),
+      ])
 
-//       // Move to next period
-//       currentDate = new Date(endOfPeriod)
-//     }
+      sentData.push(periodSent)
+      openedData.push(periodOpened)
+      clickedData.push(periodClicked)
 
-//     // Get campaign performance data
-//     const campaigns = await client.emailCampaign.findMany({
-//       where: {
-//         createdAt: {
-//           gte: startDate,
-//         },
-//       },
-//       orderBy: {
-//         createdAt: "desc",
-//       },
-//       take: 5,
-//       include: {
-//         emails: {
-//           select: {
-//             status: true,
-//           },
-//         },
-//       },
-//     })
+      // Move to next period
+      currentDate = new Date(endOfPeriod)
+    }
 
-//     const campaignPerformance = campaigns.map((campaign) => {
-//       const totalEmails = campaign.emails.length
-//       const openedEmails = campaign.emails.filter((e) => e.status === "OPENED" || e.status === "CLICKED").length
-//       const clickedEmails = campaign.emails.filter((e) => e.status === "CLICKED").length
+    // Get campaign performance data
+    const campaigns = await client.emailCampaign.findMany({
+      where: {
+        createdAt: {
+          gte: startDate,
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 5,
+      include: {
+        emails: {
+          select: {
+            status: true,
+          },
+        },
+      },
+    })
 
-//       return {
-//         name: campaign.name,
-//         sentEmails: totalEmails,
-//         openRate: totalEmails > 0 ? Math.round((openedEmails / totalEmails) * 100 * 10) / 10 : 0,
-//         clickRate: totalEmails > 0 ? Math.round((clickedEmails / totalEmails) * 100 * 10) / 10 : 0,
-//       }
-//     })
+    const campaignPerformance = campaigns.map((campaign) => {
+      const totalEmails = campaign.emails.length
+      const openedEmails = campaign.emails.filter((e) => e.status === "OPENED" || e.status === "CLICKED").length
+      const clickedEmails = campaign.emails.filter((e) => e.status === "CLICKED").length
 
-//     // Construct the analytics object
-//     const analytics = {
-//       overview: {
-//         totalEmails,
-//         deliveredEmails,
-//         openedEmails,
-//         clickedEmails,
-//         deliveryRate,
-//         openRate,
-//         clickRate,
-//         bounceRate,
-//         emailsGrowth,
-//       },
-//       campaigns: campaignPerformance,
-//       timeData: {
-//         labels: timeLabels,
-//         sent: sentData,
-//         opened: openedData,
-//         clicked: clickedData,
-//       },
-//     }
+      return {
+        name: campaign.name,
+        sentEmails: totalEmails,
+        openRate: totalEmails > 0 ? Math.round((openedEmails / totalEmails) * 100 * 10) / 10 : 0,
+        clickRate: totalEmails > 0 ? Math.round((clickedEmails / totalEmails) * 100 * 10) / 10 : 0,
+      }
+    })
 
-//     return {
-//       success: true,
-//       analytics,
-//     }
-//   } catch (error) {
-//     console.error("Error getting email analytics:", error)
-//     return { success: false, error: "Failed to get email analytics" }
-//   }
-// }
+    // Construct the analytics object
+    const analytics = {
+      overview: {
+        totalEmails,
+        deliveredEmails,
+        openedEmails,
+        clickedEmails,
+        deliveryRate,
+        openRate,
+        clickRate,
+        bounceRate,
+        emailsGrowth,
+      },
+      campaigns: campaignPerformance,
+      timeData: {
+        labels: timeLabels,
+        sent: sentData,
+        opened: openedData,
+        clicked: clickedData,
+      },
+    }
+
+    return {
+      success: true,
+      analytics,
+    }
+  } catch (error) {
+    console.error("Error getting email analytics:", error)
+    return { success: false, error: "Failed to get email analytics" }
+  }
+}
 
 // Send a test email
 // export async function sendTestEmail(formData: FormData) {
