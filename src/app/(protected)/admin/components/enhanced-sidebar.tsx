@@ -2193,7 +2193,7 @@
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { Users, CreditCard, Settings, LogOut, MessageSquare, Zap, Calendar, Home, Mail, FileText, Send, BarChart2, Instagram, Bot, Activity, Menu } from 'lucide-react'
+import { Users, CreditCard, Settings, LogOut, MessageSquare, Zap, Calendar, Home, Mail, FileText, Send, BarChart2, Instagram, Bot, Activity, Menu,DollarSign } from 'lucide-react'
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -2331,6 +2331,20 @@ export function EnhancedSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname === "/admin/invoices"} className="group">
+                  <Link href="/admin/invoices">
+                    <DollarSign className={cn(
+                      "h-4 w-4 transition-colors duration-200",
+                      pathname === "/admin/invoices" ? "text-emerald-500" : "text-muted-foreground",
+                      "group-hover:text-emerald-500"
+                    )} />
+                    <span>Invoices</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
