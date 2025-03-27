@@ -799,7 +799,7 @@ export function EmailTemplatesList({ category }: EmailTemplatesListProps) {
         } else {
           toast({
             title: "Error",
-            description: result.error || "Failed to load templates",
+            description: "Failed to load templates",
             variant: "destructive",
           })
         }
@@ -830,7 +830,7 @@ export function EmailTemplatesList({ category }: EmailTemplatesListProps) {
       } else {
         toast({
           title: "Error",
-          description: result.error || "Failed to delete template",
+          description: "Failed to delete template",
           variant: "destructive",
         })
       }
