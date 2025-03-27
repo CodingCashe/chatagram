@@ -417,10 +417,11 @@ type Message = {
   isFromAdmin: boolean
   createdAt: string
   isPending?: boolean
+  read?:boolean
 }
 
 export function UserChat({ userId, userName, isPage = false }: UserChatProps) {
-  const [isOpen, setIsOpen] = useState(isPage) // Always open if it's a page
+  const [isOpen, setIsOpen] = useState(isPage) 
   const [newMessage, setNewMessage] = useState("")
   const [messages, setMessages] = useState<Message[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
