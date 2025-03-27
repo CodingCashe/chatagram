@@ -723,7 +723,7 @@ export function EmailCampaignsList() {
         } else {
           toast({
             title: "Error",
-            description: result.error || "Failed to load campaigns",
+            description: "Failed to load campaigns",
             variant: "destructive",
           })
         }
