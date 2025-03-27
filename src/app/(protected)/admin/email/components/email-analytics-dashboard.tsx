@@ -108,7 +108,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { Skeleton } from "@/components/ui/skeleton"
-import { getEmailAnalytics } from "../../actions/email-actions"
+import { getEmailAnalyticse } from "../../actions/email-actions"
 import { toast } from "@/hooks/use-toast"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import {
@@ -135,7 +135,7 @@ export function EmailAnalyticsDashboard() {
     async function loadAnalytics() {
       setLoading(true)
       try {
-        const result = await getEmailAnalytics(timeframe)
+        const result = await getEmailAnalyticse()
         if (result.success) {
           setAnalytics(result.analytics || [])
         } else {
