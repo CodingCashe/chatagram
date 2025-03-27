@@ -794,7 +794,7 @@ export function EmailCampaignForm({
         } else {
           toast({
             title: "Error",
-            description: result.error || "Failed to load templates",
+            description: "Failed to load templates",
             variant: "destructive",
           })
         }
@@ -933,7 +933,7 @@ export function EmailCampaignForm({
       } else {
         toast({
           title: "Error",
-          description: result.error || "Failed to create campaign",
+          description: "Failed to create campaign",
           variant: "destructive",
         })
       }

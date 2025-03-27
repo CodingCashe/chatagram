@@ -108,9 +108,12 @@
 
 
 export const dynamic = 'force-dynamic'
+import { DashboardHeader } from "./components/dashboard-header"
+import "./components/sidebar-styles.css"
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import type React from "react"
 import { EnhancedSidebar } from "./components/enhanced-sidebar"
-import { SidebarProvider } from "@/components/ui/sidebar"
+// import { SidebarProvider } from "@/components/ui/sidebar"
 import { Toaster } from "@/components/ui/toaster"
 import { redirect } from "next/navigation"
 import { requireAdmin } from "./utils"
@@ -148,9 +151,12 @@ export default async function AdminLayout({
       <SidebarProvider>
         <div className="flex h-screen bg-background">
           <EnhancedSidebar />
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <div className="flex-1 overflow-auto">{children}</div>
+           <SidebarInset className="bg-background">
+          <div className="flex h-full flex-col">
+            <DashboardHeader adminName="Cashe" />
+            <div className="flex-1 overflow-auto p-4">{children}</div>
           </div>
+        </SidebarInset>
         </div>
         <NotificationListener userId={admin.id} />
         <Toaster />
@@ -158,6 +164,8 @@ export default async function AdminLayout({
     </ThemeProvider>
   )
 }
+
+
 
 // export const dynamic = 'force-dynamic'
 
