@@ -1050,7 +1050,7 @@ type EmailResult = {
 
 // Get email configuration from environment variables
 function getEmailConfig(): EmailConfig {
-  // Check if RESEND_API_KEY is available
+  // Check if RESEND_API_KEY is availablel
   if (process.env.RESEND_API_KEY) {
     return {
       provider: "resend",
