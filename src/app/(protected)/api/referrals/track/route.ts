@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { trackReferralClick } from "@/app/dashboard/actions/referral-actions"
+import { trackReferralClick } from "@/actions/referral/referral-actions"
 
 export async function POST(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("code")

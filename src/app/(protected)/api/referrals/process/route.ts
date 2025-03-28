@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { processReferral } from "@/app/dashboard/actions/referral-actions"
+import { processReferral } from "@/actions/referral/referral-actions"
 
 export async function POST(request: NextRequest) {
   try {

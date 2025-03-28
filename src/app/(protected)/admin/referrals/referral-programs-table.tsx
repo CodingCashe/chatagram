@@ -15,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import { getReferralPrograms, deleteReferralProgram } from "../actions/referral-admin-actions"
 
 export function ReferralProgramsTable() {
@@ -43,7 +43,7 @@ export function ReferralProgramsTable() {
     }
 
     fetchPrograms()
-  }, [toast])
+  },)
 
   const handleDelete = async () => {
     if (!programToDelete) return
@@ -141,7 +141,7 @@ export function ReferralProgramsTable() {
                 </TableCell>
                 <TableCell>${program.minimumPayout.toFixed(2)}</TableCell>
                 <TableCell>
-                  <Badge variant={program.active ? "success" : "secondary"}>
+                  <Badge variant={program.active ? "default" : "secondary"}>
                     {program.active ? "Active" : "Inactive"}
                   </Badge>
                 </TableCell>
