@@ -3955,7 +3955,7 @@ export function EnhancedSidebar() {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="p-0 border-r shadow-xl w-[100px] sm:max-w-[100px]">
+            <SheetContent side="left" className="p-0 border-r shadow-xl w-[60px] sm:max-w-[60px]">
               <div className="absolute right-4 top-4 z-50">
                 <Button
                   variant="ghost"
