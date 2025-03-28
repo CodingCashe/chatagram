@@ -2188,17 +2188,463 @@
 //   )
 // }
 
+// "use client"
+
+// import { useState, useEffect } from "react"
+// import { usePathname } from "next/navigation"
+// import Link from "next/link"
+// import { Users, CreditCard, Settings, LogOut, MessageSquare, Zap, Calendar, Home, Mail, FileText, Send, BarChart2, Instagram, Bot, Activity, Menu,DollarSign } from 'lucide-react'
+// import { cn } from "@/lib/utils"
+// import { Button } from "@/components/ui/button"
+// import {
+//   Sidebar,
+//   SidebarContent,
+//   SidebarFooter,
+//   SidebarHeader,
+//   SidebarMenu,
+//   SidebarMenuButton,
+//   SidebarMenuItem,
+//   SidebarMenuSub,
+//   SidebarMenuSubButton,
+//   SidebarMenuSubItem,
+//   SidebarGroup,
+//   SidebarGroupContent,
+//   SidebarGroupLabel,
+//   SidebarTrigger,
+//   SidebarMenuBadge,
+//   useSidebar,
+// } from "@/components/ui/sidebar"
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+// import { Badge } from "@/components/ui/badge"
+// import { NotificationDropdown } from "./notification-dropdown"
+// import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+// import { useMediaQuery } from "@/hooks/use-media-query"
+// import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+
+// export function EnhancedSidebar() {
+//   const pathname = usePathname()
+//   const [systemStatus, setSystemStatus] = useState<"healthy" | "warning" | "error">("healthy")
+//   const { state } = useSidebar()
+//   const isCollapsed = state === "collapsed"
+//   const isMobile = useMediaQuery("(max-width: 768px)")
+
+//   // Simulate system status check
+//   useEffect(() => {
+//     const interval = setInterval(() => {
+//       // Randomly set system status for demo purposes
+//       const statuses = ["healthy", "warning", "error"] as const
+//       const randomStatus = statuses[Math.floor(Math.random() * 10) % 3]
+//       setSystemStatus(randomStatus)
+//     }, 30000)
+
+//     return () => clearInterval(interval)
+//   }, [])
+
+//   // Auto-collapse sidebar on mobile
+//   useEffect(() => {
+//     if (isMobile && state === "expanded") {
+//       // We can't directly set the state, so we'll trigger the sidebar toggle
+//       const sidebarTrigger = document.querySelector('[data-sidebar-trigger="true"]') as HTMLButtonElement | null
+//       if (sidebarTrigger) {
+//         sidebarTrigger.click()
+//       }
+//     }
+//   }, [isMobile, state])
+
+//   const getStatusColor = (status: "healthy" | "warning" | "error") => {
+//     switch (status) {
+//       case "healthy":
+//         return "bg-green-500"
+//       case "warning":
+//         return "bg-yellow-500"
+//       case "error":
+//         return "bg-red-500"
+//       default:
+//         return "bg-gray-500"
+//     }
+//   }
+
+//   const SidebarComponent = () => (
+//     <Sidebar collapsible="icon" className="border-r">
+//       <SidebarHeader className="border-b py-4">
+//         <div className="flex items-center justify-between px-2">
+//           {isCollapsed ? (
+//             <div className="flex w-full justify-center">
+//               <SidebarTrigger className="transition-transform duration-300" />
+//             </div>
+//           ) : (
+//             <>
+//               <div className="flex items-center gap-2">
+//                 <Avatar className="h-8 w-8">
+//                   <AvatarImage src="/placeholder.svg" alt="Logo" />
+//                   <AvatarFallback>AD</AvatarFallback>
+//                 </Avatar>
+//                 <div className="font-semibold">Admin Dashboard</div>
+//               </div>
+//               <div className="flex items-center gap-2">
+//                 <NotificationDropdown />
+//                 <SidebarTrigger className="transition-transform duration-300" />
+//               </div>
+//             </>
+//           )}
+//         </div>
+//       </SidebarHeader>
+
+//       <SidebarContent>
+//         <SidebarGroup>
+//           <SidebarGroupLabel>Overview</SidebarGroupLabel>
+//           <SidebarGroupContent>
+//             <SidebarMenu>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin"} className="group">
+//                   <Link href="/admin">
+//                     <Home className={cn(
+//                       "h-4 w-4 transition-colors duration-200",
+//                       pathname === "/admin" ? "text-blue-500" : "text-muted-foreground",
+//                       "group-hover:text-blue-500"
+//                     )} />
+//                     <span>Dashboard</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/users"} className="group">
+//                   <Link href="/admin/users">
+//                     <Users className={cn(
+//                       "h-4 w-4 transition-colors duration-200",
+//                       pathname === "/admin/users" ? "text-indigo-500" : "text-muted-foreground",
+//                       "group-hover:text-indigo-500"
+//                     )} />
+//                     <span>Users</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/subscriptions"} className="group">
+//                   <Link href="/admin/subscriptions">
+//                     <CreditCard className={cn(
+//                       "h-4 w-4 transition-colors duration-200",
+//                       pathname === "/admin/subscriptions" ? "text-emerald-500" : "text-muted-foreground",
+//                       "group-hover:text-emerald-500"
+//                     )} />
+//                     <span>Subscriptions</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/invoices"} className="group">
+//                   <Link href="/admin/invoices">
+//                     <DollarSign className={cn(
+//                       "h-4 w-4 transition-colors duration-200",
+//                       pathname === "/admin/invoices" ? "text-emerald-500" : "text-muted-foreground",
+//                       "group-hover:text-emerald-500"
+//                     )} />
+//                     <span>Invoices</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+
+//             </SidebarMenu>
+//           </SidebarGroupContent>
+//         </SidebarGroup>
+
+//         <SidebarGroup>
+//           <SidebarGroupLabel>Communication</SidebarGroupLabel>
+//           <SidebarGroupContent>
+//             <SidebarMenu>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/chat"} className="group">
+//                   <Link href="/admin/chat">
+//                     <MessageSquare className={cn(
+//                       "h-4 w-4 transition-colors duration-200",
+//                       pathname === "/admin/chat" ? "text-violet-500" : "text-muted-foreground",
+//                       "group-hover:text-violet-500"
+//                     )} />
+//                     <span>Chat</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//                 <SidebarMenuBadge>3</SidebarMenuBadge>
+//               </SidebarMenuItem>
+
+//               <Collapsible>
+//                 <SidebarMenuItem>
+//                   <CollapsibleTrigger asChild>
+//                     <SidebarMenuButton className="group">
+//                       <Mail className={cn(
+//                         "h-4 w-4 transition-colors duration-200",
+//                         pathname.startsWith("/admin/email") ? "text-sky-500" : "text-muted-foreground",
+//                         "group-hover:text-sky-500"
+//                       )} />
+//                       <span>Email</span>
+//                     </SidebarMenuButton>
+//                   </CollapsibleTrigger>
+//                 </SidebarMenuItem>
+//                 <CollapsibleContent>
+//                   <SidebarMenuSub>
+//                     <SidebarMenuSubItem>
+//                       <SidebarMenuSubButton asChild isActive={pathname === "/admin/email/templates"} className="group">
+//                         <Link href="/admin/email/templates">
+//                           <FileText className={cn(
+//                             "h-4 w-4 transition-colors duration-200",
+//                             pathname === "/admin/email/templates" ? "text-sky-400" : "text-muted-foreground",
+//                             "group-hover:text-sky-400"
+//                           )} />
+//                           <span>Templates</span>
+//                         </Link>
+//                       </SidebarMenuSubButton>
+//                     </SidebarMenuSubItem>
+//                     <SidebarMenuSubItem>
+//                       <SidebarMenuSubButton asChild isActive={pathname === "/admin/email/campaigns"} className="group">
+//                         <Link href="/admin/email/campaigns">
+//                           <Send className={cn(
+//                             "h-4 w-4 transition-colors duration-200",
+//                             pathname === "/admin/email/campaigns" ? "text-sky-400" : "text-muted-foreground",
+//                             "group-hover:text-sky-400"
+//                           )} />
+//                           <span>Campaigns</span>
+//                         </Link>
+//                       </SidebarMenuSubButton>
+//                     </SidebarMenuSubItem>
+//                     <SidebarMenuSubItem>
+//                       <SidebarMenuSubButton asChild isActive={pathname === "/admin/email/analytics"} className="group">
+//                         <Link href="/admin/email/analytics">
+//                           <BarChart2 className={cn(
+//                             "h-4 w-4 transition-colors duration-200",
+//                             pathname === "/admin/email/analytics" ? "text-sky-400" : "text-muted-foreground",
+//                             "group-hover:text-sky-400"
+//                           )} />
+//                           <span>Analytics</span>
+//                         </Link>
+//                       </SidebarMenuSubButton>
+//                     </SidebarMenuSubItem>
+//                   </SidebarMenuSub>
+//                 </CollapsibleContent>
+//               </Collapsible>
+//             </SidebarMenu>
+//           </SidebarGroupContent>
+//         </SidebarGroup>
+
+//         <SidebarGroup>
+//           <SidebarGroupLabel>Automation</SidebarGroupLabel>
+//           <SidebarGroupContent>
+//             <SidebarMenu>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/automations"} className="group">
+//                   <Link href="/admin/automations">
+//                     <Zap className={cn(
+//                       "h-4 w-4 transition-colors duration-200",
+//                       pathname === "/admin/automations" ? "text-amber-500" : "text-muted-foreground",
+//                       "group-hover:text-amber-500"
+//                     )} />
+//                     <span>Automations</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/scheduled-content"} className="group">
+//                   <Link href="/admin/scheduled-content">
+//                     <Calendar className={cn(
+//                       "h-4 w-4 transition-colors duration-200",
+//                       pathname === "/admin/scheduled-content" ? "text-orange-500" : "text-muted-foreground",
+//                       "group-hover:text-orange-500"
+//                     )} />
+//                     <span>Scheduled Content</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/templates"} className="group">
+//                   <Link href="/admin/templates">
+//                     <FileText className={cn(
+//                       "h-4 w-4 transition-colors duration-200",
+//                       pathname === "/admin/templates" ? "text-yellow-500" : "text-muted-foreground",
+//                       "group-hover:text-yellow-500"
+//                     )} />
+//                     <span>Message Templates</span>
+//                     {!isCollapsed && (
+//                       <Badge className="ml-auto" variant="outline">
+//                         New
+//                       </Badge>
+//                     )}
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//             </SidebarMenu>
+//           </SidebarGroupContent>
+//         </SidebarGroup>
+
+//         <SidebarGroup>
+//           <SidebarGroupLabel>Integrations</SidebarGroupLabel>
+//           <SidebarGroupContent>
+//             <SidebarMenu>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/instagram-accounts"} className="group">
+//                   <Link href="/admin/instagram-accounts">
+//                     <Instagram className={cn(
+//                       "h-4 w-4 transition-colors duration-200",
+//                       pathname === "/admin/instagram-accounts" ? "text-pink-500" : "text-muted-foreground",
+//                       "group-hover:text-pink-500"
+//                     )} />
+//                     <span>Instagram Accounts</span>
+//                     {!isCollapsed && (
+//                       <Badge className="ml-auto" variant="outline">
+//                         New
+//                       </Badge>
+//                     )}
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/ai-assistant"} className="group">
+//                   <Link href="/admin/ai-assistant">
+//                     <Bot className={cn(
+//                       "h-4 w-4 transition-colors duration-200",
+//                       pathname === "/admin/ai-assistant" ? "text-cyan-500" : "text-muted-foreground",
+//                       "group-hover:text-cyan-500"
+//                     )} />
+//                     <span>AI Assistant</span>
+//                     {!isCollapsed && (
+//                       <Badge className="ml-auto" variant="outline">
+//                         New
+//                       </Badge>
+//                     )}
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//             </SidebarMenu>
+//           </SidebarGroupContent>
+//         </SidebarGroup>
+
+//         <SidebarGroup>
+//           <SidebarGroupLabel>System</SidebarGroupLabel>
+//           <SidebarGroupContent>
+//             <SidebarMenu>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/settings"} className="group">
+//                   <Link href="/admin/settings">
+//                     <Settings className={cn(
+//                       "h-4 w-4 transition-colors duration-200",
+//                       pathname === "/admin/settings" ? "text-gray-500" : "text-muted-foreground",
+//                       "group-hover:text-gray-500"
+//                     )} />
+//                     <span>Settings</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton asChild isActive={pathname === "/admin/status"} className="group">
+//                   <Link href="/admin/status">
+//                     <Activity className={cn(
+//                       "h-4 w-4 transition-colors duration-200",
+//                       pathname === "/admin/status" ? "text-green-500" : "text-muted-foreground",
+//                       "group-hover:text-green-500"
+//                     )} />
+//                     <span>System Status</span>
+//                   </Link>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//               <SidebarMenuItem>
+//                 <SidebarMenuButton tooltip={isCollapsed ? `System: ${systemStatus}` : undefined} className="group">
+//                   <div className="flex items-center gap-2">
+//                     <div className={cn("h-2 w-2 rounded-full", getStatusColor(systemStatus))} />
+//                     <span>Status Indicator</span>
+//                     {!isCollapsed && <span className="ml-auto capitalize text-xs">{systemStatus}</span>}
+//                   </div>
+//                 </SidebarMenuButton>
+//               </SidebarMenuItem>
+//             </SidebarMenu>
+//           </SidebarGroupContent>
+//         </SidebarGroup>
+//       </SidebarContent>
+
+//       <SidebarFooter className="border-t p-4">
+//         {isCollapsed ? (
+//           <div className="flex justify-center">
+//             <Button variant="ghost" size="icon" className="group">
+//               <LogOut className={cn(
+//                 "h-4 w-4 transition-colors duration-200",
+//                 "text-muted-foreground group-hover:text-red-500"
+//               )} />
+//             </Button>
+//           </div>
+//         ) : (
+//           <div className="flex items-center gap-2">
+//             <Avatar className="h-8 w-8">
+//               <AvatarImage src="/placeholder.svg" alt="Avatar" />
+//               <AvatarFallback>AD</AvatarFallback>
+//             </Avatar>
+//             <div className="flex flex-col">
+//               <span className="text-sm font-medium">Admin User</span>
+//               <span className="text-xs text-muted-foreground">admin@example.com</span>
+//             </div>
+//             <Button variant="ghost" size="icon" className="ml-auto group">
+//               <LogOut className={cn(
+//                 "h-4 w-4 transition-colors duration-200",
+//                 "text-muted-foreground group-hover:text-red-500"
+//               )} />
+//             </Button>
+//           </div>
+//         )}
+//       </SidebarFooter>
+//     </Sidebar>
+//   )
+
+//   // For mobile devices, we'll use a Sheet component
+//   if (isMobile) {
+//     return (
+//       <>
+//         <div className="fixed left-4 top-4 z-50 md:hidden">
+//           <Sheet>
+//             <SheetTrigger asChild>
+//               <Button variant="outline" size="icon" className="rounded-full">
+//                 <Menu className="h-5 w-5" />
+//               </Button>
+//             </SheetTrigger>
+//             <SheetContent side="left" className="p-0 w-[280px]">
+//               <SidebarComponent />
+//             </SheetContent>
+//           </Sheet>
+//         </div>
+//         <div className="hidden md:block">
+//           <SidebarComponent />
+//         </div>
+//       </>
+//     )
+//   }
+
+//   return <SidebarComponent />
+// }
+
+
 "use client"
 
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { Users, CreditCard, Settings, LogOut, MessageSquare, Zap, Calendar, Home, Mail, FileText, Send, BarChart2, Instagram, Bot, Activity, Menu,DollarSign } from 'lucide-react'
+import {
+  Users,
+  CreditCard,
+  Settings,
+  LogOut,
+  MessageSquare,
+  Zap,
+  Calendar,
+  Home,
+  Mail,
+  FileText,
+  Send,
+  BarChart2,
+  Instagram,
+  Bot,
+  Activity,
+  Menu,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
-  Sidebar,
   SidebarContent,
+  Sidebar,
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
@@ -2224,7 +2670,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 export function EnhancedSidebar() {
   const pathname = usePathname()
   const [systemStatus, setSystemStatus] = useState<"healthy" | "warning" | "error">("healthy")
-  const { state } = useSidebar()
+  const { state} = useSidebar()
   const isCollapsed = state === "collapsed"
   const isMobile = useMediaQuery("(max-width: 768px)")
 
@@ -2240,7 +2686,6 @@ export function EnhancedSidebar() {
     return () => clearInterval(interval)
   }, [])
 
-  // Auto-collapse sidebar on mobile
   useEffect(() => {
     if (isMobile && state === "expanded") {
       // We can't directly set the state, so we'll trigger the sidebar toggle
@@ -2298,11 +2743,13 @@ export function EnhancedSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/admin"} className="group">
                   <Link href="/admin">
-                    <Home className={cn(
-                      "h-4 w-4 transition-colors duration-200",
-                      pathname === "/admin" ? "text-blue-500" : "text-muted-foreground",
-                      "group-hover:text-blue-500"
-                    )} />
+                    <Home
+                      className={cn(
+                        "h-4 w-4 transition-colors duration-200",
+                        pathname === "/admin" ? "text-blue-500" : "text-muted-foreground",
+                        "group-hover:text-blue-500",
+                      )}
+                    />
                     <span>Dashboard</span>
                   </Link>
                 </SidebarMenuButton>
@@ -2310,11 +2757,13 @@ export function EnhancedSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/admin/users"} className="group">
                   <Link href="/admin/users">
-                    <Users className={cn(
-                      "h-4 w-4 transition-colors duration-200",
-                      pathname === "/admin/users" ? "text-indigo-500" : "text-muted-foreground",
-                      "group-hover:text-indigo-500"
-                    )} />
+                    <Users
+                      className={cn(
+                        "h-4 w-4 transition-colors duration-200",
+                        pathname === "/admin/users" ? "text-indigo-500" : "text-muted-foreground",
+                        "group-hover:text-indigo-500",
+                      )}
+                    />
                     <span>Users</span>
                   </Link>
                 </SidebarMenuButton>
@@ -2322,29 +2771,17 @@ export function EnhancedSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/admin/subscriptions"} className="group">
                   <Link href="/admin/subscriptions">
-                    <CreditCard className={cn(
-                      "h-4 w-4 transition-colors duration-200",
-                      pathname === "/admin/subscriptions" ? "text-emerald-500" : "text-muted-foreground",
-                      "group-hover:text-emerald-500"
-                    )} />
+                    <CreditCard
+                      className={cn(
+                        "h-4 w-4 transition-colors duration-200",
+                        pathname === "/admin/subscriptions" ? "text-emerald-500" : "text-muted-foreground",
+                        "group-hover:text-emerald-500",
+                      )}
+                    />
                     <span>Subscriptions</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === "/admin/invoices"} className="group">
-                  <Link href="/admin/invoices">
-                    <DollarSign className={cn(
-                      "h-4 w-4 transition-colors duration-200",
-                      pathname === "/admin/invoices" ? "text-emerald-500" : "text-muted-foreground",
-                      "group-hover:text-emerald-500"
-                    )} />
-                    <span>Invoices</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -2356,11 +2793,13 @@ export function EnhancedSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/admin/chat"} className="group">
                   <Link href="/admin/chat">
-                    <MessageSquare className={cn(
-                      "h-4 w-4 transition-colors duration-200",
-                      pathname === "/admin/chat" ? "text-violet-500" : "text-muted-foreground",
-                      "group-hover:text-violet-500"
-                    )} />
+                    <MessageSquare
+                      className={cn(
+                        "h-4 w-4 transition-colors duration-200",
+                        pathname === "/admin/chat" ? "text-violet-500" : "text-muted-foreground",
+                        "group-hover:text-violet-500",
+                      )}
+                    />
                     <span>Chat</span>
                   </Link>
                 </SidebarMenuButton>
@@ -2371,11 +2810,13 @@ export function EnhancedSidebar() {
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="group">
-                      <Mail className={cn(
-                        "h-4 w-4 transition-colors duration-200",
-                        pathname.startsWith("/admin/email") ? "text-sky-500" : "text-muted-foreground",
-                        "group-hover:text-sky-500"
-                      )} />
+                      <Mail
+                        className={cn(
+                          "h-4 w-4 transition-colors duration-200",
+                          pathname.startsWith("/admin/email") ? "text-sky-500" : "text-muted-foreground",
+                          "group-hover:text-sky-500",
+                        )}
+                      />
                       <span>Email</span>
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -2385,11 +2826,13 @@ export function EnhancedSidebar() {
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton asChild isActive={pathname === "/admin/email/templates"} className="group">
                         <Link href="/admin/email/templates">
-                          <FileText className={cn(
-                            "h-4 w-4 transition-colors duration-200",
-                            pathname === "/admin/email/templates" ? "text-sky-400" : "text-muted-foreground",
-                            "group-hover:text-sky-400"
-                          )} />
+                          <FileText
+                            className={cn(
+                              "h-4 w-4 transition-colors duration-200",
+                              pathname === "/admin/email/templates" ? "text-sky-400" : "text-muted-foreground",
+                              "group-hover:text-sky-400",
+                            )}
+                          />
                           <span>Templates</span>
                         </Link>
                       </SidebarMenuSubButton>
@@ -2397,11 +2840,13 @@ export function EnhancedSidebar() {
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton asChild isActive={pathname === "/admin/email/campaigns"} className="group">
                         <Link href="/admin/email/campaigns">
-                          <Send className={cn(
-                            "h-4 w-4 transition-colors duration-200",
-                            pathname === "/admin/email/campaigns" ? "text-sky-400" : "text-muted-foreground",
-                            "group-hover:text-sky-400"
-                          )} />
+                          <Send
+                            className={cn(
+                              "h-4 w-4 transition-colors duration-200",
+                              pathname === "/admin/email/campaigns" ? "text-sky-400" : "text-muted-foreground",
+                              "group-hover:text-sky-400",
+                            )}
+                          />
                           <span>Campaigns</span>
                         </Link>
                       </SidebarMenuSubButton>
@@ -2409,11 +2854,13 @@ export function EnhancedSidebar() {
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton asChild isActive={pathname === "/admin/email/analytics"} className="group">
                         <Link href="/admin/email/analytics">
-                          <BarChart2 className={cn(
-                            "h-4 w-4 transition-colors duration-200",
-                            pathname === "/admin/email/analytics" ? "text-sky-400" : "text-muted-foreground",
-                            "group-hover:text-sky-400"
-                          )} />
+                          <BarChart2
+                            className={cn(
+                              "h-4 w-4 transition-colors duration-200",
+                              pathname === "/admin/email/analytics" ? "text-sky-400" : "text-muted-foreground",
+                              "group-hover:text-sky-400",
+                            )}
+                          />
                           <span>Analytics</span>
                         </Link>
                       </SidebarMenuSubButton>
@@ -2432,11 +2879,13 @@ export function EnhancedSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/admin/automations"} className="group">
                   <Link href="/admin/automations">
-                    <Zap className={cn(
-                      "h-4 w-4 transition-colors duration-200",
-                      pathname === "/admin/automations" ? "text-amber-500" : "text-muted-foreground",
-                      "group-hover:text-amber-500"
-                    )} />
+                    <Zap
+                      className={cn(
+                        "h-4 w-4 transition-colors duration-200",
+                        pathname === "/admin/automations" ? "text-amber-500" : "text-muted-foreground",
+                        "group-hover:text-amber-500",
+                      )}
+                    />
                     <span>Automations</span>
                   </Link>
                 </SidebarMenuButton>
@@ -2444,11 +2893,13 @@ export function EnhancedSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/admin/scheduled-content"} className="group">
                   <Link href="/admin/scheduled-content">
-                    <Calendar className={cn(
-                      "h-4 w-4 transition-colors duration-200",
-                      pathname === "/admin/scheduled-content" ? "text-orange-500" : "text-muted-foreground",
-                      "group-hover:text-orange-500"
-                    )} />
+                    <Calendar
+                      className={cn(
+                        "h-4 w-4 transition-colors duration-200",
+                        pathname === "/admin/scheduled-content" ? "text-orange-500" : "text-muted-foreground",
+                        "group-hover:text-orange-500",
+                      )}
+                    />
                     <span>Scheduled Content</span>
                   </Link>
                 </SidebarMenuButton>
@@ -2456,12 +2907,41 @@ export function EnhancedSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/admin/templates"} className="group">
                   <Link href="/admin/templates">
-                    <FileText className={cn(
-                      "h-4 w-4 transition-colors duration-200",
-                      pathname === "/admin/templates" ? "text-yellow-500" : "text-muted-foreground",
-                      "group-hover:text-yellow-500"
-                    )} />
+                    <FileText
+                      className={cn(
+                        "h-4 w-4 transition-colors duration-200",
+                        pathname === "/admin/templates" ? "text-yellow-500" : "text-muted-foreground",
+                        "group-hover:text-yellow-500",
+                      )}
+                    />
                     <span>Message Templates</span>
+                    {!isCollapsed && (
+                      <Badge className="ml-auto" variant="outline">
+                        New
+                      </Badge>
+                    )}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Finance</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname === "/admin/invoices"} className="group">
+                  <Link href="/admin/invoices">
+                    <FileText
+                      className={cn(
+                        "h-4 w-4 transition-colors duration-200",
+                        pathname === "/admin/invoices" ? "text-green-500" : "text-muted-foreground",
+                        "group-hover:text-green-500",
+                      )}
+                    />
+                    <span>Invoices</span>
                     {!isCollapsed && (
                       <Badge className="ml-auto" variant="outline">
                         New
@@ -2481,11 +2961,13 @@ export function EnhancedSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/admin/instagram-accounts"} className="group">
                   <Link href="/admin/instagram-accounts">
-                    <Instagram className={cn(
-                      "h-4 w-4 transition-colors duration-200",
-                      pathname === "/admin/instagram-accounts" ? "text-pink-500" : "text-muted-foreground",
-                      "group-hover:text-pink-500"
-                    )} />
+                    <Instagram
+                      className={cn(
+                        "h-4 w-4 transition-colors duration-200",
+                        pathname === "/admin/instagram-accounts" ? "text-pink-500" : "text-muted-foreground",
+                        "group-hover:text-pink-500",
+                      )}
+                    />
                     <span>Instagram Accounts</span>
                     {!isCollapsed && (
                       <Badge className="ml-auto" variant="outline">
@@ -2498,11 +2980,13 @@ export function EnhancedSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/admin/ai-assistant"} className="group">
                   <Link href="/admin/ai-assistant">
-                    <Bot className={cn(
-                      "h-4 w-4 transition-colors duration-200",
-                      pathname === "/admin/ai-assistant" ? "text-cyan-500" : "text-muted-foreground",
-                      "group-hover:text-cyan-500"
-                    )} />
+                    <Bot
+                      className={cn(
+                        "h-4 w-4 transition-colors duration-200",
+                        pathname === "/admin/ai-assistant" ? "text-cyan-500" : "text-muted-foreground",
+                        "group-hover:text-cyan-500",
+                      )}
+                    />
                     <span>AI Assistant</span>
                     {!isCollapsed && (
                       <Badge className="ml-auto" variant="outline">
@@ -2523,11 +3007,13 @@ export function EnhancedSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/admin/settings"} className="group">
                   <Link href="/admin/settings">
-                    <Settings className={cn(
-                      "h-4 w-4 transition-colors duration-200",
-                      pathname === "/admin/settings" ? "text-gray-500" : "text-muted-foreground",
-                      "group-hover:text-gray-500"
-                    )} />
+                    <Settings
+                      className={cn(
+                        "h-4 w-4 transition-colors duration-200",
+                        pathname === "/admin/settings" ? "text-gray-500" : "text-muted-foreground",
+                        "group-hover:text-gray-500",
+                      )}
+                    />
                     <span>Settings</span>
                   </Link>
                 </SidebarMenuButton>
@@ -2535,11 +3021,13 @@ export function EnhancedSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/admin/status"} className="group">
                   <Link href="/admin/status">
-                    <Activity className={cn(
-                      "h-4 w-4 transition-colors duration-200",
-                      pathname === "/admin/status" ? "text-green-500" : "text-muted-foreground",
-                      "group-hover:text-green-500"
-                    )} />
+                    <Activity
+                      className={cn(
+                        "h-4 w-4 transition-colors duration-200",
+                        pathname === "/admin/status" ? "text-green-500" : "text-muted-foreground",
+                        "group-hover:text-green-500",
+                      )}
+                    />
                     <span>System Status</span>
                   </Link>
                 </SidebarMenuButton>
@@ -2562,10 +3050,12 @@ export function EnhancedSidebar() {
         {isCollapsed ? (
           <div className="flex justify-center">
             <Button variant="ghost" size="icon" className="group">
-              <LogOut className={cn(
-                "h-4 w-4 transition-colors duration-200",
-                "text-muted-foreground group-hover:text-red-500"
-              )} />
+              <LogOut
+                className={cn(
+                  "h-4 w-4 transition-colors duration-200",
+                  "text-muted-foreground group-hover:text-red-500",
+                )}
+              />
             </Button>
           </div>
         ) : (
@@ -2579,10 +3069,12 @@ export function EnhancedSidebar() {
               <span className="text-xs text-muted-foreground">admin@example.com</span>
             </div>
             <Button variant="ghost" size="icon" className="ml-auto group">
-              <LogOut className={cn(
-                "h-4 w-4 transition-colors duration-200",
-                "text-muted-foreground group-hover:text-red-500"
-              )} />
+              <LogOut
+                className={cn(
+                  "h-4 w-4 transition-colors duration-200",
+                  "text-muted-foreground group-hover:text-red-500",
+                )}
+              />
             </Button>
           </div>
         )}
@@ -2602,12 +3094,12 @@ export function EnhancedSidebar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="p-0 w-[280px]">
-              <SidebarComponent />
+              <SidebarContent />
             </SheetContent>
           </Sheet>
         </div>
         <div className="hidden md:block">
-          <SidebarComponent />
+          <SidebarContent />
         </div>
       </>
     )
@@ -2615,3 +3107,4 @@ export function EnhancedSidebar() {
 
   return <SidebarComponent />
 }
+
