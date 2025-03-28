@@ -33,6 +33,12 @@ model User {
   receivedAttachments  ChatAttachment[]   @relation("ReceivedAttachments")
   invoices             Invoice[]          @relation("UserInvoices")
   payments             Payment[]          @relation("UserPayments")
+  referralCodes        ReferralCode[]     @relation("UserReferralCodes")
+  referrals            Referral[]         @relation("UserReferrals")
+  referredBy           Referral[]         @relation("ReferredUsers")
+  commissionPayouts    CommissionPayout[] @relation("UserCommissionPayouts")
+  referredByCode       String?
+
 }
 
 model ScheduledContent {
@@ -499,5 +505,104 @@ enum PaymentStatus {
   COMPLETED
   FAILED
   REFUNDED
+}
+
+
+model ReferralProgram {
+  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String
+  description       String?
+  commissionType    CommissionType      @default(PERCENTAGE)
+  commissionValue   Float               // Percentage or fixed amount
+  minimumPayout     Float               @default(0)
+  active            Boolean             @default(true)
+  referralCodes     ReferralCode[]
+  referrals         Referral[]
+  commissionPayouts CommissionPayout[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+}
+
+model ReferralCode {
+  id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code              String          @unique
+  userId            String          @db.Uuid
+  user              User            @relation("UserReferralCodes", fields: [userId], references: [id])
+  programId         String          @db.Uuid
+  program           ReferralProgram @relation(fields: [programId], references: [id])
+  active            Boolean         @default(true)
+  referrals         Referral[]      @relation("ReferralsByCode")
+  clicks            Int             @default(0)
+  conversions       Int             @default(0)
+  conversionRate    Float?          // Calculated field
+  totalCommission   Float           @default(0)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+model Referral {
+  id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  referrerId        String          @db.Uuid
+  referrer          User            @relation("UserReferrals", fields: [referrerId], references: [id])
+  referredUserId    String?         @db.Uuid
+  referredUser      User?           @relation("ReferredUsers", fields: [referredUserId], references: [id])
+  referralCodeId    String          @db.Uuid
+  referralCode      ReferralCode    @relation("ReferralsByCode", fields: [referralCodeId], references: [id])
+  programId         String          @db.Uuid
+  program           ReferralProgram @relation(fields: [programId], references: [id])
+  status            ReferralStatus  @default(PENDING)
+  commissionAmount  Float?
+  commissionPaid    Boolean         @default(false)
+  commissionPayoutId String?        @db.Uuid
+  commissionPayout  CommissionPayout? @relation(fields: [commissionPayoutId], references: [id])
+  conversionDate    DateTime?
+  ipAddress         String?
+  userAgent         String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+model CommissionPayout {
+  id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String          @db.Uuid
+  user              User            @relation("UserCommissionPayouts", fields: [userId], references: [id])
+  programId         String          @db.Uuid
+  program           ReferralProgram @relation(fields: [programId], references: [id])
+  amount            Float
+  status            PayoutStatus    @default(PENDING)
+  paymentMethod     PaymentMethod   @default(BANK_TRANSFER)
+  paymentDetails    Json?
+  referrals         Referral[]
+  processedDate     DateTime?
+  notes             String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+model ReferralClick {
+  id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  referralCodeId    String          @db.Uuid
+  ipAddress         String?
+  userAgent         String?
+  createdAt         DateTime        @default(now())
+}
+
+enum CommissionType {
+  PERCENTAGE
+  FIXED_AMOUNT
+}
+
+enum ReferralStatus {
+  PENDING
+  CONVERTED
+  EXPIRED
+  REJECTED
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
 }
 

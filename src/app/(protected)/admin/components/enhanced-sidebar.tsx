@@ -3534,7 +3534,6 @@ import {
   Menu,
   Gift,
   ChevronRight,
-  X,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -3657,7 +3656,7 @@ export function EnhancedSidebar() {
                 <AvatarImage src="/placeholder.svg" alt="Logo" />
                 <AvatarFallback>AD</AvatarFallback>
               </Avatar>
-              <div className="font-semibold">Admin Dashboard</div>
+              <div className="font-semibold">Vavi&apos;s Dashboard</div>
             </div>
             <div className="flex items-center gap-2">
               <NotificationDropdown />
@@ -3930,7 +3929,7 @@ export function EnhancedSidebar() {
             </Avatar>
             <div className="flex flex-col">
               <span className="text-sm font-medium">Admin User</span>
-              <span className="text-xs text-muted-foreground">admin@example.com</span>
+              <span className="text-xs text-muted-foreground">Cashe@yazil.com</span>
             </div>
             <Button variant="ghost" size="icon" className="ml-auto hover:bg-accent/50 transition-all duration-200">
               <LogOut className="h-4 w-4 text-muted-foreground hover:text-red-500 transition-colors duration-200" />
@@ -3956,7 +3955,7 @@ export function EnhancedSidebar() {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="p-0 border-r shadow-xl w-[280px] sm:max-w-[280px]">
+            <SheetContent side="left" className="p-0 border-r shadow-xl w-[100px] sm:max-w-[100px]">
               <div className="absolute right-4 top-4 z-50">
                 <Button
                   variant="ghost"
@@ -3964,7 +3963,6 @@ export function EnhancedSidebar() {
                   className="rounded-full hover:bg-accent/50"
                   onClick={() => setIsSheetOpen(false)}
                 >
-                  <X className="h-4 w-4" />
                 </Button>
               </div>
               <SidebarContent />
