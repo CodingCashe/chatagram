@@ -4,5 +4,5 @@ export default function SignupPage({ searchParams }: { searchParams: { ref?: str
   const referralCode = searchParams.ref || ''
   
   // Redirect to your actual sign-up page with the referral code
-  redirect(`/auth/sign-up?ref=${referralCode}`)
+  redirect(`/sign-up?ref=${referralCode}`)
 }
