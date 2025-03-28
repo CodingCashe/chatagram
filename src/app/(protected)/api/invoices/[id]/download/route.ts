@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getInvoiceById } from "../../../admin/actions/invoice-actions"
+import { getInvoiceById } from "../../../../admin/actions/invoice-actions"
 import { generateInvoicePdf } from "@/lib/pdf-generator"
 import { onCurrentUser } from "@/actions/user"
 
