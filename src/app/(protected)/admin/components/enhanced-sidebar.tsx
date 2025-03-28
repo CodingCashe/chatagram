@@ -3928,7 +3928,7 @@ export function EnhancedSidebar() {
               <AvatarFallback>AD</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <span className="text-sm font-medium">Admin User</span>
+              <span className="text-sm font-medium">Admin</span>
               <span className="text-xs text-muted-foreground">Cashe@yazil.com</span>
             </div>
             <Button variant="ghost" size="icon" className="ml-auto hover:bg-accent/50 transition-all duration-200">
