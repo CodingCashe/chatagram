@@ -151,3 +151,99 @@ function formatCurrency(amount: number, currency: string, symbol = true) {
   }).format(amount)
 }
 
+// import jsPDF from "jspdf"
+// import "jspdf-autotable"
+// import type { Invoice, InvoiceItem } from "@prisma/client"
+
+// type InvoiceWithItems = Invoice & {
+//   items: InvoiceItem[]
+// }
+
+// export async function generateInvoicePDF(invoice: InvoiceWithItems): Promise<Uint8Array> {
+//   // Create a new PDF document
+//   const doc = new jsPDF()
+
+//   // Add company logo/header
+//   doc.setFontSize(20)
+//   doc.setTextColor(40, 40, 40)
+//   doc.text("INVOICE", 14, 22)
+
+//   // Add invoice details
+//   doc.setFontSize(10)
+//   doc.text(`Invoice Number: ${invoice.invoiceNumber}`, 14, 35)
+//   doc.text(`Date: ${new Date(invoice.createdAt).toLocaleDateString()}`, 14, 40)
+//   doc.text(`Due Date: ${new Date(invoice.dueDate).toLocaleDateString()}`, 14, 45)
+
+//   // Add client information
+//   doc.setFontSize(12)
+//   doc.text("Bill To:", 14, 60)
+//   doc.setFontSize(10)
+//   doc.text(invoice.clientName, 14, 65)
+//   doc.text(invoice.clientEmail, 14, 70)
+//   doc.text(invoice.clientAddress || "", 14, 75)
+
+//   // Add company information
+//   doc.setFontSize(12)
+//   doc.text("From:", 140, 60)
+//   doc.setFontSize(10)
+//   doc.text("Your Company Name", 140, 65)
+//   doc.text("company@example.com", 140, 70)
+//   doc.text("123 Business St, City, Country", 140, 75)
+
+//   // Add invoice items table
+//   const tableColumn = ["Item", "Description", "Quantity", "Rate", "Amount"]
+//   const tableRows: any[] = []
+
+//   invoice.items.forEach((item) => {
+//     const itemData = [
+//       item.name,
+//       item.description || "",
+//       item.quantity.toString(),
+//       `$${item.unitPrice.toFixed(2)}`,
+//       `$${(item.quantity * item.unitPrice).toFixed(2)}`,
+//     ]
+//     tableRows.push(itemData)
+//   })
+
+//   // @ts-ignore - jspdf-autotable extends jsPDF prototype
+//   doc.autoTable({
+//     head: [tableColumn],
+//     body: tableRows,
+//     startY: 85,
+//     theme: "grid",
+//     styles: {
+//       fontSize: 9,
+//       cellPadding: 3,
+//     },
+//     headStyles: {
+//       fillColor: [66, 66, 66],
+//       textColor: 255,
+//       fontStyle: "bold",
+//     },
+//   })
+
+//   // Get the final y position after the table
+//   // @ts-ignore - jspdf-autotable extends jsPDF prototype
+//   const finalY = (doc as any).lastAutoTable.finalY + 10
+
+//   // Add totals
+//   doc.setFontSize(10)
+//   doc.text(`Subtotal: $${invoice.subtotal.toFixed(2)}`, 140, finalY)
+//   doc.text(`Tax (${(invoice.taxRate * 100).toFixed(2)}%): $${invoice.taxAmount.toFixed(2)}`, 140, finalY + 5)
+//   doc.text(`Total: $${invoice.total.toFixed(2)}`, 140, finalY + 10)
+
+//   // Add payment information
+//   doc.setFontSize(10)
+//   doc.text("Payment Information:", 14, finalY + 25)
+//   doc.text("Please make payment within the due date.", 14, finalY + 30)
+//   doc.text("Bank Transfer: BANK123456789", 14, finalY + 35)
+
+//   // Add footer
+//   doc.setFontSize(8)
+//   doc.text("Thank you for your business!", 14, finalY + 45)
+
+//   // Convert the PDF to a Uint8Array
+//   const pdfBytes = doc.output("arraybuffer")
+//   return new Uint8Array(pdfBytes)
+// }
+
