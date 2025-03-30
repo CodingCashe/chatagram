@@ -3537,6 +3537,7 @@ import {
   Award,
   User,
   DollarSignIcon,
+  Group,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -3873,7 +3874,7 @@ export function EnhancedSidebar() {
               />
               <MenuItem
                 href="/admin/affiliates/programs/new"
-                icon={Bot}
+                icon={Group}
                 label="Programs"
                 isActive={pathname === "/admin/affiliates/programs/new"}
                 color="text-cyan-500"
