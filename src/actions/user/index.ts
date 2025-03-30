@@ -15,6 +15,17 @@ export const onCurrentUser = async () => {
   return user
 }
 
+export const isCurrentUserAdmin = async (): Promise<boolean> => {
+  try {
+    const user = await onCurrentUser()
+    const profile = await findUser(user.id)
+    return profile?.isAdmin || false
+  } catch (error) {
+    console.error("Error checking admin status:", error)
+    return false
+  }
+}
+
 export const onBoardUser = async () => {
   const user = await onCurrentUser()
   try {

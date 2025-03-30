@@ -3534,6 +3534,9 @@ import {
   Menu,
   Gift,
   ChevronRight,
+  Award,
+  User,
+  DollarSignIcon,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -3852,6 +3855,50 @@ export function EnhancedSidebar() {
               />
             </ul>
           </div>
+
+          <div className="py-2">
+            {!isCollapsed && (
+              <h3 className="mb-2 px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Affiliates
+              </h3>
+            )}
+            <ul className="grid gap-1">
+              <MenuItem
+                href="/admin/affiliates"
+                icon={Award}
+                label="Dashboard"
+                isActive={pathname === "/admin/affiliates"}
+                color="text-magenta-500"
+                badge="New"
+              />
+              <MenuItem
+                href="/admin/affiliates/programs/new"
+                icon={Bot}
+                label="Programs"
+                isActive={pathname === "/admin/affiliates/programs/new"}
+                color="text-cyan-500"
+                badge="New"
+              />
+               <MenuItem
+                href="/admin/affiliates/users"
+                icon={User}
+                label="Users"
+                isActive={pathname === "/admin/affiliates/users"}
+                color="text-green-500"
+                badge="New"
+              />
+              <MenuItem
+                href="/admin/affiliates/payouts"
+                icon={DollarSignIcon}
+                label="Payouts"
+                isActive={pathname === "/admin/affiliates/payouts"}
+                color="text-brown-500"
+                badge="New"
+              />
+            </ul>
+          </div>
+
+          
 
           <div className="py-2">
             {!isCollapsed && (

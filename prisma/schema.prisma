@@ -38,7 +38,8 @@ model User {
   referredBy           Referral[]         @relation("ReferredUsers")
   commissionPayouts    CommissionPayout[] @relation("UserCommissionPayouts")
   referredByCode       String?
-
+  affiliate            AffiliateUser?
+  affiliateReferrals   AffiliateReferral[] @relation("referredUser")
 }
 
 model ScheduledContent {
@@ -606,3 +607,99 @@ enum PayoutStatus {
   FAILED
 }
 
+
+// New Affiliate Program model
+model AffiliateProgram {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String
+  description       String?
+  commissionRate    Float    // Percentage
+  cookieDuration    Int      // Days
+  minimumPayout     Float    @default(50)
+  status            String   @default("active") // active, paused, inactive
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  termsAndConditions String?
+  
+  // Relations
+  affiliates        AffiliateUser[]
+  referrals         AffiliateReferral[]
+  payouts           AffiliatePayout[]
+}
+
+// Model for both registered users and external affiliates
+model AffiliateUser {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String?  @unique @db.Uuid  // Added @unique and @db.Uuid
+  name              String
+  email             String   @unique
+  isApproved        Boolean  @default(false)
+  status            String   @default("pending") // pending, active, suspended
+  commissionRate    Float?   // Custom rate (overrides program default if set)
+  balance           Float    @default(0)
+  totalEarned       Float    @default(0)
+  referralCode      String   @unique
+  bio               String?
+  paymentDetails    Json?    // Payment method details (PayPal email, bank info, etc.)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  // Relations
+  user              User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  program           AffiliateProgram @relation(fields: [programId], references: [id])
+  programId         String   @db.Uuid  // Added @db.Uuid
+  referrals         AffiliateReferral[]
+  clicks            AffiliateClick[]
+  payouts           AffiliatePayout[]
+}
+
+model AffiliateReferral {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  referredUserId    String?  @db.Uuid  // Added @db.Uuid
+  conversionType    String   // registration, subscription, purchase, etc.
+  amount            Float    // Amount of the transaction that generated the commission
+  commissionAmount  Float    // Actual commission amount
+  status            String   @default("pending") // pending, approved, rejected, paid
+  conversionDate    DateTime @default(now())
+  notes             String?
+  
+  // Relations
+  referredUser      User?    @relation(name: "referredUser", fields: [referredUserId], references: [id], onDelete: SetNull)
+  affiliate         AffiliateUser @relation(fields: [affiliateId], references: [id])
+  affiliateId       String   @db.Uuid  // Added @db.Uuid
+  program           AffiliateProgram @relation(fields: [programId], references: [id])
+  programId         String   @db.Uuid  // Added @db.Uuid
+  payout            AffiliatePayout? @relation(fields: [payoutId], references: [id])
+  payoutId          String?  @db.Uuid  // Added @db.Uuid
+}
+
+model AffiliateClick {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ipAddress         String?
+  userAgent         String?
+  referrer          String?
+  timestamp         DateTime @default(now())
+  converted         Boolean  @default(false)
+  
+  // Relations
+  affiliate         AffiliateUser @relation(fields: [affiliateId], references: [id])
+  affiliateId       String   @db.Uuid  // Added @db.Uuid
+}
+
+model AffiliatePayout {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  amount            Float
+  status            String   @default("pending") // pending, processing, completed, failed
+  paymentMethod     String   // paypal, bank_transfer, etc.
+  transactionId     String?
+  notes             String?
+  processedAt       DateTime?
+  createdAt         DateTime @default(now())
+  
+  // Relations
+  affiliate         AffiliateUser @relation(fields: [affiliateId], references: [id])
+  affiliateId       String   @db.Uuid  // Added @db.Uuid
+  program           AffiliateProgram @relation(fields: [programId], references: [id])
+  programId         String   @db.Uuid  // Added @db.Uuid
+  referrals         AffiliateReferral[]
+}
