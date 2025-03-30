@@ -138,7 +138,7 @@ export default function AffiliateRegistration({ userId, programs }: AffiliateReg
         </div>
         <h3 className="text-xl font-semibold mb-2">Application Submitted!</h3>
         <p className="text-muted-foreground max-w-md mb-6">
-          Your affiliate application has been submitted successfully. We'll review it shortly.
+          Your affiliate application has been submitted successfully. We&apos;ll review it shortly.
         </p>
         <Button onClick={() => router.refresh()}>Check Status</Button>
       </div>

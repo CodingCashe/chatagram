@@ -135,7 +135,7 @@ export default function AffiliateLinks({ affiliateId }: AffiliateLinksProps) {
                 <h4 className="text-sm font-medium">Suggested Caption:</h4>
                 <div className="p-3 bg-muted rounded-md">
                   <p className="text-sm">
-                    I've been using this amazing platform and thought you might like it too! Sign up using my link and
+                    I&apos;ve been using this amazing platform and thought you might like it too! Sign up using my link and
                     get started today.
                   </p>
                 </div>
@@ -157,16 +157,16 @@ export default function AffiliateLinks({ affiliateId }: AffiliateLinksProps) {
             <TabsContent value="email" className="space-y-4">
               <h3 className="text-lg font-semibold">Email Template</h3>
               <div className="p-4 bg-muted rounded-md">
-                <p className="text-sm mb-2">Subject: A tool I think you'll love</p>
+                <p className="text-sm mb-2">Subject: A tool I think you&apos;ll love</p>
                 <p className="text-sm">
                   Hi [Name],
                   <br />
                   <br />
-                  I've been using this platform for a while now and it's been a game-changer for my workflow. I thought
+                  I&apos;ve been using this platform for a while now and it&apos;s been a game-changer for my workflow. I thought
                   you might find it useful too!
                   <br />
                   <br />
-                  Here's my referral link if you want to check it out:
+                  Here&apos;s my referral link if you want to check it out:
                   <br />
                   [Your Referral Link]
                   <br />
@@ -192,7 +192,7 @@ ${referralLink}
 Let me know if you have any questions!
 
 Best,
-[Your Name]`)
+[Cashe]`)
                 }
                 disabled={loading || !referralLink}
               >
