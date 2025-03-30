@@ -60,11 +60,11 @@ export default function AffiliateUsersPage({ searchParams }: { searchParams: { p
               <CardTitle>Affiliate Leaderboard</CardTitle>
               <CardDescription>Top performing affiliates by earnings</CardDescription>
             </CardHeader>
-            <CardContent>
+            {/* <CardContent>
               <Suspense fallback={<Loading />}>
                 <AffiliateLeaderboard programId={programId} />
               </Suspense>
-            </CardContent>
+            </CardContent> */}
           </Card>
         </TabsContent>
       </Tabs>
