@@ -19,10 +19,11 @@ export const metadata = {
 export default async function AffiliatePage() {
   const userd = await onCurrentUser()
   const userId = userd.id
+  const emailId = userd.emailAddresses[0].emailAddress
 
   // Check if user is already an affiliate
   const affiliate = await client.affiliateUser.findFirst({
-    where: { },
+    where: {  email:emailId},
   })
 
   const activePrograms = await client.affiliateProgram.findMany({
