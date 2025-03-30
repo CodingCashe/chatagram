@@ -1,8 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { recordAffiliateReferral } from "@/app/actions/affiliate-actions"
+import { recordAffiliateReferral } from "@/actions/new-referral/referral-actions"
 import { cookies } from "next/headers"
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/lib/auth"
+import { onCurrentUser } from "@/actions/user"
 
 // Process a conversion from a referral
 export async function POST(req: NextRequest) {
@@ -10,8 +9,9 @@ export async function POST(req: NextRequest) {
     const { conversionType, amount } = await req.json()
 
     // Get current session to identify the user
-    const session = await getServerSession(authOptions)
-    const userId = session?.user?.id || null
+    const userr = await onCurrentUser()
+    
+    const userId = userr?.id || null
 
     // Get referral code from cookie
     const cookieStore = cookies()
