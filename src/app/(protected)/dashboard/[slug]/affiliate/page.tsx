@@ -22,7 +22,7 @@ export default async function AffiliatePage() {
 
   // Check if user is already an affiliate
   const affiliate = await client.affiliateUser.findFirst({
-    where: { userId },
+    where: { },
   })
 
   const activePrograms = await client.affiliateProgram.findMany({
