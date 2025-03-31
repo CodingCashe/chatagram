@@ -1999,7 +1999,7 @@ export async function registerAsAffiliate(programId: string, data: AffiliateRegi
     try {
       const userResponse = await onUserInfor()
       if (userResponse) {
-        userId = userResponse.data?.clerkId
+        userId = userResponse.data?.id
       }
     } catch (error) {
       // User not authenticated, continue as guest
