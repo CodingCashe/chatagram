@@ -6,8 +6,7 @@ import { onCurrentUser } from "@/actions/user"
 export async function GET(request: Request) {
   try {
     const thisUser = await onCurrentUser()
-        const userId = thisUser.id
-    
+    const  userId  = thisUser.id
 
     if (!userId) {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })

@@ -1,148 +1,10 @@
-// import { NextResponse } from "next/server"
-// import {client} from "@/lib/prisma"
-// import { auth } from "@clerk/nextjs/server"
-// import { onCurrentUser } from "@/actions/user"
-
-// export async function GET() {
-//   try {
-//     const thisUser = await onCurrentUser()
-
-//     const  userId  = thisUser.id
-
-//     if (!userId) {
-//       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
-//     }
-
-//     // Check if user is an admin
-//     const user = await client.user.findUnique({
-//       where: { clerkId: userId },
-//       select: { isAdmin: true },
-//     })
-
-//     if (!user?.isAdmin) {
-//       return NextResponse.json({ success: false, message: "Forbidden: Admin access required" }, { status: 403 })
-//     }
-
-//     // Get counts
-//     const totalPrograms = await client.affiliateProgram.count()
-//     const totalAffiliates = await client.affiliateUser.count()
-//     const totalReferrals = await client.affiliateReferral.count()
-
-//     // Get sum of all commissions
-//     const commissionsResult = await client.affiliateReferral.aggregate({
-//       _sum: {
-//         commissionAmount: true,
-//       },
-//     })
-
-//     const totalCommissions = commissionsResult._sum.commissionAmount || 0
-
-//     // Get pending payouts
-//     const pendingPayoutsResult = await client.affiliatePayout.aggregate({
-//       where: {
-//         status: "pending",
-//       },
-//       _sum: {
-//         amount: true,
-//       },
-//     })
-
-//     const pendingPayouts = pendingPayoutsResult._sum.amount || 0
-
-//     // Calculate conversion rate
-//     const totalClicks = await client.affiliateClick.count()
-//     const conversionRate = totalClicks > 0 ? (totalReferrals / totalClicks) * 100 : 0
-
-//     // Get monthly performance data for the last 6 months
-//     const now = new Date()
-//     const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1)
-
-//     const monthlyReferrals = await client.affiliateReferral.groupBy({
-//       by: ["conversionDate"],
-//       where: {
-//         conversionDate: {
-//           gte: sixMonthsAgo,
-//         },
-//       },
-//       _count: {
-//         id: true,
-//       },
-//       _sum: {
-//         commissionAmount: true,
-//       },
-//     })
-
-//     // Format monthly data
-//     const monthlyData = []
-
-//     // Create a map for each month
-//     const monthMap = new Map()
-
-//     for (let i = 0; i < 6; i++) {
-//       const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
-//       const monthYear = `${date.toLocaleString("default", { month: "short" })} ${date.getFullYear()}`
-//       monthMap.set(monthYear, {
-//         month: monthYear,
-//         referrals: 0,
-//         commissions: 0,
-//       })
-//     }
-
-//     // Fill in the data
-//     for (const entry of monthlyReferrals) {
-//       const date = new Date(entry.conversionDate)
-//       const monthYear = `${date.toLocaleString("default", { month: "short" })} ${date.getFullYear()}`
-
-//       if (monthMap.has(monthYear)) {
-//         const data = monthMap.get(monthYear)
-//         data.referrals += entry._count.id
-//         data.commissions += entry._sum.commissionAmount || 0
-//         monthMap.set(monthYear, data)
-//       }
-//     }
-
-    
-//     for (const [_, value] of monthMap) {
-//       monthlyData.push(value)
-//     }
-    
-
-//     monthlyData.reverse() // Most recent month first
-
-//     return NextResponse.json({
-//       success: true,
-//       stats: {
-//         totalPrograms,
-//         totalAffiliates,
-//         totalReferrals,
-//         totalCommissions,
-//         pendingPayouts,
-//         conversionRate,
-//         monthlyPerformance: monthlyData,
-//       },
-//     })
-//   } catch (error) {
-//     console.error("Error fetching affiliate metrics:", error)
-//     return NextResponse.json({ success: false, message: "Failed to fetch affiliate metrics" }, { status: 500 })
-//   }
-// }
-
 import { NextResponse } from "next/server"
 import { client } from "@/lib/prisma"
-import { auth } from "@clerk/nextjs/server"
 import { onCurrentUser } from "@/actions/user"
 
-// Define types for monthly data
-interface MonthlyDataEntry {
-  month: string;
-  referrals: number;
-  commissions: number;
-}
-
-export async function GET() {
+export async function GET(req: Request) {
   try {
     const thisUser = await onCurrentUser()
-
     const userId = thisUser.id
 
     if (!userId) {
@@ -159,103 +21,125 @@ export async function GET() {
       return NextResponse.json({ success: false, message: "Forbidden: Admin access required" }, { status: 403 })
     }
 
-    // Get counts
-    const totalPrograms = await client.affiliateProgram.count()
-    const totalAffiliates = await client.affiliateUser.count()
-    const totalReferrals = await client.affiliateReferral.count()
+    // Get query parameters
+    const url = new URL(req.url)
+    const status = url.searchParams.get("status") || undefined
+    const page = Number.parseInt(url.searchParams.get("page") || "1")
+    const limit = Number.parseInt(url.searchParams.get("limit") || "10")
+    const skip = (page - 1) * limit
 
-    // Get sum of all commissions
-    const commissionsResult = await client.affiliateReferral.aggregate({
-      _sum: {
-        commissionAmount: true,
-      },
-    })
+    // Build the where clause
+    const where: any = {}
+    if (status) {
+      where.status = status
+    }
 
-    const totalCommissions = commissionsResult._sum.commissionAmount || 0
-
-    // Get pending payouts
-    const pendingPayoutsResult = await client.affiliatePayout.aggregate({
-      where: {
-        status: "pending",
-      },
-      _sum: {
-        amount: true,
-      },
-    })
-
-    const pendingPayouts = pendingPayoutsResult._sum.amount || 0
-
-    // Calculate conversion rate
-    const totalClicks = await client.affiliateClick.count()
-    const conversionRate = totalClicks > 0 ? (totalReferrals / totalClicks) * 100 : 0
-
-    // Get monthly performance data for the last 6 months
-    const now = new Date()
-    const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1)
-
-    const monthlyReferrals = await client.affiliateReferral.groupBy({
-      by: ["conversionDate"],
-      where: {
-        conversionDate: {
-          gte: sixMonthsAgo,
+    // Get payouts with pagination
+    const [payouts, totalCount] = await Promise.all([
+      client.affiliatePayout.findMany({
+        where,
+        include: {
+          affiliate: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              referralCode: true,
+            },
+          },
+          program: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
         },
-      },
-      _count: {
-        id: true,
-      },
-      _sum: {
-        commissionAmount: true,
-      },
-    })
+        orderBy: {
+          createdAt: "desc",
+        },
+        skip,
+        take: limit,
+      }),
+      client.affiliatePayout.count({ where }),
+    ])
 
-    // Create a map for each month
-    const monthMap = new Map<string, MonthlyDataEntry>()
-
-    for (let i = 0; i < 6; i++) {
-      const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
-      const monthYear = `${date.toLocaleString("default", { month: "short" })} ${date.getFullYear()}`
-      monthMap.set(monthYear, {
-        month: monthYear,
-        referrals: 0,
-        commissions: 0,
-      })
-    }
-
-    // Fill in the data
-    for (const entry of monthlyReferrals) {
-      const date = new Date(entry.conversionDate)
-      const monthYear = `${date.toLocaleString("default", { month: "short" })} ${date.getFullYear()}`
-
-      if (monthMap.has(monthYear)) {
-        const data = monthMap.get(monthYear)
-        if (data) {
-          data.referrals += entry._count.id
-          data.commissions += entry._sum.commissionAmount || 0
-          monthMap.set(monthYear, data)
-        }
-      }
-    }
-
-    // Convert map to array using Array.from instead of for...of loop
-    const monthlyData: MonthlyDataEntry[] = Array.from(monthMap.values())
-
-    // Most recent month first
-    monthlyData.reverse()
+    // Calculate pagination info
+    const totalPages = Math.ceil(totalCount / limit)
+    const hasMore = page < totalPages
 
     return NextResponse.json({
       success: true,
-      stats: {
-        totalPrograms,
-        totalAffiliates,
-        totalReferrals,
-        totalCommissions,
-        pendingPayouts,
-        conversionRate,
-        monthlyPerformance: monthlyData,
+      payouts,
+      pagination: {
+        page,
+        limit,
+        totalCount,
+        totalPages,
+        hasMore,
       },
     })
   } catch (error) {
-    console.error("Error fetching affiliate metrics:", error)
-    return NextResponse.json({ success: false, message: "Failed to fetch affiliate metrics" }, { status: 500 })
+    console.error("Error fetching affiliate payouts:", error)
+    return NextResponse.json({ success: false, message: "Failed to fetch affiliate payouts" }, { status: 500 })
   }
 }
+
+export async function POST(req: Request) {
+  try {
+    const thisUser = await onCurrentUser()
+    const userId = thisUser.id
+
+    if (!userId) {
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
+    }
+
+    // Check if user is an admin
+    const user = await client.user.findUnique({
+      where: { clerkId: userId },
+      select: { isAdmin: true },
+    })
+
+    if (!user?.isAdmin) {
+      return NextResponse.json({ success: false, message: "Forbidden: Admin access required" }, { status: 403 })
+    }
+
+    const body = await req.json()
+    const { affiliateId, amount, paymentMethod, notes } = body
+
+    if (!affiliateId || !amount || !paymentMethod) {
+      return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 })
+    }
+
+    // Get the affiliate
+    const affiliate = await client.affiliateUser.findUnique({
+      where: { id: affiliateId },
+      include: {
+        program: true,
+      },
+    })
+
+    if (!affiliate) {
+      return NextResponse.json({ success: false, message: "Affiliate not found" }, { status: 404 })
+    }
+
+    // Create the payout
+    const payout = await client.affiliatePayout.create({
+      data: {
+        amount,
+        paymentMethod,
+        notes,
+        affiliate: { connect: { id: affiliateId } },
+        program: { connect: { id: affiliate.programId } },
+      },
+    })
+
+    return NextResponse.json({
+      success: true,
+      payout,
+    })
+  } catch (error) {
+    console.error("Error creating affiliate payout:", error)
+    return NextResponse.json({ success: false, message: "Failed to create affiliate payout" }, { status: 500 })
+  }
+}
+
