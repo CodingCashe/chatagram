@@ -1970,7 +1970,6 @@
 "use server"
 import { v4 as uuidv4 } from "uuid"
 import { client } from "@/lib/prisma"
-import { onUserInfo } from "@/actions/user"
 import { onCurrentUser } from "@/actions/user"
 
 // Types
@@ -2460,4 +2459,3 @@ function generateReferralCode(name: string): string {
 
   return `${baseCode}${uniqueId}`
 }
-
