@@ -1968,9 +1968,14 @@
 // }
 
 "use server"
+
+import { auth } from "@clerk/nextjs/server"
+import { revalidatePath } from "next/cache"
+
 import { v4 as uuidv4 } from "uuid"
 import { client } from "@/lib/prisma"
 import { onCurrentUser } from "@/actions/user"
+import { onUserInfor } from "../user"
 
 // Types
 export type AffiliateRegistrationData = {
@@ -1992,9 +1997,9 @@ export async function registerAsAffiliate(programId: string, data: AffiliateRegi
     // Get current user if logged in
     let userId = null
     try {
-      const userResponse = await onCurrentUser()
+      const userResponse = await onUserInfor()
       if (userResponse) {
-        userId = userResponse.id
+        userId = userResponse.data?.clerkId
       }
     } catch (error) {
       // User not authenticated, continue as guest
@@ -2459,3 +2464,120 @@ function generateReferralCode(name: string): string {
 
   return `${baseCode}${uniqueId}`
 }
+
+
+//////
+
+
+
+// // Register as an affiliate (both users and non-users)
+// export async function registerAsAffiliate(programId: string, data: AffiliateRegistrationData) {
+//   try {
+//     const userd = await onCurrentUser()
+//     // Get current user if logged in
+//     const { userId } = userd.id
+
+//     if (!userId) {
+//       return {
+//         success: false,
+//         message: "You must be logged in to register as an affiliate.",
+//       }
+//     }
+
+//     // If user is logged in, get their UUID from the database
+//     let userUuid = null
+//     if (userId) {
+//       const user = await prisma.user.findUnique({
+//         where: { clerkId },
+//         select: { id: true, email: true, firstname: true, lastname: true },
+//       })
+
+//       if (user) {
+//         userUuid = user.id
+
+//         // If no name/email provided in data, use the user's info
+//         if (!data.name) {
+//           data.name = `${user.firstname || ""} ${user.lastname || ""}`.trim() || "User"
+//         }
+
+//         if (!data.email) {
+//           data.email = user.email
+//         }
+//       }
+//     }
+
+//     // Validate required data
+//     if (!data.name || !data.email) {
+//       return {
+//         success: false,
+//         message: "Name and email are required.",
+//       }
+//     }
+
+//     // Check if this email is already registered as an affiliate
+//     const existingAffiliate = await prisma.affiliateUser.findFirst({
+//       where: { email: data.email },
+//     })
+
+//     if (existingAffiliate) {
+//       return {
+//         success: false,
+//         message: "This email is already registered as an affiliate.",
+//       }
+//     }
+
+//     // Generate a unique referral code
+//     const referralCode = generateReferralCode(data.name)
+
+//     // Get the commission rate from the program
+//     const program = await prisma.affiliateProgram.findUnique({
+//       where: { id: programId },
+//     })
+
+//     if (!program || program.status !== "active") {
+//       return {
+//         success: false,
+//         message: "Affiliate program not found or inactive.",
+//       }
+//     }
+
+//     // Create the affiliate user
+//     const newAffiliate = await prisma.affiliateUser.create({
+//       data: {
+//         userId: userUuid, // Use the UUID, not the Clerk ID
+//         name: data.name,
+//         email: data.email,
+//         referralCode,
+//         bio: data.bio,
+//         paymentDetails: data.paymentDetails ? data.paymentDetails : undefined,
+//         program: { connect: { id: programId } },
+//         commissionRate: program.commissionRate,
+//         isApproved: program.name.toLowerCase().includes("auto-approve"),
+//       },
+//     })
+
+//     // Revalidate relevant paths
+//     revalidatePath("/dashboard/affiliate")
+//     revalidatePath("/admin/affiliates/users")
+
+//     return {
+//       success: true,
+//       affiliate: {
+//         id: newAffiliate.id,
+//         name: newAffiliate.name,
+//         referralCode: newAffiliate.referralCode,
+//         status: newAffiliate.status,
+//       },
+//     }
+//   } catch (error) {
+//     console.error("Error registering affiliate:", error)
+//     return {
+//       success: false,
+//       message: "Failed to register as affiliate.",
+//     }
+//   }
+// }
+
+
+// // Other functions remain the same...
+
