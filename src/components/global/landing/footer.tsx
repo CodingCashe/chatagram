@@ -135,7 +135,7 @@ export default function Footer() {
             <div className="space-y-2">
               <div className="flex items-start space-x-3">
                 <Mail className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
-                <span className="text-slate-400">support@yazil.ai</span>
+                <span className="text-slate-400">Cashe@yazil.ai</span>
               </div>
               <div className="flex items-start space-x-3">
                 <Phone className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
@@ -143,7 +143,7 @@ export default function Footer() {
               </div>
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
-                <span className="text-slate-400">123 Social Ave, San Francisco, CA 94107</span>
+                <span className="text-slate-400">473 Social Ave, San Francisco, CA 94107</span>
               </div>
             </div>
           </div>

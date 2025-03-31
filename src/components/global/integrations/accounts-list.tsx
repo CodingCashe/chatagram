@@ -300,7 +300,7 @@ export default function AccountsList({ accounts = [], onRemove }: AccountsListPr
                     </div>
                     <div className="grid grid-cols-2 gap-1 text-sm">
                       <span className="text-muted-foreground">Connected on:</span>
-                      <span>March 14, 2025</span>
+                      <span>{"---"}</span>
                     </div>
                     <div className="grid grid-cols-2 gap-1 text-sm">
                       <span className="text-muted-foreground">Last synced:</span>

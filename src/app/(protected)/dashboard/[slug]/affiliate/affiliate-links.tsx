@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
-import { Copy, CheckCircle, Facebook, Twitter, LinkedinIcon as LinkedIn } from "lucide-react"
+import { Copy, CheckCircle, Facebook, Twitter, LinkedinIcon as LinkedIn ,MessageCircle} from "lucide-react"
 import { generateReferralLink } from "@/actions/new-referral/referral-actions"
 
 interface AffiliateLinksProps {
@@ -70,6 +70,7 @@ export default function AffiliateLinks({ affiliateId }: AffiliateLinksProps) {
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${getEncodedLink()}`,
     twitter: `https://twitter.com/intent/tweet?url=${getEncodedLink()}&text=Check out this awesome product!`,
     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${getEncodedLink()}`,
+    whatsapp: `https://api.whatsapp.com/send?text=Check out this awesome product! ${getEncodedLink()}`,
   }
 
   return (
@@ -112,6 +113,14 @@ export default function AffiliateLinks({ affiliateId }: AffiliateLinksProps) {
                   disabled={loading || !referralLink}
                 >
                   <Facebook className="h-5 w-5 text-blue-600" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => window.open(socialShareLinks.facebook, "_blank")}
+                  disabled={loading || !referralLink}
+                >
+                  <MessageCircle className="h-5 w-5 text-green-600" />
                 </Button>
                 <Button
                   variant="outline"
@@ -162,7 +171,7 @@ export default function AffiliateLinks({ affiliateId }: AffiliateLinksProps) {
                   Hi [Name],
                   <br />
                   <br />
-                  I&apos;ve been using this platform for a while now and it&apos;s been a game-changer for my workflow. I thought
+                  I&apos;ve been using this platform for a while now and it&apos;s been a game-changer for my dm automation. I thought
                   you might find it useful too!
                   <br />
                   <br />
@@ -182,17 +191,16 @@ export default function AffiliateLinks({ affiliateId }: AffiliateLinksProps) {
               <Button
                 variant="outline"
                 onClick={() =>
-                  copyToClipboard(`Hi [Name],
+                  copyToClipboard(`Hi There,
+                    I've been using this platform for a while now and it's been a game-changer for my workflow. I thought you might find it useful too!
 
-I've been using this platform for a while now and it's been a game-changer for my workflow. I thought you might find it useful too!
+                    Here's my referral link if you want to check it out:
+                    ${referralLink}
 
-Here's my referral link if you want to check it out:
-${referralLink}
+                    Let me know if you have any questions!
 
-Let me know if you have any questions!
-
-Best,
-[Cashe]`)
+                    Best,
+                    [Cashe]`)
                 }
                 disabled={loading || !referralLink}
               >

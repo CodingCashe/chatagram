@@ -419,8 +419,7 @@ import RequirementsModal from "./requirements-modal"
 import AccountsList from "./accounts-list"
 import PlatformBenefits from "./platform-benefits"
 import ConnectionStatus from "./connection-status"
-import UsageStats from "./usage-stats"
-import RecentActivity from "./recent-activity"
+// import UsageStats from "./usage-stats"
 import IntegrationInsights from "./integration-insights"
 import { useSearchParams } from "next/navigation"
 
@@ -525,7 +524,7 @@ export default function IntegrationsPage() {
     setIsRefreshing(true)
     try {
       // Use the actual user ID from userData
-      const userId = userData?.data?.id || "user123"
+      const userId = userData?.data?.id || "User"
       const result = await refreshInstagramData(userId)
 
       if (result.status === 200) {
@@ -672,7 +671,6 @@ export default function IntegrationsPage() {
           </motion.div>
 
           <IntegrationInsights userData={userData?.data} />
-          <RecentActivity userData={userData?.data} />
         </TabsContent>
 
         <TabsContent value="instagram">
@@ -732,7 +730,6 @@ export default function IntegrationsPage() {
             </CardFooter>
           </Card>
           <PlatformBenefits platform="instagram" />
-          <UsageStats platform="instagram" userData={userData?.data} />
         </TabsContent>
 
         <TabsContent value="whatsapp">
@@ -792,7 +789,6 @@ export default function IntegrationsPage() {
             </CardFooter>
           </Card>
           <PlatformBenefits platform="whatsapp" />
-          <UsageStats platform="whatsapp" userData={userData?.data} />
         </TabsContent>
       </Tabs>
 
