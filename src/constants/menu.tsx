@@ -219,6 +219,7 @@ import {
   RocketDuoToneWhite,
   SettingsDuoToneWhite,
   PencilDuoToneBlack,
+  Chat,
 } from '@/icons'
 import { MessageCircle,Instagram,Clock, BarChart2, Users,DollarSign, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone, TargetIcon, PersonStanding, Gift, Group, Award } from 'lucide-react'
 import { v4 as uuid } from 'uuid'
@@ -308,6 +309,11 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
         id: uuid(),
         label: 'Affiliate',
         icon: <Award />,
+      },
+      {
+        id: uuid(),
+        label: 'Whatsapp',
+        icon: <Chat />,
       },
     ]
   },

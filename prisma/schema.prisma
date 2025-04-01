@@ -40,6 +40,9 @@ model User {
   referredByCode       String?
   affiliate            AffiliateUser?
   affiliateReferrals   AffiliateReferral[] @relation("referredUser")
+  whatsAppBusinesses   WhatsAppBusiness[]
+  whatsAppRules        WhatsAppRule[]
+  whatsAppTemplates    WhatsAppTemplate[]
 }
 
 model ScheduledContent {
@@ -703,3 +706,87 @@ model AffiliatePayout {
   programId         String   @db.Uuid  // Added @db.Uuid
   referrals         AffiliateReferral[]
 }
+
+
+//////
+
+// WhatsApp-specific models to add to your existing schema
+
+model WhatsAppBusiness {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String   @db.Uuid
+  businessName      String
+  phoneNumber       String
+  phoneNumberId     String   @unique
+  wabaId            String
+  accessToken       String
+  refreshToken      String?
+  tokenExpiresAt    DateTime
+  verificationStatus String   @default("pending") // pending, verified, failed
+  webhookSecret     String   @default(uuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  whatsAppRules     WhatsAppRule[]
+  whatsAppStats     WhatsAppStat[]
+  whatsAppTemplates WhatsAppTemplate[]
+
+  @@index([userId])
+}
+
+model WhatsAppRule {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String
+  trigger      String   // keyword, new_chat, no_response, button_click, location, media, scheduled
+  triggerValue String?  // comma-separated keywords or other trigger-specific values
+  response     String   // The message to send
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  userId             String   @db.Uuid
+  whatsappBusinessId String?  @db.Uuid
+
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  whatsappBusiness  WhatsAppBusiness? @relation(fields: [whatsappBusinessId], references: [id], onDelete: SetNull)
+  
+  @@index([userId])
+  @@index([whatsappBusinessId])
+}
+
+model WhatsAppTemplate {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String
+  status     String   // approved, pending, rejected
+  category   String   // MARKETING, UTILITY, AUTHENTICATION
+  components Json     // Array of template components
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  userId             String   @db.Uuid
+  whatsappBusinessId String?  @db.Uuid
+
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  whatsappBusiness  WhatsAppBusiness? @relation(fields: [whatsappBusinessId], references: [id], onDelete: SetNull)
+  
+  @@index([userId])
+  @@index([whatsappBusinessId])
+}
+
+model WhatsAppStat {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  date              DateTime @default(now())
+  messagesSent      Int      @default(0)
+  messagesReceived  Int      @default(0)
+  automationTriggered Int    @default(0)
+  activeUsers       Int      @default(0)
+  
+  whatsappBusinessId String   @db.Uuid
+  whatsappBusiness   WhatsAppBusiness @relation(fields: [whatsappBusinessId], references: [id], onDelete: Cascade)
+  
+  @@index([whatsappBusinessId])
+  @@index([date])
+}
+
+

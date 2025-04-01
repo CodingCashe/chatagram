@@ -7,7 +7,8 @@ import {
   Tech,
   InstagramDuoToneBlue,
   MegaPhoneDuoToneWhite,
-  PencilDuoToneBlack
+  PencilDuoToneBlack,
+  Chat
 } from '@/icons'
 import { MessageCircle,Send, BarChart2, Users, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone, Clock, TargetIcon, PersonStanding, Gift, Group, Award } from 'lucide-react'
 
@@ -24,6 +25,7 @@ export const PAGE_BREAD_CRUMBS: string[] = [
   'leads',
   'chat',
   'referral',
+  'whatsapp',
   
 
 
@@ -47,7 +49,7 @@ export const PAGE_ICON: Props = {
   CUSTOMIZE:<TargetIcon/>,
   LEADS:<PersonStanding/>,
   CHAT:<MessageCircle/>,
-  REFERRAL:<Gift/>,
+  WHATSAPP:<Chat/>,
   AFFILIATE:<Award/>,
 }
 

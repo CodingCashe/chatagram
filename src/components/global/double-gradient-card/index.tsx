@@ -528,9 +528,9 @@ const DoubleGradientCard = ({ label, subLabel, description }: Props) => {
       {/* Glowing border effect */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 opacity-75 animate-border-flow" />
 
-      {/* Inner content area with glassmorphism effect bg-gradient-to-br from-black/60 to-black/40 */}
+      {/* Inner content area with glassmorphism effect  */}
       <motion.div
-        className="relative p-6 backdrop-blur-xl rounded-xl overflow-hidden h-full"
+        className="relative p-6 bg-gradient-to-br from-black/60 to-black/40 backdrop-blur-xl rounded-xl overflow-hidden h-full"
         style={{
           transformStyle: "preserve-3d",
           transform: isHovered ? "rotateY(10deg) rotateX(5deg)" : "rotateY(0deg) rotateX(0deg)",

@@ -420,7 +420,7 @@ export default function AffiliateRegistration({ userId, programs }: AffiliateReg
         })
         setTimeout(() => {
           router.refresh()
-        }, 2000)
+        }, 4000)
       } else {
         toast({
           title: "Registration Failed",
