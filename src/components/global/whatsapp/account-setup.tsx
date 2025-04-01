@@ -678,7 +678,7 @@ export default function AccountSetup() {
                 <div className="space-y-4">
                   <h3 className="font-medium">Verify Your WhatsApp Number</h3>
                   <p className="text-sm text-muted-foreground">
-                    We've sent a verification code to your WhatsApp Business number. Please enter it below.
+                    We&apos;ve sent a verification code to your WhatsApp Business number. Please enter it below.
                   </p>
 
                   <div className="space-y-2">
