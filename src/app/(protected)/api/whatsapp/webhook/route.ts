@@ -622,6 +622,11 @@ export async function GET(request: NextRequest) {
   const mode = searchParams.get("hub.mode")
   const token = searchParams.get("hub.verify_token")
   const challenge = searchParams.get("hub.challenge")
+  const TESTING_TOKEN = "testing"
+
+  if (mode === "subscribe" && token === TESTING_TOKEN){
+    return new Response(challenge,{status: 200}) 
+  }
 
   // Find the WhatsApp account with this verify token
   if (mode === "subscribe" && token) {
