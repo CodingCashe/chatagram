@@ -596,7 +596,7 @@ export default function AccountSetup() {
               >
                 3
               </div>
-              <span className="text-xs mt-1">Complete</span>
+              <span className="text-xs mt-1">Complette</span>
             </div>
           </div>
 
