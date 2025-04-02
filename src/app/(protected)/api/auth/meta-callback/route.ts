@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     // Exchange the code for an access token
     const redirectUri = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/meta-callback`
-    const tokenResponse = await fetch("https://graph.facebook.com/v17.0/oauth/access_token", {
+    const tokenResponse = await fetch("https://graph.facebook.com/v22.0/oauth/access_token", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -70,10 +70,10 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get("code")
 
   if (!code) {
-    return NextResponse.redirect(new URL("/account-setup?error=missing_code", request.url))
+    return NextResponse.redirect(new URL("/callback/whatsapp?error=missing_code", request.url))
   }
 
   // Redirect back to the account setup page with the code
-  return NextResponse.redirect(new URL(`/account-setup?code=${code}`, request.url))
+  return NextResponse.redirect(new URL(`/callback/whatsapp?code=${code}`, request.url))
 }
 
