@@ -365,6 +365,7 @@ import {
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Search from '../navbar/search'
+import { Notifications } from '../navbar/notifications/notifications'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -383,7 +384,7 @@ import { useMobile } from "@/hooks/use-mobiles"
 const navItems = [
   { name: "Automations", icon: Cpu, href: "/automations", color: "blue" },
   { name: "Posting", icon: Instagram, href: "/posting", color: "green" },
-  { name: "Chats", icon: MessageSquare, href: "/chats", color: "blue" },
+//   { name: "Chats", icon: MessageSquare, href: "/chats", color: "blue" },
   { name: "Customize", icon: LayoutGrid, href: "/customize", color: "green" },
   { name: "Integrations", icon: Grid, href: "/integrations", color: "blue" },
   { name: "Affiliates", icon: Share2, href: "/affiliates", color: "green" },
@@ -535,23 +536,7 @@ export default function AutomationDashboardHeader() {
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-10 w-10 rounded-full border-blue-500/20 hover:border-blue-500/40 hover:bg-blue-500/10 relative"
-                      >
-                        <Bell className="h-5 w-5 text-blue-500" />
-                        <AnimatePresence>
-                          {showNotification && (
-                            <motion.div
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              exit={{ scale: 0 }}
-                              className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full"
-                            />
-                          )}
-                        </AnimatePresence>
-                      </Button>
+                    <Notifications /> 
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Notifications</p>
