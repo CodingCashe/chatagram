@@ -358,14 +358,13 @@ import {
   LayoutGrid,
   MessageSquare,
   Plus,
-  Search,
   Settings,
   Share2,
   Sparkles,
   Tablet,
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-
+import Search from '../navbar/search'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -477,7 +476,7 @@ export default function AutomationDashboardHeader() {
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-10 h-10 border-blue-500/30 focus-visible:ring-blue-500/50 w-[200px] rounded-full"
                     />
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-blue-500" />
+                    <Search />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -495,7 +494,7 @@ export default function AutomationDashboardHeader() {
                           size="icon"
                           className="h-10 w-10 rounded-full border-green-500/20 hover:border-green-500/40 hover:bg-green-500/10"
                         >
-                          <Search className="h-5 w-5 text-green-500" />
+                          <Search />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="p-2">
