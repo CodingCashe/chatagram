@@ -411,7 +411,7 @@ export default function AutomationDashboardHeader() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             {/* Left Section - Navigation */}
             {/* <div className="flex items-center gap-4 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto hide-scrollbar"> */}
-            <div className="hidden md:flex items-center gap-4 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto hide-scrollbar">
+            <div className="hidden md:flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto hide-scrollbar">
               {navItems.map((item) => (
                 <Link href={item.href} key={item.name}>
                   <Button
@@ -451,7 +451,7 @@ export default function AutomationDashboardHeader() {
                 className="h-10 px-3 rounded-full border-blue-500/20 hover:border-blue-500/40 hover:bg-transparent"
                 >
                 <Menu className="h-4 w-4 text-blue-500 mr-2" />
-               
+                <span className="text-blue-500 text-sm">Menu</span>
                 </Button>
 
                 {/* Create Automation Button */}
@@ -460,7 +460,7 @@ export default function AutomationDashboardHeader() {
                 className="h-10 px-3 rounded-full border-green-500/20 hover:border-green-500/40 hover:bg-transparent"
                 >
                 <PlusCircle className="h-4 w-4 text-green-500 mr-2" />
-            
+                <span className="text-blue-500 text-sm">Create</span>
                 </Button>
 
                 {/* Integrate Account Button */}
@@ -468,7 +468,7 @@ export default function AutomationDashboardHeader() {
                 variant="outline"
                 className="h-10 px-3 rounded-full border-purple-500/20 hover:border-purple-500/40 hover:bg-transparent"
                 >
-                <GitMerge className="h-4 w-4 text-purple-500 mr-2" />
+                <GitMerge className="h-4 w-4 text-purple-500 mr-0" />
                 
                 </Button>
             </div>
