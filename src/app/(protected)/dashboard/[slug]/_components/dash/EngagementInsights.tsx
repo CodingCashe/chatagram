@@ -98,7 +98,7 @@ const EngagementInsights: React.FC = () => {
         ) : data.length === 0 ? (
           <div className="text-center py-10 text-muted-foreground">No DM data available for this automation.</div>
         ) : (
-          <Tabs defaultValue="timeline" className="w-full">
+          <Tabs defaultValue="insights" className="w-full">
             <TabsList className="grid w-full grid-cols-4 mb-4 bg-background/50">
               <TabsTrigger
                 value="timeline"
