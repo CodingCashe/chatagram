@@ -27,7 +27,7 @@ export default async function DashboardPage() {
   const dashboardData = await getDashboardData()
 
   return (
-    <div className="flex flex-col gap-y-10">
+    <div className="flex flex-col mt-100 gap-y-10">
 
       <div className="flex gap-5 lg:flex-row flex-col">
         {DASHBOARD_CARDS.map((card) => (
