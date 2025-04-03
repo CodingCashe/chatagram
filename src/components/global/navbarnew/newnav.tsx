@@ -69,7 +69,7 @@ export default function AutomationDashboardHeader() {
                 />
               </motion.div>
 
-              {/* <div className="space-y-1">
+              <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <h2 className="text-2xl font-bold">Instagram Automation</h2>
                   <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/30">
@@ -77,7 +77,7 @@ export default function AutomationDashboardHeader() {
                   </Badge>
                 </div>
                 <p className="text-muted-foreground">Manage your Instagram DM automations</p>
-              </div> */}
+              </div>
             </div>
 
             {/* Right Section - Action Buttons */}
