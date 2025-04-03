@@ -73,7 +73,7 @@ const EngagementInsights: React.FC = () => {
   }
 
   return (
-    <Card className="w-full max-w-4xl mx-auto bg-gradient-to-br from-primary/5 to-secondary/5 shadow-lg hover:shadow-xl transition-shadow duration-300 border-primary/10">
+    <Card className="w-full bg-gradient-to-br from-primary/5 to-secondary/5 shadow-lg hover:shadow-xl transition-shadow duration-300 border-primary/10">
       <CardHeader>
         <CardTitle className="text-xl sm:text-2xl text-foreground">DM Insights</CardTitle>
       </CardHeader>
