@@ -183,7 +183,7 @@ export default function AccountSetup() {
     router.push("/dashboard")
   }
 
-  // Find the selected account and phone safely
+  // Find the selected account and phone safely ly
   const selectedAccount = businessAccounts.find((acc) => acc.id === selectedBusinessAccount)
   const selectedPhone = phoneNumbers.find((phone) => phone.id === selectedPhoneNumber)
 
