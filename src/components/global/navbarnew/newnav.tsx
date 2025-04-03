@@ -349,20 +349,14 @@ import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
 import {
   Bell,
-  Calendar,
-  ChevronDown,
   Cpu,
-  DollarSign,
   Grid,
   Instagram,
-  LayoutGrid,
   MessageSquare,
   Plus,
   Search,
   Settings,
   Share2,
-  Sparkles,
-  Tablet,
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -373,9 +367,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useMobile } from "@/hooks/use-mobiles"
@@ -385,18 +376,8 @@ const navItems = [
   { name: "Automations", icon: Cpu, href: "/automations", color: "blue" },
   { name: "Posting", icon: Instagram, href: "/posting", color: "green" },
   { name: "Chats", icon: MessageSquare, href: "/chats", color: "blue" },
-//   { name: "Customize", icon: LayoutGrid, href: "/customize", color: "green" },
   { name: "Integrations", icon: Grid, href: "/integrations", color: "blue" },
   { name: "Affiliates", icon: Share2, href: "/affiliates", color: "green" },
-//   { name: "Pricing", icon: DollarSign, href: "/pricing", color: "blue" },
-]
-
-// Activity data for the timeline
-const activityData = [
-  { time: "Just now", action: "New follower gained", count: 5 },
-  { time: "2m ago", action: "Messages sent", count: 12 },
-  { time: "15m ago", action: "Post engagement", count: 34 },
-  { time: "1h ago", action: "Story views", count: 156 },
 ]
 
 export default function AutomationDashboardHeader() {
@@ -426,7 +407,8 @@ export default function AutomationDashboardHeader() {
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             {/* Left Section - Navigation */}
-            <div className="flex items-center gap-4 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto hide-scrollbar">
+            {/* <div className="flex items-center gap-4 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto hide-scrollbar"> */}
+            <div className="hidden md:flex items-center gap-4 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto hide-scrollbar">
               {navItems.map((item) => (
                 <Link href={item.href} key={item.name}>
                   <Button
@@ -560,181 +542,10 @@ export default function AutomationDashboardHeader() {
                   </Tooltip>
                 </TooltipProvider>
               </div>
-
-              {/* Create Button - Responsive
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onHoverStart={() => setIsHovering(true)}
-                onHoverEnd={() => setIsHovering(false)}
-                className="relative"
-              >
-                <AnimatePresence mode="wait">
-                  {isMobile ? (
-                    <motion.div
-                      key="mobile-button"
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0, opacity: 0 }}
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    >
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            size="icon"
-                            className="bg-blue-500 hover:bg-blue-600 text-white border-none shadow-lg h-10 w-10 rounded-full"
-                          >
-                            <Plus className="h-5 w-5" />
-                            <span className="sr-only">Create New</span>
-                            <motion.div
-                              animate={{
-                                opacity: isHovering ? 1 : 0,
-                                scale: isHovering ? 1 : 0.8,
-                                rotate: isHovering ? [0, 15, -15, 0] : 0,
-                              }}
-                              transition={{
-                                rotate: { repeat: Number.POSITIVE_INFINITY, duration: 1.5 },
-                                opacity: { duration: 0.2 },
-                              }}
-                              className="absolute -top-2 -right-2"
-                            >
-                              <Sparkles className="h-5 w-5 text-yellow-300" />
-                            </motion.div>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56">
-                          <DropdownMenuLabel>Create New</DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem>
-                            <Instagram className="mr-2 h-4 w-4 text-blue-500" />
-                            <span>Automation</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Bell className="mr-2 h-4 w-4 text-green-500" />
-                            <span>Post</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Calendar className="mr-2 h-4 w-4 text-blue-500" />
-                            <span>Campaign</span>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="desktop-button"
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0, opacity: 0 }}
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    >
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button className="bg-blue-500 hover:bg-blue-600 text-white border-none shadow-lg group h-10 px-4 rounded-full">
-                            <Plus className="mr-2 h-5 w-5 group-hover:rotate-90 transition-transform duration-200" />
-                            Create New
-                            <ChevronDown className="ml-2 h-4 w-4 opacity-70" />
-                            <motion.div
-                              animate={{
-                                opacity: isHovering ? 1 : 0,
-                                scale: isHovering ? 1 : 0.8,
-                                rotate: isHovering ? [0, 15, -15, 0] : 0,
-                              }}
-                              transition={{
-                                rotate: { repeat: Number.POSITIVE_INFINITY, duration: 1.5 },
-                                opacity: { duration: 0.2 },
-                              }}
-                              className="absolute -top-2 -right-2"
-                            >
-                              <Sparkles className="h-5 w-5 text-yellow-300" />
-                            </motion.div>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56">
-                          <DropdownMenuLabel>Create New</DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem>
-                            <Instagram className="mr-2 h-4 w-4 text-blue-500" />
-                            <span>Automation</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Bell className="mr-2 h-4 w-4 text-green-500" />
-                            <span>Post</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Calendar className="mr-2 h-4 w-4 text-blue-500" />
-                            <span>Campaign</span>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div> */}
             </div>
           </div>
         </CardContent>
       </Card>
-
-      {/* Activity Timeline - Large Screens Only */}
-      {/* {!isMobile && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, type: "spring" }}
-          className="relative"
-        >
-          <Card className="border-0 shadow-md overflow-hidden">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center">
-                    <Tablet className="h-4 w-4 text-blue-500" />
-                  </div>
-                  <h3 className="font-medium text-sm">Live Activity Dashboard</h3>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="relative flex h-2 w-2 mr-1">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                  </span>
-                  <span className="text-xs text-muted-foreground">Live updates</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-4 gap-4">
-                {activityData.map((item, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="relative"
-                  >
-                    <div className={`p-3 rounded-lg ${index % 2 === 0 ? "bg-blue-500/5" : "bg-green-500/5"}`}>
-                      <div className="flex justify-between items-start mb-1">
-                        <span className={`text-xs font-medium ${index % 2 === 0 ? "text-blue-500" : "text-green-500"}`}>
-                          {item.time}
-                        </span>
-                        <span className="text-lg font-bold">{item.count}</span>
-                      </div>
-                      <p className="text-sm text-gray-600">{item.action}</p>
-                      <div className="mt-2 h-1 w-full bg-gray-100 rounded-full overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${Math.min(item.count / 2, 100)}%` }}
-                          transition={{ duration: 1, delay: index * 0.1 }}
-                          className={`h-full rounded-full ${index % 2 === 0 ? "bg-blue-500" : "bg-green-500"}`}
-                        />
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      )} */}
     </div>
   )
 }
