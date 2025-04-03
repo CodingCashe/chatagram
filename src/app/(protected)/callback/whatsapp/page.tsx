@@ -665,7 +665,7 @@ export default function WhatsAppCallback() {
                   Connect with Meta Business
                 </Button>
                 <p className="text-sm text-muted-foreground mt-2">
-                  We'll redirect you to Meta to authorize access to your WhatsApp Business account.
+                  We&apos;ll redirect you to Meta to authorize access to your WhatsApp Business account.
                 </p>
               </div>
             </div>
@@ -717,7 +717,7 @@ export default function WhatsAppCallback() {
                 <div className="space-y-4">
                   <h3 className="font-medium">Verify Your WhatsApp Number</h3>
                   <p className="text-sm text-muted-foreground">
-                    We've sent a verification code to your WhatsApp Business number. Please enter it below.
+                    We&apos;ve sent a verification code to your WhatsApp Business number. Please enter it below.
                   </p>
 
                   <div className="space-y-2">
