@@ -347,6 +347,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
+import { useRouter, usePathname } from "next/navigation"
 import {
   Menu, 
   PlusCircle, 
@@ -391,6 +392,40 @@ export default function AutomationDashboardHeader() {
   const searchInputRef = useRef<HTMLInputElement>(null)
   const isMobile = useMobile()
 
+  const router = useRouter()
+  const pathname = usePathname()
+   // Extract the slug from the pathname
+  const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+  const slug = slugMatch ? slugMatch[1] : ""
+
+  const handleIntegrate = () => {
+    // Redirect to the integrations page with the correct slug
+    router.push(`/dashboard/${slug}/integrations`)
+  }
+  const handlecreate= () => {
+    // Redirect to the integrations page with the correct slug
+    router.push(`/dashboard/${slug}/automations`)
+  }
+  const handlechats= () => {
+    // Redirect to the integrations page with the correct slug
+    router.push(`/dashboard/${slug}/chats`)
+  }
+
+  const handlepost= () => {
+    // Redirect to the integrations page with the correct slug
+    router.push(`/dashboard/${slug}/post`)
+  }
+  const handleaffiliates= () => {
+    // Redirect to the integrations page with the correct slug
+    router.push(`/dashboard/${slug}/affiliates`)
+  }
+   
+  const handlesettings= () => {
+    // Redirect to the integrations page with the correct slug
+    router.push(`/dashboard/${slug}/pricing`)
+  }
+
+
   // Show notification dot periodically
   useEffect(() => {
     const interval = setInterval(() => {
@@ -423,7 +458,9 @@ export default function AutomationDashboardHeader() {
                           : "bg-green-500/10 text-green-500 hover:bg-green-500/20"
                         : "hover:bg-gray-100"
                     }`}
-                    onClick={() => setActiveNavItem(item.name)}
+                    onClick={() => setActiveNavItem(item.name)                        
+                    }
+                    
                   >
                     <item.icon className={`h-4 w-4 ${item.color === "blue" ? "text-blue-500" : "text-green-500"}`} />
                     <span
@@ -456,6 +493,7 @@ export default function AutomationDashboardHeader() {
 
                 {/* Create Automation Button */}
                 <Button
+                onClick={handlecreate}
                 variant="outline"
                 className="h-10 px-3 rounded-full border-green-500/20 hover:border-green-500/40 hover:bg-transparent"
                 >
@@ -466,6 +504,7 @@ export default function AutomationDashboardHeader() {
                 {/* Integrate Account Button */}
                 <Button
                 variant="outline"
+                onClick={handleIntegrate}
                 className="h-10 px-3 rounded-full border-purple-500/20 hover:border-purple-500/40 hover:bg-transparent"
                 >
                 <GitMerge className="h-4 w-4 text-purple-500 mr-0" />
@@ -532,6 +571,7 @@ export default function AutomationDashboardHeader() {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
+                        onClick={handlesettings}
                         variant="outline"
                         size="icon"
                         className="h-10 w-10 rounded-full border-green-500/20 hover:border-green-500/40 hover:bg-green-500/10"
@@ -581,3 +621,40 @@ export default function AutomationDashboardHeader() {
   )
 }
 
+
+
+// "use client"
+
+// import { Button } from "@/components/ui/button"
+// import { CalendarPlus } from "lucide-react"
+// import { useRouter, usePathname } from "next/navigation"
+
+// type Props = {}
+
+// const SchedulePost = (props: Props) => {
+
+//   const router = useRouter()
+//   const pathname = usePathname()
+
+//   const handleSchedule = () => {
+//     // Extract the slug from the pathname
+//     const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+//     const slug = slugMatch ? slugMatch[1] : ""
+
+//     // Redirect to the integrations page with the correct slug
+//     router.push(`/dashboard/${slug}/post`)
+//   }
+
+
+//   return (
+//     <Button
+//       className="lg:px-10 py-6 bg-gradient-to-br hover:bg-gradient-to-tl hover:shadow-lg text-white rounded-full from-[#1A1E2D] to-[#2C3E50] font-medium transition-all duration-300 ease-in-out"
+//       onClick={handleSchedule}
+//     >
+//       <CalendarPlus className="h-5 w-5" />
+//       <p className="lg:inline md:hidden hidden">Schedule a Post</p>
+//     </Button>
+//   )
+// }
+
+// export default SchedulePost
