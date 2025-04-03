@@ -358,14 +358,14 @@ import {
   LayoutGrid,
   MessageSquare,
   Plus,
+  Search,
   Settings,
   Share2,
   Sparkles,
   Tablet,
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import Search from '../navbar/search'
-import { Notifications } from '../navbar/notifications/notifications'
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -384,7 +384,7 @@ import { useMobile } from "@/hooks/use-mobiles"
 const navItems = [
   { name: "Automations", icon: Cpu, href: "/automations", color: "blue" },
   { name: "Posting", icon: Instagram, href: "/posting", color: "green" },
-//   { name: "Chats", icon: MessageSquare, href: "/chats", color: "blue" },
+  { name: "Chats", icon: MessageSquare, href: "/chats", color: "blue" },
   { name: "Customize", icon: LayoutGrid, href: "/customize", color: "green" },
   { name: "Integrations", icon: Grid, href: "/integrations", color: "blue" },
   { name: "Affiliates", icon: Share2, href: "/affiliates", color: "green" },
@@ -462,7 +462,23 @@ export default function AutomationDashboardHeader() {
               {/* Search Input/Button - Responsive */}
               <AnimatePresence mode="wait">
                 {!isMobile ? (
-                  <Search />
+                  <motion.div
+                    key="search-input-desktop"
+                    initial={{ width: 0, opacity: 0 }}
+                    animate={{ width: "auto", opacity: 1 }}
+                    exit={{ width: 0, opacity: 0 }}
+                    className="relative"
+                  >
+                    <Input
+                      ref={searchInputRef}
+                      type="text"
+                      placeholder="Search..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10 h-10 border-blue-500/30 focus-visible:ring-blue-500/50 w-[200px] rounded-full"
+                    />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-blue-500" />
+                  </motion.div>
                 ) : (
                   <motion.div
                     key="search-button-mobile"
@@ -479,7 +495,7 @@ export default function AutomationDashboardHeader() {
                           size="icon"
                           className="h-10 w-10 rounded-full border-green-500/20 hover:border-green-500/40 hover:bg-green-500/10"
                         >
-                          {/* <Search /> */}
+                          <Search className="h-5 w-5 text-green-500" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="p-2">
@@ -520,7 +536,23 @@ export default function AutomationDashboardHeader() {
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                    <Notifications /> 
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-10 w-10 rounded-full border-blue-500/20 hover:border-blue-500/40 hover:bg-blue-500/10 relative"
+                      >
+                        <Bell className="h-5 w-5 text-blue-500" />
+                        <AnimatePresence>
+                          {showNotification && (
+                            <motion.div
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              exit={{ scale: 0 }}
+                              className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full"
+                            />
+                          )}
+                        </AnimatePresence>
+                      </Button>
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Notifications</p>

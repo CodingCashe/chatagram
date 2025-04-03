@@ -28,8 +28,8 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-y-10">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <SentimentAnalysis />
+      <div className="grid grid-cols-1 gap-6">
+        {/* <SentimentAnalysis /> */}
         <HashtagCloud />
       </div>
       {/* <div className="flex gap-5 lg:flex-row flex-col">
