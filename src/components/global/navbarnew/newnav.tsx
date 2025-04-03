@@ -451,7 +451,7 @@ export default function AutomationDashboardHeader() {
                 className="h-10 px-3 rounded-full border-blue-500/20 hover:border-blue-500/40 hover:bg-transparent"
                 >
                 <Menu className="h-4 w-4 text-blue-500 mr-2" />
-                <span className="text-blue-500 text-sm">Menu</span>
+               
                 </Button>
 
                 {/* Create Automation Button */}
@@ -460,7 +460,7 @@ export default function AutomationDashboardHeader() {
                 className="h-10 px-3 rounded-full border-green-500/20 hover:border-green-500/40 hover:bg-transparent"
                 >
                 <PlusCircle className="h-4 w-4 text-green-500 mr-2" />
-                <span className="text-green-500 text-sm">Create</span>
+            
                 </Button>
 
                 {/* Integrate Account Button */}
@@ -469,7 +469,7 @@ export default function AutomationDashboardHeader() {
                 className="h-10 px-3 rounded-full border-purple-500/20 hover:border-purple-500/40 hover:bg-transparent"
                 >
                 <GitMerge className="h-4 w-4 text-purple-500 mr-2" />
-                <span className="text-purple-500 text-sm">Integrate</span>
+                
                 </Button>
             </div>
               {/* Search Input/Button - Responsive */}
