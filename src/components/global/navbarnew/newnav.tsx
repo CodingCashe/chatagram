@@ -77,8 +77,8 @@ export default function AutomationDashboardHeader() {
                   </Badge>
                 </div>
                 <p className="text-muted-foreground">Manage your Instagram DM automations</p>
-              </div>
-            </div> */}
+              </div> */}
+            </div>
 
             {/* Right Section - Action Buttons */}
             <div className="flex items-center gap-3 flex-wrap justify-end">
