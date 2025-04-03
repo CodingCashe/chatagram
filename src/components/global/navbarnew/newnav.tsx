@@ -404,10 +404,10 @@ export default function AutomationDashboardHeader() {
   }, [])
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-1">
       {/* Main Header Card */}
       <Card className="shadow-md overflow-hidden relative border-0">
-        <CardContent className="p-6">
+        <CardContent className="p-3">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             {/* Left Section - Navigation */}
             {/* <div className="flex items-center gap-4 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto hide-scrollbar"> */}
