@@ -462,23 +462,7 @@ export default function AutomationDashboardHeader() {
               {/* Search Input/Button - Responsive */}
               <AnimatePresence mode="wait">
                 {!isMobile ? (
-                  <motion.div
-                    key="search-input-desktop"
-                    initial={{ width: 0, opacity: 0 }}
-                    animate={{ width: "auto", opacity: 1 }}
-                    exit={{ width: 0, opacity: 0 }}
-                    className="relative"
-                  >
-                    <Input
-                      ref={searchInputRef}
-                      type="text"
-                      placeholder="Search..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 h-10 border-blue-500/30 focus-visible:ring-blue-500/50 w-[200px] rounded-full"
-                    />
-                    <Search />
-                  </motion.div>
+                  <Search />
                 ) : (
                   <motion.div
                     key="search-button-mobile"
@@ -495,7 +479,7 @@ export default function AutomationDashboardHeader() {
                           size="icon"
                           className="h-10 w-10 rounded-full border-green-500/20 hover:border-green-500/40 hover:bg-green-500/10"
                         >
-                          <Search />
+                          {/* <Search /> */}
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="p-2">
