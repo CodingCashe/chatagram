@@ -1252,7 +1252,7 @@ const Sidebar = ({ slug }: Props) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <span>{showSubscriptionPlan ? "Hide" : "Show"} Subscription Plan</span>
+            <span>{showSubscriptionPlan ? "Hide" : "Show"} Current Plan</span>
             {showSubscriptionPlan ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </motion.button>
           <AnimatePresence>
