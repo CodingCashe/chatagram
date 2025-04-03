@@ -660,7 +660,7 @@ const navItems = [
   { name: "Posting", icon: Instagram, href: "/posting", color: "green" },
   { name: "Chats", icon: MessageSquare, href: "/chat", color: "blue" },
   { name: "Integrations", icon: Grid, href: "/integrations", color: "blue" },
-  { name: "Affiliates", icon: Share2, href: "/affiliates", color: "green" },
+  { name: "Affiliates", icon: Share2, href: "/affiliate", color: "green" },
 ]
 
 export default function AutomationDashboardHeader() {
