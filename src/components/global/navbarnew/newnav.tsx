@@ -383,12 +383,12 @@ import { useMobile } from "@/hooks/use-mobiles"
 // Navigation items
 const navItems = [
   { name: "Automations", icon: Cpu, href: "/automations", color: "blue" },
-  { name: "Posting", icon: Instagram, href: "/posting", color: "green" },
-  { name: "Chats", icon: MessageSquare, href: "/chats", color: "blue" },
-  { name: "Customize", icon: LayoutGrid, href: "/customize", color: "green" },
+//   { name: "Posting", icon: Instagram, href: "/posting", color: "green" },
+//   { name: "Chats", icon: MessageSquare, href: "/chats", color: "blue" },
+//   { name: "Customize", icon: LayoutGrid, href: "/customize", color: "green" },
   { name: "Integrations", icon: Grid, href: "/integrations", color: "blue" },
   { name: "Affiliates", icon: Share2, href: "/affiliates", color: "green" },
-  { name: "Pricing", icon: DollarSign, href: "/pricing", color: "blue" },
+//   { name: "Pricing", icon: DollarSign, href: "/pricing", color: "blue" },
 ]
 
 // Activity data for the timeline
@@ -561,7 +561,7 @@ export default function AutomationDashboardHeader() {
                 </TooltipProvider>
               </div>
 
-              {/* Create Button - Responsive */}
+              {/* Create Button - Responsive
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -670,14 +670,14 @@ export default function AutomationDashboardHeader() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </motion.div>
+              </motion.div> */}
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Activity Timeline - Large Screens Only */}
-      {!isMobile && (
+      {/* {!isMobile && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -734,7 +734,7 @@ export default function AutomationDashboardHeader() {
             </CardContent>
           </Card>
         </motion.div>
-      )}
+      )} */}
     </div>
   )
 }
