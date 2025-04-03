@@ -350,7 +350,7 @@ import Link from "next/link"
 import {
   Menu, 
   PlusCircle, 
-  GitMerge, 
+  GitMerge,
   Bell,
   Cpu,
   Grid,
@@ -444,37 +444,34 @@ export default function AutomationDashboardHeader() {
 
             {/* Right Section - Action Buttons */}
             <div className="flex items-center gap-3 flex-wrap justify-end">
-            <div className="flex items-center gap-3 flex-wrap justify-end">
-                {/* Mobile Only Buttons - Left of Search */}
-                <div className="flex md:hidden items-center gap-2">
-                    {/* Sidebar Toggle Button */}
-                    <Button
-                    variant="outline"
-                    className="h-10 px-3 rounded-full border-blue-500/20 hover:border-blue-500/40 hover:bg-transparent"
-                    >
-                    <Menu className="h-4 w-4 text-blue-500 mr-2" />
-                    <span className="text-blue-500 text-sm">Menu</span>
-                    </Button>
+            <div className="flex md:hidden items-center gap-2">
+                {/* Sidebar Toggle Button */}
+                <Button
+                variant="outline"
+                className="h-10 px-3 rounded-full border-blue-500/20 hover:border-blue-500/40 hover:bg-transparent"
+                >
+                <Menu className="h-4 w-4 text-blue-500 mr-2" />
+                <span className="text-blue-500 text-sm">Menu</span>
+                </Button>
 
-                    {/* Create Automation Button */}
-                    <Button
-                    variant="outline"
-                    className="h-10 px-3 rounded-full border-green-500/20 hover:border-green-500/40 hover:bg-transparent"
-                    >
-                    <PlusCircle className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-green-500 text-sm">Create</span>
-                    </Button>
+                {/* Create Automation Button */}
+                <Button
+                variant="outline"
+                className="h-10 px-3 rounded-full border-green-500/20 hover:border-green-500/40 hover:bg-transparent"
+                >
+                <PlusCircle className="h-4 w-4 text-green-500 mr-2" />
+                <span className="text-green-500 text-sm">Create</span>
+                </Button>
 
-                    {/* Integrate Account Button */}
-                    <Button
-                    variant="outline"
-                    className="h-10 px-3 rounded-full border-purple-500/20 hover:border-purple-500/40 hover:bg-transparent"
-                    >
-                    <GitMerge className="h-4 w-4 text-purple-500 mr-2" />
-                    <span className="text-purple-500 text-sm">Integrate</span>
-                    </Button>
-                </div>
-
+                {/* Integrate Account Button */}
+                <Button
+                variant="outline"
+                className="h-10 px-3 rounded-full border-purple-500/20 hover:border-purple-500/40 hover:bg-transparent"
+                >
+                <GitMerge className="h-4 w-4 text-purple-500 mr-2" />
+                <span className="text-purple-500 text-sm">Integrate</span>
+                </Button>
+            </div>
               {/* Search Input/Button - Responsive */}
               <AnimatePresence mode="wait">
                 {!isMobile ? (
