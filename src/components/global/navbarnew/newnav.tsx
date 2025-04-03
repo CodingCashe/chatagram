@@ -658,7 +658,7 @@ import { useMobile } from "@/hooks/use-mobiles"
 const navItems = [
   { name: "Automations", icon: Cpu, href: "/automations", color: "blue" },
   { name: "Posting", icon: Instagram, href: "/posting", color: "green" },
-  { name: "Chats", icon: MessageSquare, href: "/chats", color: "blue" },
+  { name: "Chats", icon: MessageSquare, href: "/chat", color: "blue" },
   { name: "Integrations", icon: Grid, href: "/integrations", color: "blue" },
   { name: "Affiliates", icon: Share2, href: "/affiliates", color: "green" },
 ]
