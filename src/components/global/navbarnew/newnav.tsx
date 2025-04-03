@@ -383,9 +383,9 @@ import { useMobile } from "@/hooks/use-mobiles"
 // Navigation items
 const navItems = [
   { name: "Automations", icon: Cpu, href: "/automations", color: "blue" },
-//   { name: "Posting", icon: Instagram, href: "/posting", color: "green" },
-//   { name: "Chats", icon: MessageSquare, href: "/chats", color: "blue" },
-//   { name: "Customize", icon: LayoutGrid, href: "/customize", color: "green" },
+  { name: "Posting", icon: Instagram, href: "/posting", color: "green" },
+  { name: "Chats", icon: MessageSquare, href: "/chats", color: "blue" },
+  { name: "Customize", icon: LayoutGrid, href: "/customize", color: "green" },
   { name: "Integrations", icon: Grid, href: "/integrations", color: "blue" },
   { name: "Affiliates", icon: Share2, href: "/affiliates", color: "green" },
 //   { name: "Pricing", icon: DollarSign, href: "/pricing", color: "blue" },
