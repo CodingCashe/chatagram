@@ -1875,7 +1875,7 @@ export default function AIDiscoveryPage() {
             </>
           ) : (
             <div className="text-center py-12 border rounded-md">
-              <p className="text-muted-foreground">Click "Generate AI Recommendations" to discover influencers.</p>
+              <p className="text-muted-foreground">Click &ldquo;Generate AI Recommendations&rdquo; to discover influencers.</p>
             </div>
           )}
         </TabsContent>
