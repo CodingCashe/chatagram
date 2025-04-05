@@ -5,7 +5,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowRight, Database, Bot, BarChart3, Search, Upload, UserPlus } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 
- const router = useRouter()
+ 
+
+
+export default function Home() {
+
+  const router = useRouter()
   const pathname = usePathname()
   const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
   const slug = slugMatch ? slugMatch[1] : ""
@@ -16,7 +21,8 @@ import { useRouter, usePathname } from "next/navigation"
   };
 
 
-export default function Home() {
+
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <main className="flex-1">
