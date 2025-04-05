@@ -1,0 +1,907 @@
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+// import { Button } from "@/components/ui/button"
+// import { Input } from "@/components/ui/input"
+// import { Label } from "@/components/ui/label"
+// import { Slider } from "@/components/ui/slider"
+// import { Switch } from "@/components/ui/switch"
+// import { Badge } from "@/components/ui/badge"
+// import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+// import { Bot, Search, AlertCircle, RefreshCw, Zap, PieChart, BarChart2, Users } from "lucide-react"
+// import InfluencerCard from "@/components/global/influencers/influencer-card"
+
+// export default function AIDiscoveryPage() {
+//   return (
+//     <div className="container mx-auto py-6 space-y-8">
+//       <div className="flex flex-col space-y-2">
+//         <h1 className="text-3xl font-bold tracking-tight">AI-Powered Discovery</h1>
+//         <p className="text-muted-foreground">Use AI to find new influencers based on content and engagement patterns</p>
+//       </div>
+
+//       <Tabs defaultValue="discover">
+//         <TabsList className="grid w-full grid-cols-3">
+//           <TabsTrigger value="discover">Discover</TabsTrigger>
+//           <TabsTrigger value="similar">Find Similar</TabsTrigger>
+//           <TabsTrigger value="settings">AI Settings</TabsTrigger>
+//         </TabsList>
+
+//         <TabsContent value="discover" className="space-y-4 mt-4">
+//           <Card>
+//             <CardHeader>
+//               <CardTitle className="flex items-center">
+//                 <Bot className="h-5 w-5 mr-2" />
+//                 AI Discovery
+//               </CardTitle>
+//               <CardDescription>Let our AI find influencers that match your brand and campaign needs</CardDescription>
+//             </CardHeader>
+//             <CardContent className="space-y-4">
+//               <div className="space-y-2">
+//                 <Label htmlFor="discovery-prompt">Discovery Prompt</Label>
+//                 <div className="relative">
+//                   <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+//                   <Input
+//                     id="discovery-prompt"
+//                     placeholder="Describe the type of influencers you're looking for..."
+//                     className="pl-8"
+//                     defaultValue="Fashion influencers with high engagement who create sustainable fashion content and have an audience interested in eco-friendly products"
+//                   />
+//                 </div>
+//                 <p className="text-xs text-muted-foreground">
+//                   Be specific about content style, audience demographics, and brand alignment
+//                 </p>
+//               </div>
+
+//               <div className="grid gap-4 md:grid-cols-3">
+//                 <div className="space-y-2">
+//                   <Label>Follower Range</Label>
+//                   <div className="flex items-center justify-between text-xs text-muted-foreground">
+//                     <span>1K</span>
+//                     <span>1M+</span>
+//                   </div>
+//                   <Slider defaultValue={[10, 70]} max={100} step={1} />
+//                   <div className="flex justify-between text-xs">
+//                     <span>10K</span>
+//                     <span>500K</span>
+//                   </div>
+//                 </div>
+
+//                 <div className="space-y-2">
+//                   <Label>Engagement Rate</Label>
+//                   <div className="flex items-center justify-between text-xs text-muted-foreground">
+//                     <span>1%</span>
+//                     <span>20%+</span>
+//                   </div>
+//                   <Slider defaultValue={[3, 15]} max={20} step={0.5} />
+//                   <div className="flex justify-between text-xs">
+//                     <span>3%</span>
+//                     <span>15%</span>
+//                   </div>
+//                 </div>
+
+//                 <div className="space-y-2">
+//                   <Label>Content Quality</Label>
+//                   <div className="flex items-center justify-between text-xs text-muted-foreground">
+//                     <span>Any</span>
+//                     <span>Premium</span>
+//                   </div>
+//                   <Slider defaultValue={[75]} max={100} step={1} />
+//                   <div className="flex justify-between text-xs">
+//                     <span></span>
+//                     <span>High Quality</span>
+//                   </div>
+//                 </div>
+//               </div>
+
+//               <div className="space-y-2">
+//                 <Label>Discovery Preferences</Label>
+//                 <div className="grid gap-2 md:grid-cols-2">
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Prioritize Engagement</h4>
+//                       <p className="text-xs text-muted-foreground">Focus on high engagement over follower count</p>
+//                     </div>
+//                     <Switch id="prioritize-engagement" defaultChecked />
+//                   </div>
+
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Authentic Audience</h4>
+//                       <p className="text-xs text-muted-foreground">Filter out influencers with fake followers</p>
+//                     </div>
+//                     <Switch id="authentic-audience" defaultChecked />
+//                   </div>
+
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Content Alignment</h4>
+//                       <p className="text-xs text-muted-foreground">Match content style to your brand</p>
+//                     </div>
+//                     <Switch id="content-alignment" defaultChecked />
+//                   </div>
+
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Growth Potential</h4>
+//                       <p className="text-xs text-muted-foreground">Find influencers with growth trajectory</p>
+//                     </div>
+//                     <Switch id="growth-potential" defaultChecked />
+//                   </div>
+//                 </div>
+//               </div>
+
+//               <div className="flex justify-end">
+//                 <Button>
+//                   <Bot className="h-4 w-4 mr-2" />
+//                   Generate AI Recommendations
+//                 </Button>
+//               </div>
+//             </CardContent>
+//           </Card>
+
+//           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//             {Array.from({ length: 6 }).map((_, i) => (
+//               <InfluencerCard key={i} source="ai" />
+//             ))}
+//           </div>
+
+//           <div className="flex justify-center">
+//             <Button variant="outline">Load More Recommendations</Button>
+//           </div>
+//         </TabsContent>
+
+//         <TabsContent value="similar" className="space-y-4 mt-4">
+//           <Card>
+//             <CardHeader>
+//               <CardTitle className="flex items-center">
+//                 <Users className="h-5 w-5 mr-2" />
+//                 Find Similar Influencers
+//               </CardTitle>
+//               <CardDescription>Discover influencers similar to your top performers</CardDescription>
+//             </CardHeader>
+//             <CardContent className="space-y-4">
+//               <div className="space-y-2">
+//                 <Label htmlFor="reference-influencer">Reference Influencer</Label>
+//                 <Select>
+//                   <SelectTrigger id="reference-influencer">
+//                     <SelectValue placeholder="Select an influencer" />
+//                   </SelectTrigger>
+//                   <SelectContent>
+//                     <SelectItem value="inf1">@fashion_emma</SelectItem>
+//                     <SelectItem value="inf2">@travel_mike</SelectItem>
+//                     <SelectItem value="inf3">@fitness_sarah</SelectItem>
+//                     <SelectItem value="inf4">@tech_jason</SelectItem>
+//                   </SelectContent>
+//                 </Select>
+//                 <p className="text-xs text-muted-foreground">
+//                   Or enter an Instagram handle below to find similar influencers
+//                 </p>
+//               </div>
+
+//               <div className="space-y-2">
+//                 <Label htmlFor="instagram-handle">Instagram Handle</Label>
+//                 <div className="relative">
+//                   <span className="absolute left-2.5 top-2.5 text-muted-foreground">@</span>
+//                   <Input id="instagram-handle" placeholder="username" className="pl-8" />
+//                 </div>
+//               </div>
+
+//               <div className="space-y-2">
+//                 <Label>Similarity Factors</Label>
+//                 <div className="grid gap-2 md:grid-cols-3">
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Content Style</h4>
+//                     </div>
+//                     <div className="flex items-center space-x-2">
+//                       <Input type="number" className="w-16 h-8" defaultValue="80" />
+//                       <span className="text-sm text-muted-foreground">%</span>
+//                     </div>
+//                   </div>
+
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Audience Type</h4>
+//                     </div>
+//                     <div className="flex items-center space-x-2">
+//                       <Input type="number" className="w-16 h-8" defaultValue="70" />
+//                       <span className="text-sm text-muted-foreground">%</span>
+//                     </div>
+//                   </div>
+
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Engagement</h4>
+//                     </div>
+//                     <div className="flex items-center space-x-2">
+//                       <Input type="number" className="w-16 h-8" defaultValue="50" />
+//                       <span className="text-sm text-muted-foreground">%</span>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+
+//               <Alert>
+//                 <AlertCircle className="h-4 w-4" />
+//                 <AlertTitle>How it works</AlertTitle>
+//                 <AlertDescription>
+//                   Our AI analyzes the content, audience, and engagement patterns of your reference influencer to find
+//                   others with similar characteristics. Adjust the similarity factors to control how closely the
+//                   recommendations should match.
+//                 </AlertDescription>
+//               </Alert>
+
+//               <div className="flex justify-end">
+//                 <Button>
+//                   <RefreshCw className="h-4 w-4 mr-2" />
+//                   Find Similar Influencers
+//                 </Button>
+//               </div>
+//             </CardContent>
+//           </Card>
+
+//           <div className="flex items-center justify-center p-12 border rounded-md">
+//             <div className="text-center">
+//               <Bot className="h-12 w-12 mx-auto text-muted-foreground" />
+//               <h3 className="mt-4 text-lg font-medium">Select a reference influencer</h3>
+//               <p className="mt-2 text-muted-foreground">Choose an influencer above to find similar creators</p>
+//             </div>
+//           </div>
+//         </TabsContent>
+
+//         <TabsContent value="settings" className="space-y-4 mt-4">
+//           <Card>
+//             <CardHeader>
+//               <CardTitle className="flex items-center">
+//                 <Zap className="h-5 w-5 mr-2" />
+//                 AI Model Settings
+//               </CardTitle>
+//               <CardDescription>Configure the AI models used for influencer discovery</CardDescription>
+//             </CardHeader>
+//             <CardContent className="space-y-4">
+//               <div className="space-y-2">
+//                 <Label>Active AI Models</Label>
+//                 <div className="grid gap-2 md:grid-cols-2">
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Content Analysis</h4>
+//                       <p className="text-xs text-muted-foreground">Analyzes content themes and quality</p>
+//                     </div>
+//                     <div className="flex items-center space-x-2">
+//                       <Badge variant="outline" className="text-green-500">
+//                         Active
+//                       </Badge>
+//                       <Switch id="content-analysis-model" defaultChecked />
+//                     </div>
+//                   </div>
+
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Audience Overlap</h4>
+//                       <p className="text-xs text-muted-foreground">Identifies similar audience demographics</p>
+//                     </div>
+//                     <div className="flex items-center space-x-2">
+//                       <Badge variant="outline" className="text-green-500">
+//                         Active
+//                       </Badge>
+//                       <Switch id="audience-overlap-model" defaultChecked />
+//                     </div>
+//                   </div>
+
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Engagement Pattern</h4>
+//                       <p className="text-xs text-muted-foreground">Analyzes engagement quality and patterns</p>
+//                     </div>
+//                     <div className="flex items-center space-x-2">
+//                       <Badge variant="outline" className="text-green-500">
+//                         Active
+//                       </Badge>
+//                       <Switch id="engagement-pattern-model" defaultChecked />
+//                     </div>
+//                   </div>
+
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Brand Alignment</h4>
+//                       <p className="text-xs text-muted-foreground">Matches influencers to brand values</p>
+//                     </div>
+//                     <div className="flex items-center space-x-2">
+//                       <Badge variant="outline" className="text-green-500">
+//                         Active
+//                       </Badge>
+//                       <Switch id="brand-alignment-model" defaultChecked />
+//                     </div>
+//                   </div>
+
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Growth Prediction</h4>
+//                       <p className="text-xs text-muted-foreground">Predicts future growth potential</p>
+//                     </div>
+//                     <div className="flex items-center space-x-2">
+//                       <Badge variant="outline" className="text-green-500">
+//                         Active
+//                       </Badge>
+//                       <Switch id="growth-prediction-model" defaultChecked />
+//                     </div>
+//                   </div>
+
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Fraud Detection</h4>
+//                       <p className="text-xs text-muted-foreground">Identifies fake followers and engagement</p>
+//                     </div>
+//                     <div className="flex items-center space-x-2">
+//                       <Badge variant="outline" className="text-green-500">
+//                         Active
+//                       </Badge>
+//                       <Switch id="fraud-detection-model" defaultChecked />
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+
+//               <div className="space-y-2">
+//                 <Label>Model Training</Label>
+//                 <div className="grid gap-2">
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Training Frequency</h4>
+//                       <p className="text-xs text-muted-foreground">How often AI models are retrained</p>
+//                     </div>
+//                     <Select defaultValue="weekly">
+//                       <SelectTrigger className="w-[180px]">
+//                         <SelectValue placeholder="Select frequency" />
+//                       </SelectTrigger>
+//                       <SelectContent>
+//                         <SelectItem value="daily">Daily</SelectItem>
+//                         <SelectItem value="weekly">Weekly</SelectItem>
+//                         <SelectItem value="monthly">Monthly</SelectItem>
+//                       </SelectContent>
+//                     </Select>
+//                   </div>
+
+//                   <div className="flex items-center justify-between border p-3 rounded-md">
+//                     <div>
+//                       <h4 className="font-medium">Last Training</h4>
+//                       <p className="text-xs text-muted-foreground">When models were last trained</p>
+//                     </div>
+//                     <div className="flex items-center space-x-2">
+//                       <span>2025-04-01</span>
+//                       <Button variant="outline" size="sm">
+//                         <RefreshCw className="h-4 w-4" />
+//                       </Button>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+
+//               <div className="space-y-2">
+//                 <Label>Performance Metrics</Label>
+//                 <div className="grid gap-4 md:grid-cols-3">
+//                   <Card className="bg-muted/50">
+//                     <CardContent className="p-4">
+//                       <div className="flex items-center justify-between">
+//                         <h4 className="font-medium flex items-center">
+//                           <PieChart className="h-4 w-4 mr-1" />
+//                           Accuracy
+//                         </h4>
+//                         <span className="text-lg font-bold">92%</span>
+//                       </div>
+//                       <p className="text-xs text-muted-foreground mt-1">Based on manual verification</p>
+//                     </CardContent>
+//                   </Card>
+
+//                   <Card className="bg-muted/50">
+//                     <CardContent className="p-4">
+//                       <div className="flex items-center justify-between">
+//                         <h4 className="font-medium flex items-center">
+//                           <BarChart2 className="h-4 w-4 mr-1" />
+//                           Precision
+//                         </h4>
+//                         <span className="text-lg font-bold">87%</span>
+//                       </div>
+//                       <p className="text-xs text-muted-foreground mt-1">Relevance of recommendations</p>
+//                     </CardContent>
+//                   </Card>
+
+//                   <Card className="bg-muted/50">
+//                     <CardContent className="p-4">
+//                       <div className="flex items-center justify-between">
+//                         <h4 className="font-medium flex items-center">
+//                           <Users className="h-4 w-4 mr-1" />
+//                           Coverage
+//                         </h4>
+//                         <span className="text-lg font-bold">78%</span>
+//                       </div>
+//                       <p className="text-xs text-muted-foreground mt-1">Of potential influencers</p>
+//                     </CardContent>
+//                   </Card>
+//                 </div>
+//               </div>
+
+//               <Alert>
+//                 <AlertCircle className="h-4 w-4" />
+//                 <AlertTitle>AI Capabilities</AlertTitle>
+//                 <AlertDescription>
+//                   Our AI models analyze content themes, engagement patterns, and audience overlap to discover new
+//                   influencers that match your brand's style and target audience. The models improve over time as they
+//                   learn from your selections and campaign results.
+//                 </AlertDescription>
+//               </Alert>
+
+//               <div className="flex justify-end space-x-2">
+//                 <Button variant="outline">Reset to Defaults</Button>
+//                 <Button>Save AI Settings</Button>
+//               </div>
+//             </CardContent>
+//           </Card>
+//         </TabsContent>
+//       </Tabs>
+//     </div>
+//   )
+// }
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Slider } from "@/components/ui/slider"
+import { Switch } from "@/components/ui/switch"
+import { Badge } from "@/components/ui/badge"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Bot, Search, AlertCircle, RefreshCw, Zap, PieChart, BarChart2, Users } from "lucide-react"
+import InfluencerCard from "@/components/global/influencers/influencer-card"
+
+export default function AIDiscoveryPage() {
+  return (
+    <div className="container mx-auto py-6 space-y-8">
+      <div className="flex flex-col space-y-2">
+        <h1 className="text-3xl font-bold tracking-tight">AI-Powered Discovery</h1>
+        <p className="text-muted-foreground">Use AI to find new influencers based on content and engagement patterns</p>
+      </div>
+
+      <Tabs defaultValue="discover">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="discover">Discover</TabsTrigger>
+          <TabsTrigger value="similar">Find Similar</TabsTrigger>
+          <TabsTrigger value="settings">AI Settings</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="discover" className="space-y-4 mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Bot className="h-5 w-5 mr-2" />
+                AI Discovery
+              </CardTitle>
+              <CardDescription>Let our AI find influencers that match your brand and campaign needs</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="discovery-prompt">Discovery Prompt</Label>
+                <div className="relative">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="discovery-prompt"
+                    placeholder="Describe the type of influencers you're looking for..."
+                    className="pl-8"
+                    defaultValue="Fashion influencers with high engagement who create sustainable fashion content and have an audience interested in eco-friendly products"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Be specific about content style, audience demographics, and brand alignment
+                </p>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="space-y-2">
+                  <Label>Follower Range</Label>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>1K</span>
+                    <span>1M+</span>
+                  </div>
+                  <Slider defaultValue={[10, 70]} max={100} step={1} />
+                  <div className="flex justify-between text-xs">
+                    <span>10K</span>
+                    <span>500K</span>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Engagement Rate</Label>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>1%</span>
+                    <span>20%+</span>
+                  </div>
+                  <Slider defaultValue={[3, 15]} max={20} step={0.5} />
+                  <div className="flex justify-between text-xs">
+                    <span>3%</span>
+                    <span>15%</span>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Content Quality</Label>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>Any</span>
+                    <span>Premium</span>
+                  </div>
+                  <Slider defaultValue={[75]} max={100} step={1} />
+                  <div className="flex justify-between text-xs">
+                    <span></span>
+                    <span>High Quality</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Discovery Preferences</Label>
+                <div className="grid gap-2 md:grid-cols-2">
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Prioritize Engagement</h4>
+                      <p className="text-xs text-muted-foreground">Focus on high engagement over follower count</p>
+                    </div>
+                    <Switch id="prioritize-engagement" defaultChecked />
+                  </div>
+
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Authentic Audience</h4>
+                      <p className="text-xs text-muted-foreground">Filter out influencers with fake followers</p>
+                    </div>
+                    <Switch id="authentic-audience" defaultChecked />
+                  </div>
+
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Content Alignment</h4>
+                      <p className="text-xs text-muted-foreground">Match content style to your brand</p>
+                    </div>
+                    <Switch id="content-alignment" defaultChecked />
+                  </div>
+
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Growth Potential</h4>
+                      <p className="text-xs text-muted-foreground">Find influencers with growth trajectory</p>
+                    </div>
+                    <Switch id="growth-potential" defaultChecked />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <Button>
+                  <Bot className="h-4 w-4 mr-2" />
+                  Generate AI Recommendations
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <InfluencerCard
+                key={i}
+                source="ai"
+                influencer={{
+                  id: `sample-${i}`,
+                  name: `AI Discovered Influencer ${i + 1}`,
+                  username: `ai_influencer_${i + 1}`,
+                  followers: Math.floor(10000 + Math.random() * 90000),
+                  engagementRate: 3 + Math.random() * 5,
+                  postsCount: Math.floor(50 + Math.random() * 150),
+                  verified: Math.random() > 0.5,
+                  niche: ["Fashion", "Beauty", "Lifestyle", "Travel", "Fitness"][i % 5],
+                  location: ["New York", "Los Angeles", "London", "Paris", "Tokyo", "Sydney"][i % 6],
+                  brandFit: Math.floor(70 + Math.random() * 30),
+                  audienceMatch: Math.floor(65 + Math.random() * 35),
+                  estimatedCost: Math.floor(500 + Math.random() * 150),
+                }}
+              />
+            ))}
+          </div>
+
+          <div className="flex justify-center">
+            <Button variant="outline">Load More Recommendations</Button>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="similar" className="space-y-4 mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Users className="h-5 w-5 mr-2" />
+                Find Similar Influencers
+              </CardTitle>
+              <CardDescription>Discover influencers similar to your top performers</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="reference-influencer">Reference Influencer</Label>
+                <Select>
+                  <SelectTrigger id="reference-influencer">
+                    <SelectValue placeholder="Select an influencer" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="inf1">@fashion_emma</SelectItem>
+                    <SelectItem value="inf2">@travel_mike</SelectItem>
+                    <SelectItem value="inf3">@fitness_sarah</SelectItem>
+                    <SelectItem value="inf4">@tech_jason</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">
+                  Or enter an Instagram handle below to find similar influencers
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="instagram-handle">Instagram Handle</Label>
+                <div className="relative">
+                  <span className="absolute left-2.5 top-2.5 text-muted-foreground">@</span>
+                  <Input id="instagram-handle" placeholder="username" className="pl-8" />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Similarity Factors</Label>
+                <div className="grid gap-2 md:grid-cols-3">
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Content Style</h4>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Input type="number" className="w-16 h-8" defaultValue="80" />
+                      <span className="text-sm text-muted-foreground">%</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Audience Type</h4>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Input type="number" className="w-16 h-8" defaultValue="70" />
+                      <span className="text-sm text-muted-foreground">%</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Engagement</h4>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Input type="number" className="w-16 h-8" defaultValue="50" />
+                      <span className="text-sm text-muted-foreground">%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <Alert>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>How it works</AlertTitle>
+                <AlertDescription>
+                  Our AI analyzes the content, audience, and engagement patterns of your reference influencer to find
+                  others with similar characteristics. Adjust the similarity factors to control how closely the
+                  recommendations should match.
+                </AlertDescription>
+              </Alert>
+
+              <div className="flex justify-end">
+                <Button>
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Find Similar Influencers
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="flex items-center justify-center p-12 border rounded-md">
+            <div className="text-center">
+              <Bot className="h-12 w-12 mx-auto text-muted-foreground" />
+              <h3 className="mt-4 text-lg font-medium">Select a reference influencer</h3>
+              <p className="mt-2 text-muted-foreground">Choose an influencer above to find similar creators</p>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="settings" className="space-y-4 mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Zap className="h-5 w-5 mr-2" />
+                AI Model Settings
+              </CardTitle>
+              <CardDescription>Configure the AI models used for influencer discovery</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Active AI Models</Label>
+                <div className="grid gap-2 md:grid-cols-2">
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Content Analysis</h4>
+                      <p className="text-xs text-muted-foreground">Analyzes content themes and quality</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="outline" className="text-green-500">
+                        Active
+                      </Badge>
+                      <Switch id="content-analysis-model" defaultChecked />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Audience Overlap</h4>
+                      <p className="text-xs text-muted-foreground">Identifies similar audience demographics</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="outline" className="text-green-500">
+                        Active
+                      </Badge>
+                      <Switch id="audience-overlap-model" defaultChecked />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Engagement Pattern</h4>
+                      <p className="text-xs text-muted-foreground">Analyzes engagement quality and patterns</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="outline" className="text-green-500">
+                        Active
+                      </Badge>
+                      <Switch id="engagement-pattern-model" defaultChecked />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Brand Alignment</h4>
+                      <p className="text-xs text-muted-foreground">Matches influencers to brand values</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="outline" className="text-green-500">
+                        Active
+                      </Badge>
+                      <Switch id="brand-alignment-model" defaultChecked />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Growth Prediction</h4>
+                      <p className="text-xs text-muted-foreground">Predicts future growth potential</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="outline" className="text-green-500">
+                        Active
+                      </Badge>
+                      <Switch id="growth-prediction-model" defaultChecked />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Fraud Detection</h4>
+                      <p className="text-xs text-muted-foreground">Identifies fake followers and engagement</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="outline" className="text-green-500">
+                        Active
+                      </Badge>
+                      <Switch id="fraud-detection-model" defaultChecked />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Model Training</Label>
+                <div className="grid gap-2">
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Training Frequency</h4>
+                      <p className="text-xs text-muted-foreground">How often AI models are retrained</p>
+                    </div>
+                    <Select defaultValue="weekly">
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Select frequency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="daily">Daily</SelectItem>
+                        <SelectItem value="weekly">Weekly</SelectItem>
+                        <SelectItem value="monthly">Monthly</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex items-center justify-between border p-3 rounded-md">
+                    <div>
+                      <h4 className="font-medium">Last Training</h4>
+                      <p className="text-xs text-muted-foreground">When models were last trained</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span>2025-04-01</span>
+                      <Button variant="outline" size="sm">
+                        <RefreshCw className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Performance Metrics</Label>
+                <div className="grid gap-4 md:grid-cols-3">
+                  <Card className="bg-muted/50">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-medium flex items-center">
+                          <PieChart className="h-4 w-4 mr-1" />
+                          Accuracy
+                        </h4>
+                        <span className="text-lg font-bold">92%</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">Based on manual verification</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-muted/50">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-medium flex items-center">
+                          <BarChart2 className="h-4 w-4 mr-1" />
+                          Precision
+                        </h4>
+                        <span className="text-lg font-bold">87%</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">Relevance of recommendations</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-muted/50">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-medium flex items-center">
+                          <Users className="h-4 w-4 mr-1" />
+                          Coverage
+                        </h4>
+                        <span className="text-lg font-bold">78%</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">Of potential influencers</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+
+              <Alert>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>AI Capabilities</AlertTitle>
+                <AlertDescription>
+                  Our AI models analyze content themes, engagement patterns, and audience overlap to discover new
+                  influencers that match your brand's style and target audience. The models improve over time as they
+                  learn from your selections and campaign results.
+                </AlertDescription>
+              </Alert>
+
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline">Reset to Defaults</Button>
+                <Button>Save AI Settings</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}
+
