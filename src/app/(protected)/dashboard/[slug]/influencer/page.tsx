@@ -38,7 +38,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="space-x-4">
-                <Link href="/influencers/discover">
+                <Link href={`/dashboard/${slug}/influencer/influencers/discover`}>
                   <Button>
                     Get Started
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -61,7 +61,7 @@ export default function Home() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href={`/dashboard/${slug}/influencers/discover`}>
+                  <Link href={`/dashboard/${slug}/influencer/influencers/discover`}>
                   
                     <Button variant="outline" className="w-full">
                       Explore
@@ -78,7 +78,7 @@ export default function Home() {
                   <CardDescription>Connect to Instagram API and third-party data providers.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href={`/dashboard/${slug}/integrations`}>
+                  <Link href={`/dashboard/${slug}/influencer/integrations`}>
                     <Button variant="outline" className="w-full">
                       Configure
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -94,7 +94,7 @@ export default function Home() {
                   <CardDescription>Let influencers sign up and manage their profiles directly.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href={`/dashboard/${slug}/portal/settings`}>
+                  <Link href={`/dashboard/${slug}/influencer/portal/settings`}>
                     <Button variant="outline" className="w-full">
                       Manage
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -110,7 +110,7 @@ export default function Home() {
                   <CardDescription>Upload and manage your existing influencer contacts.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href={`/dashboard/${slug}/influencers/import`}>
+                  <Link href={`/dashboard/${slug}/influencer/influencers/import`}>
                     <Button variant="outline" className="w-full">
                       Import
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -126,7 +126,7 @@ export default function Home() {
                   <CardDescription>Track and analyze influencer campaign performance.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href={`/dashboard/${slug}/campaigns/analytics`}>
+                  <Link href={`/dashboard/${slug}/influencer/campaigns/analytics`}>
                     <Button variant="outline" className="w-full">
                       View Analytics
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -142,7 +142,7 @@ export default function Home() {
                   <CardDescription>Use AI to find influencers based on content and engagement.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href={`/dashboard/${slug}/influencers/ai-discovery`}>
+                  <Link href={`/dashboard/${slug}/influencer/influencers/ai-discovery`}>
                     <Button variant="outline" className="w-full">
                       Discover
                       <ArrowRight className="ml-2 h-4 w-4" />
