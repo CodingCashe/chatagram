@@ -888,7 +888,7 @@ export default function AIDiscoveryPage() {
                 <AlertTitle>AI Capabilities</AlertTitle>
                 <AlertDescription>
                   Our AI models analyze content themes, engagement patterns, and audience overlap to discover new
-                  influencers that match your brand's style and target audience. The models improve over time as they
+                  influencers that match your brand&apos;s style and target audience. The models improve over time as they
                   learn from your selections and campaign results.
                 </AlertDescription>
               </Alert>

@@ -50,7 +50,7 @@ export default function IntegrationsPage() {
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>API Limitations</AlertTitle>
                 <AlertDescription>
-                  Instagram's API has restrictions on what data you can access. Some metrics like detailed engagement
+                  Instagram&apos;s API has restrictions on what data you can access. Some metrics like detailed engagement
                   rates require additional data sources.
                 </AlertDescription>
               </Alert>
