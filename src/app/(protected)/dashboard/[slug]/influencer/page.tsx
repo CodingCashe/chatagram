@@ -2,6 +2,18 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, Database, Bot, BarChart3, Search, Upload, UserPlus } from "lucide-react"
+import { useRouter, usePathname } from "next/navigation"
+
+ const router = useRouter()
+  const pathname = usePathname()
+  const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+  const slug = slugMatch ? slugMatch[1] : ""
+
+  // Unified navigation handler
+  const handleNavigation = (path: string) => {
+    router.push(`/dashboard/${slug}/${path}`);
+  };
+
 
 export default function Home() {
   return (
@@ -42,7 +54,8 @@ export default function Home() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href="/influencers/discover">
+                  <Link href={`/dashboard/${slug}/influencers/discover`}>
+                  
                     <Button variant="outline" className="w-full">
                       Explore
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -58,7 +71,7 @@ export default function Home() {
                   <CardDescription>Connect to Instagram API and third-party data providers.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href="/integrations">
+                  <Link href={`/dashboard/${slug}/integrations`}>
                     <Button variant="outline" className="w-full">
                       Configure
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -74,7 +87,7 @@ export default function Home() {
                   <CardDescription>Let influencers sign up and manage their profiles directly.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href="/portal/settings">
+                  <Link href={`/dashboard/${slug}/portal/settings`}>
                     <Button variant="outline" className="w-full">
                       Manage
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -90,7 +103,7 @@ export default function Home() {
                   <CardDescription>Upload and manage your existing influencer contacts.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href="/influencers/import">
+                  <Link href={`/dashboard/${slug}/influencers/import`}>
                     <Button variant="outline" className="w-full">
                       Import
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -106,7 +119,7 @@ export default function Home() {
                   <CardDescription>Track and analyze influencer campaign performance.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href="/campaigns/analytics">
+                  <Link href={`/dashboard/${slug}/campaigns/analytics`}>
                     <Button variant="outline" className="w-full">
                       View Analytics
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -122,7 +135,7 @@ export default function Home() {
                   <CardDescription>Use AI to find influencers based on content and engagement.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href="/influencers/ai-discovery">
+                  <Link href={`/dashboard/${slug}/influencers/ai-discovery`}>
                     <Button variant="outline" className="w-full">
                       Discover
                       <ArrowRight className="ml-2 h-4 w-4" />
