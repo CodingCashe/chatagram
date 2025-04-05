@@ -25,6 +25,7 @@ export const PAGE_BREAD_CRUMBS: string[] = [
   'leads',
   'chat',
   'referral',
+  'influencer',
   'whatsapp',
   
 
@@ -50,6 +51,7 @@ export const PAGE_ICON: Props = {
   LEADS:<PersonStanding/>,
   CHAT:<MessageCircle/>,
   WHATSAPP:<Chat/>,
+  INFLUENCER:<Chat/>,
   AFFILIATE:<Award/>,
 }
 

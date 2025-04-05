@@ -312,6 +312,11 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
       },
       {
         id: uuid(),
+        label: 'Influencer',
+        icon: <Award />,
+      },
+      {
+        id: uuid(),
         label: 'Whatsapp',
         icon: <Chat />,
       },
