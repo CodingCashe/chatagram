@@ -51,6 +51,9 @@ model User {
   portalSettings    PortalSettings[]
   aiDiscoverySettings AIDiscoverySettings?
   dataSourceSettings DataSourceSettings?
+
+  importHistory       ImportHistory[]
+  instagramCredentials InstagramCredentials?
 }
 
 model ScheduledContent {
@@ -828,7 +831,8 @@ model Influencer {
   sourceId          String?             // ID from the source system
   metrics           InfluencerMetric[]
   campaigns         CampaignInfluencer[]
-  lists             InfluencerList[]    @relation("InfluencerToList")
+  lists             InfluencerListInfluencer[]
+  list              InfluencerList[]    @relation("InfluencerToList")
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
   userId            String              @db.Uuid
@@ -931,10 +935,11 @@ model InfluencerList {
   id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name              String
   description       String?
-  influencers       Influencer[] @relation("InfluencerToList")
+  influencer        Influencer[] @relation("InfluencerToList")
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
   userId            String       @db.Uuid
+  influencers       InfluencerListInfluencer[]
   user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   @@index([userId])
@@ -1045,7 +1050,6 @@ model DataSourceSettings {
   updatedAt         DateTime   @updatedAt
 }
 
-
 enum InfluencerStatus {
   DISCOVERED
   CONTACTED
@@ -1054,7 +1058,9 @@ enum InfluencerStatus {
   ACTIVE
   INACTIVE
   BLACKLISTED
+  IDENTIFIED
 }
+
 
 enum InfluencerSource {
   INSTAGRAM_API
@@ -1063,7 +1069,10 @@ enum InfluencerSource {
   AI_DISCOVERY
   PORTAL_SIGNUP
   MANUAL_IMPORT
+  IMPORT
 }
+
+
 
 enum MyCampaignStatus {
   DRAFT
@@ -1075,5 +1084,44 @@ enum MyCampaignStatus {
 }
 
 
+////////////////////////////////
 
 
+model ImportHistory {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String   @unique @db.Uuid
+  fileName     String
+  recordsTotal Int
+  recordsAdded Int
+  recordsUpdated Int
+  recordsFailed Int
+  errors       String[]
+  importOption String
+  enrichData   Boolean
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model InstagramCredentials {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String   @unique @db.Uuid
+  appId       String
+  appSecret   String
+  accessToken String
+  tokenExpiry DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+
+model InfluencerListInfluencer {
+  listId       String         @unique @db.Uuid
+  influencerId String         @unique @db.Uuid
+  createdAt    DateTime       @default(now())
+  list         InfluencerList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  influencer   Influencer     @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+
+  @@id([listId, influencerId])
+}
