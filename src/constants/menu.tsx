@@ -102,22 +102,185 @@
 //   },
 // ]
 
+// import {
+//   HomeDuoToneWhite,
+//   AutomationDuoToneWhite,
+//   RocketDuoToneWhite,
+//   SettingsDuoToneWhite,
+//   PencilDuoToneBlack,
+//   Chat,
+// } from '@/icons'
+// import { MessageCircle,Instagram,Clock, BarChart2, Users,DollarSign, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone, TargetIcon, PersonStanding, Gift, Group, Award } from 'lucide-react'
+// import { v4 as uuid } from 'uuid'
+
+// export type SideBarItemProps = {
+//   id: string
+//   label: string
+//   icon: React.ReactNode
+//   subItems?: Omit<SideBarItemProps, 'subItems'>[]
+// }
+
+// export type SideBarGroupProps = {
+//   id: string
+//   label: string
+//   items: SideBarItemProps[]
+// }
+
+// export const SIDEBAR_MENU: SideBarGroupProps[] = [
+//   {
+//     id: uuid(),
+//     label: 'Main',
+//     items: [
+//       {
+//         id: uuid(),
+//         label: 'Home',
+//         icon: <HomeDuoToneWhite />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Automations',
+//         icon: <AutomationDuoToneWhite />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'leads',
+//         icon: <PersonStanding />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Customize',
+//         icon: <TargetIcon />,
+//       },
+//     ]
+//   },
+//   {
+//     id: uuid(),
+//     label: 'Influencer',
+//     items: [
+//       {
+//         id: uuid(),
+//         label: 'Integrations',
+//         icon: <HomeDuoToneWhite />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'campaigns',
+//         icon: <AutomationDuoToneWhite />,
+//         subItems: [
+//           { id: uuid(), label: 'Create New', icon: <Zap size={18} /> },
+//           { id: uuid(), label: 'Templates', icon: <FileText size={18} /> },
+//           { id: uuid(), label: 'Analytics', icon: <BarChart2 size={18} /> },
+//         ]
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Portal',
+//         icon: <AutomationDuoToneWhite />,
+//         subItems: [
+//           { id: uuid(), label: 'Settings', icon: <Zap size={18} /> },
+//         ]
+//       },
+//       {
+//         id: uuid(),
+//         label: 'influencers',
+//         icon: <AutomationDuoToneWhite />,
+//         subItems: [
+//           { id: uuid(), label: 'ai-discovery', icon: <Zap size={18} /> },
+//           { id: uuid(), label: 'discover', icon: <FileText size={18} /> },
+//           { id: uuid(), label: 'import', icon: <BarChart2 size={18} /> },
+//         ]
+//       },
+//     ]
+//   },
+ 
+//   {
+//     id: uuid(),
+//     label: 'System',
+//     items: [
+//       {
+//         id: uuid(),
+//         label: 'Integrations',
+//         icon: <RocketDuoToneWhite />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Pricing',
+//         icon: <SettingsDuoToneWhite />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Payment',
+//         icon: <DollarSign />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Information',
+//         icon: <PencilDuoToneBlack />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Posting',
+//         icon: <Clock />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Chat',
+//         icon: <MessageCircle />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Referral',
+//         icon: <Gift />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Affiliate',
+//         icon: <Award />,
+//       },
+//       {
+
+//         id: uuid(),
+//         label: 'Whatsapp',
+//         icon: <Chat />,
+//       },
+//     ]
+//   },
+// ]
+
+
+import { v4 as uuid } from "uuid"
 import {
-  HomeDuoToneWhite,
-  AutomationDuoToneWhite,
-  RocketDuoToneWhite,
-  SettingsDuoToneWhite,
-  PencilDuoToneBlack,
-  Chat,
-} from '@/icons'
-import { MessageCircle,Instagram,Clock, BarChart2, Users,DollarSign, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone, TargetIcon, PersonStanding, Gift, Group, Award } from 'lucide-react'
-import { v4 as uuid } from 'uuid'
+  Home,
+  Zap,
+  Users,
+  Settings,
+  Target,
+  BarChart2,
+  Sparkles,
+  MessageCircle,
+  Clock,
+  DollarSign,
+  Gift,
+  Award,
+  Plug,
+  PanelTop,
+  Search,
+  Upload,
+  PlusCircle,
+  Layout,
+  HelpCircle,
+  CreditCard,
+  Info,
+  Send,
+  Instagram,
+} from "lucide-react"
+import type React from "react"
 
 export type SideBarItemProps = {
   id: string
   label: string
   icon: React.ReactNode
-  subItems?: Omit<SideBarItemProps, 'subItems'>[]
+  subItems?: Omit<SideBarItemProps, "subItems">[]
 }
 
 export type SideBarGroupProps = {
@@ -126,126 +289,133 @@ export type SideBarGroupProps = {
   items: SideBarItemProps[]
 }
 
+// Helper function to add color to icons
+const colorIcon = (Icon: React.ComponentType<any>, color: string, size = 20) => {
+  return <Icon size={size} className={`${color} transition-colors duration-200`} />
+}
+
 export const SIDEBAR_MENU: SideBarGroupProps[] = [
   {
     id: uuid(),
-    label: 'Main',
+    label: "Main",
     items: [
       {
         id: uuid(),
-        label: 'Home',
-        icon: <HomeDuoToneWhite />,
+        label: "Home",
+        icon: colorIcon(Home, "text-blue-400"),
       },
       {
         id: uuid(),
-        label: 'Automations',
-        icon: <AutomationDuoToneWhite />,
+        label: "Automations",
+        icon: colorIcon(Zap, "text-yellow-400"),
       },
       {
         id: uuid(),
-        label: 'leads',
-        icon: <PersonStanding />,
+        label: "Leads",
+        icon: colorIcon(Users, "text-green-400"),
       },
       {
         id: uuid(),
-        label: 'Customize',
-        icon: <TargetIcon />,
+        label: "Customize",
+        icon: colorIcon(Target, "text-purple-400"),
       },
-    ]
+    ],
   },
   {
     id: uuid(),
-    label: 'Influencer',
+    label: "Influencer",
     items: [
       {
         id: uuid(),
-        label: 'Integrations',
-        icon: <HomeDuoToneWhite />,
+        label: "Integrations",
+        icon: colorIcon(Plug, "text-cyan-400"),
       },
       {
         id: uuid(),
-        label: 'campaigns',
-        icon: <AutomationDuoToneWhite />,
+        label: "Campaigns",
+        icon: colorIcon(Target, "text-pink-400"),
         subItems: [
-          { id: uuid(), label: 'Create New', icon: <Zap size={18} /> },
-          { id: uuid(), label: 'Templates', icon: <FileText size={18} /> },
-          { id: uuid(), label: 'Analytics', icon: <BarChart2 size={18} /> },
-        ]
+          { id: uuid(), label: "Create New", icon: colorIcon(PlusCircle, "text-green-400", 18) },
+          { id: uuid(), label: "Templates", icon: colorIcon(Layout, "text-blue-400", 18) },
+          { id: uuid(), label: "Analytics", icon: colorIcon(BarChart2, "text-purple-400", 18) },
+        ],
       },
       {
         id: uuid(),
-        label: 'Portal',
-        icon: <AutomationDuoToneWhite />,
+        label: "Influencers",
+        icon: colorIcon(Instagram, "text-rose-400"),
         subItems: [
-          { id: uuid(), label: 'Settings', icon: <Zap size={18} /> },
-        ]
+          { id: uuid(), label: "AI-Discovery", icon: colorIcon(Sparkles, "text-yellow-400", 18) },
+          { id: uuid(), label: "Discover", icon: colorIcon(Search, "text-blue-400", 18) },
+          { id: uuid(), label: "Import", icon: colorIcon(Upload, "text-green-400", 18) },
+        ],
       },
       {
         id: uuid(),
-        label: 'influencers',
-        icon: <AutomationDuoToneWhite />,
-        subItems: [
-          { id: uuid(), label: 'ai-discovery', icon: <Zap size={18} /> },
-          { id: uuid(), label: 'discover', icon: <FileText size={18} /> },
-          { id: uuid(), label: 'import', icon: <BarChart2 size={18} /> },
-        ]
+        label: "Portal",
+        icon: colorIcon(PanelTop, "text-indigo-400"),
+        subItems: [{ id: uuid(), label: "Settings", icon: colorIcon(Settings, "text-gray-400", 18) }],
       },
-    ]
+    ],
   },
- 
   {
     id: uuid(),
-    label: 'System',
+    label: "System",
     items: [
+      // Communication group
       {
         id: uuid(),
-        label: 'Integrations',
-        icon: <RocketDuoToneWhite />,
+        label: "Chat",
+        icon: colorIcon(MessageCircle, "text-green-400"),
       },
       {
         id: uuid(),
-        label: 'Pricing',
-        icon: <SettingsDuoToneWhite />,
+        label: "Whatsapp",
+        icon: colorIcon(Send, "text-green-500"),
       },
       {
         id: uuid(),
-        label: 'Payment',
-        icon: <DollarSign />,
+        label: "Posting",
+        icon: colorIcon(Clock, "text-blue-400"),
+      },
+
+      // Financial group
+      {
+        id: uuid(),
+        label: "Payment",
+        icon: colorIcon(CreditCard, "text-purple-400"),
       },
       {
         id: uuid(),
-        label: 'Information',
-        icon: <PencilDuoToneBlack />,
+        label: "Pricing",
+        icon: colorIcon(DollarSign, "text-emerald-400"),
       },
       {
         id: uuid(),
-        label: 'Posting',
-        icon: <Clock />,
+        label: "Referral",
+        icon: colorIcon(Gift, "text-pink-400"),
       },
       {
         id: uuid(),
-        label: 'Chat',
-        icon: <MessageCircle />,
+        label: "Affiliate",
+        icon: colorIcon(Award, "text-amber-400"),
+      },
+
+      // Information group
+      {
+        id: uuid(),
+        label: "Information",
+        icon: colorIcon(Info, "text-cyan-400"),
       },
       {
         id: uuid(),
-        label: 'Referral',
-        icon: <Gift />,
+        label: "Help",
+        icon: colorIcon(HelpCircle, "text-blue-400"),
       },
-      {
-        id: uuid(),
-        label: 'Affiliate',
-        icon: <Award />,
-      },
-      {
-        
-        id: uuid(),
-        label: 'Whatsapp',
-        icon: <Chat />,
-      },
-    ]
+    ],
   },
 ]
+
 
 
 // import {
