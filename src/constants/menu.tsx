@@ -102,118 +102,7 @@
 //   },
 // ]
 
-// import {
-//   HomeDuoToneWhite,
-//   AutomationDuoToneWhite,
-//   RocketDuoToneWhite,
-//   SettingsDuoToneWhite,
-// } from '@/icons'
-// import { MessageCircle, BarChart2, Users, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone } from 'lucide-react'
-// import { v4 as uuid } from 'uuid'
-
-// export type SideBarItemProps = {
-//   id: string
-//   label: string
-//   icon: React.ReactNode
-//   subItems?: Omit<SideBarItemProps, 'subItems'>[]
-// }
-
-// export type SideBarGroupProps = {
-//   id: string
-//   label: string
-//   items: SideBarItemProps[]
-// }
-
-// export const SIDEBAR_MENU: SideBarGroupProps[] = [
-//   {
-//     id: uuid(),
-//     label: 'Main',
-//     items: [
-//       {
-//         id: uuid(),
-//         label: 'Dashboard',
-//         icon: <HomeDuoToneWhite />,
-//       },
-//       {
-//         id: uuid(),
-//         label: 'Automations',
-//         icon: <AutomationDuoToneWhite />,
-//         subItems: [
-//           { id: uuid(), label: 'Create New', icon: <Zap size={18} /> },
-//           { id: uuid(), label: 'Templates', icon: <FileText size={18} /> },
-//           { id: uuid(), label: 'Analytics', icon: <BarChart2 size={18} /> },
-//         ]
-//       },
-//       {
-//         id: uuid(),
-//         label: 'Conversations',
-//         icon: <MessageCircle />,
-//       },
-//     ]
-//   },
-//   {
-//     id: uuid(),
-//     label: 'Growth',
-//     items: [
-//       {
-//         id: uuid(),
-//         label: 'Audience',
-//         icon: <Users />,
-//       },
-//       {
-//         id: uuid(),
-//         label: 'Campaigns',
-//         icon: <Calendar />,
-//       },
-//       {
-//         id: uuid(),
-//         label: 'Analytics',
-//         icon: <BarChart2 />,
-//       },
-//     ]
-//   },
-//   {
-//     id: uuid(),
-//     label: 'Content',
-//     items: [
-//       {
-//         id: uuid(),
-//         label: 'AI Assistant',
-//         icon: <Sparkles />,
-//       },
-//       {
-//         id: uuid(),
-//         label: 'Content Planner',
-//         icon: <Palette />,
-//       },
-//       {
-//         id: uuid(),
-//         label: 'Hashtag Manager',
-//         icon: <Target />,
-//       },
-//     ]
-//   },
-//   {
-//     id: uuid(),
-//     label: 'System',
-//     items: [
-//       {
-//         id: uuid(),
-//         label: 'Integrations',
-//         icon: <RocketDuoToneWhite />,
-//       },
-//       {
-//         id: uuid(),
-//         label: 'Settings',
-//         icon: <SettingsDuoToneWhite />,
-//       },
-//     ]
-//   },
-// ]
-
-
 import {
-  InstagramDuoToneBlue,
   HomeDuoToneWhite,
   AutomationDuoToneWhite,
   RocketDuoToneWhite,
@@ -224,19 +113,17 @@ import {
 import { MessageCircle,Instagram,Clock, BarChart2, Users,DollarSign, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone, TargetIcon, PersonStanding, Gift, Group, Award } from 'lucide-react'
 import { v4 as uuid } from 'uuid'
 
-export interface SideBarItemProps {
+export type SideBarItemProps = {
   id: string
   label: string
   icon: React.ReactNode
-  url?: string
-  subItems?: SideBarItemProps[]
+  subItems?: Omit<SideBarItemProps, 'subItems'>[]
 }
 
-export interface SideBarGroupProps {
+export type SideBarGroupProps = {
   id: string
   label: string
   items: SideBarItemProps[]
-  
 }
 
 export const SIDEBAR_MENU: SideBarGroupProps[] = [
@@ -266,6 +153,46 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
       },
     ]
   },
+  {
+    id: uuid(),
+    label: 'Influencer',
+    items: [
+      {
+        id: uuid(),
+        label: 'Integrations',
+        icon: <HomeDuoToneWhite />,
+      },
+      {
+        id: uuid(),
+        label: 'campaigns',
+        icon: <AutomationDuoToneWhite />,
+        subItems: [
+          { id: uuid(), label: 'Create New', icon: <Zap size={18} /> },
+          { id: uuid(), label: 'Templates', icon: <FileText size={18} /> },
+          { id: uuid(), label: 'Analytics', icon: <BarChart2 size={18} /> },
+        ]
+      },
+      {
+        id: uuid(),
+        label: 'Portal',
+        icon: <AutomationDuoToneWhite />,
+        subItems: [
+          { id: uuid(), label: 'Settings', icon: <Zap size={18} /> },
+        ]
+      },
+      {
+        id: uuid(),
+        label: 'influencers',
+        icon: <AutomationDuoToneWhite />,
+        subItems: [
+          { id: uuid(), label: 'ai-discovery', icon: <Zap size={18} /> },
+          { id: uuid(), label: 'discover', icon: <FileText size={18} /> },
+          { id: uuid(), label: 'import', icon: <BarChart2 size={18} /> },
+        ]
+      },
+    ]
+  },
+ 
   {
     id: uuid(),
     label: 'System',
@@ -311,11 +238,7 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
         icon: <Award />,
       },
       {
-        id: uuid(),
-        label: 'Influencer',
-        icon: <Award />,
-      },
-      {
+        
         id: uuid(),
         label: 'Whatsapp',
         icon: <Chat />,
@@ -323,5 +246,122 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
     ]
   },
 ]
+
+
+// import {
+//   InstagramDuoToneBlue,
+//   HomeDuoToneWhite,
+//   AutomationDuoToneWhite,
+//   RocketDuoToneWhite,
+//   SettingsDuoToneWhite,
+//   PencilDuoToneBlack,
+//   Chat,
+// } from '@/icons'
+// import { MessageCircle,Instagram,Clock, BarChart2, Users,DollarSign, Calendar, Zap, FileText, HelpCircle, Sparkles, Target, Palette, Megaphone, TargetIcon, PersonStanding, Gift, Group, Award } from 'lucide-react'
+// import { v4 as uuid } from 'uuid'
+
+
+// export type SideBarItemProps = {
+//   id: string
+//   label: string
+//   icon: React.ReactNode
+//   subItems?: Omit<SideBarItemProps, 'subItems'>[]
+// }
+
+
+// // export interface SideBarItemProps {
+// //   id: string
+// //   label: string
+// //   icon: React.ReactNode
+// //   url?: string
+// //   subItems?: SideBarItemProps[]
+// // }
+
+// export interface SideBarGroupProps {
+//   id: string
+//   label: string
+//   items: SideBarItemProps[]
+  
+// }
+
+// export const SIDEBAR_MENU: SideBarGroupProps[] = [
+//   {
+//     id: uuid(),
+//     label: 'Main',
+//     items: [
+//       {
+//         id: uuid(),
+//         label: 'Home',
+//         icon: <HomeDuoToneWhite />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Automations',
+//         icon: <AutomationDuoToneWhite />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'leads',
+//         icon: <PersonStanding />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Customize',
+//         icon: <TargetIcon />,
+//       },
+//     ]
+//   },
+//   {
+//     id: uuid(),
+//     label: 'System',
+//     items: [
+//       {
+//         id: uuid(),
+//         label: 'Integrations',
+//         icon: <RocketDuoToneWhite />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Pricing',
+//         icon: <SettingsDuoToneWhite />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Payment',
+//         icon: <DollarSign />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Information',
+//         icon: <PencilDuoToneBlack />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Posting',
+//         icon: <Clock />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Chat',
+//         icon: <MessageCircle />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Referral',
+//         icon: <Gift />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Affiliate',
+//         icon: <Award />,
+//       },
+//       {
+//         id: uuid(),
+//         label: 'Whatsapp',
+//         icon: <Chat />,
+//       },
+//     ]
+//   },
+// ]
 
 
