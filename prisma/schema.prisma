@@ -54,6 +54,12 @@ model User {
 
   importHistory       ImportHistory[]
   instagramCredentials InstagramCredentials?
+
+  
+  businessProfile     BusinessProfile?
+  savedSearches       SavedSearch[]        // Add this line
+  chatParticipations  CollabChatParticipant[] // Add this line
+  
 }
 
 model ScheduledContent {
@@ -799,73 +805,115 @@ model WhatsAppStat {
   @@index([date])
 }
 
-
-
-// Influencer Management Models
-
 model Influencer {
-  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name              String
-  username          String              @unique
-  bio               String?
-  profilePicture    String?
-  followers         Int                 @default(0)
-  following         Int                 @default(0)
-  postsCount        Int                 @default(0)
-  engagementRate    Float               @default(0)
-  averageLikes      Int                 @default(0)
-  averageComments   Int                 @default(0)
-  verified          Boolean             @default(false)
-  location          String?
-  niche             String?
-  email             String?
-  website           String?
-  contactInfo       Json?
-  notes             String?
-  tags              String[]
-  brandFit          Int?                // Score from 0-100
-  audienceMatch     Int?                // Score from 0-100
-  estimatedCost     Float?
-  status            InfluencerStatus    @default(DISCOVERED)
-  source            InfluencerSource    @default(INSTAGRAM_API)
-  sourceId          String?             // ID from the source system
-  metrics           InfluencerMetric[]
-  campaigns         CampaignInfluencer[]
-  lists             InfluencerListInfluencer[]
-  list              InfluencerList[]    @relation("InfluencerToList")
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  userId            String              @db.Uuid
-  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  aiDiscoveryScore  Float?              // AI-generated relevance score
-  aiDiscoveryData   Json?               // Additional AI-generated data
-  portalSignup      Boolean             @default(false) // Whether they signed up through the portal
-  audienceDemographics Json?            // Age, gender, location breakdown
-  authenticity      Int?                // Score from 0-100 for fake follower detection
-  growthRate        Float?              // Monthly growth rate percentage
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String               @db.Uuid @unique
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   
+  // Profile Information
+  name                String
+  username            String               @unique
+  bio                 String?
+  profilePicture      String?
+  location            String?
+  niche               String?
+  email               String?
+  website             String?
+  contactInfo         Json?
+  notes               String?
+  tags                String[]
+  verified            Boolean             @default(false)
+  isAvailableForHire  Boolean             @default(true)
+  platforms           String[]
+
+  // Stats
+  followers           Int                 @default(0)
+  following           Int                 @default(0)
+  postsCount          Int                 @default(0)
+  engagementRate      Float               @default(0)
+  averageLikes        Int                 @default(0)
+  averageComments     Int                 @default(0)
+  totalEarnings       Float               @default(0)
+  pendingEarnings     Float               @default(0)
+  currentMonthEarnings Float              @default(0)
+  monthlyEarningsGrowth Float             @default(0)
+
+  // Business Metrics
+  brandFit            Int?
+  audienceMatch       Int?
+  estimatedCost       Float?
+  audienceDemographics Json?
+  authenticity        Int?
+  growthRate          Float?
+
+  // Status
+  status              InfluencerStatus    @default(DISCOVERED)
+  source              InfluencerSource    @default(INSTAGRAM_API)
+  sourceId            String?
+  portalSignup        Boolean             @default(false)
+  lastActive          DateTime            @default(now())
+
+  // AI/Discovery
+  aiDiscoveryScore    Float?
+  aiDiscoveryData     Json?
+
+  // Relations
+  metrics             InfluencerMetrics[]
+  campaigns           CampaignInfluencer[]
+  lists               InfluencerListInfluencer[]
+  list                InfluencerList[]    @relation("InfluencerToList")
+  socialAccounts      SocialAccount[]
+  contentTypes        ContentType[]
+  contentSamples      ContentSample[]
+  rates               InfluencerRates?
+  earnings            InfluencerEarnings[]
+  applications        OpportunityApplication[]
+  chatParticipations  CollabChatParticipant[]
+
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
   @@index([userId])
   @@index([username])
   @@index([source])
   @@index([niche])
 }
 
-model InfluencerMetric {
-  id                String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  influencerId      String     @db.Uuid
-  influencer        Influencer @relation(fields: [influencerId], references: [id], onDelete: Cascade)
-  date              DateTime   @default(now())
-  followers         Int
-  engagementRate    Float
-  averageLikes      Int?
-  averageComments   Int?
-  reachEstimate     Int?
+model InfluencerMetrics {
+  id                      String               @id @default(uuid())
+  influencerId            String               @db.Uuid
+  influencer              Influencer           @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  date                    DateTime             @default(now())
+  profileViews            Int                  @default(0)
+  profileViewsGrowth      Float                @default(0)
+  profileViewsPercentile  Float                @default(0)
+  searchAppearances       Int                  @default(0)
+  searchAppearancesPercentile Float            @default(0)
+  campaignInvites         Int                  @default(0)
+  campaignInvitesGrowth   Float                @default(0)
+  brandContacts           Int                  @default(0)
+  brandContactsPercentile Float                @default(0)
+  engagementRate              Float                @default(0)
+  engagementGrowth        Float                @default(0)
+  followers               Int                  @default(0)
+  followersGrowth         Float                @default(0)
+  averageLikes            Int?
+  averageComments         Int?
+  reachEstimate           Int?
+  acceptanceRate          Float                @default(0)
+  acceptanceRateChange    Float                @default(0)
+  completionRate          Float                @default(0)
+  completionRateChange    Float                @default(0)
+  clientSatisfaction      Float                @default(0)
+  reviewCount             Int                  @default(0)
+  createdAt               DateTime             @default(now())
   impressionsEstimate Int?
-  metricSource      String     // Where this metric came from
-  
+  metricSource      String?
+
   @@index([influencerId])
   @@index([date])
 }
+
 
 model Campaign {
   id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -874,21 +922,24 @@ model Campaign {
   startDate         DateTime?
   endDate           DateTime?
   budget            Float?
-  status            MyCampaignStatus      @default(DRAFT)
-  goals             Json?               // Campaign goals and KPIs
-  brief             String?             // Campaign brief
-  guidelines        String?             // Content guidelines
-  hashtags          String[]            // Campaign hashtags
-  mentions          String[]            // Accounts to mention
+  status            MyCampaignStatus    @default(DRAFT)
+  goals             Json?
+  brief             String?
+  guidelines        String?
+  hashtags          String[]
+  mentions          String[]
   influencers       CampaignInfluencer[]
   analytics         CampaignAnalytics[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
   userId            String              @db.Uuid
   user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessProfileId String?             @db.Uuid
+  businessProfile   BusinessProfile?    @relation(fields: [businessProfileId], references: [id], onDelete: SetNull)
   
   @@index([userId])
   @@index([status])
+  @@index([businessProfileId])
 }
 
 model CampaignInfluencer {
@@ -897,12 +948,14 @@ model CampaignInfluencer {
   campaign          Campaign   @relation(fields: [campaignId], references: [id], onDelete: Cascade)
   influencerId      String     @db.Uuid
   influencer        Influencer @relation(fields: [influencerId], references: [id], onDelete: Cascade)
-  status            String     @default("invited") // invited, accepted, declined, completed
-  rate              Float?     // Agreed payment rate
-  deliverables      Json?      // What the influencer agreed to deliver
-  contentUrls       String[]   // URLs to the content they posted
+  status            String     @default("invited")
+  rate              Float?
+  deliverables      Json?
+  contentUrls       String[]
   notes             String?
-  performance       Json?      // Performance metrics for this influencer in this campaign
+  dueDate           DateTime?
+  progress          Int        @default(0)
+  performance       Json?
   createdAt         DateTime   @default(now())
   updatedAt         DateTime   @updatedAt
   
@@ -910,6 +963,7 @@ model CampaignInfluencer {
   @@index([campaignId])
   @@index([influencerId])
 }
+
 
 model CampaignAnalytics {
   id                String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -1084,9 +1138,6 @@ enum MyCampaignStatus {
 }
 
 
-////////////////////////////////
-
-
 model ImportHistory {
   id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId       String   @unique @db.Uuid
@@ -1124,4 +1175,213 @@ model InfluencerListInfluencer {
   influencer   Influencer     @relation(fields: [influencerId], references: [id], onDelete: Cascade)
 
   @@id([listId, influencerId])
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////
+
+
+// New models to add to your existing schema
+
+
+// Business Profile
+model BusinessProfile {
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String               @unique @db.Uuid
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName         String
+  industry            String?
+  website             String?
+  logo                String?
+  description         String?              @db.Text
+  location            String?
+  size                String?
+  foundedYear         Int?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  // Relations
+  campaigns           Campaign[]
+  opportunities       Opportunity[]
+  savedSearches       SavedSearch[]
+  chatParticipations  CollabChatParticipant[]
+}
+
+// Social Account
+model SocialAccount {
+  id                  String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  influencerId        String     @db.Uuid
+  influencer          Influencer @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  platform            String
+  username            String
+  url                 String?
+  followers           Int?
+  engagement          Float?
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  @@unique([influencerId, platform])
+}
+
+// Content Type
+model ContentType {
+  id                  String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  influencerId        String     @db.Uuid
+  influencer          Influencer @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  type                String
+  createdAt           DateTime   @default(now())
+
+  @@unique([influencerId, type])
+}
+
+// Content Sample
+model ContentSample {
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId           String               @unique @db.Uuid
+  profile             Influencer           @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  url                 String
+  type                String
+  createdAt           DateTime             @default(now())
+}
+
+// Influencer Rates
+model InfluencerRates {
+  id                  String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  influencerId        String     @unique @db.Uuid
+  influencer          Influencer @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  postRate            Float      @default(0)
+  videoRate           Float      @default(0)
+  storyRate           Float      @default(0)
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+}
+
+
+// Influencer Earnings
+model InfluencerEarnings {
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  influencerId        String               @db.Uuid
+  influencer          Influencer           @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  campaignId          String?              @db.Uuid
+  campaignName        String
+  amount              Float
+  status              String               @default("PENDING") // PENDING, PAID
+  date                DateTime             @default(now())
+  createdAt           DateTime             @default(now())
+
+  @@index([influencerId])
+  @@index([campaignId])
+}
+
+// Saved Search
+model SavedSearch {
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String               @db.Uuid
+  user                User                 @relation(fields: [userId], references: [id])
+  businessId          String?              @db.Uuid
+  business            BusinessProfile?     @relation(fields: [businessId], references: [id], onDelete: SetNull)
+  name                String
+  filters             Json
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  @@index([userId])
+  @@index([businessId])
+}
+
+// Opportunity
+model Opportunity {
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  businessId          String               @db.Uuid
+  business            BusinessProfile      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  brandName           String
+  title               String
+  description         String               @db.Text
+  requirements        String?              @db.Text
+  platforms           String[]
+  contentType         String
+  budget              Float
+  deadline            DateTime?
+  deliveryDate        DateTime?
+  tags                String[]
+  isPublic            Boolean              @default(true)
+  status              String               @default("OPEN") // OPEN, CLOSED, COMPLETED
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  // Relations
+  applications        OpportunityApplication[]
+
+  @@index([businessId])
+  @@index([status])
+}
+
+// Opportunity Application
+model OpportunityApplication {
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  opportunityId       String               @db.Uuid
+  opportunity         Opportunity          @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  influencerId        String               @db.Uuid
+  influencer          Influencer           @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  message             String?              @db.Text
+  proposedRate        Float?
+  status              String               @default("PENDING") // PENDING, ACCEPTED, REJECTED
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  @@unique([opportunityId, influencerId])
+  @@index([opportunityId])
+  @@index([influencerId])
+}
+
+// CollabChat
+model CollabChat {
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title               String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  // Relations
+  participants        CollabChatParticipant[]
+  messages            CollabMessage[]
+}
+
+// CollabChatParticipant
+model CollabChatParticipant {
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chatId              String               @db.Uuid
+  chat                CollabChat           @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  userId              String               @db.Uuid
+  user                User                 @relation(fields: [userId], references: [id])
+  influencerId        String?              @db.Uuid
+  influencer          Influencer?          @relation(fields: [influencerId], references: [id], onDelete: SetNull)
+  businessId          String?              @db.Uuid
+  business            BusinessProfile?     @relation(fields: [businessId], references: [id], onDelete: SetNull)
+  joinedAt            DateTime             @default(now())
+
+  // Relations
+  messages            CollabMessage[]
+
+  @@unique([chatId, userId])
+  @@index([chatId])
+  @@index([userId])
+  @@index([influencerId])
+  @@index([businessId])
+}
+
+// CollabMessage
+model CollabMessage {
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chatId              String               @db.Uuid
+  chat                CollabChat           @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  senderId            String               @db.Uuid
+  sender              CollabChatParticipant @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  content             String               @db.Text
+  contentType         String               @default("text") // text, image, file
+  readAt              DateTime?
+  createdAt           DateTime             @default(now())
+
+  @@index([chatId])
+  @@index([senderId])
 }
