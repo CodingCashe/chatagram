@@ -506,7 +506,7 @@ export default function InfluencerOnboardingPage() {
                 <AlertTitle>Why connect your accounts?</AlertTitle>
                 <AlertDescription>
                   Connecting your social accounts helps verify your following and increases your chances of being
-                  discovered by brands. We'll never post without your permission.
+                  discovered by brands. We&apos;ll never post without your permission.
                 </AlertDescription>
               </Alert>
             </div>

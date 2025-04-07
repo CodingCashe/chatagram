@@ -449,7 +449,7 @@ export default function InfluencerHubPage() {
                 <div className="text-center py-12">
                   <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                   <h3 className="text-lg font-medium">No active campaigns</h3>
-                  <p className="text-muted-foreground mt-1 mb-4">You don't have any active campaigns at the moment</p>
+                  <p className="text-muted-foreground mt-1 mb-4">You don&apos;t have any active campaigns at the moment</p>
                   <Button asChild>
                     <Link href="/influencer-hub/opportunities/browse">Find Opportunities</Link>
                   </Button>
