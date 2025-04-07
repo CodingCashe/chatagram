@@ -133,7 +133,7 @@ export const importInfluencers = async (
           })
 
           // Add new metric record
-          await client.influencerMetric.create({
+          await client.influencerMetrics.create({
             data: {
               influencerId: existing.id,
               followers: influencer.followers,
