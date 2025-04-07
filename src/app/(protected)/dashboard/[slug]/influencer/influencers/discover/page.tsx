@@ -857,7 +857,7 @@ export default function DiscoverInfluencers() {
                     <InfluencerCard
                       key={influencer.id}
                       influencer={influencer}
-                      source={influencer.source.toLowerCase()}
+                      // source={influencer.source.toLowerCase()}
                     />
                   ))}
                 </div>

@@ -1863,7 +1863,7 @@ export default function AIDiscoveryPage() {
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {influencers.map((influencer) => (
-                  <InfluencerCard key={influencer.id} influencer={influencer} source="ai" />
+                  <InfluencerCard key={influencer.id} influencer={influencer} />
                 ))}
               </div>
 
@@ -1992,7 +1992,7 @@ export default function AIDiscoveryPage() {
           ) : influencers.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {influencers.map((influencer) => (
-                <InfluencerCard key={influencer.id} influencer={influencer} source="ai" />
+                <InfluencerCard key={influencer.id} influencer={influencer} />
               ))}
             </div>
           ) : (
