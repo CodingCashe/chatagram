@@ -21,7 +21,7 @@ interface DashboardShellProps {
 export function DashboardShell({ children }: DashboardShellProps) {
   const pathname = usePathname()
   const [isMounted, setIsMounted] = useState(false)
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
