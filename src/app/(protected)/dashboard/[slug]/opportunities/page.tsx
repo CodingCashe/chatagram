@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { DashboardShell } from "@/components/global/influencer-relation/dashboard/shell"
+import { DashboardShell } from "@/components/global/influencer-relation/dashboard/user-shell"
 import { DashboardHeader } from "@/components/global/influencer-relation/dashboard/header"
 import { OpportunityFilters } from "@/components/global/influencer-relation/opportunities/opportunity-filters"
 import { OpportunityList } from "@/components/global/influencer-relation/opportunities/opportunity-list"

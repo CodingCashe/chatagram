@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { useRouter, usePathname  } from "next/navigation"
-import { DashboardShell } from "@/components/global/influencer-relation/dashboard/shell"
+import { DashboardShell } from "@/components/global/influencer-relation/dashboard/user-shell"
 import { DashboardHeader } from "@/components/global/influencer-relation/dashboard/header"
 import { OpportunityForm } from "@/components/global/influencer-relation/opportunities/opportunity-form"
 import { InfluencerRecommendations } from "@/components/global/influencer-relation/opportunities/influencer-recommendations"
