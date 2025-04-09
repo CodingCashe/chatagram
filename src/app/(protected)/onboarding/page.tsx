@@ -51,6 +51,7 @@ import { toast } from "@/hooks/use-toast"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import confetti from "canvas-confetti"
+import { onBoardUser } from '@/actions/user'
 
 // Mock verification service
 const mockVerifyPhone = async (phone: string) => {
@@ -751,8 +752,11 @@ export default function OnboardingPage() {
     }
   }
 
+
   // Navigation functions
-  const nextStep = () => {
+  const nextStep = async () => {
+    const user = await onBoardUser()
+  // const nextStep = () => {
     if (step < totalSteps - 1) {
       setStep(step + 1)
 
@@ -765,13 +769,15 @@ export default function OnboardingPage() {
     } else {
       // Final submission
       setIsSubmitting(true)
+
       setTimeout(() => {
         setIsSubmitting(false)
         triggerConfetti()
         // Redirect based on user type
         setTimeout(() => {
           if (userType === "influencer") {
-            router.push("/influencer-dashboard")
+            // router.push("/influencer-dashboard")
+            router.push(`dashboard/${user.data?.firstname}-${user.data?.lastname}`)
           } else {
             router.push("/dashboard")
           }
