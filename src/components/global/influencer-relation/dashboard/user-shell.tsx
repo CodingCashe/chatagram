@@ -121,7 +121,7 @@ import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { DashboardNav } from "./nav"
 import { MobileNav } from "./mobile-nav"
-import { UserNav } from "./user-nav"
+// import { UserNav } from "./user-nav"
 import { NotificationsPopover } from "./notifications"
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
@@ -172,7 +172,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
 
             <div className="flex items-center gap-3">
               <NotificationsPopover />
-              <UserNav />
+              {/* <UserNav /> */}
             </div>
           </div>
         </div>
