@@ -137,7 +137,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { DashboardShell } from "@/components/global/influencer-relation/dashboard/shell"
 import { DashboardHeader } from "@/components/global/influencer-relation/dashboard/header"
 import { OpportunityDetails } from "@/components/global/influencer-relation/opportunities/opportunity-details"
@@ -150,12 +149,17 @@ import { ArrowLeft, Share, Edit } from "lucide-react"
 import { getOpportunity } from "@/actions/influencer-relations/opportunities"
 import { toast } from "@/hooks/use-toast"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useRouter, usePathname  } from "next/navigation"
 
 export default function OpportunityPage({ params }: { params: { id: string } }) {
   const router = useRouter()
   const [opportunity, setOpportunity] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const pathname = usePathname()
+  const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+  const slug = slugMatch ? slugMatch[1] : ""
+  
 
   useEffect(() => {
     const fetchOpportunity = async () => {
@@ -244,7 +248,7 @@ export default function OpportunityPage({ params }: { params: { id: string } }) 
             Share
           </Button>
           <Button variant="outline" className="gap-1" asChild>
-            <a href={`/opportunities/edit/${params.id}`}>
+            <a href={`/dashboard/${slug}/opportunities/edit/${params.id}`}>
               <Edit className="h-4 w-4" />
               Edit
             </a>

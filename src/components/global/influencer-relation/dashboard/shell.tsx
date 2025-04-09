@@ -46,10 +46,10 @@ export function DashboardShell({ children }: DashboardShellProps) {
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-40 border-b bg-background">
         <div className="flex h-16 items-center justify-between px-4 md:px-6">
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <MobileNav />
             <span className="hidden font-bold md:inline-block">InstaGrowth</span>
-          </div>
+          </div> */}
 
           <div className="flex flex-1 items-center justify-end gap-4 md:justify-between">
             <div className="relative hidden w-full max-w-sm md:flex">
@@ -69,7 +69,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
         </div>
       </header>
 
-      <div className="flex flex-1">
+      {/* <div className="flex flex-1">
         <motion.aside
           initial={false}
           animate={{
@@ -106,7 +106,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
             {children}
           </main>
         </motion.div>
-      </div>
+      </div> */}
     </div>
   )
 }

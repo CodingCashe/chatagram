@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname  } from "next/navigation"
 import { DashboardShell } from "@/components/global/influencer-relation/dashboard/shell"
 import { DashboardHeader } from "@/components/global/influencer-relation/dashboard/header"
 import { OpportunityForm } from "@/components/global/influencer-relation/opportunities/opportunity-form"
@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ArrowLeft } from "lucide-react"
 import { createOpportunity } from "@/actions/influencer-relations/opportunities"
 import { toast } from "@/hooks/use-toast"
+
 
 export default function CreateOpportunityPage() {
   const router = useRouter()
@@ -36,6 +37,11 @@ export default function CreateOpportunityPage() {
   const [loading, setLoading] = useState(false)
   const [formStep, setFormStep] = useState(1)
 
+
+  const pathname = usePathname()
+  const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+  const slug = slugMatch ? slugMatch[1] : ""
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -47,7 +53,7 @@ export default function CreateOpportunityPage() {
           title: "Opportunity Created",
           description: "Your opportunity has been successfully created.",
         })
-        router.push(`/opportunities/${result?.data?.id}`)
+        router.push(`/dashboard/${slug}/opportunities/${result?.data?.id}`)
       } else {
         toast({
           title: "Error",

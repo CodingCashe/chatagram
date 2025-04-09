@@ -10,7 +10,7 @@ import { OpportunityStats } from "@/components/global/influencer-relation/opport
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Plus } from "lucide-react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter, usePathname  } from "next/navigation"
 
 export default function OpportunitiesPage() {
   const searchParams = useSearchParams()
@@ -23,10 +23,23 @@ export default function OpportunitiesPage() {
     location: [],
   })
 
+
+    const router = useRouter()
+    const pathname = usePathname()
+    const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+    const slug = slugMatch ? slugMatch[1] : ""
+  
+    // Unified navigation handler
+    const handleNavigation = (path: string) => {
+      router.push(`/dashboard/${slug}/${path}`);
+    };
+  
+  
+
   return (
     <DashboardShell>
       <DashboardHeader heading="Opportunities" text="Manage and create opportunities for influencers">
-        <Link href="/opportunities/create">
+        <Link href={`/dashboard/${slug}/opportunities/create`}>
           <Button className="gap-1">
             <Plus className="h-4 w-4" />
             New Opportunity
