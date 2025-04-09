@@ -301,45 +301,45 @@ export const deleteSavedSearch = async (id: string) => {
 }
 
 // Opportunity Actions
-export const createOpportunity = async (data: {
-  brandName: string
-  title: string
-  description: string
-  requirements?: string
-  platforms: string[]
-  contentType: string
-  budget: number
-  deadline?: Date
-  deliveryDate?: Date
-  tags?: string[]
-  isPublic?: boolean
-}) => {
-  try {
-    const user = await onCurrentUser()
+// export const createOpportunity = async (data: {
+//   brandName: string
+//   title: string
+//   description: string
+//   requirements?: string
+//   platforms: string[]
+//   contentType: string
+//   budget: number
+//   deadline?: Date
+//   deliveryDate?: Date
+//   tags?: string[]
+//   isPublic?: boolean
+// }) => {
+//   try {
+//     const user = await onCurrentUser()
 
-    const businessProfile = await client.businessProfile.findUnique({
-      where: { userId: user.id },
-    })
+//     const businessProfile = await client.businessProfile.findUnique({
+//       where: { userId: user.id },
+//     })
 
-    if (!businessProfile) {
-      return { status: 404, error: "Business profile not found" }
-    }
+//     if (!businessProfile) {
+//       return { status: 404, error: "Business profile not found" }
+//     }
 
-    const opportunity = await client.opportunity.create({
-      data: {
-        ...data,
-        businessId: businessProfile.id,
-        tags: data.tags || [],
-      },
-    })
+//     const opportunity = await client.opportunity.create({
+//       data: {
+//         ...data,
+//         businessId: businessProfile.id,
+//         tags: data.tags || [],
+//       },
+//     })
 
-    revalidatePath("/business/opportunities")
-    return { status: 201, data: opportunity }
-  } catch (error) {
-    console.error("Error creating opportunity:", error)
-    return { status: 500, error: "Failed to create opportunity" }
-  }
-}
+//     revalidatePath("/business/opportunities")
+//     return { status: 201, data: opportunity }
+//   } catch (error) {
+//     console.error("Error creating opportunity:", error)
+//     return { status: 500, error: "Failed to create opportunity" }
+//   }
+// }
 
 export const getBusinessOpportunities = async (filters?: {
   status?: string
@@ -635,3 +635,67 @@ export const inviteInfluencerToCampaign = async (
   }
 }
 
+///////
+
+
+// Only showing the createOpportunity function that needs to be fixed
+export const createOpportunity = async (data: {
+  brandName: string
+  title: string
+  description: string
+  requirements?: string
+  platforms: string[]
+  contentType: string[] // Changed to array to match schema
+  budget: number
+  category: string // Added required field
+  deadline?: Date
+  deliveryDate?: Date
+  tags?: string[]
+  isPublic?: boolean
+}) => {
+  try {
+    const user = await onCurrentUser()
+
+    const businessProfile = await client.businessProfile.findUnique({
+      where: { userId: user.id },
+    })
+
+    if (!businessProfile) {
+      return { status: 404, error: "Business profile not found" }
+    }
+
+    // Calculate budgetMin and budgetMax from the budget
+    const budgetMin = Math.round(data.budget * 0.9)
+    const budgetMax = Math.round(data.budget * 1.1)
+
+    const opportunity = await client.opportunity.create({
+      data: {
+        businessId: businessProfile.id,
+        brandName: data.brandName,
+        title: data.title,
+        description: data.description,
+        requirements: data.requirements,
+        platforms: data.platforms,
+        contentType: Array.isArray(data.contentType) ? data.contentType : [data.contentType],
+        budget: data.budget,
+        budgetMin: budgetMin, // Added required field
+        budgetMax: budgetMax, // Added required field
+        category: data.category, // Added required field
+        deadline: data.deadline,
+        deliveryDate: data.deliveryDate,
+        tags: data.tags || [],
+        isPublic: data.isPublic ?? true,
+        // Default values for other required fields
+        minFollowers: 0,
+        minEngagementRate: 0,
+        location: "",
+      },
+    })
+
+    revalidatePath("/business/opportunities")
+    return { status: 201, data: opportunity }
+  } catch (error) {
+    console.error("Error creating opportunity:", error)
+    return { status: 500, error: "Failed to create opportunity" }
+  }
+}
