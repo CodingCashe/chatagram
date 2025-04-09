@@ -148,7 +148,7 @@ export function InfluencerOpportunityList({ type, filters }: InfluencerOpportuni
     return (
       <Card>
         <CardContent className="flex h-32 items-center justify-center">
-          <p className="text-muted-foreground">You haven't applied to any opportunities yet</p>
+          <p className="text-muted-foreground">You haven&apos;t applied to any opportunities yet</p>
         </CardContent>
       </Card>
     )

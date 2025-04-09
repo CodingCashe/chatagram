@@ -431,7 +431,7 @@ const StatsCard = ({
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>You're in the top {100 - percentile}% of creators</p>
+                  <p>You&apos;re in the top {100 - percentile}% of creators</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>

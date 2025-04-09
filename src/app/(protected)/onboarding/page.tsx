@@ -983,7 +983,7 @@ export default function OnboardingPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-primary">Welcome to InstaGrowth</h1>
-                <p className="text-muted-foreground">Let's set up your experience</p>
+                <p className="text-muted-foreground">Let&apos;s set up your experience</p>
               </div>
 
               {showMascot && (
@@ -1463,7 +1463,7 @@ export default function OnboardingPage() {
 
                       <div className="space-y-6">
                         <div className="space-y-2">
-                          <Label>Select topics you're interested in learning:</Label>
+                          <Label>Select topics you&apos;re interested in learning:</Label>
                           <div className="grid grid-cols-2 gap-2">
                             {learningTopics.map((topic) => (
                               <div key={topic} className="flex items-center space-x-2">
@@ -1599,7 +1599,7 @@ export default function OnboardingPage() {
                   ) : (
                     <>
                       <h2 className="text-xl font-semibold">Content Creator Personality</h2>
-                      <p className="text-muted-foreground">Let's discover your content creator type</p>
+                      <p className="text-muted-foreground">Let&apos;s discover your content creator type</p>
 
                       <div className="space-y-6">
                         {personalityResult ? (
@@ -1612,7 +1612,7 @@ export default function OnboardingPage() {
                                   )}
                                 </div>
                                 <div>
-                                  <h3 className="font-semibold">You're a {personalityResult}!</h3>
+                                  <h3 className="font-semibold">You&apos;re a {personalityResult}!</h3>
                                   <p className="text-sm text-muted-foreground">
                                     {personalityTypes.find((p) => p.type === personalityResult)?.description}
                                   </p>
@@ -1927,7 +1927,7 @@ export default function OnboardingPage() {
                           <Check className="h-12 w-12 text-green-500" />
                         </motion.div>
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
-                          <h2 className="text-2xl font-bold">You're all set!</h2>
+                          <h2 className="text-2xl font-bold">You&apos;re all set!</h2>
                           <p className="mt-2 text-muted-foreground">
                             {userType === "influencer"
                               ? "Your influencer dashboard is ready."

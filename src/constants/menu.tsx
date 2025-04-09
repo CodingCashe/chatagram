@@ -401,6 +401,13 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
         icon: colorIcon(Award, "text-amber-400"),
       },
 
+      {
+        id: uuid(),
+        label: "Opportunities",
+        icon: colorIcon(Award, "text-green-400"),
+      },
+
+
       // Information group
       {
         id: uuid(),

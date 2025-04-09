@@ -67,7 +67,7 @@ export function ApplyToOpportunityDialog({ opportunity, onClose, onSuccess }: Ap
         <DialogHeader>
           <DialogTitle>Apply to Opportunity</DialogTitle>
           <DialogDescription>
-            Submit your application for "{opportunity.title}" with {opportunity.business.companyName}
+            Submit your application for &ldquo;{opportunity.title}&rdquo; with {opportunity.business.companyName}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
