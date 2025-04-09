@@ -110,7 +110,7 @@ const Layout = ({ children }: Props) => {
 
         {/* Bottom text */}
         <p className="text-center text-xs text-white/40 mt-6">
-          © {new Date().getFullYear()} Yazi. All rights reserved.
+          © {new Date().getFullYear()} Yazil. All rights reserved.
         </p>
       </div>
     </div>

@@ -59,6 +59,8 @@ model User {
   businessProfile     BusinessProfile?
   savedSearches       SavedSearch[]        // Add this line
   chatParticipations  CollabChatParticipant[] // Add this line
+
+  onboardingProgress  OnboardingProgress?
   
 }
 
@@ -93,6 +95,8 @@ model MarketingInfo {
   userId    String   @db.Uuid
 }
 
+
+
 model Business {
   id                        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name                      String?
@@ -126,6 +130,19 @@ model Business {
   updatedAt                 DateTime  @updatedAt
   User                      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                    String?   @db.Uuid
+
+  learningTopics            String[]
+  growthChallenges          String[]
+  goalStatement             String?
+  logo                      String?
+  location                  String?
+  size                      String?
+  influencerRatings         InfluencerRating[]
+  campaigns                 Campaign[]
+  opportunities             Opportunity[]
+  savedSearches             SavedSearch[]
+  chatParticipations        CollabChatParticipant[]
+  onboardingCompleted       Boolean @default(false)
 }
 
 model Subscription {
@@ -805,6 +822,7 @@ model WhatsAppStat {
   @@index([date])
 }
 
+
 model Influencer {
   id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId              String               @db.Uuid @unique
@@ -847,6 +865,7 @@ model Influencer {
   growthRate          Float?
 
   // Status
+  statuss             String              @default("ACTIVE")
   status              InfluencerStatus    @default(DISCOVERED)
   source              InfluencerSource    @default(INSTAGRAM_API)
   sourceId            String?
@@ -857,6 +876,14 @@ model Influencer {
   aiDiscoveryScore    Float?
   aiDiscoveryData     Json?
 
+  rating              Float               @default(0)
+  completedCampaigns  Int                @default(0)
+
+  rates               InfluencerRates[]
+  
+  application         Application[]
+  ratings             InfluencerRating[]
+
   // Relations
   metrics             InfluencerMetrics[]
   campaigns           CampaignInfluencer[]
@@ -865,7 +892,7 @@ model Influencer {
   socialAccounts      SocialAccount[]
   contentTypes        ContentType[]
   contentSamples      ContentSample[]
-  rates               InfluencerRates?
+  //rate                InfluencerRates?
   earnings            InfluencerEarnings[]
   applications        OpportunityApplication[]
   chatParticipations  CollabChatParticipant[]
@@ -873,11 +900,22 @@ model Influencer {
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt
 
+  // Onboarding-specific fields
+  personalityType       String?
+  contentStyle          String?
+  selectedContentDays   Int[]
+  incomeGoal            Float?
+  brandCollabTypes      String[]
+  contentFrequency      String?
+  goalStatement         String?
+  onboardingCompleted   Boolean @default(false)
+
   @@index([userId])
   @@index([username])
   @@index([source])
   @@index([niche])
 }
+
 
 model InfluencerMetrics {
   id                      String               @id @default(uuid())
@@ -907,8 +945,10 @@ model InfluencerMetrics {
   clientSatisfaction      Float                @default(0)
   reviewCount             Int                  @default(0)
   createdAt               DateTime             @default(now())
-  impressionsEstimate Int?
-  metricSource      String?
+  impressionsEstimate     Int?
+  impressions             Int
+  impressionsGrowth       Float
+  metricSource            String?
 
   @@index([influencerId])
   @@index([date])
@@ -935,7 +975,7 @@ model Campaign {
   userId            String              @db.Uuid
   user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   businessProfileId String?             @db.Uuid
-  businessProfile   BusinessProfile?    @relation(fields: [businessProfileId], references: [id], onDelete: SetNull)
+  businessProfile   Business?            @relation(fields: [businessProfileId], references: [id], onDelete: SetNull)
   
   @@index([userId])
   @@index([status])
@@ -1200,13 +1240,9 @@ model BusinessProfile {
   foundedYear         Int?
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
-
-  // Relations
-  campaigns           Campaign[]
-  opportunities       Opportunity[]
-  savedSearches       SavedSearch[]
-  chatParticipations  CollabChatParticipant[]
 }
+
+
 
 // Social Account
 model SocialAccount {
@@ -1215,7 +1251,9 @@ model SocialAccount {
   influencer          Influencer @relation(fields: [influencerId], references: [id], onDelete: Cascade)
   platform            String
   username            String
+  handle              String?
   url                 String?
+  verified            Boolean    @default(false)
   followers           Int?
   engagement          Float?
   createdAt           DateTime   @default(now())
@@ -1245,12 +1283,16 @@ model ContentSample {
   createdAt           DateTime             @default(now())
 }
 
+
 // Influencer Rates
 model InfluencerRates {
   id                  String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   influencerId        String     @unique @db.Uuid
   influencer          Influencer @relation(fields: [influencerId], references: [id], onDelete: Cascade)
   postRate            Float      @default(0)
+  platform            String?
+  rate                Float?
+  contentType         String?
   videoRate           Float      @default(0)
   storyRate           Float      @default(0)
   createdAt           DateTime   @default(now())
@@ -1280,7 +1322,7 @@ model SavedSearch {
   userId              String               @db.Uuid
   user                User                 @relation(fields: [userId], references: [id])
   businessId          String?              @db.Uuid
-  business            BusinessProfile?     @relation(fields: [businessId], references: [id], onDelete: SetNull)
+  business            Business?            @relation(fields: [businessId], references: [id], onDelete: SetNull)
   name                String
   filters             Json
   createdAt           DateTime             @default(now())
@@ -1290,28 +1332,37 @@ model SavedSearch {
   @@index([businessId])
 }
 
+
 // Opportunity
 model Opportunity {
   id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   businessId          String               @db.Uuid
-  business            BusinessProfile      @relation(fields: [businessId], references: [id], onDelete: Cascade)
   brandName           String
   title               String
-  description         String               @db.Text
   requirements        String?              @db.Text
   platforms           String[]
-  contentType         String
+  contentType       String[]
+  description       String        @db.Text
+  category          String
+  budgetMin         Float
+  budgetMax         Float
   budget              Float
   deadline            DateTime?
   deliveryDate        DateTime?
+  location          String?
+  minFollowers      Int           @default(0)
+  maxFollowers      Int?
   tags                String[]
+  minEngagementRate Float         @default(0)
+  business          Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  applications      Application[]
   isPublic            Boolean              @default(true)
   status              String               @default("OPEN") // OPEN, CLOSED, COMPLETED
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
 
   // Relations
-  applications        OpportunityApplication[]
+  application        OpportunityApplication[]
 
   @@index([businessId])
   @@index([status])
@@ -1357,9 +1408,9 @@ model CollabChatParticipant {
   influencerId        String?              @db.Uuid
   influencer          Influencer?          @relation(fields: [influencerId], references: [id], onDelete: SetNull)
   businessId          String?              @db.Uuid
-  business            BusinessProfile?     @relation(fields: [businessId], references: [id], onDelete: SetNull)
+  business            Business?            @relation(fields: [businessId], references: [id], onDelete: SetNull)
   joinedAt            DateTime             @default(now())
-
+  
   // Relations
   messages            CollabMessage[]
 
@@ -1385,3 +1436,97 @@ model CollabMessage {
   @@index([chatId])
   @@index([senderId])
 }
+
+
+// Add this to your schema.prisma file
+
+model OnboardingProgress {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String   @unique @db.Uuid
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userType          String   // "influencer" or "regular"
+  currentStep       Int      @default(0)
+  totalSteps        Int      @default(8)
+  lastActiveAt      DateTime @default(now())
+  completedAt       DateTime?
+  abandonedAt       DateTime?
+  remindersSent     Int      @default(0)
+  lastReminderAt    DateTime?
+  metadata          Json?    // For storing any additional data
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  // Relations
+  steps             OnboardingStep[]
+  
+  @@index([userType])
+  @@index([completedAt])
+  @@index([abandonedAt])
+}
+
+model OnboardingStep {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  progressId        String   @db.Uuid
+  progress          OnboardingProgress @relation(fields: [progressId], references: [id], onDelete: Cascade)
+  stepNumber        Int
+  stepName          String
+  status            OnboardingStepStatus @default(NOT_STARTED)
+  data              Json?    // Store step-specific data
+  startedAt         DateTime?
+  completedAt       DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@unique([progressId, stepNumber])
+  @@index([progressId])
+  @@index([status])
+}
+
+enum OnboardingStepStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  SKIPPED
+}
+
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// New models for the opportunity marketplac
+
+model Application {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  opportunityId String   @db.Uuid
+  influencerId  String   @db.Uuid
+  message       String?     @db.Text
+  proposal      Float?      // Proposed rate
+  status        String      @default("PENDING")
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  influencer    Influencer  @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+}
+
+model InfluencerRating {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  businessId    String   @db.Uuid
+  influencerId  String   @db.Uuid
+  rating        Float
+  comment     String?   @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  business    Business?  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  influencer  Influencer @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+
+  @@unique([businessId, influencerId])
+}
+
+

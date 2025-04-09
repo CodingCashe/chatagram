@@ -103,7 +103,6 @@ export const getBusinessesForWebhook = async (businessId: string) => {
   })
 }
 
-//JUST ADDED
 
 
 type BusinessUpdateData = Partial<FormSchema> & {
