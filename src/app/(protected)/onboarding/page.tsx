@@ -776,10 +776,11 @@ export default function OnboardingPage() {
         // Redirect based on user type
         setTimeout(() => {
           if (userType === "influencer") {
-            // router.push("/influencer-dashboard")
-            router.push(`dashboard/${user.data?.firstname}-${user.data?.lastname}`)
+            router.push("/influencers")
+            // router.push(`dashboard/${user.data?.firstname}-${user.data?.lastname}`)
           } else {
             router.push("/dashboard")
+            // router.push(`influencers/${user.data?.firstname}-${user.data?.lastname}`)
           }
         }, 2000)
       }, 1500)

@@ -66,9 +66,9 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center space-x-4">
           <Button variant="ghost" className="text-slate-300 hover:text-blue-400 hover:bg-blue-900/20">
-          <Link href="/dashboard">Log in</Link>
+          <Link href="/onboarding">Log in</Link>
           </Button>
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white"><Link href="/dashboard">Get Started</Link></Button>
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white"><Link href="/onboarding">Get Started</Link></Button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -149,9 +149,9 @@ export default function Navbar() {
                   variant="ghost"
                   className="justify-center text-slate-300 hover:text-blue-400 hover:bg-blue-900/20"
                 >
-                  <Link href="/dashboard">Log in</Link>
+                  <Link href="/onboarding">Log in</Link>
                 </Button>
-                <Button className="justify-center bg-blue-600 hover:bg-blue-700 text-white"><Link href="/dashboard">Get Started</Link></Button>
+                <Button className="justify-center bg-blue-600 hover:bg-blue-700 text-white"><Link href="/onboarding">Get Started</Link></Button>
               </div>
             </div>
           </motion.div>
