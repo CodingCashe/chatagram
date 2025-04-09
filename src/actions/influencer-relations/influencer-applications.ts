@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { client } from "@/lib/prisma"
-import { onCurrentUser } from "@/lib/auth"
+import { onCurrentUser } from "@/actions/user"
 
 // Get all opportunities available for an influencer
 export async function getAvailableOpportunities(
@@ -83,7 +83,7 @@ export async function getAvailableOpportunities(
       include: {
         business: {
           select: {
-            companyName: true,
+            businessName: true,
             logo: true,
           },
         },
@@ -128,7 +128,7 @@ export async function getMyApplications() {
           include: {
             business: {
               select: {
-                companyName: true,
+                businessName: true,
                 logo: true,
               },
             },

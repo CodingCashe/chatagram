@@ -85,11 +85,19 @@ export default function InfluencerHubPage() {
           setStats(statsResult.data)
         }
 
-        const opportunitiesResult = await getInfluencerOpportunities()
-        if (opportunitiesResult.status === 200) {
-          // setOpportunities(opportunitiesResult.data.opportunities || [])
-          setOpportunities((opportunitiesResult.data as { opportunities: Opportunity[] }).opportunities || []);
-        }
+        // const opportunitiesResult = await getInfluencerOpportunities()
+        // if (opportunitiesResult.status === 200) {
+        //   // setOpportunities(opportunitiesResult.data.opportunities || [])
+        //   setOpportunities((opportunitiesResult.data as { opportunities: Opportunity[] }).opportunities || []);
+        // }
+          const opportunitiesResult = await getInfluencerOpportunities();
+          if (opportunitiesResult.status === 200) {
+            if (typeof opportunitiesResult.data !== 'string') {
+              setOpportunities(opportunitiesResult.data.opportunities || []);
+            } else {
+              setOpportunities([]); // handle string case
+            }
+          }
 
         // Get unread messages count
         // This would be implemented with your messaging system

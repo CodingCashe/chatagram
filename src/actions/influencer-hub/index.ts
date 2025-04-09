@@ -40,7 +40,8 @@ interface Opportunity {
   brand: string;
   description: string;
   platform: string;
-  contentType: string;
+  contentType: string[];
+  // contentType: string;
   budget: number;
   deadline: Date | null;
   status: string;
@@ -243,6 +244,7 @@ export const addSocialAccount = async (data: {
       data: {
         ...data,
         influencerId: profile.id,
+        handle: data.username,
       },
     })
 
@@ -395,6 +397,9 @@ export const updateRates = async (data: {
       data: {
         ...data,
         influencerId: profile.id,
+        platform: "instagram", // or another valid platform
+        rate: 8, 
+        contentType: "post", // or another valid content type
       },
     })
 
