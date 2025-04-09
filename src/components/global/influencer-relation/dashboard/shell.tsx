@@ -69,7 +69,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
         </div>
       </header>
 
-      {/* <div className="flex flex-1">
+      <div className="flex flex-1">
         <motion.aside
           initial={false}
           animate={{
@@ -99,14 +99,14 @@ export function DashboardShell({ children }: DashboardShellProps) {
         >
           <main className="flex-1 p-4 md:p-6">
             {!isSidebarOpen && !isMobile && (
-              <Button variant="outline" size="sm" className="mb-4" onClick={() => setIsSidebarOpen(true)}>
+              <Button variant="outline" size="sm" className="mb-4" onClick={() => setIsSidebarOpen(false)}>
                 Expand Sidebar
               </Button>
             )}
             {children}
           </main>
         </motion.div>
-      </div> */}
+      </div>
     </div>
   )
 }
