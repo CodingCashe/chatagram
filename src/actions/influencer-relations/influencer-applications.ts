@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache"
 import { client } from "@/lib/prisma"
-import { onCurrentUser } from "@/actions/user"
+import { onUserInfor } from "@/actions/user"
+
 
 // Get all opportunities available for an influencer
 export async function getAvailableOpportunities(
@@ -14,11 +15,11 @@ export async function getAvailableOpportunities(
   } = {},
 ) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
@@ -108,11 +109,11 @@ export async function getAvailableOpportunities(
 // Get all applications made by an influencer
 export async function getMyApplications() {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
@@ -150,11 +151,11 @@ export async function getMyApplications() {
 // Apply to an opportunity
 export async function applyToOpportunity(opportunityId: string, message: string, proposal: number) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
@@ -208,11 +209,11 @@ export async function applyToOpportunity(opportunityId: string, message: string,
 // Withdraw an application
 export async function withdrawApplication(applicationId: string) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
@@ -249,11 +250,11 @@ export async function withdrawApplication(applicationId: string) {
 // Get application statistics for an influencer
 export async function getApplicationStats() {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {

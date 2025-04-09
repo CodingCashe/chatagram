@@ -1,14 +1,14 @@
 "use server"
 import { client } from "@/lib/prisma"
-import { onCurrentUser } from "@/actions/user"
+import { onUserInfor } from "@/actions/user"
 
 // Get influencer profile
 export async function getInfluencerProfile() {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
       include: {
         socialAccounts: true,
         rates: true,
@@ -29,10 +29,10 @@ export async function getInfluencerProfile() {
 // Get influencer metrics
 export async function getInfluencerMetrics() {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
@@ -68,10 +68,10 @@ export async function getInfluencerMetrics() {
 // Get upcoming campaigns
 export async function getUpcomingCampaigns() {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
@@ -100,10 +100,10 @@ export async function getUpcomingCampaigns() {
 // Get content performance
 export async function getContentPerformance() {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
@@ -177,10 +177,10 @@ export async function getContentPerformance() {
 // Get audience insights
 export async function getAudienceInsights() {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
@@ -227,10 +227,10 @@ export async function getAudienceInsights() {
 // Get revenue analytics
 export async function getRevenueAnalytics() {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
@@ -285,10 +285,10 @@ export async function getRevenueAnalytics() {
 // Get brand opportunities
 export async function getBrandOpportunities() {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
@@ -329,10 +329,10 @@ export async function getBrandOpportunities() {
 // Get content calendar
 export async function getContentCalendar() {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {

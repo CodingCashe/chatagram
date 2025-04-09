@@ -2,16 +2,16 @@
 
 import { revalidatePath } from "next/cache"
 import { client } from "@/lib/prisma"
-import { onCurrentUser } from "@/actions/user"
+import { onUserInfor } from "@/actions/user"
 
 // Create new opportunity
 export async function createOpportunity(data: any) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Check if user has a business profile
     const business = await client.business.findFirst({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!business) {
@@ -60,11 +60,11 @@ export async function getOpportunities(
   } = {},
 ) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get business ID
     const business = await client.business.findFirst({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!business) {
@@ -149,11 +149,11 @@ export async function getOpportunities(
 // Get opportunity by ID
 export async function getOpportunity(id: string) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get business ID
     const business = await client.business.findFirst({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!business) {
@@ -199,11 +199,11 @@ export async function getOpportunity(id: string) {
 // Update opportunity
 export async function updateOpportunity(id: string, data: any) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get business ID
     const business = await client.business.findFirst({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!business) {
@@ -245,11 +245,11 @@ export async function updateOpportunity(id: string, data: any) {
 // Delete opportunity
 export async function deleteOpportunity(id: string) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get business ID
     const business = await client.business.findFirst({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!business) {
@@ -274,11 +274,11 @@ export async function deleteOpportunity(id: string) {
 // Get opportunity stats
 export async function getOpportunityStats() {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get business ID
     const business = await client.business.findFirst({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!business) {
@@ -337,11 +337,11 @@ export async function getOpportunityStats() {
 // Get applications for an opportunity
 export async function getOpportunityApplications(opportunityId: string) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get business ID
     const business = await client.business.findFirst({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!business) {
@@ -536,11 +536,11 @@ export async function getRecommendedInfluencers(criteria: {
 // Update application status
 export async function updateApplicationStatus(applicationId: string, status: string) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get business ID
     const business = await client.business.findFirst({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!business) {
@@ -604,11 +604,11 @@ export async function updateApplicationStatus(applicationId: string, status: str
 // Vote for an influencer
 export async function voteForInfluencer(influencerId: string, rating: number) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get business ID
     const business = await client.business.findFirst({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!business) {
@@ -680,11 +680,11 @@ export async function voteForInfluencer(influencerId: string, rating: number) {
 // Apply to an opportunity (for influencers)
 export async function applyToOpportunity(opportunityId: string, message: string, proposal: number) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
@@ -742,7 +742,7 @@ export async function applyToOpportunity(opportunityId: string, message: string,
 
 // import { revalidatePath } from "next/cache"
 // import { client } from "@/lib/prisma"
-// import { onCurrentUser } from "@/actions/user"
+// import { onUserInfor } from "@/actions/user"
 
 /**
  * Get available opportunities for influencers with optional filters
@@ -756,11 +756,11 @@ export async function getAvailableOpportunities(
   } = {},
 ) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
@@ -853,11 +853,11 @@ export async function getAvailableOpportunities(
  */
 export async function getMyApplications() {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
@@ -899,11 +899,11 @@ export async function getMyApplications() {
  */
 export async function withdrawApplication(applicationId: string) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
@@ -943,11 +943,11 @@ export async function withdrawApplication(applicationId: string) {
  */
 export async function getOpportunityDetails(opportunityId: string) {
   try {
-    const user = await onCurrentUser()
+    const user = await onUserInfor()
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.id },
+      where: { userId: user.data?.clerkId },
     })
 
     if (!influencer) {
