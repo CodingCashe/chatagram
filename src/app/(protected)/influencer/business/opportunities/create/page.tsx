@@ -437,14 +437,32 @@ export default function CreateOpportunityPage() {
         title: formData.title,
         description: formData.description,
         requirements: formData.requirements,
-        platforms: [formData.platform], // Convert single platform to array
-        contentType: formData.contentType,
+        platforms: [formData.platform],
+        contentType: Array.isArray(formData.contentType) 
+          ? formData.contentType 
+          : [formData.contentType],
         budget: Number.parseFloat(formData.budget),
-        deadline: formData.deadline || undefined, // Convert null to undefined
-        deliveryDate: formData.deliveryDate || undefined, // Convert null to undefined
+        category: formData.platform || 'default_category', // Add this required field
+        deadline: formData.deadline || undefined,
+        deliveryDate: formData.deliveryDate || undefined,
         tags: formData.tags,
         isPublic: formData.isPublic,
-      })
+      });
+    //   const result = await createOpportunity({
+    //     brandName: formData.brandName,
+    //     title: formData.title,
+    //     description: formData.description,
+    //     requirements: formData.requirements,
+    //     platforms: [formData.platform], // Convert single platform to array
+    //     contentType: Array.isArray(formData.contentType) 
+    // ? formData.contentType 
+    // : [formData.contentType],
+    //     budget: Number.parseFloat(formData.budget),
+    //     deadline: formData.deadline || undefined, // Convert null to undefined
+    //     deliveryDate: formData.deliveryDate || undefined, // Convert null to undefined
+    //     tags: formData.tags,
+    //     isPublic: formData.isPublic,
+    //   })
 
       if (result.status === 201 && result.data) {
         toast({
