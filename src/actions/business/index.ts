@@ -543,7 +543,7 @@ export const updateApplicationStatus = async (applicationId: string, status: str
           data: {
             name: `${application.opportunity.title} Campaign`,
             description: application.opportunity.description,
-            budget: application.opportunity.budget,
+            budget: { min: 0, max: 0 },
             userId: user.id,
             status: "ACTIVE",
           },
@@ -646,7 +646,7 @@ export const createOpportunity = async (data: {
   requirements?: string
   platforms: string[]
   contentType: string[] // Changed to array to match schema
-  budget: number
+  budget: { min: 0, max: 0 }
   category: string // Added required field
   deadline?: Date
   deliveryDate?: Date
