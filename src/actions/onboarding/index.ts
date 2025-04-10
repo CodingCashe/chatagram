@@ -455,7 +455,7 @@ export const initializeOnboarding = async (userType: "influencer" | "regular", t
     // Create new onboarding progress
     const progress = await client.onboardingProgress.create({
       data: {
-        userId: user.id,
+        userId: userId || "123456",
         userType,
         totalSteps,
         steps: {
