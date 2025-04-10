@@ -104,9 +104,10 @@ export async function getUpcomingCampaigns() {
 export async function getContentPerformance() {
   try {
     const user = await onUserInfor()
+    const userId = user.data?.id
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.data?.clerkId },
+      where: { userId },
     })
 
     if (!influencer) {
@@ -181,9 +182,10 @@ export async function getContentPerformance() {
 export async function getAudienceInsights() {
   try {
     const user = await onUserInfor()
+    const userId = user.data?.id
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.data?.clerkId },
+      where: { userId },
     })
 
     if (!influencer) {
@@ -231,9 +233,10 @@ export async function getAudienceInsights() {
 export async function getRevenueAnalytics() {
   try {
     const user = await onUserInfor()
+    const userId = user.data?.id
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.data?.clerkId },
+      where: { userId },
     })
 
     if (!influencer) {
@@ -289,9 +292,10 @@ export async function getRevenueAnalytics() {
 export async function getBrandOpportunities() {
   try {
     const user = await onUserInfor()
+    const userId = user.data?.id
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.data?.clerkId },
+      where: { userId },
     })
 
     if (!influencer) {
@@ -333,9 +337,10 @@ export async function getBrandOpportunities() {
 export async function getContentCalendar() {
   try {
     const user = await onUserInfor()
+    const userId = user.data?.id
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.data?.clerkId },
+      where: { userId },
     })
 
     if (!influencer) {
