@@ -6,9 +6,10 @@ import { onUserInfor } from "@/actions/user"
 export async function getInfluencerProfile() {
   try {
     const user = await onUserInfor()
+    const userId = user.data?.id
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.data?.clerkId },
+      where: { userId },
       include: {
         socialAccounts: true,
         rates: true,
@@ -30,9 +31,10 @@ export async function getInfluencerProfile() {
 export async function getInfluencerMetrics() {
   try {
     const user = await onUserInfor()
+    const userId = user.data?.id
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.data?.clerkId },
+      where: { userId },
     })
 
     if (!influencer) {
@@ -69,9 +71,10 @@ export async function getInfluencerMetrics() {
 export async function getUpcomingCampaigns() {
   try {
     const user = await onUserInfor()
+    const userId = user.data?.id
 
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.data?.clerkId },
+      where: { userId },
     })
 
     if (!influencer) {

@@ -430,16 +430,18 @@
 
 import { revalidatePath } from "next/cache"
 import { client } from "@/lib/prisma"
-import { onCurrentUser } from "@/actions/user"
+import { onCurrentUser, onUserInfor } from "@/actions/user"
 
 // Initialize onboarding progress
 export const initializeOnboarding = async (userType: "influencer" | "regular", totalSteps: number) => {
+  const userid = await onUserInfor()
   const user = await onCurrentUser()
+  const userId = userid.data?.id
 
   try {
     // Check if onboarding already exists
     const existingProgress = await client.onboardingProgress.findUnique({
-      where: { userId: user.id },
+      where: { userId },
     })
 
     if (existingProgress) {
@@ -482,12 +484,15 @@ export const updateOnboardingStep = async (
   status: "IN_PROGRESS" | "COMPLETED" | "SKIPPED",
   stepData?: any,
 ) => {
+  const userid = await onUserInfor()
   const user = await onCurrentUser()
+  const userId = userid.data?.id
+
 
   try {
     // Get onboarding progress
     const progress = await client.onboardingProgress.findUnique({
-      where: { userId: user.id },
+      where: { userId },
       include: { steps: true },
     })
 
@@ -544,12 +549,13 @@ export const updateOnboardingStep = async (
 
 // Save specific onboarding data
 export const saveOnboardingData = async (stepNumber: number, data: any) => {
-  const user = await onCurrentUser()
+  const userid = await onUserInfor()
+  const userId = userid.data?.id
 
   try {
     // Get onboarding progress
     const progress = await client.onboardingProgress.findUnique({
-      where: { userId: user.id },
+      where: { userId },
       include: { steps: true },
     })
 
@@ -593,12 +599,14 @@ export const saveOnboardingData = async (stepNumber: number, data: any) => {
 
 // Complete onboarding
 export const completeOnboarding = async () => {
+  const userid = await onUserInfor()
   const user = await onCurrentUser()
+  const userId = userid.data?.id
 
   try {
     // Get onboarding progress
     const progress = await client.onboardingProgress.findUnique({
-      where: { userId: user.id },
+      where: { userId },
       include: { steps: true },
     })
 

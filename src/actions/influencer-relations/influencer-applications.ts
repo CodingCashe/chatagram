@@ -16,10 +16,11 @@ export async function getAvailableOpportunities(
 ) {
   try {
     const user = await onUserInfor()
+    const userId = user.data?.id
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.data?.clerkId },
+      where: { userId },
     })
 
     if (!influencer) {
@@ -110,10 +111,11 @@ export async function getAvailableOpportunities(
 export async function getMyApplications() {
   try {
     const user = await onUserInfor()
+    const userId = user.data?.id
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.data?.clerkId },
+      where: { userId },
     })
 
     if (!influencer) {
@@ -152,10 +154,11 @@ export async function getMyApplications() {
 export async function applyToOpportunity(opportunityId: string, message: string, proposal: number) {
   try {
     const user = await onUserInfor()
+    const userId = user.data?.id
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.data?.clerkId },
+      where: { userId },
     })
 
     if (!influencer) {
@@ -210,10 +213,11 @@ export async function applyToOpportunity(opportunityId: string, message: string,
 export async function withdrawApplication(applicationId: string) {
   try {
     const user = await onUserInfor()
+    const userId = user.data?.id
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.data?.clerkId },
+      where: { userId },
     })
 
     if (!influencer) {
@@ -251,10 +255,11 @@ export async function withdrawApplication(applicationId: string) {
 export async function getApplicationStats() {
   try {
     const user = await onUserInfor()
+    const userId = user.data?.id
 
     // Get influencer profile
     const influencer = await client.influencer.findUnique({
-      where: { userId: user.data?.clerkId },
+      where: { userId },
     })
 
     if (!influencer) {
