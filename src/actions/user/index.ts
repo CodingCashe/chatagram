@@ -133,3 +133,26 @@ export const onUserInfor = async () => {
     return { status: 500, error: "Internal Server Error" }
   }
 }
+
+
+// Update the onBoardUser function to use the Blob URL instead of base64
+export const onBoarding = async (formData: FormData) => {
+  try {
+    // Get data from form
+    const onboardingData = Object.fromEntries(formData);
+    
+    // Get the current user
+    const user = await onCurrentUser();
+    
+    // Use the profileImageUrl from Vercel Blob if available
+    const profileImage = onboardingData.profileImageUrl || null;
+    
+    // Save to database using your existing queries
+    // ...
+    
+    return { status: 200, message: "Onboarding data saved successfully" };
+  } catch (error) {
+    console.error("Error in onBoarding server action:", error);
+    return { status: 500, message: "Error saving onboarding data" };
+  }
+};

@@ -16,6 +16,8 @@ model User {
   email            String             @unique
   firstname        String?            @unique
   lastname         String?            @unique
+  phone            String?            @unique
+  phoneVerified    Boolean            @default(false)
   isAdmin          Boolean            @default(false)
   createdAt        DateTime           @default(now())
   subscription     Subscription?
@@ -1496,6 +1498,21 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model VerificationCode {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  phoneNumber String
+  code        String
+  type        String    @default("SMS")  // SMS, EMAIL, etc.
+  expiresAt   DateTime
+  used        Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([phoneNumber])
+  @@index([code])
+  @@index([expiresAt])
 }
 
 // New models for the opportunity marketplac
