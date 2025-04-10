@@ -20,6 +20,7 @@ export default function CreateOpportunityPage() {
   const router = useRouter()
   const [formData, setFormData] = useState({
     title: "",
+    brandName:"To be changed"
     description: "",
     category: "",
     budget: { min: 0, max: 0 },
