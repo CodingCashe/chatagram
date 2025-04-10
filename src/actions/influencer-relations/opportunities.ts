@@ -23,7 +23,7 @@ export async function createOpportunity(data: any) {
       data: {
         title: data.title,
         budget:data.budget,
-        brandName:data.brandName,
+        brandName:data.businessName,
         description: data.description,
         category: data.category,
         budgetMin: data.budget.min,
