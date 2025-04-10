@@ -7271,88 +7271,6 @@ export default function OnboardingPage() {
 
   // Phone verification
   // Update the handleVerifyPhone function to use the server action
-  const handleVerifyPhone = async () => {
-    if (!phoneNumber || phoneNumber.length < 10) {
-      toast({
-        title: "Invalid Phone Number",
-        description: "Please enter a valid phone number",
-        variant: "destructive",
-      })
-      return
-    }
-
-    setIsVerifying(true)
-    try {
-      // Call the server action to send the verification code
-      const result = await sendVerificationSMS(phoneNumber)
-
-      if (result.status === 200) {
-        setExpectedCode(result.data?.code||"12345")
-        setVerificationStep("verify")
-        toast({
-          title: "Verification Code Sent",
-          description: `We've sent a code to ${phoneNumber}. For demo purposes, the code is: ${result.data?.code}`,
-        })
-      } else {
-        toast({
-          title: "Verification Failed",
-          description: result.error || "Could not send verification code",
-          variant: "destructive",
-        })
-      }
-    } catch (error) {
-      toast({
-        title: "Verification Failed",
-        description: "Could not send verification code",
-        variant: "destructive",
-      })
-    } finally {
-      setIsVerifying(false)
-    }
-  }
-
-  // Update the handleCheckVerificationCode function to use the server action
-  const handleCheckVerificationCode = async () => {
-    if (!verificationCode) {
-      toast({
-        title: "Missing Code",
-        description: "Please enter the verification code",
-        variant: "destructive",
-      })
-      return
-    }
-  
-    setIsVerifying(true)
-    try {
-      // Call the server action to verify the code
-      const result = await verifyCode(phoneNumber, verificationCode)
-      
-      if (result.status === 200) {
-        setIsVerified(true)
-        toast({
-          title: "Phone Verified",
-          description: "Your phone number has been verified successfully!",
-        })
-        nextStep()
-      } else {
-        toast({
-          title: "Invalid Code",
-          description: result.error || "The code you entered is incorrect",
-          variant: "destructive",
-        })
-      }
-    } catch (error) {
-      toast({
-        title: "Verification Failed",
-        description: "Could not verify code",
-        variant: "destructive",
-      })
-    } finally {
-      setIsVerifying(false)
-    }
-  }
-
-  // Phone verification
   // const handleVerifyPhone = async () => {
   //   if (!phoneNumber || phoneNumber.length < 10) {
   //     toast({
@@ -7369,14 +7287,8 @@ export default function OnboardingPage() {
   //     const result = await sendVerificationSMS(phoneNumber)
 
   //     if (result.status === 200) {
-  //       setExpectedCode(result.data?.code||"833978")
+  //       setExpectedCode(result.data?.code||"12345")
   //       setVerificationStep("verify")
-
-  //       // Save this step data
-  //       await saveOnboardingData(step, {
-  //         phoneNumber,
-  //       })
-
   //       toast({
   //         title: "Verification Code Sent",
   //         description: `We've sent a code to ${phoneNumber}. For demo purposes, the code is: ${result.data?.code}`,
@@ -7399,6 +7311,7 @@ export default function OnboardingPage() {
   //   }
   // }
 
+  // // Update the handleCheckVerificationCode function to use the server action
   // const handleCheckVerificationCode = async () => {
   //   if (!verificationCode) {
   //     toast({
@@ -7408,21 +7321,14 @@ export default function OnboardingPage() {
   //     })
   //     return
   //   }
-
+  
   //   setIsVerifying(true)
   //   try {
-  //     // For demo purposes, we'll check against the expected code directly
-  //     const isValid = verificationCode === expectedCode
-
-  //     if (isValid) {
+  //     // Call the server action to verify the code
+  //     const result = await verifyCode(phoneNumber, verificationCode)
+      
+  //     if (result.status === 200) {
   //       setIsVerified(true)
-
-  //       // Save this step data
-  //       await saveOnboardingData(step, {
-  //         phoneNumber,
-  //         verified: true,
-  //       })
-
   //       toast({
   //         title: "Phone Verified",
   //         description: "Your phone number has been verified successfully!",
@@ -7431,7 +7337,7 @@ export default function OnboardingPage() {
   //     } else {
   //       toast({
   //         title: "Invalid Code",
-  //         description: "The code you entered is incorrect",
+  //         description: result.error || "The code you entered is incorrect",
   //         variant: "destructive",
   //       })
   //     }
@@ -7445,6 +7351,100 @@ export default function OnboardingPage() {
   //     setIsVerifying(false)
   //   }
   // }
+
+  
+  const handleVerifyPhone = async () => {
+    if (!phoneNumber || phoneNumber.length < 10) {
+      toast({
+        title: "Invalid Phone Number",
+        description: "Please enter a valid phone number",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsVerifying(true)
+    try {
+      // Call the server action to send the verification code
+      const result = await sendVerificationSMS(phoneNumber)
+
+      if (result.status === 200) {
+        setExpectedCode(result.data?.code||"833978")
+        setVerificationStep("verify")
+
+        // Save this step data
+        await saveOnboardingData(step, {
+          phoneNumber,
+        })
+
+        toast({
+          title: "Verification Code Sent",
+          description: `We've sent a code to ${phoneNumber}. For demo purposes, the code is: ${result.data?.code}`,
+        })
+      } else {
+        toast({
+          title: "Verification Failed",
+          description: result.error || "Could not send verification code",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Verification Failed",
+        description: "Could not send verification code",
+        variant: "destructive",
+      })
+    } finally {
+      setIsVerifying(false)
+    }
+  }
+
+  const handleCheckVerificationCode = async () => {
+    if (!verificationCode) {
+      toast({
+        title: "Missing Code",
+        description: "Please enter the verification code",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsVerifying(true)
+    try {
+      // For demo purposes, we'll check against the expected code directly
+      const isValid = verificationCode === expectedCode
+
+      if (isValid) {
+        setIsVerified(true)
+
+        // Save this step data
+        await saveOnboardingData(step, {
+          phoneNumber,
+          verified: true,
+        })
+
+        toast({
+          title: "Phone Verified",
+          description: "Your phone number has been verified successfully!",
+        })
+        nextStep()
+      } else {
+        toast({
+          title: "Invalid Code",
+          description: "The code you entered is incorrect",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Verification Failed",
+        description: "Could not verify code",
+        variant: "destructive",
+      })
+    } finally {
+      setIsVerifying(false)
+    }
+  }
 
   // Income goal management
   const handleIncomeRangeSelect = async (index: number) => {
@@ -7595,7 +7595,7 @@ export default function OnboardingPage() {
           <div className="bg-primary/10 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-primary">Welcome to InstaGrowth</h1>
+                <h1 className="text-2xl font-bold text-primary">Welcome to Yazil</h1>
                 <p className="text-muted-foreground">Let&apos;s set up your experience</p>
               </div>
 

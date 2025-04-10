@@ -77,7 +77,7 @@ import { client } from "@/lib/prisma"
 import { sendSMS } from "@/lib/twilio"
 
 // SMS verification service
-export const sendVerificationSMS = async (phoneNumber: string) => {
+export const sendVerificationSMSrenamed = async (phoneNumber: string) => {
   try {
     // Generate a random 6-digit code
     const code = Math.floor(100000 + Math.random() * 900000).toString()
@@ -149,5 +149,30 @@ export const verifyCode = async (phoneNumber: string, code: string) => {
   } catch (error) {
     console.error("Error verifying code:", error)
     return { status: 500, data: null, error: "Failed to verify code" }
+  }
+}
+
+///We use this mock for now, to use the real one, I need to rename the function that is named almost similar to this 
+export const sendVerificationSMS = async (phoneNumber: string) => {
+  try {
+    // Generate a random 6-digit code
+    const code = Math.floor(100000 + Math.random() * 900000).toString()
+
+    // In a real app, you would use a service like Twilio to send the SMS
+    console.log(`Sending verification code ${code} to ${phoneNumber}`)
+
+    // Store the verification code in the database
+    // await client.verificationToken.create({
+    //   data: {
+    //     phoneNumber,
+    //     code,
+    //     expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes expiry
+    //   },
+    // })
+
+    return { status: 200, data: { code } }
+  } catch (error) {
+    console.error("Error sending verification SMS:", error)
+    return { status: 500, data: null, error: "Failed to send verification SMS" }
   }
 }

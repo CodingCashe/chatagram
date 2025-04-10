@@ -953,7 +953,7 @@ const Navbar = ({ slug }: Props) => {
     const fullPageName = pathname === `/dashboard/${slug}` ? "home" : pathname.split("/").pop() || ""
     const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
     const isUUID = uuidPattern.test(fullPageName)
-    const displayName = isUUID ? "Automation" : fullPageName
+    const displayName = isUUID ? "id" : fullPageName
     return { fullPageName, displayName, isUUID }
   }
 

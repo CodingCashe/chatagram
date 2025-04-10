@@ -137,7 +137,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { DashboardShell } from "@/components/global/influencer-relation/dashboard/shell"
+import { DashboardShell } from "@/components/global/influencer-relation/dashboard/user-shell"
 import { DashboardHeader } from "@/components/global/influencer-relation/dashboard/header"
 import { OpportunityDetails } from "@/components/global/influencer-relation/opportunities/opportunity-details"
 import { InfluencerApplications } from "@/components/global/influencer-relation/opportunities/influencer-applications"
