@@ -432,6 +432,89 @@ import { revalidatePath } from "next/cache"
 import { client } from "@/lib/prisma"
 import { onCurrentUser, onUserInfor } from "@/actions/user"
 
+
+export const updateOnboardingStep = async (
+  stepNumber: number,
+  status: "IN_PROGRESS" | "COMPLETED" | "SKIPPED",
+  stepData?: any,
+) => {
+  const userid = await onUserInfor()
+  const user = await onCurrentUser()
+  const userId = userid.data?.id
+
+  try {
+    // Get onboarding progress with steps
+    const progress = await client.onboardingProgress.findUnique({
+      where: { userId },
+      include: { steps: true },
+    })
+
+    if (!progress) {
+      return { status: 404, data: "Onboarding not initialized" }
+    }
+
+    // Validate step number
+    if (stepNumber < 1 || stepNumber > progress.totalSteps) {
+      return { status: 400, data: "Invalid step number" }
+    }
+
+    // Check if step exists
+    const stepExists = progress.steps.some(step => step.stepNumber === stepNumber);
+    if (!stepExists) {
+      // Create the step if it doesn't exist
+      await client.onboardingStep.create({
+        data: {
+          progressId: progress.id,
+          stepNumber,
+          stepName: getStepName(progress.userType, stepNumber),
+          status: "NOT_STARTED", // Initial status
+        }
+      });
+    }
+
+    // Now update the step (it should exist now)
+    const updatedStep = await client.onboardingStep.update({
+      where: {
+        progressId_stepNumber: {
+          progressId: progress.id,
+          stepNumber,
+        },
+      },
+      data: {
+        status,
+        data: stepData ? JSON.stringify(stepData) : undefined,
+        startedAt: status === "IN_PROGRESS" ? new Date() : undefined,
+        completedAt: status === "COMPLETED" ? new Date() : undefined,
+      },
+    })
+
+    // Rest of your update logic...
+    const updatedProgress = await client.onboardingProgress.update({
+      where: { id: progress.id },
+      data: {
+        currentStep: status === "COMPLETED" ? stepNumber + 1 : stepNumber,
+        lastActiveAt: new Date(),
+        completedAt: status === "COMPLETED" && stepNumber === progress.totalSteps ? new Date() : undefined,
+      },
+      include: { steps: true },
+    })
+
+    if (status === "COMPLETED" && stepNumber === progress.totalSteps) {
+      await finalizeOnboarding(user.id, progress.userType, progress.steps)
+    }
+
+    return {
+      status: 200,
+      data: "Step updated",
+      step: updatedStep,
+      progress: updatedProgress,
+    }
+  } catch (error) {
+    console.error("Error updating onboarding step:", error)
+    return { status: 500, data: "Failed to update onboarding step" }
+  }
+}
+
 // Initialize onboarding progress
 export const initializeOnboarding = async (userType: "influencer" | "regular", totalSteps: number) => {
   const userid = await onUserInfor()
@@ -479,7 +562,7 @@ export const initializeOnboarding = async (userType: "influencer" | "regular", t
 }
 
 // Update onboarding step
-export const updateOnboardingStep = async (
+export const updateOnboardingStepp = async (
   stepNumber: number,
   status: "IN_PROGRESS" | "COMPLETED" | "SKIPPED",
   stepData?: any,
