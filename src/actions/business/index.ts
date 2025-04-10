@@ -493,149 +493,149 @@ export const getOpportunityApplications = async (
   }
 }
 
-export const updateApplicationStatus = async (applicationId: string, status: string) => {
-  try {
-    const user = await onCurrentUser()
+// export const updateApplicationStatus = async (applicationId: string, status: string) => {
+//   try {
+//     const user = await onCurrentUser()
 
-    const businessProfile = await client.businessProfile.findUnique({
-      where: { userId: user.id },
-    })
+//     const businessProfile = await client.businessProfile.findUnique({
+//       where: { userId: user.id },
+//     })
 
-    if (!businessProfile) {
-      return { status: 404, error: "Business profile not found" }
-    }
+//     if (!businessProfile) {
+//       return { status: 404, error: "Business profile not found" }
+//     }
 
-    // Check if application belongs to business
-    const application = await client.opportunityApplication.findFirst({
-      where: {
-        id: applicationId,
-        opportunity: {
-          businessId: businessProfile.id,
-        },
-      },
-      include: {
-        opportunity: true,
-      },
-    })
+//     // Check if application belongs to business
+//     const application = await client.opportunityApplication.findFirst({
+//       where: {
+//         id: applicationId,
+//         opportunity: {
+//           businessId: businessProfile.id,
+//         },
+//       },
+//       include: {
+//         opportunity: true,
+//       },
+//     })
 
-    if (!application) {
-      return { status: 404, error: "Application not found" }
-    }
+//     if (!application) {
+//       return { status: 404, error: "Application not found" }
+//     }
 
-    const updatedApplication = await client.opportunityApplication.update({
-      where: { id: applicationId },
-      data: { status },
-    })
+//     const updatedApplication = await client.opportunityApplication.update({
+//       where: { id: applicationId },
+//       data: { status },
+//     })
 
-    // If accepted, create a campaign and add influencer
-    if (status === "ACCEPTED") {
-      // Check if campaign already exists for this opportunity
-      let campaign = await client.campaign.findFirst({
-        where: {
-          name: `${application.opportunity.title} Campaign`,
-          userId: user.id,
-        },
-      })
+//     // If accepted, create a campaign and add influencer
+//     if (status === "ACCEPTED") {
+//       // Check if campaign already exists for this opportunity
+//       let campaign = await client.campaign.findFirst({
+//         where: {
+//           name: `${application.opportunity.title} Campaign`,
+//           userId: user.id,
+//         },
+//       })
 
-      // Create campaign if it doesn't exist
-      if (!campaign) {
-        campaign = await client.campaign.create({
-          data: {
-            name: `${application.opportunity.title} Campaign`,
-            description: application.opportunity.description,
-            budget: { min: 0, max: 0 },
-            userId: user.id,
-            status: "ACTIVE",
-          },
-        })
-      }
+//       // Create campaign if it doesn't exist
+//       if (!campaign) {
+//         campaign = await client.campaign.create({
+//           data: {
+//             name: `${application.opportunity.title} Campaign`,
+//             description: application.opportunity.description,
+//             budget: application.opportunity.budget, 
+//             userId: user.id,
+//             status: "ACTIVE",
+//           },
+//         })
+//       }
 
-      // Add influencer to campaign
-      await client.campaignInfluencer.create({
-        data: {
-          campaignId: campaign.id,
-          influencerId: application.influencerId,
-          status: "ACCEPTED",
-          rate: application.proposedRate || application.opportunity.budget,
-          deliverables: application.opportunity.requirements 
-            ? JSON.parse(application.opportunity.requirements)
-            : null,
-        },
-      })
-    }
+//       // Add influencer to campaign
+//       await client.campaignInfluencer.create({
+//         data: {
+//           campaignId: campaign.id,
+//           influencerId: application.influencerId,
+//           status: "ACCEPTED",
+//           rate: application.proposedRate || application.opportunity.budget,
+//           deliverables: application.opportunity.requirements 
+//             ? JSON.parse(application.opportunity.requirements)
+//             : null,
+//         },
+//       })
+//     }
 
-    revalidatePath(`/business/opportunities/${application.opportunityId}`)
-    return { status: 200, data: updatedApplication }
-  } catch (error) {
-    console.error("Error updating application status:", error)
-    return { status: 500, error: "Failed to update application status" }
-  }
-}
+//     revalidatePath(`/business/opportunities/${application.opportunityId}`)
+//     return { status: 200, data: updatedApplication }
+//   } catch (error) {
+//     console.error("Error updating application status:", error)
+//     return { status: 500, error: "Failed to update application status" }
+//   }
+// }
 
-// Invite influencer to campaign directly
-export const inviteInfluencerToCampaign = async (
-  campaignId: string,
-  influencerId: string,
-  data: {
-    rate: number
-    deliverables?: string
-    dueDate?: Date
-  },
-) => {
-  try {
-    const user = await onCurrentUser()
+// // Invite influencer to campaign directly
+// export const inviteInfluencerToCampaign = async (
+//   campaignId: string,
+//   influencerId: string,
+//   data: {
+//     rate: number
+//     deliverables?: string
+//     dueDate?: Date
+//   },
+// ) => {
+//   try {
+//     const user = await onCurrentUser()
 
-    // Check if campaign belongs to user
-    const campaign = await client.campaign.findFirst({
-      where: {
-        id: campaignId,
-        userId: user.id,
-      },
-    })
+//     // Check if campaign belongs to user
+//     const campaign = await client.campaign.findFirst({
+//       where: {
+//         id: campaignId,
+//         userId: user.id,
+//       },
+//     })
 
-    if (!campaign) {
-      return { status: 404, error: "Campaign not found" }
-    }
+//     if (!campaign) {
+//       return { status: 404, error: "Campaign not found" }
+//     }
 
-    // Check if influencer exists
-    const influencer = await client.influencer.findUnique({
-      where: { id: influencerId },
-    })
+//     // Check if influencer exists
+//     const influencer = await client.influencer.findUnique({
+//       where: { id: influencerId },
+//     })
 
-    if (!influencer) {
-      return { status: 404, error: "Influencer not found" }
-    }
+//     if (!influencer) {
+//       return { status: 404, error: "Influencer not found" }
+//     }
 
-    // Check if already invited
-    const existingInvite = await client.campaignInfluencer.findFirst({
-      where: {
-        campaignId,
-        influencerId,
-      },
-    })
+//     // Check if already invited
+//     const existingInvite = await client.campaignInfluencer.findFirst({
+//       where: {
+//         campaignId,
+//         influencerId,
+//       },
+//     })
 
-    if (existingInvite) {
-      return { status: 400, error: "Influencer already invited to this campaign" }
-    }
+//     if (existingInvite) {
+//       return { status: 400, error: "Influencer already invited to this campaign" }
+//     }
 
-    const invite = await client.campaignInfluencer.create({
-      data: {
-        campaignId,
-        influencerId,
-        status: "INVITED",
-        ...data,
-      },
-    })
+//     const invite = await client.campaignInfluencer.create({
+//       data: {
+//         campaignId,
+//         influencerId,
+//         status: "INVITED",
+//         ...data,
+//       },
+//     })
 
-    revalidatePath(`/business/campaigns/${campaignId}`)
-    return { status: 201, data: invite }
-  } catch (error) {
-    console.error("Error inviting influencer:", error)
-    return { status: 500, error: "Failed to invite influencer" }
-  }
-}
+//     revalidatePath(`/business/campaigns/${campaignId}`)
+//     return { status: 201, data: invite }
+//   } catch (error) {
+//     console.error("Error inviting influencer:", error)
+//     return { status: 500, error: "Failed to invite influencer" }
+//   }
+// }
 
-///////
+// ///////
 
 
 // Only showing the createOpportunity function that needs to be fixed
@@ -646,7 +646,7 @@ export const createOpportunity = async (data: {
   requirements?: string
   platforms: string[]
   contentType: string[] // Changed to array to match schema
-  budget: { min: 0, max: 0 }
+  budget: number
   category: string // Added required field
   deadline?: Date
   deliveryDate?: Date
