@@ -23,7 +23,8 @@ export async function createOpportunity(data: any) {
       data: {
         title: data.title,
         budget:data.budget,
-        brandName:data.businessName,
+        // brandName:data.businessName,
+        brandName:"businessName",
         description: data.description,
         category: data.category,
         budgetMin: data.budget.min,
@@ -221,6 +222,7 @@ export async function updateOpportunity(id: string, data: any) {
       },
       data: {
         title: data.title,
+        brandName:"businessName",
         description: data.description,
         category: data.category,
         budgetMin: data.budget.min,
