@@ -370,7 +370,7 @@ export function ProfileSetupPage() {
 
       if (result.status === 200) {
         // Redirect to dashboard
-        router.push("/influencer/dashboard")
+        router.push("/influencers")
         router.refresh()
       } else {
         toast({
