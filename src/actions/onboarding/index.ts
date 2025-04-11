@@ -725,7 +725,7 @@ export const completeOnboarding = async () => {
     })
 
     // Finalize onboarding
-    await finalizeOnboarding(user.id, progress.userType, updatedProgress.steps)
+    await finalizeOnboarding( userId||user.id, progress.userType, updatedProgress.steps)
 
     return {
       status: 200,
