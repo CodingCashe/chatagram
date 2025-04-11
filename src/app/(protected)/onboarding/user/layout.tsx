@@ -51,14 +51,14 @@ export default function OnboardingLayout({
                 Welcome to the future of collaboration
               </h2>
               <p className="text-gray-300 mb-6">
-                Complete your profile to unlock the full potential of our platform. We're excited to have you on board.
+                Complete your profile to unlock the full potential of our platform. We&apos;re excited to have you on board.
               </p>
 
               {/* Testimonial */}
               <div className="mt-12 bg-white/5 p-6 rounded-xl border border-white/10">
                 <p className="text-gray-300 italic mb-4">
-                  "This platform transformed how our team works together. The onboarding was smooth and the features are
-                  incredible."
+                  &ldquo;This platform transformed how our team works together. The onboarding was smooth and the features are
+                  incredible.&rdquo;
                 </p>
                 <div className="flex items-center">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-orange-400"></div>
