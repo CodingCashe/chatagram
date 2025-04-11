@@ -121,7 +121,7 @@ export function ProfileCompletion({ className }: ProfileCompletionProps) {
         <CardHeader className="pb-2">
           <CardTitle className="text-lg font-semibold text-amber-800">Complete Your Profile</CardTitle>
           <CardDescription className="text-amber-700">
-            You haven't set up your influencer profile yet. Complete the onboarding process to get started.
+            You haven&apos;t set up your influencer profile yet. Complete the onboarding process to get started.
           </CardDescription>
         </CardHeader>
         <CardContent>
