@@ -9513,7 +9513,7 @@ export default function OnboardingPage() {
           // Redirect based on user type
           setTimeout(() => {
             if (userType === "influencer") {
-              router.push("/influencer-dashboard")
+              router.push("/influencers")
             } else {
               router.push("/dashboard")
             }
@@ -11018,7 +11018,7 @@ export default function OnboardingPage() {
                             <Button
                               onClick={() => {
                                 if (userType === "influencer") {
-                                  router.push("/influencer-dashboard")
+                                  router.push("/influencers")
                                 } else {
                                   router.push("/dashboard")
                                 }

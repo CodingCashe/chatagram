@@ -2374,7 +2374,7 @@ export default function OnboardingPage() {
                             <Button
                               onClick={() => {
                                 if (userType === "influencer") {
-                                  router.push("/influencer-dashboard")
+                                  router.push("/influencers")
                                 } else {
                                   router.push("/dashboard")
                                 }

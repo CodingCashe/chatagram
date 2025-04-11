@@ -755,7 +755,7 @@ async function finalizeOnboarding(userId: string, userType: string, steps: any[]
 
   // Revalidate paths
   revalidatePath("/dashboard")
-  revalidatePath("/influencer-dashboard")
+  revalidatePath("/influencers")
 }
 
 // Helper function to create influencer profile
