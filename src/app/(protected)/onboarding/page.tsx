@@ -11,7 +11,7 @@ const Page = async (props: Props) => {
     return redirect('/sign-in')
   }
 
-  return redirect('/onboarding/user')
+  return redirect('/onboarding/new')
 }
 
 export default Page
