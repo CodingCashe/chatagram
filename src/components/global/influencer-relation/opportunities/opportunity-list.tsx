@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Calendar, Users, DollarSign, CheckCircle } from "lucide-react"
 import { getOpportunities } from "@/actions/influencer-relations/opportunities"
+import { useRouter, usePathname  } from "next/navigation"
 
 interface OpportunityListProps {
   status: string
@@ -24,6 +25,9 @@ export function OpportunityList({ status, filters }: OpportunityListProps) {
   const [opportunities, setOpportunities] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const pathname = usePathname()
+  const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+  const slug = slugMatch ? slugMatch[1] : ""
 
   useEffect(() => {
     const fetchOpportunities = async () => {
@@ -158,10 +162,10 @@ export function OpportunityList({ status, filters }: OpportunityListProps) {
           </CardContent>
           <CardFooter className="flex justify-between border-t bg-muted/50 p-4">
             <Button variant="outline" size="sm" asChild>
-              <Link href={`/opportunities/${opportunity.id}`}>View Details</Link>
+              <Link href={`/dashboard/${slug}/opportunities/${opportunity.id}`}>View Details</Link>
             </Button>
             <Button size="sm" asChild>
-              <Link href={`/opportunities/${opportunity.id}`}>
+              <Link href={`/dashboard/${slug}/opportunities/${opportunity.id}`}>
                 <CheckCircle className="mr-1 h-4 w-4" />
                 <span className="hidden sm:inline">View Applications</span>
                 <span className="sm:hidden">Applications</span>

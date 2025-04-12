@@ -911,11 +911,11 @@ export default function InfluencerDashboardPage() {
             </Suspense>
           </div>
 
-          <div className="mt-4">
+          {/* <div className="mt-4">
             <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
               <BrandOpportunities />
             </Suspense>
-          </div>
+          </div> */}
           <div className="mt-4">
             <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
               <BrandOpportunity />

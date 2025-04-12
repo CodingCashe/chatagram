@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Calendar, Users, DollarSign, Building } from "lucide-react"
 import { getAvailableOpportunities, getMyApplications } from "@/actions/influencer-relations/opportunities"
+import { usePathname } from "next/navigation"
 
 import { ApplyToOpportunityDialog } from "./apply-to-opportunity-dialog"
 
@@ -28,6 +29,9 @@ export function InfluencerOpportunityList({ type, filters }: InfluencerOpportuni
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedOpportunity, setSelectedOpportunity] = useState<any>(null)
+  const pathname = usePathname()
+  const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+  const slug = slugMatch ? slugMatch[1] : ""
 
   useEffect(() => {
     const fetchData = async () => {
@@ -205,7 +209,8 @@ export function InfluencerOpportunityList({ type, filters }: InfluencerOpportuni
                 </CardContent>
                 <CardFooter className="flex justify-between border-t bg-muted/50 p-4">
                   <Button variant="outline" size="sm" asChild>
-                    <Link href={`/opportunities/view/${opportunity.id}`}>View Details</Link>
+                    {/* <Link href={`/opportunities/view/${opportunity.id}`}>View Details</Link> */}
+                    <Link href={`/influencers/${slug}/opportunities/view/${opportunity.id}`}>View Details</Link>
                   </Button>
                   <Button size="sm" onClick={() => setSelectedOpportunity(opportunity)}>
                     Apply Now
@@ -246,7 +251,7 @@ export function InfluencerOpportunityList({ type, filters }: InfluencerOpportuni
                 </CardContent>
                 <CardFooter className="flex justify-between border-t bg-muted/50 p-4">
                   <Button variant="outline" size="sm" asChild>
-                    <Link href={`/opportunities/view/${application.opportunity.id}`}>View Opportunity</Link>
+                    <Link href={`/influencers/${slug}/opportunities/view/${application.opportunity.id}`}>View Opportunity</Link>
                   </Button>
                   <Button
                     size="sm"
