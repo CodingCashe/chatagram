@@ -86,7 +86,7 @@ export default function HeroSection() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
-                  <Link href="/onboarding/user">Get Started Free</Link>
+                  <Link href="/onboarding">Get Started Free</Link>
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
                 <Button size="lg" variant="outline" className="border-blue-700 text-blue-400 hover:bg-blue-900/20">
