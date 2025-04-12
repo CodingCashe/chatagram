@@ -1328,7 +1328,7 @@ export default function OnboardingPage() {
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
       <div className="flex flex-col items-center gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-sm font-medium">Processing your information...</p>
+        <p className="text-sm font-medium">Cashe says &ldquo;wait buddy&rdquo;...</p>
       </div>
     </div>
   )
@@ -1342,7 +1342,7 @@ export default function OnboardingPage() {
           <div className="bg-primary/10 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-primary">Welcome to InstaGrowth</h1>
+                <h1 className="text-2xl font-bold text-primary">Welcome to Yazil!</h1>
                 <p className="text-muted-foreground">Let&apos;s set up your experience</p>
               </div>
 
@@ -1448,7 +1448,7 @@ export default function OnboardingPage() {
                         </div>
                         <div className="flex-1">
                           <div className="font-medium">Regular User</div>
-                          <div className="text-sm text-muted-foreground">I want to grow my personal account</div>
+                          <div className="text-sm text-muted-foreground">I want to grow my Business</div>
                         </div>
                         <ChevronRight className="h-5 w-5 text-muted-foreground" />
                       </Button>
@@ -1466,7 +1466,7 @@ export default function OnboardingPage() {
                         <div className="flex-1">
                           <div className="font-medium">Influencer</div>
                           <div className="text-sm text-muted-foreground">
-                            I have a significant following and brand partnerships
+                            I am an influencer with  a significant following and brand partnerships
                           </div>
                         </div>
                         <ChevronRight className="h-5 w-5 text-muted-foreground" />

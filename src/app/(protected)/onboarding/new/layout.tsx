@@ -71,7 +71,7 @@ export default function OnboardingLayout({
             </div>
 
             <div className="text-gray-400 text-sm">
-              <p>© 2025 Your Platform. All rights reserved.</p>
+              <p>© 2025 Yazil. All rights reserved.</p>
               <div className="flex space-x-4 mt-2">
                 <a href="#" className="hover:text-white transition-colors">
                   Terms
