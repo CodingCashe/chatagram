@@ -78,7 +78,8 @@ export function BrandOpportunities() {
                   <div className="grid gap-2 text-sm">
                     <div className="flex items-center justify-between">
                       <span className="text-muted-foreground">Budget:</span>
-                      <span className="font-medium">${opportunity.budget}</span>
+                      {/* <span className="font-medium">${opportunity.budget}</span> */}
+                      <span className="font-medium">$22000</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-muted-foreground">Content:</span>
