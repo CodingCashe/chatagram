@@ -816,6 +816,7 @@ import { AudienceInsights } from "@/components/global/influencer-relation/influe
 import { RevenueAnalytics } from "@/components/global/influencer-relation/influencer/revenue-analytics"
 import { GrowthMetrics } from "@/components/global/influencer-relation/influencer/growth-metrics"
 import { BrandOpportunities } from "@/components/global/influencer-relation/influencer/brand-opportunities"
+import { BrandOpportunity } from "@/components/global/influencer-relation/influencer/available-opportunities"
 import { ContentCalendar } from "@/components/global/influencer-relation/influencer/content-calendar"
 import { ProfileCompletion } from "@/components/global/influencer-relation/influencer/profile-completion"
 import { getInfluencerProfile } from "@/actions/influencer-relations/influencer"
@@ -913,6 +914,11 @@ export default function InfluencerDashboardPage() {
           <div className="mt-4">
             <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
               <BrandOpportunities />
+            </Suspense>
+          </div>
+          <div className="mt-4">
+            <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
+              <BrandOpportunity />
             </Suspense>
           </div>
         </>

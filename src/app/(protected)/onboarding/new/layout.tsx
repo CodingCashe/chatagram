@@ -64,7 +64,7 @@ export default function OnboardingLayout({
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-orange-400"></div>
                   <div className="ml-3">
                     <p className="text-white font-medium">Lady Cashe</p>
-                    <p className="text-gray-400 text-sm">Product Manager, Acme Inc</p>
+                    <p className="text-gray-400 text-sm">Product Manager, Vavi Crotchets Ltd</p>
                   </div>
                 </div>
               </div>
