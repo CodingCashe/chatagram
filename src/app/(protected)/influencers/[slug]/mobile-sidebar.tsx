@@ -98,7 +98,7 @@ export function MobileSidebar({ isOpen, onClose, activeTab, onTabChange }: Mobil
                   <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10">
                     <Instagram className="h-5 w-5 text-primary" />
                   </div>
-                  <span className="font-semibold">InstaGrowth</span>
+                  <span className="font-semibold">Yazil</span>
                 </div>
                 <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8">
                   <X className="h-4 w-4" />

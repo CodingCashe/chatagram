@@ -9974,7 +9974,7 @@ export default function OnboardingPage() {
           <div className="bg-primary/10 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-primary">Welcome to InstaGrowth</h1>
+                <h1 className="text-2xl font-bold text-primary">Welcome to Yazil</h1>
                 <p className="text-muted-foreground">Let&apos;s set up your experience</p>
               </div>
 

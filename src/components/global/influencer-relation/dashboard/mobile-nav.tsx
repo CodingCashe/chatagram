@@ -112,7 +112,7 @@ export function MobileNav() {
             >
               <div className="flex items-center justify-between">
                 <Link href="/" className="flex items-center gap-2 font-bold">
-                  InstaGrowth
+                  Yazil
                 </Link>
                 <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
                   <X className="h-5 w-5" />

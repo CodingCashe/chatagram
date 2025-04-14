@@ -2285,7 +2285,7 @@ export default function OnboardingPage() {
                     <p className="mt-1 text-sm text-muted-foreground">Invite other influencers and earn rewards</p>
 
                     <div className="mt-3 flex items-center gap-2">
-                      <Input value="https://instagrowth.com/ref/yourname" readOnly className="flex-1 bg-muted" />
+                      <Input value="https://yazil.com/ref/yourname" readOnly className="flex-1 bg-muted" />
                       <Button variant="outline" size="sm" className="shrink-0">
                         <CopyIcon className="mr-1 h-3 w-3" />
                         Copy

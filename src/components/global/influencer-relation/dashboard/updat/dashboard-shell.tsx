@@ -78,7 +78,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              InstaGrowth
+              Yazil
             </motion.span>
           </div>
 

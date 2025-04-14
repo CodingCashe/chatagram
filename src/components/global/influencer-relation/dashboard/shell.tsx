@@ -48,7 +48,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
         <div className="flex h-16 items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-2">
             <MobileNav />
-            {/* <span className="hidden font-bold md:inline-block">InstaGrowth</span> */}
+            {/* <span className="hidden font-bold md:inline-block">Yazil</span> */}
           </div>
 
           <div className="flex flex-1 items-center justify-end gap-4 md:justify-between">
