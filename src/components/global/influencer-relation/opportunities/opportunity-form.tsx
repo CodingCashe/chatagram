@@ -114,7 +114,7 @@ export function OpportunityForm({ formData, setFormData, loading, onSubmit, isEd
           <Label htmlFor="title">Opportunity Title</Label>
           <Input
             id="title"
-            placeholder="E.g., Summer Fashion Campaign"
+            placeholder="E.g., Summer Fashio Campaign"
             value={formData.title}
             onChange={(e) => handleChange("title", e.target.value)}
             required

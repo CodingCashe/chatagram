@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { useRouter, usePathname  } from "next/navigation"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import {
@@ -24,59 +25,65 @@ interface NavProps {
 }
 
 export function DashboardNav({ pathname }: NavProps) {
+  const pathnamme = usePathname()
+  const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+  const slug = slugMatch ? slugMatch[1] : ""
+
+  
+
   const routes = [
     {
-      href: "/influencer-dashboard",
+      href: `/influencers/${slug}/dashboard/`,
       icon: LayoutDashboard,
       title: "Dashboard",
     },
     {
-      href: "/influencer-dashboard/analytics",
+      href: `/influencers/${slug}/analytics/`,
       icon: BarChart3,
       title: "Analytics",
     },
     {
-      href: "/influencer-dashboard/content",
+      href: `/influencers/${slug}/content/`,
       icon: ImageIcon,
       title: "Content",
     },
     {
-      href: "/influencer-dashboard/campaigns",
+      href: `/influencers/${slug}/campaigns/`,
       icon: Briefcase,
       title: "Campaigns",
     },
     {
-      href: "/influencer-dashboard/audience",
+      href: `/influencers/${slug}/audience/`,
       icon: Users,
       title: "Audience",
     },
     {
-      href: "/influencer-dashboard/calendar",
+      href: `/influencers/${slug}/calendar/`,
       icon: Calendar,
       title: "Calendar",
     },
     {
-      href: "/influencer-dashboard/messages",
+      href: `/influencers/${slug}/messages/`,
       icon: MessageSquare,
       title: "Messages",
     },
     {
-      href: "/influencer-dashboard/earnings",
+      href: `/influencers/${slug}/earnings/`,
       icon: CreditCard,
       title: "Earnings",
     },
     {
-      href: "/influencer-dashboard/growth",
+      href: `/influencers/${slug}/growth/`,
       icon: TrendingUp,
       title: "Growth",
     },
     {
-      href: "/influencer-dashboard/opportunities",
+      href: `/influencers/${slug}/opportunities/`,
       icon: Zap,
       title: "Opportunities",
     },
     {
-      href: "/influencer-dashboard/settings",
+      href: `/influencers/${slug}/settings/`,
       icon: Settings,
       title: "Settings",
     },
