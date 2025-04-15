@@ -823,7 +823,7 @@ export default function InfluencerSearchPage() {
       setLoading(false)
     }
   }
-
+   
   const handleFilterChange = (key: string, value: any) => {
     setFilters((prev) => ({ ...prev, [key]: value }))
   }

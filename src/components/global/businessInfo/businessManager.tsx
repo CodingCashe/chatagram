@@ -122,10 +122,10 @@ export default function BusinessManager() {
   const handleBusinessCreated = (newBusiness: FormSchema) => {
     setBusiness(newBusiness)
   }
-
+  //bg-gradient-to-br from-gray-900 to-gray-800
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-gray-900 to-gray-800">
+      <div className="flex justify-center items-center h-screen">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}

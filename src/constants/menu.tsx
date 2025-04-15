@@ -316,6 +316,11 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
       },
       {
         id: uuid(),
+        label: "Messages",
+        icon: colorIcon(MessageCircle, "text-green-400"),
+      },
+      {
+        id: uuid(),
         label: "Customize",
         icon: colorIcon(Target, "text-purple-400"),
       },
