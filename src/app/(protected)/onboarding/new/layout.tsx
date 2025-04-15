@@ -72,7 +72,7 @@ export default function OnboardingLayout({
 
             <div className="text-gray-400 text-sm">
               <p>© 2025 Yazil. All rights reserved.</p>
-              <div className="flex space-x-4 mt-2">
+              {/* <div className="flex space-x-4 mt-2">
                 <a href="#" className="hover:text-white transition-colors">
                   Terms
                 </a>
@@ -82,7 +82,7 @@ export default function OnboardingLayout({
                 <a href="#" className="hover:text-white transition-colors">
                   Help
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
 
