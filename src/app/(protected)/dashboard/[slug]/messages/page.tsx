@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter,usePathname } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Avatar } from "@/components/ui/avatar"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -20,6 +20,10 @@ export default function MessagesListPage() {
   const [filter, setFilter] = useState("all")
   const [userId, setUserId] = useState<string | null>(null)
 
+  const pathname = usePathname()
+  const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+  const slug = slugMatch ? slugMatch[1] : ""
+
   // Fetch current user
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -28,7 +32,7 @@ export default function MessagesListPage() {
         setUserId(user.data.id)
       } else {
         // Redirect to login if not authenticated
-        router.push("/login")
+        router.push("/sign-up")
       }
     }
 
@@ -137,7 +141,7 @@ export default function MessagesListPage() {
   })
 
   const selectConversation = (conversationId: string) => {
-    router.push(`/messages/${conversationId}`)
+    router.push(`/dashboard/${slug}/messages/${conversationId}`)
   }
 
   if (loading) {

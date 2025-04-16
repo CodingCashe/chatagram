@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { useParams, useRouter,usePathname } from "next/navigation"
 import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from "@/hooks/use-toast"
 import { getOrCreateChat } from "@/actions/collab/chat-actions"
@@ -13,10 +13,14 @@ export default function InfluencerMessageRedirect() {
   const influencerId = params.influencerId as string
   const [loading, setLoading] = useState(true)
 
+  const pathname = usePathname()
+  const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+  const slug = slugMatch ? slugMatch[1] : ""
+
   useEffect(() => {
     const initializeChat = async () => {
       if (!influencerId) {
-        router.push("/messages")
+        router.push(`/dashboard/${slug}/messages`)
         return
       }
 
@@ -33,14 +37,14 @@ export default function InfluencerMessageRedirect() {
           }
 
           // Redirect to the chat page
-          router.push(`/messages/${data.id}`)
+          router.push(`/dashboard/${slug}/messages/${data.id}`)
         } else {
           toast({
             title: "Error",
             description: message || "Failed to create chat",
             variant: "destructive",
           })
-          router.push("/messages")
+          router.push(`/dashboard/${slug}/messages`)
         }
       } catch (error) {
         toast({
@@ -48,7 +52,7 @@ export default function InfluencerMessageRedirect() {
           description: "An unexpected error occurred",
           variant: "destructive",
         })
-        router.push("/messages")
+        router.push(`/dashboard/${slug}/messages`)
       } finally {
         setLoading(false)
       }

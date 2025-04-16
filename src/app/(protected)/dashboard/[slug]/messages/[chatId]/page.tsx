@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { useParams, useRouter,usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar } from "@/components/ui/avatar"
@@ -21,6 +21,9 @@ export default function ChatPage() {
   const [chat, setChat] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [userId, setUserId] = useState<string | null>(null)
+  const pathname = usePathname()
+  const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+  const slug = slugMatch ? slugMatch[1] : ""
 
   // Fetch current user
   useEffect(() => {
@@ -30,7 +33,7 @@ export default function ChatPage() {
         setUserId(user.data.id)
       } else {
         // Redirect to login if not authenticated
-        router.push("/login")
+        router.push("/sign-in")
       }
     }
 
@@ -53,7 +56,7 @@ export default function ChatPage() {
             description: message || "Failed to load chat",
             variant: "destructive",
           })
-          router.push("/messages")
+          router.push(`/dashboard/${slug}/messages`)
         }
       } catch (error) {
         toast({
@@ -61,7 +64,7 @@ export default function ChatPage() {
           description: "An unexpected error occurred",
           variant: "destructive",
         })
-        router.push("/messages")
+        router.push(`/dashboard/${slug}/messages`)
       } finally {
         setLoading(false)
       }
@@ -195,7 +198,7 @@ export default function ChatPage() {
             {/* Header */}
             <div className="p-4 border-b border-gray-800 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Button variant="ghost" size="icon" onClick={() => router.push("/messages")} className="mr-2">
+                <Button variant="ghost" size="icon" onClick={() => router.push(`/dashboard/${slug}/messages`)} className="mr-2">
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
                 <Avatar className="h-10 w-10 bg-gray-700">

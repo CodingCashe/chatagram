@@ -13,6 +13,7 @@ import { StarIcon, MoreHorizontal, CheckCircle, XCircle, MessageCircle, External
 import { getOpportunityApplications, updateApplicationStatus, voteForInfluencer } from "@/actions/influencer-relations/opportunities"
 import { toast } from "@/hooks/use-toast"
 import { InfluencerRating } from "./influencer-rating"
+import { usePathname } from "next/navigation"
 
 interface InfluencerApplicationsProps {
   opportunityId: string
@@ -23,6 +24,9 @@ export function InfluencerApplications({ opportunityId }: InfluencerApplications
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [ratingInfluencerId, setRatingInfluencerId] = useState<string | null>(null)
+  const pathname = usePathname()
+  const slugMatch = pathname.match(/^\/dashboard\/([^/]+)/)
+  const slug = slugMatch ? slugMatch[1] : ""
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -287,7 +291,7 @@ export function InfluencerApplications({ opportunityId }: InfluencerApplications
                                 Reject
                               </DropdownMenuItem>
                               <DropdownMenuItem
-                                onClick={() => window.open(`/messages/${application.influencer.id}`, "_blank")}
+                                onClick={() => window.open(`/dashboard/${slug}/messages/${application.influencer.id}`, "_blank")}
                               >
                                 <MessageCircle className="mr-2 h-4 w-4" />
                                 Message
@@ -317,7 +321,7 @@ export function InfluencerApplications({ opportunityId }: InfluencerApplications
                           </Button>
                           <Button
                             size="sm"
-                            onClick={() => window.open(`/messages/${application.influencer.id}`, "_blank")}
+                            onClick={() => window.open(`/dashboard/${slug}/messages/${application.influencer.id}`, "_blank")}
                           >
                             Contact Influencer
                           </Button>
