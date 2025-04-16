@@ -107,7 +107,7 @@ export default function MessagesListPage() {
       return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     }
 
-    // If this week, show day name
+    // If this week, show day nam e
     const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
     if (diffDays < 7) {
       return date.toLocaleDateString([], { weekday: "short" })
