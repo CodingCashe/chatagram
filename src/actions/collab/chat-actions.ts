@@ -554,6 +554,7 @@ export async function getOrCreateChat(influencerId: string) {
     })
 
     if (existingChatParticipant) {
+      //
       // Chat already exists, return it
       return {
         status: 200,

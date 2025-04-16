@@ -311,7 +311,7 @@ export function InfluencerApplications({ opportunityId }: InfluencerApplications
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => window.open(`/influencers/${application.influencer.id}`, "_blank")}
+                            onClick={() => window.open(`/influencers/new/${application.influencer.id}`, "_blank")}
                           >
                             View Full Profile
                           </Button>
