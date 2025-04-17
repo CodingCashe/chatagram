@@ -275,6 +275,13 @@ import StatsTicker from "@/components/global/landing/stats-ticker"
 import IntegrationLogos from "@/components/global/landing/integration-logos"
 import AiChatDemo from "@/components/global/landing/ai-chat-demo"
 import ContentFeatures from "@/components/global/landing/content-features"
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from '@clerk/nextjs'
 
 export const metadata: Metadata = {
   title: "Yazil - Instagram DM Automation Platform",
@@ -288,6 +295,13 @@ export default function LandingPage() {
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
 
       <Navbar />
+      <SignedOut>
+        <SignInButton />
+        <SignUpButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
 
       <main className="relative">
         <HeroSection />
