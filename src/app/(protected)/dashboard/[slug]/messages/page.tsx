@@ -233,13 +233,22 @@ export default function MessagesListPage() {
                     onClick={() => selectConversation(conversation.id)}
                   >
                     <div className="flex items-start gap-3">
-                      <Avatar className="h-12 w-12 bg-gray-700">
+                    <Avatar className="h-12 w-12 bg-gray-700 flex items-center justify-center overflow-hidden">
+                        {conversation.participants[0]?.influencerId ? (
+                          <img src="/influencer-svg.svg" alt="Influencer" className="w-8 h-8" />
+                        ) : conversation.participants[0]?.businessId ? (
+                          <img src="/business-svg.svg" alt="Business" className="w-8 h-8" />
+                        ) : (
+                          <div className="text-lg font-semibold text-white">?</div>
+                        )}
+                      </Avatar>
+                      {/* <Avatar className="h-12 w-12 bg-gray-700">
                         <div className="text-lg font-semibold text-white">
                           {conversation.participants[0]?.influencerName?.charAt(0) ||
                             conversation.participants[0]?.businessName?.charAt(0) ||
                             "?"}
                         </div>
-                      </Avatar>
+                      </Avatar> */}
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-baseline">
                           <h3 className="font-medium text-white truncate">
