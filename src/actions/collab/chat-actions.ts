@@ -1543,131 +1543,131 @@ import { revalidatePath } from "next/cache"
 import { pusherServer } from "@/lib/pusher"
 
 // Get or create a chat between a business and an influencer
-export async function getOrCreateChat(influencerId: string) {
-  try {
-    const user = await onUserInfor()
-    const userId = user.data?.id
+// export async function getOrCreateChat(influencerId: string) {
+//   try {
+//     const user = await onUserInfor()
+//     const userId = user.data?.id
 
-    if (!userId) {
-      return { status: 401, message: "Unauthorized" }
-    }
+//     if (!userId) {
+//       return { status: 401, message: "Unauthorized" }
+//     }
 
-    // Find the business associated with the current user
-    const business = await client.business.findFirst({
-      where: { userId },
-    })
+//     // Find the business associated with the current user
+//     const business = await client.business.findFirst({
+//       where: { userId },
+//     })
 
-    if (!business) {
-      return { status: 404, message: "Business not found for current user" }
-    }
+//     if (!business) {
+//       return { status: 404, message: "Business not found for current user" }
+//     }
 
-    // Check if a chat already exists between this business and influencer
-    const existingChatParticipant = await client.collabChatParticipant.findFirst({
-      where: {
-        businessId: business.id,
-        AND: {
-          chat: {
-            participants: {
-              some: {
-                influencerId,
-              },
-            },
-          },
-        },
-      },
-      include: {
-        chat: {
-          include: {
-            participants: true,
-          },
-        },
-      },
-    })
+//     // Check if a chat already exists between this business and influencer
+//     const existingChatParticipant = await client.collabChatParticipant.findFirst({
+//       where: {
+//         businessId: business.id,
+//         AND: {
+//           chat: {
+//             participants: {
+//               some: {
+//                 influencerId,
+//               },
+//             },
+//           },
+//         },
+//       },
+//       include: {
+//         chat: {
+//           include: {
+//             participants: true,
+//           },
+//         },
+//       },
+//     })
 
-    if (existingChatParticipant) {
-      // Chat already exists, return it
-      return {
-        status: 200,
-        data: existingChatParticipant.chat,
-        isNew: false,
-      }
-    }
+//     if (existingChatParticipant) {
+//       // Chat already exists, return it
+//       return {
+//         status: 200,
+//         data: existingChatParticipant.chat,
+//         isNew: false,
+//       }
+//     }
 
-    // Find the influencer to get their user ID
-    const influencer = await client.influencer.findUnique({
-      where: { id: influencerId },
-      include: { user: true },
-    })
+//     // Find the influencer to get their user ID
+//     const influencer = await client.influencer.findUnique({
+//       where: { id: influencerId },
+//       include: { user: true },
+//     })
 
-    if (!influencer) {
-      return { status: 404, message: "Influencer not found" }
-    }
+//     if (!influencer) {
+//       return { status: 404, message: "Influencer not found" }
+//     }
 
-    // Create a new chat with proper participant records
-    const newChat = await client.collabChat.create({
-      data: {
-        title: "New Conversation",
-        participants: {
-          create: [
-            // Business participant (current user)
-            {
-              userId,
-              businessId: business.id,
-            },
-            // Influencer participant (with their own user ID if available)
-            ...(influencer.userId
-              ? [
-                  {
-                    userId: influencer.userId, // Use influencer's user ID
-                    influencerId,
-                  },
-                ]
-              : []), // Skip creating participant if influencer has no user ID yet
-          ],
-        },
-      },
-      include: {
-        participants: true,
-      },
-    })
+//     // Create a new chat with proper participant records
+//     const newChat = await client.collabChat.create({
+//       data: {
+//         title: "New Conversation",
+//         participants: {
+//           create: [
+//             // Business participant (current user)
+//             {
+//               userId,
+//               businessId: business.id,
+//             },
+//             // Influencer participant (with their own user ID if available)
+//             ...(influencer.userId
+//               ? [
+//                   {
+//                     userId: influencer.userId, // Use influencer's user ID
+//                     influencerId,
+//                   },
+//                 ]
+//               : []), // Skip creating participant if influencer has no user ID yet
+//           ],
+//         },
+//       },
+//       include: {
+//         participants: true,
+//       },
+//     })
 
-    // If the influencer has a user ID, create a notification
-    if (influencer.userId) {
-      await client.userNotification.create({
-        data: {
-          userId: influencer.userId,
-          title: "New Message",
-          message: `${business.businessName} wants to chat with you`,
-          type: "chat",
-        },
-      })
+//     // If the influencer has a user ID, create a notification
+//     if (influencer.userId) {
+//       await client.userNotification.create({
+//         data: {
+//           userId: influencer.userId,
+//           title: "New Message",
+//           message: `${business.businessName} wants to chat with you`,
+//           type: "chat",
+//         },
+//       })
 
-      // Trigger real-time notification
-      if (pusherServer) {
-        try {
-          await pusherServer.trigger(`user-${influencer.userId}`, "notification", {
-            title: "New Message",
-            message: `${business.businessName} wants to chat with you`,
-            type: "chat",
-            chatId: newChat.id,
-          })
-        } catch (error) {
-          console.error("Pusher notification error:", error)
-          // Continue execution even if Pusher fails
-        }
-      }
-    }
+//       // Trigger real-time notification
+//       if (pusherServer) {
+//         try {
+//           await pusherServer.trigger(`user-${influencer.userId}`, "notification", {
+//             title: "New Message",
+//             message: `${business.businessName} wants to chat with you`,
+//             type: "chat",
+//             chatId: newChat.id,
+//           })
+//         } catch (error) {
+//           console.error("Pusher notification error:", error)
+//           // Continue execution even if Pusher fails
+//         }
+//       }
+//     }
 
-    return {
-      status: 200,
-      data: newChat,
-      isNew: true,
-    }
-  } catch (error) {
-    console.error("Error in getOrCreateChat:", error)
-    return { status: 500, message: "Failed to create or retrieve chat" }
-  }
-}
+//     return {
+//       status: 200,
+//       data: newChat,
+//       isNew: true,
+//     }
+//   } catch (error) {
+//     console.error("Error in getOrCreateChat:", error)
+//     return { status: 500, message: "Failed to create or retrieve chat" }
+//   }
+// }
 
 // Get all chats for the current user
 export async function getUserChats() {
@@ -1854,123 +1854,123 @@ export async function getChatById(chatId: string) {
 }
 
 // Send a message in a chat
-export async function sendMessage(chatId: string, content: string, contentType = "text") {
-  try {
-    const user = await onUserInfor()
-    const userId = user.data?.id
+// export async function sendMessage(chatId: string, content: string, contentType = "text") {
+//   try {
+//     const user = await onUserInfor()
+//     const userId = user.data?.id
 
-    if (!userId) {
-      return { status: 401, message: "Unauthorized" }
-    }
+//     if (!userId) {
+//       return { status: 401, message: "Unauthorized" }
+//     }
 
-    // Check if user is a participant in this chat
-    const userParticipation = await client.collabChatParticipant.findFirst({
-      where: {
-        chatId,
-        userId,
-      },
-    })
+//     // Check if user is a participant in this chat
+//     const userParticipation = await client.collabChatParticipant.findFirst({
+//       where: {
+//         chatId,
+//         userId,
+//       },
+//     })
 
-    if (!userParticipation) {
-      return { status: 403, message: "You don't have access to this chat" }
-    }
+//     if (!userParticipation) {
+//       return { status: 403, message: "You don't have access to this chat" }
+//     }
 
-    // Create the message
-    const message = await client.collabMessage.create({
-      data: {
-        chatId,
-        senderId: userParticipation.id,
-        content,
-        contentType,
-      },
-      include: {
-        sender: {
-          include: {
-            influencer: true,
-            business: true,
-          },
-        },
-      },
-    })
+//     // Create the message
+//     const message = await client.collabMessage.create({
+//       data: {
+//         chatId,
+//         senderId: userParticipation.id,
+//         content,
+//         contentType,
+//       },
+//       include: {
+//         sender: {
+//           include: {
+//             influencer: true,
+//             business: true,
+//           },
+//         },
+//       },
+//     })
 
-    // Update the chat's updatedAt timestamp
-    await client.collabChat.update({
-      where: { id: chatId },
-      data: { updatedAt: new Date() },
-    })
+//     // Update the chat's updatedAt timestamp
+//     await client.collabChat.update({
+//       where: { id: chatId },
+//       data: { updatedAt: new Date() },
+//     })
 
-    // Get all other participants to notify them
-    const otherParticipants = await client.collabChatParticipant.findMany({
-      where: {
-        chatId,
-        id: { not: userParticipation.id },
-      },
-      include: {
-        user: true,
-      },
-    })
+//     // Get all other participants to notify them
+//     const otherParticipants = await client.collabChatParticipant.findMany({
+//       where: {
+//         chatId,
+//         id: { not: userParticipation.id },
+//       },
+//       include: {
+//         user: true,
+//       },
+//     })
 
-    // Create notifications for other participants
-    for (const participant of otherParticipants) {
-      // Create database notification
-      await client.userNotification.create({
-        data: {
-          userId: participant.userId,
-          title: "New Message",
-          message: `You have a new message from ${userParticipation.businessId || userParticipation.influencerId || "a user"}`,
-          type: "chat",
-        },
-      })
+//     // Create notifications for other participants
+//     for (const participant of otherParticipants) {
+//       // Create database notification
+//       await client.userNotification.create({
+//         data: {
+//           userId: participant.userId,
+//           title: "New Message",
+//           message: `You have a new message from ${userParticipation.businessId || userParticipation.influencerId || "a user"}`,
+//           type: "chat",
+//         },
+//       })
 
-      // Trigger real-time notification
-      await pusherServer.trigger(`user-${participant.userId}`, "notification", {
-        title: "New Message",
-        message: `You have a new message from ${userParticipation.businessId || userParticipation.influencerId || "a user"}`,
-        type: "chat",
-        chatId,
-      })
+//       // Trigger real-time notification
+//       await pusherServer.trigger(`user-${participant.userId}`, "notification", {
+//         title: "New Message",
+//         message: `You have a new message from ${userParticipation.businessId || userParticipation.influencerId || "a user"}`,
+//         type: "chat",
+//         chatId,
+//       })
 
-      // Trigger real-time message update
-      await pusherServer.trigger(`chat-${chatId}`, "new-message", {
-        id: message.id,
-        content: message.content,
-        contentType: message.contentType,
-        createdAt: message.createdAt,
-        isRead: !!message.readAt,
-        sender: {
-          id: message.sender.id,
-          businessName: message.sender.business?.businessName,
-          influencerName: message.sender.influencer?.name,
-          profilePicture: message.sender.influencer?.profilePicture,
-          isCurrentUser: false,
-        },
-      })
-    }
+//       // Trigger real-time message update
+//       await pusherServer.trigger(`chat-${chatId}`, "new-message", {
+//         id: message.id,
+//         content: message.content,
+//         contentType: message.contentType,
+//         createdAt: message.createdAt,
+//         isRead: !!message.readAt,
+//         sender: {
+//           id: message.sender.id,
+//           businessName: message.sender.business?.businessName,
+//           influencerName: message.sender.influencer?.name,
+//           profilePicture: message.sender.influencer?.profilePicture,
+//           isCurrentUser: false,
+//         },
+//       })
+//     }
 
-    // Format the message for the frontend
-    const formattedMessage = {
-      id: message.id,
-      content: message.content,
-      contentType: message.contentType,
-      createdAt: message.createdAt,
-      isRead: !!message.readAt,
-      sender: {
-        id: message.sender.id,
-        businessName: message.sender.business?.businessName,
-        influencerName: message.sender.influencer?.name,
-        profilePicture: message.sender.influencer?.profilePicture,
-        isCurrentUser: true,
-      },
-    }
+//     // Format the message for the frontend
+//     const formattedMessage = {
+//       id: message.id,
+//       content: message.content,
+//       contentType: message.contentType,
+//       createdAt: message.createdAt,
+//       isRead: !!message.readAt,
+//       sender: {
+//         id: message.sender.id,
+//         businessName: message.sender.business?.businessName,
+//         influencerName: message.sender.influencer?.name,
+//         profilePicture: message.sender.influencer?.profilePicture,
+//         isCurrentUser: true,
+//       },
+//     }
 
-    revalidatePath(`/messages/${chatId}`)
+//     revalidatePath(`/messages/${chatId}`)
 
-    return { status: 200, data: formattedMessage }
-  } catch (error) {
-    console.error("Error in sendMessage:", error)
-    return { status: 500, message: "Failed to send message" }
-  }
-}
+//     return { status: 200, data: formattedMessage }
+//   } catch (error) {
+//     console.error("Error in sendMessage:", error)
+//     return { status: 500, message: "Failed to send message" }
+//   }
+// }
 
 // Get unread message count for the current user
 export async function getUnreadMessageCount() {
@@ -2080,5 +2080,266 @@ export async function sendTypingIndicator(chatId: string) {
   } catch (error) {
     console.error("Error in sendTypingIndicator:", error)
     return { status: 500, message: "Failed to send typing indicator" }
+  }
+}
+
+
+// "use server"
+
+// import { client } from "@/lib/prisma"
+// import { onUserInfor } from "@/actions/user"
+// import { revalidatePath } from "next/cache"
+// import { pusherServer } from "@/lib/pusher"
+
+// Get or create a chat between a business and an influencer
+export async function getOrCreateChat(influencerId: string) {
+  try {
+    const user = await onUserInfor()
+    const userId = user.data?.id
+
+    if (!userId) {
+      return { status: 401, message: "Unauthorized" }
+    }
+
+    // Find the business associated with the current user
+    const business = await client.business.findFirst({
+      where: { userId },
+    })
+
+    if (!business) {
+      return { status: 404, message: "Business not found for current user" }
+    }
+
+    // Check if a chat already exists between this business and influencer
+    const existingChatParticipant = await client.collabChatParticipant.findFirst({
+      where: {
+        businessId: business.id,
+        AND: {
+          chat: {
+            participants: {
+              some: {
+                influencerId,
+              },
+            },
+          },
+        },
+      },
+      include: {
+        chat: {
+          include: {
+            participants: true,
+          },
+        },
+      },
+    })
+
+    if (existingChatParticipant) {
+      // Chat already exists, return it
+      return {
+        status: 200,
+        data: existingChatParticipant.chat,
+        isNew: false,
+      }
+    }
+
+    // Find the influencer to get their user ID
+    const influencer = await client.influencer.findUnique({
+      where: { id: influencerId },
+      include: { user: true },
+    })
+
+    if (!influencer) {
+      return { status: 404, message: "Influencer not found" }
+    }
+
+    // Create a new chat with proper participant records
+    const newChat = await client.collabChat.create({
+      data: {
+        title: "New Conversation",
+        participants: {
+          create: [
+            // Business participant (current user)
+            {
+              userId,
+              businessId: business.id,
+            },
+            // Influencer participant (with their own user ID if available)
+            ...(influencer.userId
+              ? [
+                  {
+                    userId: influencer.userId, // Use influencer's user ID
+                    influencerId,
+                  },
+                ]
+              : []), // Skip creating participant if influencer has no user ID yet
+          ],
+        },
+      },
+      include: {
+        participants: true,
+      },
+    })
+
+    // If the influencer has a user ID, create a notification
+    if (influencer.userId) {
+      // Create database notification
+      const notification = await client.userNotification.create({
+        data: {
+          userId: influencer.userId,
+          title: "New Message",
+          message: `${business.businessName} wants to chat with you`,
+          type: "chat",
+        },
+      })
+
+      // Trigger real-time notification
+      if (pusherServer) {
+        try {
+          await pusherServer.trigger(`user-${influencer.userId}`, "notification", {
+            id: notification.id,
+            title: "New Message",
+            message: `${business.businessName} wants to chat with you`,
+            type: "chat",
+            chatId: newChat.id,
+          })
+        } catch (error) {
+          console.error("Pusher notification error:", error)
+          // Continue execution even if Pusher fails
+        }
+      }
+    }
+
+    return {
+      status: 200,
+      data: newChat,
+      isNew: true,
+    }
+  } catch (error) {
+    console.error("Error in getOrCreateChat:", error)
+    return { status: 500, message: "Failed to create or retrieve chat" }
+  }
+}
+
+// Send a message in a chat
+export async function sendMessage(chatId: string, content: string, contentType = "text") {
+  try {
+    const user = await onUserInfor()
+    const userId = user.data?.id
+
+    if (!userId) {
+      return { status: 401, message: "Unauthorized" }
+    }
+
+    // Check if user is a participant in this chat
+    const userParticipation = await client.collabChatParticipant.findFirst({
+      where: {
+        chatId,
+        userId,
+      },
+      include: {
+        business: true,
+        influencer: true,
+      },
+    })
+
+    if (!userParticipation) {
+      return { status: 403, message: "You don't have access to this chat" }
+    }
+
+    // Create the message
+    const message = await client.collabMessage.create({
+      data: {
+        chatId,
+        senderId: userParticipation.id,
+        content,
+        contentType,
+      },
+      include: {
+        sender: {
+          include: {
+            influencer: true,
+            business: true,
+          },
+        },
+      },
+    })
+
+    // Update the chat's updatedAt timestamp
+    await client.collabChat.update({
+      where: { id: chatId },
+      data: { updatedAt: new Date() },
+    })
+
+    // Get all other participants to notify them
+    const otherParticipants = await client.collabChatParticipant.findMany({
+      where: {
+        chatId,
+        id: { not: userParticipation.id },
+      },
+      include: {
+        user: true,
+      },
+    })
+
+    // Create notifications for other participants
+    for (const participant of otherParticipants) {
+      // Create database notification
+      const notification = await client.userNotification.create({
+        data: {
+          userId: participant.userId,
+          title: "New Message",
+          message: `You have a new message from ${userParticipation.business?.businessName || userParticipation.influencer?.name || "a user"}`,
+          type: "chat",
+        },
+      })
+
+      // Trigger real-time notification
+      await pusherServer.trigger(`user-${participant.userId}`, "notification", {
+        id: notification.id,
+        title: notification.title,
+        message: notification.message,
+        type: notification.type,
+        chatId,
+      })
+
+      // Trigger real-time message update
+      await pusherServer.trigger(`chat-${chatId}`, "new-message", {
+        id: message.id,
+        content: message.content,
+        contentType: message.contentType,
+        createdAt: message.createdAt,
+        isRead: !!message.readAt,
+        sender: {
+          id: message.sender.id,
+          businessName: message.sender.business?.businessName,
+          influencerName: message.sender.influencer?.name,
+          profilePicture: message.sender.influencer?.profilePicture,
+          isCurrentUser: false,
+        },
+      })
+    }
+
+    // Format the message for the frontend
+    const formattedMessage = {
+      id: message.id,
+      content: message.content,
+      contentType: message.contentType,
+      createdAt: message.createdAt,
+      isRead: !!message.readAt,
+      sender: {
+        id: message.sender.id,
+        businessName: message.sender.business?.businessName,
+        influencerName: message.sender.influencer?.name,
+        profilePicture: message.sender.influencer?.profilePicture,
+        isCurrentUser: true,
+      },
+    }
+
+    revalidatePath(`/messages/${chatId}`)
+
+    return { status: 200, data: formattedMessage }
+  } catch (error) {
+    console.error("Error in sendMessage:", error)
+    return { status: 500, message: "Failed to send message" }
   }
 }
