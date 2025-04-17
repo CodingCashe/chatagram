@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { DashboardShell } from "@/components/global/influencer-relation/dashboard/shell"
+import { DashboardHeader } from "@/components/global/influencer-relation/dashboard/header"
 import { Input } from "@/components/ui/input"
 import { Avatar } from "@/components/ui/avatar"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -142,6 +144,9 @@ export default function MessagesListPage() {
 
   if (loading) {
     return (
+      <DashboardShell>
+      <DashboardHeader heading="Opportunities" text="Find and apply to opportunities that match your profile" />
+      
       <div className="flex flex-col h-[calc(100vh-80px)] bg-gray-950">
         <div className="container mx-auto p-4 flex flex-1 overflow-hidden">
           <div className="flex w-full h-full overflow-hidden bg-gray-900 rounded-lg shadow-xl border border-gray-800">
@@ -169,10 +174,14 @@ export default function MessagesListPage() {
           </div>
         </div>
       </div>
+      </DashboardShell>
     )
   }
 
   return (
+    <DashboardShell>
+    <DashboardHeader heading="Opportunities" text="Find and apply to opportunities that match your profile" />
+      
     <div className="flex flex-col h-[calc(100vh-80px)] bg-gray-950">
       <div className="container mx-auto p-4 flex flex-1 overflow-hidden">
         <div className="flex w-full h-full overflow-hidden bg-gray-900 rounded-lg shadow-xl border border-gray-800">
@@ -276,5 +285,6 @@ export default function MessagesListPage() {
         </div>
       </div>
     </div>
+    </DashboardShell>
   )
 }

@@ -37,7 +37,7 @@ export default function InfluencerMessageRedirect() {
           }
 
           // Redirect to the chat page
-          router.push(`/dashboard/${slug}/messages/${data.id}`)
+          router.push(`/dashboard/${slug}/messages/new/${data.id}`)
         } else {
           toast({
             title: "Error",
