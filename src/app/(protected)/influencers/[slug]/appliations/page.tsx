@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { DashboardShell } from "@/components/global/influencer-relation/dashboard/shell"
+import { DashboardShell } from "@/components/global/influencer-relation/dashboard/updat/dashboard-shell"
 import { DashboardHeader } from "@/components/global/influencer-relation/dashboard/header"
 import { OpportunityFilters } from "@/components/global/influencer-relation/opportunities/opportunity-filters"
 import { InfluencerOpportunityList } from "@/components/global/influencer-relation/opportunities/influencer-opportunity-list"

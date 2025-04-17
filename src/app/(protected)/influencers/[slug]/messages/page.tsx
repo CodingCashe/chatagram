@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { DashboardShell } from "@/components/global/influencer-relation/dashboard/shell"
+import { DashboardShell } from "@/components/global/influencer-relation/dashboard/updat/dashboard-shell"
 import { DashboardHeader } from "@/components/global/influencer-relation/dashboard/header"
 import { Input } from "@/components/ui/input"
 import { Avatar } from "@/components/ui/avatar"
