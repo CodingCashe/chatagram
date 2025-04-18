@@ -2478,7 +2478,7 @@ export async function getOrCreateChat(influencerId: string) {
 }
 
 // Send a message in a chat
-export async function sendMessage(chatId: string, content: string, contentType = "text") {
+export async function sendMessageDe(chatId: string, content: string, contentType = "text") {
   try {
     const user = await onUserInfor()
     const userId = user.data?.id
@@ -2829,5 +2829,156 @@ export async function respondToMeeting(chatId: string, messageId: string, respon
   } catch (error) {
     console.error("Error in respondToMeeting:", error)
     return { status: 500, message: "Failed to respond to meeting invitation" }
+  }
+}
+
+
+
+//////
+// import { revalidatePath } from "next/cache"
+// import { onUserInfor } from "@/app/lib/user-info"
+// import { client } from "@/app/lib/client"
+// import { pusherServer } from "@/app/lib/pusher"
+
+// Replace it with this improved version
+export async function sendMessage(chatId: string, content: string, contentType = "text", tempId?: string) {
+  try {
+    const user = await onUserInfor()
+    const userId = user.data?.id
+
+    if (!userId) {
+      return { status: 401, message: "Unauthorized" }
+    }
+
+    // Check if user is a participant in this chat
+    const userParticipation = await client.collabChatParticipant.findFirst({
+      where: {
+        chatId,
+        userId,
+      },
+      include: {
+        business: true,
+        influencer: true,
+      },
+    })
+
+    if (!userParticipation) {
+      return { status: 403, message: "You don't have access to this chat" }
+    }
+
+    // Create the message
+    const message = await client.collabMessage.create({
+      data: {
+        chatId,
+        senderId: userParticipation.id,
+        content,
+        contentType,
+      },
+      include: {
+        sender: {
+          include: {
+            influencer: true,
+            business: true,
+          },
+        },
+      },
+    })
+
+    // Update the chat's updatedAt timestamp
+    await client.collabChat.update({
+      where: { id: chatId },
+      data: { updatedAt: new Date() },
+    })
+
+    // Get all other participants to notify them
+    const otherParticipants = await client.collabChatParticipant.findMany({
+      where: {
+        chatId,
+        id: { not: userParticipation.id },
+      },
+      include: {
+        user: true,
+      },
+    })
+
+    // Create notifications for other participants
+    for (const participant of otherParticipants) {
+      // Create database notification
+      const notification = await client.userNotification.create({
+        data: {
+          userId: participant.userId,
+          title: "New Message",
+          message: `You have a new message from ${userParticipation.business?.businessName || userParticipation.influencer?.name || "a user"}`,
+          type: "chat",
+        },
+      })
+
+      // Trigger real-time notification
+      await pusherServer.trigger(`user-${participant.userId}`, "notification", {
+        id: notification.id,
+        title: notification.title,
+        message: notification.message,
+        type: notification.type,
+        chatId,
+      })
+
+      // Trigger real-time message update
+      await pusherServer.trigger(`chat-${chatId}`, "new-message", {
+        id: message.id,
+        content: message.content,
+        contentType: message.contentType,
+        createdAt: message.createdAt,
+        isRead: !!message.readAt,
+        sender: {
+          id: message.sender.id,
+          businessName: message.sender.business?.businessName,
+          influencerName: message.sender.influencer?.name,
+          profilePicture: message.sender.influencer?.profilePicture,
+          isCurrentUser: false,
+        },
+      })
+    }
+
+    // Also trigger for the current user to update their own UI
+    // This is key to fixing the duplicate message issue
+    await pusherServer.trigger(`chat-${chatId}`, "new-message", {
+      id: message.id,
+      tempId: tempId, // Include the tempId to help with optimistic UI cleanup
+      content: message.content,
+      contentType: message.contentType,
+      createdAt: message.createdAt,
+      isRead: !!message.readAt,
+      sender: {
+        id: message.sender.id,
+        businessName: message.sender.business?.businessName,
+        influencerName: message.sender.influencer?.name,
+        profilePicture: message.sender.influencer?.profilePicture,
+        isCurrentUser: true, // Mark as current user for the sender
+      },
+    })
+
+    // Format the message for the frontend
+    const formattedMessage = {
+      id: message.id,
+      tempId: tempId, // Include the tempId in the response
+      content: message.content,
+      contentType: message.contentType,
+      createdAt: message.createdAt,
+      isRead: !!message.readAt,
+      sender: {
+        id: message.sender.id,
+        businessName: message.sender.business?.businessName,
+        influencerName: message.sender.influencer?.name,
+        profilePicture: message.sender.influencer?.profilePicture,
+        isCurrentUser: true,
+      },
+    }
+
+    revalidatePath(`/messages/${chatId}`)
+
+    return { status: 200, data: formattedMessage }
+  } catch (error) {
+    console.error("Error in sendMessage:", error)
+    return { status: 500, message: "Failed to send message" }
   }
 }
