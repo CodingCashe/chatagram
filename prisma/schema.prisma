@@ -1434,6 +1434,7 @@ model CollabMessage {
   contentType         String               @default("text") // text, image, file
   readAt              DateTime?
   createdAt           DateTime             @default(now())
+  metadata            Json?
 
   @@index([chatId])
   @@index([senderId])
