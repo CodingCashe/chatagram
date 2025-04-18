@@ -7,6 +7,7 @@ import { Download, Maximize2 } from "lucide-react"
 
 interface WhiteboardMessageProps {
   imageData: string
+  messageId?:string
 }
 
 export function WhiteboardMessage({ imageData }: WhiteboardMessageProps) {
