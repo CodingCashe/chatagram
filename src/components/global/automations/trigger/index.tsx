@@ -1104,7 +1104,7 @@ import { ScheduledPostsSelector } from "../scheduled"
 import { SetupGuide } from "../guide"
 import PostButton from "../post"
 import { WebsiteAnalyzer } from "../analyzer"
-import { TemplateEditor } from "../editor"
+// import { TemplateEditor } from "../editor"
 
 type Props = {
   id: string
@@ -1269,7 +1269,7 @@ const Trigger = ({ id }: Props) => {
                 </div>
               )}
 
-              <div>
+              {/* <div>
                 <h3 className="text-lg font-medium mb-3">Create Response Template</h3>
                 <TemplateEditor
                   initialTemplate={data?.data?.listener?.prompt || ""}
@@ -1279,7 +1279,7 @@ const Trigger = ({ id }: Props) => {
                     // Handle saving the template
                   }}
                 />
-              </div>
+              </div> */}
             </div>
 
             <Button

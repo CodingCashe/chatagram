@@ -972,7 +972,7 @@ export const SimulationTab = ({
               <div className="p-3 flex items-center">
                 <div className="h-8 w-8 rounded-full overflow-hidden relative mr-2">
                   <Image
-                    src={userProfile.avatar || "/placeholder.svg"}
+                    src={"/placeholder.svg"}
                     alt={userProfile.name}
                     fill
                     sizes="32px"
@@ -995,10 +995,10 @@ export const SimulationTab = ({
               {/* Post Image */}
               <div className="aspect-square relative">
                 <Image
-                  src={samplePost.image || "/placeholder.svg"}
+                  src={"/customers.png"}
                   alt="Post image"
                   fill
-                  sizes="(max-width: 768px) 100vw, 500px"
+                  sizes="(max-width: 468px) 50vw, 50px"
                   className="object-cover"
                 />
               </div>
@@ -1060,8 +1060,8 @@ export const SimulationTab = ({
                 <div className="flex items-start gap-2">
                   <div className="h-8 w-8 rounded-full overflow-hidden relative flex-shrink-0">
                     <Image
-                      src="https://placehold.co/40x40/A76DF7/FFFFFF/webp?text=U"
-                      alt="User"
+                      src="/customers.png"
+                      alt="Cashemoon"
                       fill
                       sizes="32px"
                       className="object-cover"
@@ -1095,7 +1095,7 @@ export const SimulationTab = ({
                         >
                           <div className="h-8 w-8 rounded-full overflow-hidden relative flex-shrink-0">
                             <Image
-                              src={customerProfile.avatar || "/placeholder.svg"}
+                              src="/placeholder.svg"
                               alt={customerProfile.name}
                               fill
                               sizes="32px"
@@ -1141,7 +1141,7 @@ export const SimulationTab = ({
                         >
                           <div className="h-8 w-8 rounded-full overflow-hidden relative flex-shrink-0">
                             <Image
-                              src={userProfile.avatar || "/placeholder.svg"}
+                              src="/placeholder.svg"
                               alt={userProfile.name}
                               fill
                               sizes="32px"
@@ -1198,7 +1198,7 @@ export const SimulationTab = ({
               <form onSubmit={handleSubmit} className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full overflow-hidden relative flex-shrink-0">
                   <Image
-                    src={customerProfile.avatar || "/placeholder.svg"}
+                    src="/placeholder.svg"
                     alt={customerProfile.name}
                     fill
                     sizes="32px"
@@ -1230,7 +1230,7 @@ export const SimulationTab = ({
             <div className="p-3 border-b border-background-80 flex items-center">
               <div className="h-8 w-8 rounded-full overflow-hidden relative mr-2">
                 <Image
-                  src={userProfile.avatar || "/placeholder.svg"}
+                  src="/placeholder.svg"
                   alt={userProfile.name}
                   fill
                   sizes="32px"
