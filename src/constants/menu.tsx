@@ -326,43 +326,43 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
       },
     ],
   },
-  {
-    id: uuid(),
-    label: "Influencer",
-    items: [
-      {
-        id: uuid(),
-        label: "Integrations",
-        icon: colorIcon(Plug, "text-cyan-400"),
-      },
-      {
-        id: uuid(),
-        label: "Campaigns",
-        icon: colorIcon(Target, "text-pink-400"),
-        subItems: [
-          { id: uuid(), label: "Create New", icon: colorIcon(PlusCircle, "text-green-400", 18) },
-          { id: uuid(), label: "Templates", icon: colorIcon(Layout, "text-blue-400", 18) },
-          { id: uuid(), label: "Analytics", icon: colorIcon(BarChart2, "text-purple-400", 18) },
-        ],
-      },
-      {
-        id: uuid(),
-        label: "Influencers",
-        icon: colorIcon(Instagram, "text-rose-400"),
-        subItems: [
-          { id: uuid(), label: "AI-Discovery", icon: colorIcon(Sparkles, "text-yellow-400", 18) },
-          { id: uuid(), label: "Discover", icon: colorIcon(Search, "text-blue-400", 18) },
-          { id: uuid(), label: "Import", icon: colorIcon(Upload, "text-green-400", 18) },
-        ],
-      },
-      {
-        id: uuid(),
-        label: "Portal",
-        icon: colorIcon(PanelTop, "text-indigo-400"),
-        subItems: [{ id: uuid(), label: "Settings", icon: colorIcon(Settings, "text-gray-400", 18) }],
-      },
-    ],
-  },
+  // {
+  //   id: uuid(),
+  //   label: "Influencer",
+  //   items: [
+  //     {
+  //       id: uuid(),
+  //       label: "Integrations",
+  //       icon: colorIcon(Plug, "text-cyan-400"),
+  //     },
+  //     {
+  //       id: uuid(),
+  //       label: "Campaigns",
+  //       icon: colorIcon(Target, "text-pink-400"),
+  //       subItems: [
+  //         { id: uuid(), label: "Create New", icon: colorIcon(PlusCircle, "text-green-400", 18) },
+  //         { id: uuid(), label: "Templates", icon: colorIcon(Layout, "text-blue-400", 18) },
+  //         { id: uuid(), label: "Analytics", icon: colorIcon(BarChart2, "text-purple-400", 18) },
+  //       ],
+  //     },
+  //     {
+  //       id: uuid(),
+  //       label: "Influencers",
+  //       icon: colorIcon(Instagram, "text-rose-400"),
+  //       subItems: [
+  //         { id: uuid(), label: "AI-Discovery", icon: colorIcon(Sparkles, "text-yellow-400", 18) },
+  //         { id: uuid(), label: "Discover", icon: colorIcon(Search, "text-blue-400", 18) },
+  //         { id: uuid(), label: "Import", icon: colorIcon(Upload, "text-green-400", 18) },
+  //       ],
+  //     },
+  //     {
+  //       id: uuid(),
+  //       label: "Portal",
+  //       icon: colorIcon(PanelTop, "text-indigo-400"),
+  //       subItems: [{ id: uuid(), label: "Settings", icon: colorIcon(Settings, "text-gray-400", 18) }],
+  //     },
+  //   ],
+  // },
   {
     id: uuid(),
     label: "System",
@@ -395,11 +395,11 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
         label: "Pricing",
         icon: colorIcon(DollarSign, "text-emerald-400"),
       },
-      {
-        id: uuid(),
-        label: "Referral",
-        icon: colorIcon(Gift, "text-pink-400"),
-      },
+      // {
+      //   id: uuid(),
+      //   label: "Referral",
+      //   icon: colorIcon(Gift, "text-pink-400"),
+      // },
       {
         id: uuid(),
         label: "Affiliate",
@@ -408,7 +408,7 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
 
       {
         id: uuid(),
-        label: "Opportunities",
+        label: "Launch",
         icon: colorIcon(Award, "text-green-400"),
       },
 
@@ -416,7 +416,7 @@ export const SIDEBAR_MENU: SideBarGroupProps[] = [
       // Information group
       {
         id: uuid(),
-        label: "Information",
+        label: "Setup",
         icon: colorIcon(Info, "text-cyan-400"),
       },
       {
