@@ -219,7 +219,7 @@ export default async function SchedulePage() {
   }
  /**bg-gradient-to-b from-gray-950 to-gray-900 */
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 to-gray-900">
       <div className="container mx-auto py-4 px-4 sm:py-8">
         <div className="space-y-8">
           {/* Header Section */}

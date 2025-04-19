@@ -1,12 +1,13 @@
 "use server"
 
-import { onCurrentUser } from "../user"
+import { onUserInfor } from "../user"
 import { createMarketingInfo, getMarketingInfo, updateMarketingInfo, deleteMarketingInfo } from "./queries"
 
 export const createMarketingInfoAction = async (data: { email?: string; phone?: string; name?: string }) => {
-  const user = await onCurrentUser()
+  const user = await onUserInfor()
+  const userId = user.data?.id
   try {
-    const create = await createMarketingInfo(user.id, data)
+    const create = await createMarketingInfo(userId||"1234", data)
     if (create) return { status: 200, data: "Marketing info created", res: create }
     return { status: 404, data: "Oops! something went wrong" }
   } catch (error) {
@@ -15,9 +16,10 @@ export const createMarketingInfoAction = async (data: { email?: string; phone?: 
 }
 
 export async function getMarketingInfoAction() {
-  const user = await onCurrentUser()
+  const user = await onUserInfor()
+  const userId = user.data?.id
   try {
-    const marketingInfo = await getMarketingInfo(user.id)
+    const marketingInfo = await getMarketingInfo(userId||"1234")
     return marketingInfo || []
   } catch (error) {
     console.error("Error fetching marketing info:", error)
@@ -29,7 +31,7 @@ export const updateMarketingInfoAction = async (
   id: string,
   data: { email?: string; phone?: string; name?: string },
 ) => {
-  await onCurrentUser()
+  await onUserInfor()
   try {
     const update = await updateMarketingInfo(id, data)
     if (update) {
@@ -42,7 +44,7 @@ export const updateMarketingInfoAction = async (
 }
 
 export const deleteMarketingInfoAction = async (id: string) => {
-  await onCurrentUser()
+  await onUserInfor()
   try {
     const deleted = await deleteMarketingInfo(id)
     if (deleted) {
@@ -57,9 +59,10 @@ export const deleteMarketingInfoAction = async (id: string) => {
 
 
 export const getMarketingInfoActione = async () => {
-  const user = await onCurrentUser()
+  const user = await onUserInfor()
+  const userId = user.data?.id
   try {
-    const marketingInfo = await getMarketingInfo(user.id)
+    const marketingInfo = await getMarketingInfo(userId||"1234")
     if (marketingInfo) return { status: 200, data: marketingInfo }
     return { status: 404, data: [] }
   } catch (error) {
@@ -68,7 +71,7 @@ export const getMarketingInfoActione = async () => {
 }
 
 export const deleteMarketingInfoActione = async (id: string) => {
-  await onCurrentUser()
+  await onUserInfor()
   try {
     const deleted = await deleteMarketingInfo(id)
     if (deleted) {

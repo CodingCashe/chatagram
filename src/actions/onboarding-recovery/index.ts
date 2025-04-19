@@ -1,5 +1,3 @@
-// app/actions/onboarding-recovery.ts
-
 'use server'
 
 import { client } from '@/lib/prisma'

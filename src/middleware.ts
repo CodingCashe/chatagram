@@ -83,7 +83,7 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-const isProtectedRoute = createRouteMatcher(["/dashboard(.*)", "/api/payment(.*)", "/callback(.*)"])
+const isProtectedRoute = createRouteMatcher(["/dashboard(.*)","/influencers(.*)","/admin(.*)", "/api/payment(.*)", "/callback(.*)"])
 
 // This function will handle both referrals and affiliate tracking
 async function handleReferralsAndAffiliates(request: NextRequest) {
@@ -117,7 +117,7 @@ async function handleReferralsAndAffiliates(request: NextRequest) {
   }
 
   // Check if this is a signup page with a referral code (old system)
-  if (pathname === "/signup" && request.nextUrl.searchParams.has("ref")) {
+  if (pathname === "/sign-up" && request.nextUrl.searchParams.has("ref")) {
     const refCode = request.nextUrl.searchParams.get("ref")
 
     if (refCode) {

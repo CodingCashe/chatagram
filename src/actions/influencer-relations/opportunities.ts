@@ -747,18 +747,6 @@ export async function applyToOpportunity(opportunityId: string, message: string,
 }
 
 
-
-/////
-
-// "use server"
-
-// import { revalidatePath } from "next/cache"
-// import { client } from "@/lib/prisma"
-// import { onUserInfor } from "@/actions/user"
-
-/**
- * Get available opportunities for influencers with optional filters
- */
 export async function getAvailableOpportunities(
   filters: {
     category?: string[]

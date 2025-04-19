@@ -54,33 +54,7 @@ interface ApiResponse {
   };
 }
 
-// Then in your function:
 
-// Influencer Profile Actions
-// export const getInfluencerProfile = async (userId?: string) => {
-//   try {
-//     const user = userId ? { id: userId } : await onCurrentUser()
-
-//     const profile = await client.influencer.findUnique({
-//       where: { userId: user.id },
-//       include: {
-//         socialAccounts: true,
-//         contentTypes: true,
-//         contentSamples: true,
-//         rates: true,
-//         metrics: {
-//           orderBy: { date: "desc" },
-//           take: 1,
-//         },
-//       },
-//     })
-
-//     return { status: 200, data: profile }
-//   } catch (error) {
-//     console.error("Error fetching influencer profile:", error)
-//     return { status: 500, data: null, error: "Failed to fetch influencer profile" }
-//   }
-// }
 export const getInfluencerProfile = async (userId?: string) => {
   try {
     const user = userId ? { id: userId } : await onCurrentUser()
@@ -575,91 +549,6 @@ export const applyToOpportunity = async (
   }
 }
 
-// Campaign Actions
-// export const getInfluencerCampaigns = async (filters?: {
-//   status?: string
-//   search?: string
-//   page?: number
-//   limit?: number
-// }) => {
-//   try {
-//     const user = await onCurrentUser()
-
-//     const profile = await client.influencer.findUnique({
-//       where: { userId: user.id },
-//     })
-
-//     if (!profile) {
-//       return { status: 404, error: "Profile not found" }
-//     }
-
-//     const { status, search, page = 1, limit = 10 } = filters || {}
-
-//     const skip = (page - 1) * limit
-
-//     // Build where clause for CampaignInfluencer
-//     const where: any = {
-//       influencerId: profile.id,
-//     }
-
-//     if (status) {
-//       where.status = status
-//     }
-
-//     // Build where clause for Campaign if search is provided
-//     const campaignWhere: any = {}
-
-//     if (search) {
-//       campaignWhere.OR = [
-//         { name: { contains: search, mode: "insensitive" } },
-//         { description: { contains: search, mode: "insensitive" } },
-//       ]
-//     }
-
-//     const [campaignInfluencers, total] = await Promise.all([
-//       client.campaignInfluencer.findMany({
-//         where,
-//         include: {
-//           campaign: {
-//             where: campaignWhere,
-//             include: {
-//               _count: {
-//                 select: {
-//                   influencers: true,
-//                 },
-//               },
-//             },
-//           },
-//         },
-//         orderBy: { createdAt: "desc" },
-//         skip,
-//         take: limit,
-//       }),
-//       client.campaignInfluencer.count({
-//         where: {
-//           ...where,
-//           campaign: campaignWhere,
-//         },
-//       }),
-//     ])
-
-//     return {
-//       status: 200,
-//       data: {
-//         campaigns: campaignInfluencers,
-//         pagination: {
-//           total,
-//           pages: Math.ceil(total / limit),
-//           page,
-//           limit,
-//         },
-//       },
-//     }
-//   } catch (error) {
-//     console.error("Error fetching influencer campaigns:", error)
-//     return { status: 500, error: "Failed to fetch campaigns" }
-//   }
-// }
 
 export const getInfluencerCampaigns = async ({
   search,

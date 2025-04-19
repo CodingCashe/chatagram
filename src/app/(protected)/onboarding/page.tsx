@@ -11,7 +11,7 @@ const Page = async (props: Props) => {
   if (!user) {
     return redirect('/sign-in')
   }
-  if (user && client.business) {
+  if (user && client.onboardingProgress) {
     return redirect('/sign-in')
   }
 

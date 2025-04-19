@@ -4,6 +4,8 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "target": "ES2015",
+    "downlevelIteration": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
