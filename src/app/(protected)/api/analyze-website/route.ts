@@ -178,7 +178,9 @@
 // }
 
 import { NextResponse } from "next/server";
-import puppeteer from "puppeteer";
+// import puppeteer from "puppeteer";
+import puppeteer from 'puppeteer-core';
+import chrome from 'chrome-aws-lambda';
 import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { JSDOM } from "jsdom";
@@ -200,9 +202,14 @@ export async function POST(request: Request) {
     }
 
     // Launch browser with enhanced settings
+    // const browser = await puppeteer.launch({
+    //   headless: true,
+    //   args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    // });
     const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      args: chrome.args,
+      executablePath: await chrome.executablePath,
+      headless: chrome.headless,
     });
 
     const page = await browser.newPage();
