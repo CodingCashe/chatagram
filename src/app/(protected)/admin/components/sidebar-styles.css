@@ -1,0 +1,119 @@
+/* Custom styles for sidebar icons */
+.sidebar-icon-home:hover,
+.sidebar-icon-home.active {
+  color: #3b82f6; /* blue-500 */
+}
+
+.sidebar-icon-users:hover,
+.sidebar-icon-users.active {
+  color: #6366f1; /* indigo-500 */
+}
+
+.sidebar-icon-subscriptions:hover,
+.sidebar-icon-subscriptions.active {
+  color: #10b981; /* emerald-500 */
+}
+
+.sidebar-icon-chat:hover,
+.sidebar-icon-chat.active {
+  color: #8b5cf6; /* violet-500 */
+}
+
+.sidebar-icon-mail:hover,
+.sidebar-icon-mail.active {
+  color: #0ea5e9; /* sky-500 */
+}
+
+.sidebar-icon-automations:hover,
+.sidebar-icon-automations.active {
+  color: #f59e0b; /* amber-500 */
+}
+
+.sidebar-icon-scheduled:hover,
+.sidebar-icon-scheduled.active {
+  color: #f97316; /* orange-500 */
+}
+
+.sidebar-icon-templates:hover,
+.sidebar-icon-templates.active {
+  color: #eab308; /* yellow-500 */
+}
+
+.sidebar-icon-instagram:hover,
+.sidebar-icon-instagram.active {
+  color: #ec4899; /* pink-500 */
+}
+
+.sidebar-icon-ai:hover,
+.sidebar-icon-ai.active {
+  color: #06b6d4; /* cyan-500 */
+}
+
+.sidebar-icon-settings:hover,
+.sidebar-icon-settings.active {
+  color: #6b7280; /* gray-500 */
+}
+
+.sidebar-icon-status:hover,
+.sidebar-icon-status.active {
+  color: #22c55e; /* green-500 */
+}
+
+.sidebar-icon-logout:hover {
+  color: #ef4444; /* red-500 */
+}
+
+/* Custom scrollbar for sidebar */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.3);
+  border-radius: 9999px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.5);
+}
+
+/* Mobile sidebar styles */
+@media (max-width: 768px) {
+  .sidebar-mobile-trigger {
+    display: block;
+  }
+
+  .sidebar-desktop {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .sidebar-mobile-trigger {
+    display: none;
+  }
+
+  .sidebar-desktop {
+    display: block;
+  }
+}
+
+/* Animation for sidebar items */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-accordion-down {
+  animation: fadeIn 0.2s ease-out forwards;
+}
