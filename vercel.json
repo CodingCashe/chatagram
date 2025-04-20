@@ -1,6 +1,29 @@
 {
-  "crons": [{
-    "path": "/api/cron",
-    "schedule": "0 10 * * *"
-  }]
+  "crons": [
+    {
+      "path": "/api/cron",
+      "schedule": "0 10 * * *"
+    }
+  ],
+  "functions": {
+    "api/analyze-website/**": {
+      "memory": 3008,
+      "maxDuration": 30,
+      "runtime": "nodejs18.x"
+    }
+  },
+  "build": {
+    "env": {
+      "NODE_VERSION": "18.x",
+      "AWS_LAMBDA_FUNCTION_NAME": "vercel",
+      "AWS_LAMBDA_FUNCTION_VERSION": "1"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1",
+      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    }
+  ]
 }

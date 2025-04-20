@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    
     "build": "next build",
     "start:socket": "node socket-server.js",
     "start": "next start",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && node node_modules/@sparticuz/chrome-aws-lambda/bin/install.js",
     "lint": "next lint",
     "ngrok": "ngrok http 3000",
     "scheduler": "ts-node scripts/scheduler.ts"
@@ -64,7 +65,6 @@
     "bull": "^4.16.5",
     "canvas-confetti": "^1.9.3",
     "cheerio": "^1.0.0",
-    "chrome-aws-lambda": "^10.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
@@ -89,7 +89,6 @@
     "nodemailer": "^6.10.0",
     "openai": "^4.76.1",
     "prisma": "^6.0.1",
-    "puppeteer-core": "^10.4.0",
     "pusher": "^5.2.0",
     "pusher-js": "^8.4.0",
     "react": "^18",

@@ -46,14 +46,11 @@ const nextConfig = {
     ],
   },
   
-  // Set the entire application to use Server-Side Rendering by default
-  // This prevents static generation errors for routes using dynamic features
+  // Server-side rendering configuration
   output: 'standalone',
-  
-  // Disable static optimization for routes that use dynamic features
   staticPageGenerationTimeout: 120,
   
-  // Enable React strict mode and SWC minification
+  // React and optimization settings
   reactStrictMode: true,
   swcMinify: true,
   
@@ -64,15 +61,49 @@ const nextConfig = {
       : 'http://localhost:3000',
   },
   
-  // Ensure that Socket.io WebSocket transport works with Next.js
-  webpack: (config) => {
-    config.externals.push({
-      bufferutil: 'bufferutil',
-      'utf-8-validate': 'utf-8-validate',
-    })
-    return config
+  // Webpack configuration for both Socket.io and Puppeteer
+  webpack: (config, { isServer }) => {
+    // Handle source map files from chrome-aws-lambda
+    config.module.rules.push({
+      test: /\.map$/,
+      type: 'asset/resource',
+    });
+
+    // Exclude chrome-aws-lambda from bundling
+    config.externals = [
+      ...(config.externals || []),
+      {
+        bufferutil: 'bufferutil',
+        'utf-8-validate': 'utf-8-validate',
+        '@sparticuz/chrome-aws-lambda': '@sparticuz/chrome-aws-lambda'
+      }
+    ];
+
+    // Only apply the following for server-side bundles
+    if (isServer) {
+      // Mark chrome-aws-lambda as external
+      config.externals.push('@sparticuz/chrome-aws-lambda');
+      
+      // Fix for "Module not found: Can't resolve 'fs'"
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        child_process: false,
+        net: false,
+        tls: false,
+      };
+    }
+
+    return config;
+  },
+  
+  // Enable experimental features if needed
+  experimental: {
+    serverComponentsExternalPackages: [
+      '@sparticuz/chrome-aws-lambda',
+      'puppeteer-core'
+    ],
   },
 };
 
 export default nextConfig;
-

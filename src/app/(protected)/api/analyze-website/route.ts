@@ -177,14 +177,299 @@
 //   }
 // }
 
+// import { NextResponse } from "next/server";
+// // import puppeteer from "puppeteer";
+// import puppeteer from 'puppeteer-core';
+// import chrome from '@sparticuz/chrome-aws-lambda';
+// import { generateText } from "ai";
+// import { openai } from "@ai-sdk/openai";
+// import { JSDOM } from "jsdom";
+// // import { Readability } from "readability-dom";
+// import { Readability } from '@mozilla/readability';
+// import natural from "natural";
+
+// // Initialize NLP tools
+// const { WordTokenizer, PorterStemmer } = natural;
+// const tokenizer = new WordTokenizer();
+// const stemmer = PorterStemmer;
+
+// export async function POST(request: Request) {
+//   try {
+//     const { url } = await request.json();
+
+//     if (!url) {
+//       return NextResponse.json({ error: "URL is required" }, { status: 400 });
+//     }
+
+  
+//     const browser = await puppeteer.launch({
+//       args: chrome.args,
+//       executablePath: await chrome.executablePath,
+//       headless: chrome.headless,
+//     });
+
+//     const page = await browser.newPage();
+//     await page.setViewport({ width: 1280, height: 800 });
+//     await page.setExtraHTTPHeaders({
+//       'Accept-Language': 'en-US,en;q=0.9',
+//       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+//     });
+
+//     // Navigate to page with error handling
+//     try {
+//       await page.goto(url.startsWith('http') ? url : `https://${url}`, {
+//         waitUntil: "networkidle2",
+//         timeout: 30000
+//       });
+//     } catch (navError) {
+//       console.warn("Navigation timeout, proceeding with available content");
+//     }
+
+//     // Capture screenshot
+//     const screenshot = await page.screenshot({
+//       encoding: "base64",
+//       type: "jpeg",
+//       quality: 80,
+//     });
+//     const screenshotDataUrl = `data:image/jpeg;base64,${screenshot}`;
+
+//     // Extract content with multiple methods
+//     const pageContent = await page.evaluate(() => {
+//       const metaDescription = document.querySelector('meta[name="description"]')?.getAttribute("content") || "";
+//       const bodyText = document.body.innerText.substring(0, 5000);
+//       const headings = Array.from(document.querySelectorAll("h1, h2, h3"))
+//         .map((h) => h.textContent)
+//         .filter(Boolean)
+//         .join("\n");
+
+//       return {
+//         title: document.title,
+//         metaDescription,
+//         headings,
+//         bodyText,
+//         html: document.documentElement.innerHTML,
+//       };
+//     });
+
+//     // Enhanced content extraction using Readability
+//     const dom = new JSDOM(pageContent.html);
+//     const reader = new Readability(dom.window.document);
+//     const article = reader.parse()?.textContent || pageContent.bodyText;
+
+//     // Extract business information
+//     const businessInfo = extractBusinessInfo(pageContent, article);
+
+//     // Generate basic analysis (works without OpenAI)
+//     const basicAnalysis = generateBasicAnalysis(pageContent, businessInfo);
+
+//     // Try OpenAI analysis if available, otherwise use basic
+//     let enhancedAnalysis = null;
+//     try {
+//       enhancedAnalysis = await generateOpenAIAnalysis(pageContent);
+//     } catch (aiError) {
+//       console.warn("OpenAI analysis failed, using basic analysis:", aiError);
+//     }
+
+//     await browser.close();
+
+//     // Return combined results
+//     return NextResponse.json({
+//       // Basic analysis (always available)
+//       ...basicAnalysis,
+//       // Enhanced analysis (if available)
+//       ...(enhancedAnalysis || {}),
+//       // Raw data
+//       screenshot: screenshotDataUrl,
+//       metadata: {
+//         title: pageContent.title,
+//         description: pageContent.metaDescription,
+//         headings: pageContent.headings,
+//       },
+//       businessInfo,
+//       // Status indicators
+//       analysisSource: enhancedAnalysis ? "openai+local" : "local",
+//     });
+
+//   } catch (error) {
+//     console.error("Error analyzing website:", error);
+//     return NextResponse.json(
+//       { error: "Failed to analyze website" }, 
+//       { status: 500 }
+//     );
+//   }
+// }
+
+// // Business information extraction
+// function extractBusinessInfo(pageContent: any, articleText: string) {
+//   // Phone and email patterns
+//   const phoneRegex = /(\+?\d{1,2}[\s-]?)?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}/g;
+//   const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
+  
+//   // Extract contact info
+//   // const phones = [...new Set([
+//   //   ...(pageContent.bodyText.match(phoneRegex) || []),
+//   //   ...(articleText.match(phoneRegex) || [])
+//   // ])];
+
+//   // const emails = [...new Set([
+//   //   ...(pageContent.bodyText.match(emailRegex) || []),
+//   //   ...(articleText.match(emailRegex) || [])
+//   // ])];
+//   // For phones
+// const phoneMatches = [
+//   ...(pageContent.bodyText.match(phoneRegex) || []),
+//   ...(articleText.match(phoneRegex) || [])
+// ];
+// const phones = Array.from(new Set(phoneMatches));
+
+// // For emails
+// const emailMatches = [
+//   ...(pageContent.bodyText.match(emailRegex) || []),
+//   ...(articleText.match(emailRegex) || [])
+// ];
+// const emails = Array.from(new Set(emailMatches));
+
+//   // Extract services using NLP
+//   const services = extractServices(pageContent.bodyText + " " + articleText);
+
+//   return {
+//     phones,
+//     emails,
+//     services,
+//     contentSummary: articleText.substring(0, 1000) + (articleText.length > 1000 ? "..." : ""),
+//   };
+// }
+
+// // NLP-based service extraction
+// function extractServices(text: string) {
+//   const tokens = tokenizer.tokenize(text) || [];
+//   const stems = tokens.map(token => stemmer.stem(token));
+  
+//   const businessTerms = [
+//     'service', 'product', 'solution', 'offer', 
+//     'provide', 'deliver', 'create', 'build'
+//   ];
+  
+//   const serviceKeywords = [
+//     'design', 'develop', 'consult', 'manage',
+//     'install', 'repair', 'sell', 'market'
+//   ];
+
+//   const services: string[] = [];
+  
+//   stems.forEach((stem, i) => {
+//     if (businessTerms.includes(stem) || serviceKeywords.includes(stem)) {
+//       const start = Math.max(0, i - 3);
+//       const end = Math.min(stems.length, i + 4);
+//       const phrase = tokens.slice(start, end).join(' ');
+      
+//       if (!services.includes(phrase)) {
+//         services.push(phrase);
+//       }
+//     }
+//   });
+
+//   return services.slice(0, 10); // Limit to top 10 services
+// }
+
+// // Generate basic analysis without OpenAI
+// function generateBasicAnalysis(pageContent: any, businessInfo: any) {
+//   const domain = new URL(pageContent.url || '').hostname.replace('www.', '');
+//   const name = pageContent.title.split('|')[0].split('-')[0].trim();
+
+//   // Generate basic keywords from content
+//   const contentWords = (pageContent.bodyText + " " + pageContent.headings).toLowerCase();
+//   const wordCounts: Record<string, number> = {};
+//   contentWords.split(/\s+/).forEach(word => {
+//     if (word.length > 4) { // Ignore short words
+//       wordCounts[word] = (wordCounts[word] || 0) + 1;
+//     }
+//   });
+  
+//   const suggestedKeywords = Object.entries(wordCounts)
+//     .sort((a, b) => b[1] - a[1])
+//     .slice(0, 10)
+//     .map(([word]) => word);
+
+//   // Generate basic response template
+//   let suggestedResponse = `Thank you for your interest in ${name || 'our business'}. `;
+//   if (businessInfo.services.length > 0) {
+//     suggestedResponse += `We specialize in ${businessInfo.services.slice(0, 3).join(', ')}. `;
+//   }
+//   suggestedResponse += `Please feel free to contact us at ${businessInfo.emails[0] || 'our contact email'} `;
+//   suggestedResponse += `or call us at ${businessInfo.phones[0] || 'our phone number'} for more information.`;
+
+//   return {
+//     businessType: guessBusinessType(pageContent, businessInfo),
+//     suggestedKeywords,
+//     suggestedResponse,
+//     isBasicAnalysis: true,
+//   };
+// }
+
+// // Simple business type classifier
+// function guessBusinessType(pageContent: any, businessInfo: any) {
+//   const content = (pageContent.bodyText + pageContent.headings).toLowerCase();
+  
+//   const indicators = {
+//     ecommerce: ['shop', 'store', 'cart', 'checkout', 'buy now'],
+//     saas: ['software', 'subscription', 'pricing', 'free trial'],
+//     restaurant: ['menu', 'reservation', 'delivery', 'cuisine'],
+//     service: ['service', 'repair', 'install', 'maintenance'],
+//   };
+
+//   for (const [type, terms] of Object.entries(indicators)) {
+//     if (terms.some(term => content.includes(term))) {
+//       return type;
+//     }
+//   }
+
+//   return "general business";
+// }
+
+// // OpenAI-enhanced analysis (optional)
+// async function generateOpenAIAnalysis(pageContent: any) {
+//   try {
+//     const analysisPrompt = `
+//       Analyze this website content and provide the following information:
+      
+//       Website Title: ${pageContent.title}
+//       Meta Description: ${pageContent.metaDescription}
+//       Main Headings: ${pageContent.headings}
+//       Page Content: ${pageContent.bodyText.substring(0, 2000)}...
+      
+//       Based on this information:
+//       1. What type of business is this website for? (e.g., E-commerce, SaaS, Restaurant, etc.)
+//       2. Generate a list of 7-10 relevant keywords that customers might use when asking about this business.
+//       3. Create a helpful automated response template (150-200 words) that this business could use to respond to customer inquiries.
+      
+//       Format your response as JSON with the following structure:
+//       {
+//         "businessType": "string",
+//         "suggestedKeywords": ["string", "string", ...],
+//         "suggestedResponse": "string"
+//       }
+//     `;
+
+//     const { text } = await generateText({
+//       model: openai("gpt-4o"),
+//       prompt: analysisPrompt,
+//     });
+
+//     return JSON.parse(text);
+//   } catch (error) {
+//     console.error("OpenAI analysis failed:", error);
+//     return null;
+//   }
+// }
+
+
 import { NextResponse } from "next/server";
-// import puppeteer from "puppeteer";
 import puppeteer from 'puppeteer-core';
-import chrome from 'chrome-aws-lambda';
+import chrome from '@sparticuz/chrome-aws-lambda';
 import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { JSDOM } from "jsdom";
-// import { Readability } from "readability-dom";
 import { Readability } from '@mozilla/readability';
 import natural from "natural";
 
@@ -193,23 +478,31 @@ const { WordTokenizer, PorterStemmer } = natural;
 const tokenizer = new WordTokenizer();
 const stemmer = PorterStemmer;
 
+export const runtime = 'nodejs'; // Required for Vercel
+export const maxDuration = 30; // Vercel's maximum
+
 export async function POST(request: Request) {
+  let browser;
   try {
     const { url } = await request.json();
-
     if (!url) {
       return NextResponse.json({ error: "URL is required" }, { status: 400 });
     }
 
-    // Launch browser with enhanced settings
-    // const browser = await puppeteer.launch({
-    //   headless: true,
-    //   args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    // });
-    const browser = await puppeteer.launch({
-      args: chrome.args,
-      executablePath: await chrome.executablePath,
-      headless: chrome.headless,
+    // Configure browser for Vercel
+    const isVercel = process.env.VERCEL === '1';
+    browser = await puppeteer.launch({
+      args: [
+        ...chrome.args,
+        '--disable-gpu',
+        '--single-process',
+        '--no-zygote',
+        '--no-sandbox'
+      ],
+      executablePath: isVercel 
+        ? await chrome.executablePath 
+        : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      headless: true,
     });
 
     const page = await browser.newPage();
@@ -219,14 +512,19 @@ export async function POST(request: Request) {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     });
 
-    // Navigate to page with error handling
+    // Navigation with timeout
     try {
-      await page.goto(url.startsWith('http') ? url : `https://${url}`, {
-        waitUntil: "networkidle2",
-        timeout: 30000
-      });
+      await Promise.race([
+        page.goto(url.startsWith('http') ? url : `https://${url}`, {
+          waitUntil: "networkidle2",
+          timeout: 20000 // 20s timeout
+        }),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error("Navigation timeout")), 25000)
+      )
+      ]);
     } catch (navError) {
-      console.warn("Navigation timeout, proceeding with available content");
+      console.warn("Navigation warning:", navError);
     }
 
     // Capture screenshot
@@ -237,52 +535,38 @@ export async function POST(request: Request) {
     });
     const screenshotDataUrl = `data:image/jpeg;base64,${screenshot}`;
 
-    // Extract content with multiple methods
-    const pageContent = await page.evaluate(() => {
-      const metaDescription = document.querySelector('meta[name="description"]')?.getAttribute("content") || "";
-      const bodyText = document.body.innerText.substring(0, 5000);
-      const headings = Array.from(document.querySelectorAll("h1, h2, h3"))
+    // Extract content
+    const pageContent = await page.evaluate(() => ({
+      title: document.title,
+      metaDescription: document.querySelector('meta[name="description"]')?.getAttribute("content") || "",
+      headings: Array.from(document.querySelectorAll("h1, h2, h3"))
         .map((h) => h.textContent)
         .filter(Boolean)
-        .join("\n");
+        .join("\n"),
+      bodyText: document.body.innerText.substring(0, 5000),
+      html: document.documentElement.innerHTML,
+    }));
 
-      return {
-        title: document.title,
-        metaDescription,
-        headings,
-        bodyText,
-        html: document.documentElement.innerHTML,
-      };
-    });
-
-    // Enhanced content extraction using Readability
+    // Enhanced content extraction
     const dom = new JSDOM(pageContent.html);
-    const reader = new Readability(dom.window.document);
-    const article = reader.parse()?.textContent || pageContent.bodyText;
+    const article = new Readability(dom.window.document).parse()?.textContent || pageContent.bodyText;
 
-    // Extract business information
+    // Business info extraction
     const businessInfo = extractBusinessInfo(pageContent, article);
 
-    // Generate basic analysis (works without OpenAI)
+    // Generate analysis
     const basicAnalysis = generateBasicAnalysis(pageContent, businessInfo);
-
-    // Try OpenAI analysis if available, otherwise use basic
     let enhancedAnalysis = null;
+    
     try {
       enhancedAnalysis = await generateOpenAIAnalysis(pageContent);
     } catch (aiError) {
-      console.warn("OpenAI analysis failed, using basic analysis:", aiError);
+      console.warn("OpenAI analysis failed:", aiError);
     }
 
-    await browser.close();
-
-    // Return combined results
     return NextResponse.json({
-      // Basic analysis (always available)
       ...basicAnalysis,
-      // Enhanced analysis (if available)
       ...(enhancedAnalysis || {}),
-      // Raw data
       screenshot: screenshotDataUrl,
       metadata: {
         title: pageContent.title,
@@ -290,118 +574,82 @@ export async function POST(request: Request) {
         headings: pageContent.headings,
       },
       businessInfo,
-      // Status indicators
       analysisSource: enhancedAnalysis ? "openai+local" : "local",
     });
 
   } catch (error) {
-    console.error("Error analyzing website:", error);
+    console.error("Analysis error:", error);
     return NextResponse.json(
-      { error: "Failed to analyze website" }, 
+      { error: "Analysis failed"},
       { status: 500 }
     );
+  } finally {
+    if (browser) await browser.close().catch(e => console.error("Browser close error:", e));
   }
 }
 
-// Business information extraction
+// Helper functions (unchanged but included for completeness)
 function extractBusinessInfo(pageContent: any, articleText: string) {
-  // Phone and email patterns
   const phoneRegex = /(\+?\d{1,2}[\s-]?)?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}/g;
   const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
   
-  // Extract contact info
-  // const phones = [...new Set([
-  //   ...(pageContent.bodyText.match(phoneRegex) || []),
-  //   ...(articleText.match(phoneRegex) || [])
-  // ])];
+  const phoneMatches = [
+    ...(pageContent.bodyText.match(phoneRegex) || []),
+    ...(articleText.match(phoneRegex) || [])
+  ];
+  const phones = Array.from(new Set(phoneMatches));
 
-  // const emails = [...new Set([
-  //   ...(pageContent.bodyText.match(emailRegex) || []),
-  //   ...(articleText.match(emailRegex) || [])
-  // ])];
-  // For phones
-const phoneMatches = [
-  ...(pageContent.bodyText.match(phoneRegex) || []),
-  ...(articleText.match(phoneRegex) || [])
-];
-const phones = Array.from(new Set(phoneMatches));
-
-// For emails
-const emailMatches = [
-  ...(pageContent.bodyText.match(emailRegex) || []),
-  ...(articleText.match(emailRegex) || [])
-];
-const emails = Array.from(new Set(emailMatches));
-
-  // Extract services using NLP
-  const services = extractServices(pageContent.bodyText + " " + articleText);
+  const emailMatches = [
+    ...(pageContent.bodyText.match(emailRegex) || []),
+    ...(articleText.match(emailRegex) || [])
+  ];
+  const emails = Array.from(new Set(emailMatches));
 
   return {
     phones,
     emails,
-    services,
+    services: extractServices(pageContent.bodyText + " " + articleText),
     contentSummary: articleText.substring(0, 1000) + (articleText.length > 1000 ? "..." : ""),
   };
 }
 
-// NLP-based service extraction
 function extractServices(text: string) {
   const tokens = tokenizer.tokenize(text) || [];
   const stems = tokens.map(token => stemmer.stem(token));
-  
-  const businessTerms = [
-    'service', 'product', 'solution', 'offer', 
-    'provide', 'deliver', 'create', 'build'
-  ];
-  
-  const serviceKeywords = [
-    'design', 'develop', 'consult', 'manage',
-    'install', 'repair', 'sell', 'market'
-  ];
-
+  const businessTerms = ['service', 'product', 'solution', 'offer', 'provide'];
+  const serviceKeywords = ['design', 'develop', 'consult', 'manage', 'install'];
   const services: string[] = [];
-  
+
   stems.forEach((stem, i) => {
     if (businessTerms.includes(stem) || serviceKeywords.includes(stem)) {
       const start = Math.max(0, i - 3);
       const end = Math.min(stems.length, i + 4);
       const phrase = tokens.slice(start, end).join(' ');
-      
-      if (!services.includes(phrase)) {
-        services.push(phrase);
-      }
+      if (!services.includes(phrase)) services.push(phrase);
     }
   });
-
-  return services.slice(0, 10); // Limit to top 10 services
+  return services.slice(0, 10);
 }
 
-// Generate basic analysis without OpenAI
 function generateBasicAnalysis(pageContent: any, businessInfo: any) {
-  const domain = new URL(pageContent.url || '').hostname.replace('www.', '');
   const name = pageContent.title.split('|')[0].split('-')[0].trim();
-
-  // Generate basic keywords from content
   const contentWords = (pageContent.bodyText + " " + pageContent.headings).toLowerCase();
   const wordCounts: Record<string, number> = {};
+
   contentWords.split(/\s+/).forEach(word => {
-    if (word.length > 4) { // Ignore short words
-      wordCounts[word] = (wordCounts[word] || 0) + 1;
-    }
+    if (word.length > 4) wordCounts[word] = (wordCounts[word] || 0) + 1;
   });
-  
+
   const suggestedKeywords = Object.entries(wordCounts)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10)
     .map(([word]) => word);
 
-  // Generate basic response template
   let suggestedResponse = `Thank you for your interest in ${name || 'our business'}. `;
   if (businessInfo.services.length > 0) {
     suggestedResponse += `We specialize in ${businessInfo.services.slice(0, 3).join(', ')}. `;
   }
-  suggestedResponse += `Please feel free to contact us at ${businessInfo.emails[0] || 'our contact email'} `;
-  suggestedResponse += `or call us at ${businessInfo.phones[0] || 'our phone number'} for more information.`;
+  suggestedResponse += `Contact us at ${businessInfo.emails[0] || 'our email'} or ${businessInfo.phones[0] || 'our phone'}.`;
 
   return {
     businessType: guessBusinessType(pageContent, businessInfo),
@@ -411,58 +659,33 @@ function generateBasicAnalysis(pageContent: any, businessInfo: any) {
   };
 }
 
-// Simple business type classifier
-function guessBusinessType(pageContent: any, businessInfo: any) {
+function guessBusinessType(pageContent: any, _businessInfo: any) {
   const content = (pageContent.bodyText + pageContent.headings).toLowerCase();
-  
   const indicators = {
-    ecommerce: ['shop', 'store', 'cart', 'checkout', 'buy now'],
-    saas: ['software', 'subscription', 'pricing', 'free trial'],
-    restaurant: ['menu', 'reservation', 'delivery', 'cuisine'],
-    service: ['service', 'repair', 'install', 'maintenance'],
+    ecommerce: ['shop', 'cart', 'checkout'],
+    saas: ['software', 'subscription', 'pricing'],
+    restaurant: ['menu', 'reservation'],
+    service: ['repair', 'maintenance']
   };
 
   for (const [type, terms] of Object.entries(indicators)) {
-    if (terms.some(term => content.includes(term))) {
-      return type;
-    }
+    if (terms.some(term => content.includes(term))) return type;
   }
-
   return "general business";
 }
 
-// OpenAI-enhanced analysis (optional)
 async function generateOpenAIAnalysis(pageContent: any) {
   try {
-    const analysisPrompt = `
-      Analyze this website content and provide the following information:
-      
-      Website Title: ${pageContent.title}
-      Meta Description: ${pageContent.metaDescription}
-      Main Headings: ${pageContent.headings}
-      Page Content: ${pageContent.bodyText.substring(0, 2000)}...
-      
-      Based on this information:
-      1. What type of business is this website for? (e.g., E-commerce, SaaS, Restaurant, etc.)
-      2. Generate a list of 7-10 relevant keywords that customers might use when asking about this business.
-      3. Create a helpful automated response template (150-200 words) that this business could use to respond to customer inquiries.
-      
-      Format your response as JSON with the following structure:
-      {
-        "businessType": "string",
-        "suggestedKeywords": ["string", "string", ...],
-        "suggestedResponse": "string"
-      }
-    `;
-
     const { text } = await generateText({
       model: openai("gpt-4o"),
-      prompt: analysisPrompt,
+      prompt: `Analyze this website content:
+        Title: ${pageContent.title}
+        Description: ${pageContent.metaDescription}
+        Content: ${pageContent.bodyText.substring(0, 2000)}...
+        Return JSON with businessType, suggestedKeywords, and suggestedResponse.`
     });
-
     return JSON.parse(text);
   } catch (error) {
-    console.error("OpenAI analysis failed:", error);
-    return null;
+    throw error;
   }
 }
