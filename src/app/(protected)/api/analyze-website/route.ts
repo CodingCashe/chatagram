@@ -527,7 +527,7 @@ export async function POST(request: Request) {
       console.warn("Navigation warning:", navError);
     }
 
-    // Capture screenshot
+    // Capture screensho
     const screenshot = await page.screenshot({
       encoding: "base64",
       type: "jpeg",
